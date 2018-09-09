@@ -1,0 +1,62 @@
+/**
+ * Font Size Settings
+ */
+
+/* ----------------------------------------------------------------------------
+   Font Sizes
+   ---------------------------------------------------------------------------- */
+
+$base-font-size: 16px;
+$script-font-size: 58px;
+
+$font-size-xxxxxl: 3.625rem; //58px
+$font-size-xxxxl: 3rem; //48px
+$font-size-xxxl: 2.5rem; //40px
+$font-size-xxl: 2.25rem; //36px
+$font-size-xl: 1.875rem; //30px
+$font-size-plus: 1.5rem; //24px
+$font-size-lg: 1.25rem; //20px
+$font-size-md-lg: 1.125rem; //18px
+$font-size-md: 1rem; //16px
+$font-size-sm-md: 0.9375rem; //15px
+$font-size-sm: 0.875rem; //14px
+$font-size-xs: 0.75rem; //12px
+$font-size-xxs: 0.625rem; //10px
+$font-size-xxxs: 0.6rem; //9.6px
+
+/*
+    JP: Ideas for more predictable naming of font-size vars
+    - use pixels for variable definitions,
+      then convert to rems when variables are implemented
+    - 10px minimum size
+    - 2px minimum difference between fonts
+    - TODO: Replace references to font-size variables above with the variables below
+    - TODO: Replace references in _elements.headings.scss with new variables below
+   */
+$font-size-xxxxxlarge: 58px;
+$font-size-xxxxlarge: 48px;
+$font-size-xxxlarge: 36px;
+$font-size-xxlarge: 30px;
+$font-size-xlarge: 24px;
+$font-size-large: 20px; // overwrites Bootstrap
+$font-size-medium: 18px;
+$font-size-base: 16px; // overwrites Bootstrap
+$font-size-small: 14px; // overwrites Bootstrap
+$font-size-smaller: 12px;
+$font-size-smallest: 10px;
+
+/**
+   added these because i wanted to 
+   have rem version of above naming scheme 
+   */
+$font-size-rem-xxxxxlarge: $font-size-xxxxxl;
+$font-size-rem-xxxxlarge: $font-size-xxxxl;
+$font-size-rem-xxxlarge: $font-size-xxl;
+$font-size-rem-xxlarge: $font-size-xl;
+$font-size-rem-xlarge: $font-size-plus;
+$font-size-rem-large: $font-size-lg;
+$font-size-rem-medium: $font-size-md-lg;
+$font-size-rem-base: $font-size-md;
+$font-size-rem-small: $font-size-sm;
+$font-size-rem-smaller: $font-size-xs;
+$font-size-rem-smallest: $font-size-xxs;

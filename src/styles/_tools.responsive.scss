@@ -1,0 +1,189 @@
+/**
+ * Responsive Tools
+ */
+
+/* ----------------------------------------------------------------------------
+   Breakpoints
+   ---------------------------------------------------------------------------- */
+
+/*
+ Usage:
+
+    .component-name {
+      width: 100%;
+      float: none;
+      margin: 0;
+
+      @include breakpoint-sm {
+        width: 60%;
+        float: left;
+        margin: 0 2% 0 0;
+      }
+    }
+*/
+
+@mixin breakpoint-xs {
+  @media only screen and (min-width: $screen-xs) {
+    @content;
+  }
+}
+
+@mixin breakpoint-sm {
+  @media only screen and (min-width: $screen-sm) {
+    @content;
+  }
+}
+
+/*iPad landscape and larger*/
+
+@mixin breakpoint-tablet-ls {
+  @media only screen and (min-width: $tablet-ls) {
+    @content;
+  }
+}
+
+@mixin breakpoint-md {
+  @media only screen and (min-width: $screen-md) {
+    @content;
+  }
+}
+
+@mixin breakpoint-lg {
+  @media only screen and (min-width: $screen-lg) {
+    @content;
+  }
+}
+
+/**
+    *   adding this breakpoint to account for very large monitors such as imac 27"
+    *   using 1920px as value (24" monitors)
+**/
+
+@mixin breakpoint-xl {
+  @media only screen and (min-width: $screen-xl) {
+    @content;
+  }
+}
+
+/**
+ *  granular widths
+ *  need to target widths for iphone 4/5, iphone 6, iphone 6plus/ and nexus 6P/pixel
+**/
+
+//iphone 4/5 (320px)
+@mixin breakpoint-xxs {
+  @media only screen and (max-width: $screen-xxs) {
+    @content;
+  }
+}
+
+//iphone 6 plus (414px) and nexus 6P (412px)
+@mixin breakpoint-s {
+  @media only screen and (min-width: $screen-s) {
+    @content;
+  }
+}
+
+/**
+ *  max widths
+**/
+
+//only mobile
+@mixin breakpoint-xs-max {
+  @media only screen and (max-width: ($screen-sm)-1) {
+    @content;
+  }
+}
+
+//mobile, tablet
+@mixin breakpoint-sm-max {
+  @media only screen and (max-width: ($screen-md)-1) {
+    @content;
+  }
+}
+
+//mobile, tablet, desktop-medium
+@mixin breakpoint-md-max {
+  @media only screen and (max-width: ($screen-lg)-1) {
+    @content;
+  }
+}
+
+//mobile, tablet, desktop-medium, desktop-lg
+@mixin breakpoint-lg-max {
+  @media only screen and (max-width: ($screen-xl)-1) {
+    @content;
+  }
+}
+
+/**
+ *  isolate screen widths
+ *  mobile can use breakpoint-xs-max
+ *  desktop-large can use breakpoint-xl
+**/
+
+@mixin breakpoint-tablet-only {
+  @media only screen and (min-width: $screen-sm) and (max-width: ($screen-md)-1) {
+    @content;
+  }
+}
+
+@mixin breakpoint-desktop-only {
+  @media only screen and (min-width: $screen-md) and (max-width: ($screen-lg)-1) {
+    @content;
+  }
+}
+
+@mixin breakpoint-desktop-lg-only {
+  @media only screen and (min-width: $screen-lg) and (max-width: ($screen-xl)-1) {
+    @content;
+  }
+}
+
+/**
+ *  Device orientation
+**/
+
+//landscape general
+@mixin breakpoint-landscape {
+  @media only screen and (orientation: landscape) {
+    @content;
+  }
+}
+
+//portrait general
+@mixin breakpoint-portrait {
+  @media only screen and (orientation: portrait) {
+    @content;
+  }
+}
+
+/**
+ * mixin for generating responsive width bootstrap cols
+**/
+@mixin responsive-breakpoints($bp: xs, $value: 0) {
+  $cols: $grid-columns;
+  @if ($bp == xs) {
+    @while $cols > 0 {
+      .col-xs-#{$cols} {
+        width: percentage($cols / $grid-columns);
+      }
+      $cols: $cols - 1;
+    }
+  } @else {
+    @media only screen and (min-width: $value) {
+      @while $cols > 0 {
+        .col-#{$value}-#{$cols} {
+          width: percentage($cols / $grid-columns);
+        }
+        $cols: $cols - 1;
+      }
+    }
+  }
+}
+
+@mixin generate-responsive-breakpoints() {
+  @each $key, $value in $utility-breakpoints {
+    @include responsive-breakpoints($key, $value);
+  }
+}

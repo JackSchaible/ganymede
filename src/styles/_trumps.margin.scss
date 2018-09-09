@@ -1,0 +1,367 @@
+/**
+ * Utility - Margin
+ */
+
+/* -------------------------------------------------------------------------
+   Margin All Sides
+   ------------------------------------------------------------------------- */
+
+.u-margin-smallest {
+  margin: rem($base-spacing-unit / 4) !important;
+}
+
+.u-margin-smaller {
+  margin: rem($base-spacing-unit / 2) !important;
+}
+
+.u-margin-small {
+  margin: rem($base-spacing-unit * 0.75) !important;
+}
+
+.u-margin {
+  margin: rem($base-spacing-unit) !important;
+}
+
+.u-margin-large {
+  margin: rem($base-spacing-unit * 1.5) !important;
+}
+
+.u-margin-larger {
+  margin: rem($base-spacing-unit * 2) !important;
+}
+
+.u-margin-largest {
+  margin: rem($base-spacing-unit * 3) !important;
+}
+
+.u-margin-none {
+  margin: 0 !important;
+}
+
+/* -------------------------------------------------------------------------
+   Margin Top
+   ------------------------------------------------------------------------- */
+
+.u-margin-top-smallest {
+  margin-top: rem($base-spacing-unit / 4) !important;
+}
+
+.u-margin-top-smaller {
+  margin-top: rem($base-spacing-unit / 2) !important;
+}
+
+.u-margin-top-small {
+  margin-top: rem($base-spacing-unit * 0.75) !important;
+}
+
+.u-margin-top {
+  margin-top: rem($base-spacing-unit) !important;
+}
+
+.u-margin-top-large {
+  margin-top: rem($base-spacing-unit * 1.5) !important;
+}
+
+.u-margin-top-larger {
+  margin-top: rem($base-spacing-unit * 2) !important;
+}
+
+.u-margin-top-largest {
+  margin-top: rem($base-spacing-unit * 3) !important;
+}
+
+.u-margin-top-none {
+  margin-top: 0 !important;
+}
+
+/* -------------------------------------------------------------------------
+   Margin Right
+   ------------------------------------------------------------------------- */
+
+.u-margin-right-smallest {
+  margin-right: rem($base-spacing-unit / 4) !important;
+}
+
+.u-margin-right-smaller {
+  margin-right: rem($base-spacing-unit / 2) !important;
+}
+
+.u-margin-right-small {
+  margin-right: rem($base-spacing-unit * 0.75) !important;
+}
+
+.u-margin-right {
+  margin-right: rem($base-spacing-unit) !important;
+}
+
+.u-margin-right-large {
+  margin-right: rem($base-spacing-unit * 1.5) !important;
+}
+
+.u-margin-right-larger {
+  margin-right: rem($base-spacing-unit * 2) !important;
+}
+
+.u-margin-right-largest {
+  margin-right: rem($base-spacing-unit * 3) !important;
+}
+
+.u-margin-right-none {
+  margin-right: 0 !important;
+}
+
+/* -------------------------------------------------------------------------
+   Margin Bottom
+   ------------------------------------------------------------------------- */
+
+.u-margin-bottom-smallest {
+  margin-bottom: rem($base-spacing-unit / 4) !important;
+}
+
+.u-margin-bottom-smaller {
+  margin-bottom: rem($base-spacing-unit / 2) !important;
+}
+
+.u-margin-bottom-small {
+  margin-bottom: rem($base-spacing-unit * 0.75) !important;
+}
+
+.u-margin-bottom {
+  margin-bottom: rem($base-spacing-unit) !important;
+}
+
+.u-margin-bottom-large {
+  margin-bottom: rem($base-spacing-unit * 1.5) !important;
+}
+
+.u-margin-bottom-larger {
+  margin-bottom: rem($base-spacing-unit * 2) !important;
+}
+
+.u-margin-bottom-largest {
+  margin-bottom: rem($base-spacing-unit * 3) !important;
+}
+
+.u-margin-bottom-none {
+  margin-bottom: 0 !important;
+}
+
+/* -------------------------------------------------------------------------
+   Margin Left
+   ------------------------------------------------------------------------- */
+
+.u-margin-left-smallest {
+  margin-left: rem($base-spacing-unit / 4) !important;
+}
+
+.u-margin-left-smaller {
+  margin-left: rem($base-spacing-unit / 2) !important;
+}
+
+.u-margin-left-small {
+  margin-left: rem($base-spacing-unit * 0.75) !important;
+}
+
+.u-margin-left {
+  margin-left: rem($base-spacing-unit) !important;
+}
+
+.u-margin-left-large {
+  margin-left: rem($base-spacing-unit * 1.5) !important;
+}
+
+.u-margin-left-larger {
+  margin-left: rem($base-spacing-unit * 2) !important;
+}
+
+.u-margin-left-largest {
+  margin-left: rem($base-spacing-unit * 3) !important;
+}
+
+.u-margin-left-none {
+  margin-left: 0 !important;
+}
+
+/**
+    The larger, largest, smallest, etc naming convention doesnt make any sense for these utilities. the name should be based on the base margin/padding so its easy to understand ($base-spacing-unit) 
+    i proposed we use the following:
+**/
+
+.u-margin-vertical,
+.u-margin-y {
+  margin-top: rem($base-spacing-unit) !important;
+  margin-bottom: rem($base-spacing-unit) !important;
+}
+
+.u-margin-vertical-half,
+.u-margin-y-half {
+  margin-top: rem($base-spacing-unit/2) !important;
+  margin-bottom: rem($base-spacing-unit/2) !important;
+}
+
+.u-margin-vertical-2x,
+.u-margin-y-2x {
+  margin-top: rem($base-spacing-unit * 2) !important;
+  margin-bottom: rem($base-spacing-unit * 2) !important;
+}
+
+.u-margin-vertical-3x,
+.u-margin-y-3x {
+  margin-top: rem($base-spacing-unit * 3) !important;
+  margin-bottom: rem($base-spacing-unit * 3) !important;
+}
+
+.u-margin-vertical-none,
+.u-margin-y-none {
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+}
+
+.u-margin-horizontal,
+.u-margin-x {
+  margin-left: rem($base-spacing-unit) !important;
+  margin-right: rem($base-spacing-unit) !important;
+}
+
+.u-margin-horizontal-half,
+.u-margin-x-half {
+  margin-left: rem($base-spacing-unit/2) !important;
+  margin-right: rem($base-spacing-unit/2) !important;
+}
+
+.u-margin-horizontal-2x,
+.u-margin-x-2x {
+  margin-left: rem($base-spacing-unit * 2) !important;
+  margin-right: rem($base-spacing-unit * 2) !important;
+}
+
+.u-margin-horizontal-3x,
+.u-margin-x-3x {
+  margin-left: rem($base-spacing-unit * 3) !important;
+  margin-right: rem($base-spacing-unit * 3) !important;
+}
+
+.u-margin-top {
+  margin-top: rem($base-spacing-unit) !important;
+}
+
+.u-margin-top-half {
+  margin-top: rem($base-spacing-unit/2) !important;
+}
+
+.u-margin-top-2x {
+  margin-top: rem($base-spacing-unit * 2) !important;
+}
+
+.u-margin-top-3x {
+  margin-top: rem($base-spacing-unit * 3) !important;
+}
+
+.u-margin-bottom {
+  margin-bottom: rem($base-spacing-unit) !important;
+}
+
+.u-margin-bottom-half {
+  margin-bottom: rem($base-spacing-unit/2) !important;
+}
+
+.u-margin-bottom-2x {
+  margin-bottom: rem($base-spacing-unit * 2) !important;
+}
+
+.u-margin-bottom-3x {
+  margin-bottom: rem($base-spacing-unit * 3) !important;
+}
+
+.u-margin-right {
+  margin-right: rem($base-spacing-unit) !important;
+}
+
+.u-margin-right-half {
+  margin-right: rem($base-spacing-unit/2) !important;
+}
+
+.u-margin-right-2x {
+  margin-right: rem($base-spacing-unit * 2) !important;
+}
+
+.u-margin-right-3x {
+  margin-right: rem($base-spacing-unit * 3) !important;
+}
+
+.u-margin-left {
+  margin-left: rem($base-spacing-unit) !important;
+}
+
+.u-margin-left-half {
+  margin-left: rem($base-spacing-unit) !important;
+}
+
+.u-margin-left-2x {
+  margin-left: rem($base-spacing-unit * 2) !important;
+}
+
+.u-margin-left-3x {
+  margin-left: rem($base-spacing-unit * 3) !important;
+}
+
+.u-no-margin {
+  margin: 0 !important;
+}
+
+.u-no-margin-x {
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+}
+
+.u-no-margin-y {
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+}
+
+.u-margin-all {
+  margin: rem($base-spacing-unit) !important;
+}
+
+.u-margin-all-half {
+  margin: rem($base-spacing-unit/2) !important;
+}
+
+.u-margin-center,
+.u-margin-auto-x {
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+
+.u-margin-center-strict {
+  margin: 0 auto !important;
+}
+
+.u-vertical-center {
+  @include center-vertically();
+}
+
+.u-margin-auto {
+  margin: auto !important;
+}
+
+.u-margin-auto-y {
+  margin-top: auto !important;
+  margin-bottom: auto !important;
+}
+
+.u-margin-auto-left {
+  margin-left: auto !important;
+}
+
+.u-margin-auto-right {
+  margin-right: auto !important;
+}
+
+.u-margin-auto-top {
+  margin-top: auto !important;
+}
+
+.u-margin-auto-bottom {
+  margin-bottom: auto !important;
+}

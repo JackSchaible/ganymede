@@ -1,0 +1,164 @@
+/** flex container classes**/
+
+.u-flex {
+  @include flexbox();
+
+  /* nullify cleafix */
+  &:before,
+  &:after {
+    @include flexbox(true);
+  }
+}
+
+.u-flex-inline {
+  @include inline-flex();
+}
+
+.u-flex__justify, /*default*/
+.u-flex__justify--start,  
+.u-flex__justify--flex-start {
+  @include justify-content(flex-start, true);
+}
+
+.u-flex__justify--center {
+  @include justify-content(center, true);
+}
+
+.u-flex__justify--space-between {
+  @include justify-content(space-between, true);
+}
+
+.u-flex__justify--space-around {
+  @include justify-content(space-around, true);
+}
+
+.u-flex__justify--space-evenly {
+  @include justify-content(space-evenly, true);
+}
+.u-flex__justify--end,
+.u-flex__justify--flex-end {
+  @include justify-content(flex-end, true);
+}
+
+.u-flex__align-items--center {
+  @include align-items(center, true);
+}
+
+.u-flex__align-items,
+.u-flex__align-items--start {
+  @include align-items(flex-start, true);
+}
+
+.u-flex__align-items--end {
+  @include align-items(flex-end, true);
+}
+
+.u-flex__align-items--stretch {
+  @include align-items(stretch, true);
+}
+
+.u-flex__align-items--baseline {
+  @include align-items(baseline, true);
+}
+
+.u-flex__wrap {
+  @include flex-wrap(wrap, true);
+}
+
+.u-flex__nowrap {
+  @include flex-wrap(nowrap, true);
+}
+
+.u-flex__column {
+  @include flex-direction(column, true);
+}
+
+.u-flex__row {
+  @include flex-direction(row, true);
+}
+
+/** flex children classes **/
+
+.u-flex__grow {
+  @include flex-grow(1, true);
+}
+
+.u-flex__shrink {
+  @include flex-shrink(1, true);
+}
+
+.u-flex__grow--no {
+  @include flex-grow(0, true);
+}
+
+.u-flex__shrink--no {
+  @include flex-shrink(0, true);
+}
+
+.u-flex__push--down {
+  margin-top: auto !important;
+  margin-bottom: 0 !important;
+}
+
+.u-flex__push--up {
+  margin-top: 0 !important;
+  margin-bottom: auto !important;
+}
+
+.u-flex__push--left {
+  margin-left: 0 !important;
+  margin-right: auto !important;
+}
+
+.u-flex__push--right {
+  margin-right: 0 !important;
+  margin-left: auto !important;
+}
+
+.u-flex__center {
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+
+.u-flex__center--all {
+  @include align-self(center, true);
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+
+.u-flex__align-self,
+.u-flex__align-self--start {
+  @include align-self(flex-start, true);
+}
+
+.u-flex__align-self--end {
+  @include align-self(flex-end, true);
+}
+
+.u-flex__align-self--center {
+  @include align-self(center, true);
+}
+
+.u-flex__align-self--stretch {
+  @include align-self(stretch, true);
+}
+
+.u-flex__align-self--baseline {
+  @include align-self(baseline, true);
+}
+
+.u-flex__align-self--auto {
+  @include align-self(auto, true);
+}
+
+.u-flex__full-height {
+  height: 100% !important;
+}
+
+.u-flex__flex--full {
+  @include flex(0, 0, 100%);
+}
+
+.u-flex__flex--auto {
+  @include flex(0, 0, auto);
+}

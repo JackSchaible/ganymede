@@ -1,0 +1,49 @@
+/**
+ * Alignment Tools
+ */
+
+/* ----------------------------------------------------------------------------
+   Align Element
+   ---------------------------------------------------------------------------- */
+
+@mixin align-element(
+  $direction1: top,
+  $direction2: right,
+  $push-direction1: $base-margin,
+  $push-direction2: $base-margin,
+  $width: auto
+) {
+  position: absolute !important;
+  width: $width;
+  #{$direction1}: $push-direction1;
+  #{$direction2}: $push-direction2;
+}
+
+/* ----------------------------------------------------------------------------
+   Center content using transforms
+   ---------------------------------------------------------------------------- */
+
+@mixin center-content() {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  @include transform(translate(-50%, -50%));
+}
+
+@mixin center-vertically($top: 50%, $translateY: -50%, $position: relative) {
+  position: $position;
+  top: $top;
+  -moz-transform: translateY($translateY);
+  -ms-transform: translateY($translateY);
+  -webkit-transform: translateY($translateY);
+  transform: translateY($translateY);
+}
+
+@mixin center-horizontally($left: 50%, $translateX: -50%, $position: relative) {
+  position: $position;
+  left: $left;
+  -moz-transform: translateX($translateX);
+  -ms-transform: translateX($translateX);
+  -webkit-transform: translateX($translateX);
+  transform: translateX($translateX);
+}

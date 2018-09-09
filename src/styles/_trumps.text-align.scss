@@ -1,0 +1,107 @@
+/**
+ * Utility - Text-align
+ */
+
+.u-text-left,
+.u-text-align--left {
+  text-align: left !important;
+}
+
+.u-text-right,
+.u-text-align--right {
+  text-align: right !important;
+}
+
+.u-text-center,
+.u-text-align--center {
+  text-align: center !important;
+}
+
+/**
+    * vertical align - only works with inline elements and table td's
+ **/
+
+.u-text-v-middle {
+  vertical-align: middle;
+}
+
+.u-text-v-top {
+  vertical-align: top;
+}
+
+.u-text-v-bottom {
+  vertical-align: bottom;
+}
+
+.u-text-v-baseline {
+  vertical-align: baseline;
+}
+
+.u-text-v-sub {
+  vertical-align: sub;
+}
+
+.u-text-v-super {
+  vertical-align: super;
+}
+
+.u-text-v-text-top {
+  vertical-align: text-top;
+}
+
+.u-text-v-text-bottom {
+  vertical-align: text-bottom;
+}
+
+/**responsive**/
+
+.u-rtext-xs-left {
+  text-align: left;
+}
+
+.u-rtext-xs-right {
+  text-align: right;
+}
+
+.u-rtext-xs-center {
+  text-align: center;
+}
+
+//tablet
+@include breakpoint-sm {
+  .u-rtext-sm-left {
+    text-align: left;
+  }
+  .u-rtext-sm-right {
+    text-align: right;
+  }
+  .u-rtext-sm-center {
+    text-align: center;
+  }
+}
+
+//desktop md
+@include breakpoint-md {
+  .u-rtext-md-left {
+    text-align: left;
+  }
+  .u-rtext-md-right {
+    text-align: right;
+  }
+  .u-rtext-md-center {
+    text-align: center;
+  }
+}
+
+//desktop lg
+@include breakpoint-lg {
+  .u-rtext-lg-left {
+    text-align: left;
+  }
+  .u-rtext-lg-right {
+    text-align: right;
+  }
+  .u-rtext-lg-center {
+    text-align: center;
+  }
+}

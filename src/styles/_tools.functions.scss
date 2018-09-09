@@ -1,0 +1,60 @@
+/**
+ * Functions
+ */
+
+/* ----------------------------------------------------------------------------
+   Convert pixels to rems
+   ---------------------------------------------------------------------------- */
+
+/*
+    Usage: padding: rem(10px);
+*/
+
+@function rem($size) {
+  $remValue: $size / 16px;
+  @return #{$remValue}rem;
+}
+
+/* ----------------------------------------------------------------------------
+   Convert pixels to ems
+   ---------------------------------------------------------------------------- */
+
+/*
+    Usage: padding: em(10px);
+*/
+@function em($size) {
+  @return #{$size / 16px}em;
+}
+
+/* ----------------------------------------------------------------------------
+   color maps
+   ---------------------------------------------------------------------------- */
+
+@function primary-colors($key) {
+  @if not map-has-key($primary-colors, $key) {
+    @warn 'Key `#{$key}` not found.';
+  }
+
+  @return map-get($primary-colors, $key);
+}
+
+@function grey-colors($key) {
+  @if not map-has-key($grey-colors, $key) {
+    @warn 'Key `#{$key}` not found.';
+  }
+
+  @return map-get($grey-colors, $key);
+}
+
+/* ----------------------------------------------------------------------------
+   text colors
+   ---------------------------------------------------------------------------- */
+
+//sets proper text contrast base on bg color
+@function text-contrast-color($color, $dark-color: $color-black) {
+  @if (lightness($color) > 50) {
+    @return $dark-color; //light bg
+  } @else {
+    @return white; // dark bg
+  }
+}

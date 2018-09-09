@@ -1,0 +1,33 @@
+@import "../../node_modules/bootswatch/dist/cyborg/_variables.scss";
+@import "_settings.font-sizes.scss";
+@import "_tools.alignment.scss";
+@import "_tools.flexbox.scss";
+@import "_tools.functions.scss";
+@import "_tools.responsive.scss";
+@import "_settings.config.scss";
+@import "_trumps.align.scss";
+@import "_trumps.flex.scss";
+@import "_trumps.margin.scss";
+@import "_trumps.padding.scss";
+@import "_trumps.text-align.scss";
+@import url("https://use.typekit.net/qug3eze.css");
+
+$font: "Futura PT", Helvetica, sans-serif;
+p {
+  font-family: $font;
+  font-size: 1.5em;
+  margin: 0;
+}
+
+h3 {
+  font-family: $font;
+  font-weight: 600;
+}
+
+small {
+  font-size: rem(14px);
+}
+
+em {
+  font-family: "Futura PT Condensed", "Futura PT", Helvetica, sans-serif;
+}

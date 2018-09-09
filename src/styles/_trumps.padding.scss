@@ -1,0 +1,348 @@
+/**
+ * Utility - Padding
+ */
+
+/* -------------------------------------------------------------------------
+   Padding All Sides
+   ------------------------------------------------------------------------- */
+
+.u-padding-smallest {
+  padding: rem($base-spacing-unit / 4) !important;
+}
+
+.u-padding-smaller {
+  padding: rem($base-spacing-unit / 2) !important;
+}
+
+.u-padding-small {
+  padding: rem($base-spacing-unit / 1.5) !important;
+}
+
+.u-padding {
+  padding: rem($base-spacing-unit) !important;
+}
+
+.u-padding-large {
+  padding: rem($base-spacing-unit * 1.5) !important;
+}
+
+.u-padding-larger {
+  padding: rem($base-spacing-unit * 2) !important;
+}
+
+.u-padding-largest {
+  padding: rem($base-spacing-unit * 3) !important;
+}
+
+.u-padding-none {
+  padding: 0 !important;
+}
+
+/* -------------------------------------------------------------------------
+   Padding Top
+   ------------------------------------------------------------------------- */
+
+.u-padding-top-smallest {
+  padding-top: rem($base-spacing-unit / 4) !important;
+}
+
+.u-padding-top-smaller {
+  padding-top: rem($base-spacing-unit / 2) !important;
+}
+
+.u-padding-top-small {
+  padding-top: rem($base-spacing-unit * 0.75) !important;
+}
+
+.u-padding-top {
+  padding-top: rem($base-spacing-unit) !important;
+}
+
+.u-padding-top-large {
+  padding-top: rem($base-spacing-unit * 1.5) !important;
+}
+
+.u-padding-top-larger {
+  padding-top: rem($base-spacing-unit * 2) !important;
+}
+
+.u-padding-top-largest {
+  padding-top: rem($base-spacing-unit * 3) !important;
+}
+
+.u-padding-top-none {
+  padding-top: 0 !important;
+}
+
+/* -------------------------------------------------------------------------
+   Padding Right
+   ------------------------------------------------------------------------- */
+
+.u-padding-right-smallest {
+  padding-right: rem($base-spacing-unit / 4) !important;
+}
+
+.u-padding-right-smaller {
+  padding-right: rem($base-spacing-unit / 2) !important;
+}
+
+.u-padding-right-small {
+  padding-right: rem($base-spacing-unit * 0.75) !important;
+}
+
+.u-padding-right {
+  padding-right: rem($base-spacing-unit) !important;
+}
+
+.u-padding-right-large {
+  padding-right: rem($base-spacing-unit * 1.5) !important;
+}
+
+.u-padding-right-larger {
+  padding-right: rem($base-spacing-unit * 2) !important;
+}
+
+.u-padding-right-largest {
+  padding-right: rem($base-spacing-unit * 3) !important;
+}
+
+.u-padding-right-none {
+  padding-right: 0 !important;
+}
+
+/* -------------------------------------------------------------------------
+   Padding Bottom
+   ------------------------------------------------------------------------- */
+
+.u-padding-bottom-smallest {
+  padding-bottom: rem($base-spacing-unit / 4) !important;
+}
+
+.u-padding-bottom-smaller {
+  padding-bottom: rem($base-spacing-unit / 2) !important;
+}
+
+.u-padding-bottom-small {
+  padding-bottom: rem($base-spacing-unit * 0.75) !important;
+}
+
+.u-padding-bottom {
+  padding-bottom: rem($base-spacing-unit) !important;
+}
+
+.u-padding-bottom-large {
+  padding-bottom: rem($base-spacing-unit * 1.5) !important;
+}
+
+.u-padding-bottom-larger {
+  padding-bottom: rem($base-spacing-unit * 2) !important;
+}
+
+.u-padding-bottom-largest {
+  padding-bottom: rem($base-spacing-unit * 3) !important;
+}
+
+.u-padding-bottom-none {
+  padding-bottom: 0 !important;
+}
+
+/* -------------------------------------------------------------------------
+   Padding Left
+   ------------------------------------------------------------------------- */
+
+.u-padding-left-smallest {
+  padding-left: rem($base-spacing-unit / 4) !important;
+}
+
+.u-padding-left-smaller {
+  padding-left: rem($base-spacing-unit / 2) !important;
+}
+
+.u-padding-left-small {
+  padding-left: rem($base-spacing-unit * 0.75) !important;
+}
+
+.u-padding-left {
+  padding-left: rem($base-spacing-unit) !important;
+}
+
+.u-padding-left-large {
+  padding-left: rem($base-spacing-unit * 1.5) !important;
+}
+
+.u-padding-left-larger {
+  padding-left: rem($base-spacing-unit * 2) !important;
+}
+
+.u-padding-left-largest {
+  padding-left: rem($base-spacing-unit * 3) !important;
+}
+
+.u-padding-left-none {
+  padding-left: 0 !important;
+}
+
+/**
+    The larger, largest, smallest, etc naming convention doesnt make any sense for these utilities. the name should be based on the base margin/padding so its easy to understand ($base-spacing-unit) 
+    i proposed we use the following:
+**/
+
+.u-padding-top {
+  padding-top: $base-padding !important;
+}
+
+.u-padding-top-half {
+  padding-top: $base-padding/2 !important;
+}
+
+.u-padding-top-2x {
+  padding-top: $base-padding * 2 !important;
+}
+
+.u-padding-top-3x {
+  padding-top: $base-padding * 3 !important;
+}
+
+.u-padding-bottom {
+  padding-bottom: $base-padding !important;
+}
+
+.u-padding-bottom-half {
+  padding-bottom: $base-padding/2 !important;
+}
+
+.u-padding-bottom-2x {
+  padding-bottom: $base-padding * 2 !important;
+}
+
+.u-padding-bottom-3x {
+  padding-bottom: $base-padding * 3 !important;
+}
+
+.u-padding-right {
+  padding-right: $base-padding !important;
+}
+
+.u-padding-right-half {
+  padding-right: $base-padding/2 !important;
+}
+
+.u-padding-right-2x {
+  padding-right: $base-padding * 2 !important;
+}
+
+.u-padding-right-3x {
+  padding-right: $base-padding * 3 !important;
+}
+
+.u-padding-left {
+  padding-left: $base-padding !important;
+}
+
+.u-padding-left-half {
+  padding-left: $base-padding/2 !important;
+}
+
+.u-padding-left-2x {
+  padding-left: $base-padding * 2 !important;
+}
+
+.u-padding-left-3x {
+  padding-left: $base-padding * 3 !important;
+}
+
+.u-no-padding {
+  padding: 0 !important;
+}
+
+.u-no-padding-left {
+  padding-left: 0 !important;
+}
+
+.u-no-padding-right {
+  padding-right: 0 !important;
+}
+
+.u-no-padding-top {
+  padding-top: 0 !important;
+}
+
+.u-no-padding-bottom {
+  padding-bottom: 0 !important;
+}
+
+.u-no-padding-x,
+.u-padding-x-none {
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+
+.u-no-padding-y,
+.u-padding-y-none {
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+}
+
+.u-padding-all {
+  padding: $base-padding !important;
+}
+
+.u-padding-all-half {
+  padding: $base-padding/2 !important;
+}
+
+.u-padding-all-2x {
+  padding: $base-padding * 2 !important;
+}
+
+.u-padding-all-3x {
+  padding: $base-padding * 3 !important;
+}
+
+.u-padding-vertical,
+.u-padding-y {
+  padding-top: $base-padding !important;
+  padding-bottom: $base-padding !important;
+}
+
+.u-padding-vertical-half,
+.u-padding-y-half {
+  padding-top: $base-padding/2 !important;
+  padding-bottom: $base-padding/2 !important;
+}
+
+.u-padding-vertical-2x,
+.u-padding-y-2x {
+  padding-top: $base-padding * 2 !important;
+  padding-bottom: $base-padding * 2 !important;
+}
+
+.u-padding-vertical-3x,
+.u-padding-y-3x {
+  padding-top: $base-padding * 3 !important;
+  padding-bottom: $base-padding * 3 !important;
+}
+
+.u-padding-horizontal,
+.u-padding-x {
+  padding-left: $base-padding !important;
+  padding-right: $base-padding !important;
+}
+
+.u-padding-horizontal-half,
+.u-padding-x-half {
+  padding-left: $base-padding/2 !important;
+  padding-right: $base-padding/2 !important;
+}
+
+.u-padding-horizontal-2x,
+.u-padding-x-2x {
+  padding-left: $base-padding * 2 !important;
+  padding-right: $base-padding * 2 !important;
+}
+
+.u-padding-horizontal-3x,
+.u-padding-x-3x {
+  padding-left: $base-padding * 2 !important;
+  padding-right: $base-padding * 2 !important;
+}

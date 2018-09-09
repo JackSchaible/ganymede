@@ -1,0 +1,53 @@
+<form [formGroup]="crForm">
+
+  <div class="c-calc u-margin-top-2x">
+    <div class="u-text-center">
+      <h3>Challenge Rating (CR) Calculator</h3>
+      <p>A simple calculator for finding out the CR of your monsters!</p>
+    </div>
+
+    <div class="jumbotron u-margin-top-2x d-flex flex-wrap">
+
+      <div class="col-sm-6 col-12">
+        <label for="hp">
+          Step 1. Pick your <strong>Hit Points</strong>:
+        </label>
+        <input formControlName="hp" tabIndex="1" name="hp" type="number" class="form-control" placeholder="Hit Points" />
+        <validation-message [errors]="hp.errors" [show]="!hp.untouched"></validation-message>
+      </div>
+
+      <div class="col-sm-6 col-12">
+        <label for="dps">
+          Step 3. Pick your <strong>Damage per Round</strong>:
+        </label>
+        <input formControlName="dps" tabIndex="3" name="dps" type="number" class="form-control" placeholder="Damage per Round" />
+        <validation-message [errors]="dps.errors" [show]="!dps.untouched"></validation-message>
+      </div>
+
+      <div class="col-sm-6 col-12">
+        <label for="ac">
+          Step 2. Pick your <strong>Armor Class</strong>:
+        </label>
+        <input formControlName="ac" tabIndex="2" name="ac" type="number" class="form-control" placeholder="Armor Class" />
+        <validation-message [errors]="ac.errors" [show]="!ac.untouched"></validation-message>
+      </div>
+
+      <div class="col-sm-6 col-12">
+        <label for="bab">
+          Step 4. Pick your <strong>Attack Bonus</strong>:
+        </label>
+        <input formControlName="bab" tabIndex="4" name="bab" type="number" class="form-control" placeholder="Attack Bonus" />
+        <validation-message [errors]="bab.errors" [show]="!bab.untouched"></validation-message>
+      </div>
+
+      <div class="col-12 c-calc__cr-div" *ngIf="!!cr && !!xp">
+        <div class="u-center u-margin-auto u-text-center">
+          <p>Your monster's CR is:</p>
+          <h3>
+            {{cr}} ({{xp}} xp)
+          </h3>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>

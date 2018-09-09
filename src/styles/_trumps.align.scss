@@ -1,0 +1,22 @@
+/*
+ * Utility - block element align without floats
+ */
+
+.u-align__center, .u-center {
+    //keeping legacy class "u-center" as it is still being used alot, but doesnt follow BEM
+    float: none !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+}
+
+.u-align__left {
+    float: none !important;
+    margin-left: 0 !important;
+    margin-right: auto !important;
+}
+
+.u-align__right {
+    float: none !important;
+    margin-right: 0 !important;
+    margin-left: auto !important;
+}
