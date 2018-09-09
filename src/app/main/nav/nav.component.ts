@@ -14,4 +14,8 @@ export class NavComponent implements OnInit {
   toggleMenu() {
     this.showMenu = !this.showMenu;
   }
+
+  closeMenu() {
+    this.showMenu = false;
+  }
 }

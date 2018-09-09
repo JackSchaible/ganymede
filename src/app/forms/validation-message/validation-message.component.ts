@@ -7,7 +7,7 @@ import { Component, Input, OnChanges } from "@angular/core";
 })
 export class ValidationMessageComponent implements OnChanges {
   @Input()
-  public errors: [];
+  public errors: any[];
 
   @Input()
   public show: boolean;
