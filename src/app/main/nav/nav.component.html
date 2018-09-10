@@ -24,5 +24,17 @@
         </a>
       </li>
     </ul>
+
+    <div>
+      <div *ngIf="authService.isLoggedIn;else loggedOut">
+        <p class="text-white"><i class="fa fa-flag"></i> Welcome, {{authService.getUser()}}!</p>
+
+        <button class="btn btn-danger" type="button" (click)="authService.logout()"><i class="fa fa-sign-out"></i>
+          Logout</button>
+      </div>
+      <ng-template #loggedOut>
+        <a routerLink="/login" class="text-white"><i class="fa fa-sign-in"></i> Login</a>
+      </ng-template>
+    </div>
   </div>
 </div>

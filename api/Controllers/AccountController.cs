@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
@@ -21,7 +21,8 @@ namespace api.Controllers
 		{
 			{ "PasswordRequiresNonAlphanumeric", "REG_PWD_NONALPHA" },
 			{ "PasswordRequiresUpper", "REG_PWD_NOUPPER" },
-			{"PasswordRequiresDigit", "REG_PWD_NODIGIT" }
+			{ "PasswordRequiresDigit", "REG_PWD_NODIGIT" },
+		  { "InvalidPassword", "LOGIN_PWD_INVALID" }
 		};
 		private readonly SignInManager<IdentityUser> _signinManager;
 		private readonly UserManager<IdentityUser> _userManager;
@@ -42,7 +43,12 @@ namespace api.Controllers
 			if (result.Succeeded)
 			{
 				var appUser = _userManager.Users.SingleOrDefault(r => r.Email == model.Email);
-				return GenerateJwtToken(model.Email, appUser);
+				return Json(new {token = GenerateJwtToken(model.Email, appUser)});
+			}
+			else
+			{
+			  if (!result.IsLockedOut && !result.RequiresTwoFactor && !result.IsNotAllowed)
+			    return Json(new { error = _errors["InvalidPassword"] });
 			}
 
 			throw new ApplicationException("INVALID_LOGIN_ATTEMPT");

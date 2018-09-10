@@ -7,8 +7,12 @@ import { HomeComponent } from "./main/home/home.component";
 import { CrCalculatorComponent } from "./main/cr-calculator/cr-calculator.component";
 import { RouteNotFoundComponent } from "./main/route-not-found/route-not-found.component";
 import { ReactiveFormsModule } from "@angular/forms";
-import { ValidationMessageComponent } from "./forms/validation-message/validation-message.component";
 import { AppRoutingModule } from "./app.routing";
+import { HttpClientModule } from "@angular/common/http";
+import { EncounterModule } from "./encounter/encounter.module";
+import { AuthModule } from "./auth/auth.module";
+import { FormsModule } from "./forms/forms.module";
+import { IsLoggedInDirective } from './directives/is-logged-in.directive';
 
 @NgModule({
   declarations: [
@@ -17,9 +21,17 @@ import { AppRoutingModule } from "./app.routing";
     HomeComponent,
     CrCalculatorComponent,
     RouteNotFoundComponent,
-    ValidationMessageComponent
+    IsLoggedInDirective
   ],
-  imports: [BrowserModule, AppRoutingModule, ReactiveFormsModule],
+  imports: [
+    BrowserModule,
+    ReactiveFormsModule,
+    HttpClientModule,
+    EncounterModule,
+    AuthModule,
+    AppRoutingModule,
+    FormsModule
+  ],
   providers: [],
   bootstrap: [AppComponent]
 })
