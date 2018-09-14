@@ -14,6 +14,7 @@
 @import "./styles/_trumps.padding.scss";
 @import "./styles/_trumps.text-align.scss";
 @import url("https://use.typekit.net/qug3eze.css");
+@import "~@angular/material/prebuilt-themes/purple-green.css";
 
 $font: "Futura PT", Helvetica, sans-serif;
 p {
@@ -63,4 +64,8 @@ input.ng-invalid.ng-touched {
 
 .container {
 	margin-top: 55px;
+}
+
+mat-form-field {
+	padding: 0.5rem 1rem;
 }
