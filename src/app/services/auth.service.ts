@@ -15,48 +15,32 @@ export class AuthService {
 	private apiUrl: string = "https://localhost:44377/api/Account";
 	private currentUserKey: string = "currentUser";
 
-	constructor(private http: HttpClient) {
-		// if (localStorage) {
-		// 	let user = localStorage.getItem(this.currentUserKey);
-		// 	if (user) {
-		// 		let json = JSON.parse(user);
-		// 		if (json.Expires > new Date()) this.isLoggedIn = true;
-		// 		else localStorage.removeItem(this.currentUserKey);
-		// 	}
-		// }
-	}
+	constructor(private http: HttpClient) {}
 
 	login(username: string, password: string): Observable<boolean> {
 		var url = this.apiUrl + "/login";
-		return this.http
-			.post(url, { email: username, password: password })
-			.pipe(
-				map(r => {
-					if (r) {
-						let json = JSON.parse(JSON.stringify(r));
+		return this.http.post(url, { email: username, password: password }).pipe(
+			map(r => {
+				if (r) {
+					let json = JSON.parse(JSON.stringify(r));
 
-						if (json.token) {
-							this.isLoggedIn = true;
+					if (json.token) {
+						this.isLoggedIn = true;
 
-							let user = {
-								token: json.token,
-								expiry: new Date(
-									new Date().getTime() + 1000 * 3600 * 24 * 30
-								),
-								user: username
-							};
+						let user = {
+							token: json.token,
+							expiry: new Date(new Date().getTime() + 1000 * 3600 * 24 * 30),
+							user: username
+						};
 
-							localStorage.setItem(
-								this.currentUserKey,
-								JSON.stringify(user)
-							);
-							return true;
-						} else if (json.error) {
-							return false;
-						}
-					} else return false;
-				})
-			);
+						localStorage.setItem(this.currentUserKey, JSON.stringify(user));
+						return true;
+					} else if (json.error) {
+						return false;
+					}
+				} else return false;
+			})
+		);
 	}
 
 	register(
@@ -64,35 +48,28 @@ export class AuthService {
 		password: string
 	): Observable<boolean | ApiError[]> {
 		var url = this.apiUrl + "/register";
-		return this.http
-			.post(url, { email: username, password: password })
-			.pipe(
-				map(r => {
-					if (r) {
-						let json = JSON.parse(JSON.stringify(r));
+		return this.http.post(url, { email: username, password: password }).pipe(
+			map(r => {
+				if (r) {
+					let json = JSON.parse(JSON.stringify(r));
 
-						if (json.token) {
-							this.isLoggedIn = true;
+					if (json.token) {
+						this.isLoggedIn = true;
 
-							let user = {
-								token: json.token,
-								expiry: new Date(
-									new Date().getTime() + 1000 * 3600 * 24 * 30
-								),
-								user: username
-							};
+						let user = {
+							token: json.token,
+							expiry: new Date(new Date().getTime() + 1000 * 3600 * 24 * 30),
+							user: username
+						};
 
-							localStorage.setItem(
-								this.currentUserKey,
-								JSON.stringify(user)
-							);
-							return true;
-						} else if (json.errors) {
-							return json.errors;
-						}
-					} else return false;
-				})
-			);
+						localStorage.setItem(this.currentUserKey, JSON.stringify(user));
+						return true;
+					} else if (json.errors) {
+						return json.errors;
+					}
+				} else return false;
+			})
+		);
 	}
 
 	logout(): void {
