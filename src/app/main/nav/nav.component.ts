@@ -2,7 +2,7 @@ import { Component, OnInit } from "@angular/core";
 import { AuthService } from "../../services/auth.service";
 
 @Component({
-	selector: "nav",
+	selector: "gm-nav",
 	templateUrl: "./nav.component.html",
 	styleUrls: ["./nav.component.scss"]
 })

@@ -4,7 +4,7 @@ import { FormGroup, FormControl, Validators } from "@angular/forms";
 import { Router } from "@angular/router";
 
 @Component({
-	selector: "login",
+	selector: "gm-login",
 	templateUrl: "./login.component.html",
 	styleUrls: ["../auth.scss"]
 })
