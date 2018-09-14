@@ -13,7 +13,7 @@ import { ErrorStateMatcher } from "@angular/material/core";
 import ApiError from "../../services/http/apiError";
 
 @Component({
-	selector: "register",
+	selector: "gm-register",
 	templateUrl: "./register.component.html",
 	styleUrls: ["../auth.scss"]
 })
