@@ -35,7 +35,7 @@ export class IsLoggedInDirective extends AuthStatusDirective implements OnInit {
 	}
 
 	protected shouldShow(): boolean {
-		return this.authService.isLoggedIn;
+		return !!this.authService.getUser();
 	}
 
 	public ngOnInit() {
@@ -57,7 +57,7 @@ export class IsLoggedOutDirective extends AuthStatusDirective
 	}
 
 	protected shouldShow(): boolean {
-		return !this.authService.isLoggedIn;
+		return !this.authService.getUser();
 	}
 
 	public ngOnInit() {

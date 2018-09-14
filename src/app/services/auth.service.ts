@@ -11,7 +11,7 @@ export class AuthService {
 	public isLoggedIn: boolean = false;
 	public redirectUrl: string;
 
-	//TODO: How to change in prod?
+	// TODO: How to change in prod?
 	private apiUrl: string = "https://localhost:44377/api/Account";
 	private currentUserKey: string = "currentUser";
 
@@ -47,33 +47,36 @@ export class AuthService {
 		username: string,
 		password: string
 	): Observable<boolean | ApiError[]> {
-		var url = this.apiUrl + "/register";
-		return this.http.post(url, { email: username, password: password }).pipe(
-			map(r => {
-				if (r) {
-					let json = JSON.parse(JSON.stringify(r));
-
-					if (json.token) {
-						this.isLoggedIn = true;
-
-						let user = {
-							token: json.token,
-							expiry: new Date(new Date().getTime() + 1000 * 3600 * 24 * 30),
-							user: username
-						};
-
-						localStorage.setItem(this.currentUserKey, JSON.stringify(user));
-						return true;
-					} else if (json.errors) {
-						return json.errors;
-					}
-				} else return false;
+		return this.http
+			.post(this.apiUrl + "/register", {
+				email: username,
+				password: password
 			})
-		);
+			.pipe(
+				map(r => {
+					if (r) {
+						const json = JSON.parse(JSON.stringify(r));
+
+						if (json.token) {
+							this.isLoggedIn = true;
+
+							const user = {
+								token: json.token,
+								expiry: new Date(new Date().getTime() + 1000 * 3600 * 24 * 30),
+								user: username
+							};
+
+							localStorage.setItem(this.currentUserKey, JSON.stringify(user));
+							return true;
+						} else if (json.errors) {
+							return json.errors;
+						}
+					} else return false;
+				})
+			);
 	}
 
 	logout(): void {
-		return;
 		localStorage.removeItem(this.currentUserKey);
 		this.isLoggedIn = false;
 	}
