@@ -1,5 +1,5 @@
 <p class="text-danger u-margin-top-half">
   <i [class]="show && errors ? 'fal fa-engine-warning' : ''"></i>
   <span *ngIf="errorMessages.length == 0">{{"&nbsp;"}}</span>
-  <span *ngFor="let m of errorMessages">{{m}}</span>
+  <span *ngFor="let m of errorMessages">{{' ' + m}}</span>
 </p>

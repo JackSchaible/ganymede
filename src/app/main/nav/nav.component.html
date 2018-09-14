@@ -1,5 +1,5 @@
-<div class="navbar navbar-expand-lg navbar-dark bg-primary">
-  <a class="navbar-brand" routerLink="">
+<div class="navbar navbar-expand-lg navbar-dark bg-primary" (clickOutside)="closeMenu()">
+  <a class="navbar-brand" routerLink="" (click)="closeMenu()">
     <i class="fa fa-dice"></i> High Roller
   </a>
   <button class="navbar-toggler" type="button" (click)="toggleMenu()">
@@ -9,20 +9,32 @@
   <div class="collapse navbar-collapse" [class.show]="showMenu">
     <ul class="navbar-nav mr-auto">
       <li class="nav-item">
-        <a class="nav-link" routerLinkActive="active" routerLink="" [routerLinkActiveOptions]="{exact: true}">
+        <a class="nav-link" routerLinkActive="active" routerLink="" [routerLinkActiveOptions]="{exact: true}" (click)="closeMenu()">
           <i class="fa fa-home"></i> Home
         </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" routerLinkActive="active" routerLink="/CRCalculator">
+        <a class="nav-link" routerLinkActive="active" routerLink="/CRCalculator" (click)="closeMenu()">
           <i class="fa fa-calculator"></i> CR Calculator
         </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" routerLinkActive="active" routerLink="/test">
+        <a class="nav-link" routerLinkActive="active" routerLink="/test" (click)="closeMenu()">
           <i class="fa fa-list"></i> Test Auth
         </a>
       </li>
     </ul>
+
+    <div>
+      <div *ngIf="authService.isLoggedIn;else loggedOut">
+        <p class="text-white"><i class="fa fa-flag"></i> Welcome, {{authService.getUser()}}!</p>
+
+        <button class="btn btn-danger" type="button" (click)="authService.logout()"><i class="fa fa-sign-out"></i>
+          Logout</button>
+      </div>
+      <ng-template #loggedOut>
+        <a routerLink="/login" class="text-white"><i class="fa fa-sign-in"></i> Login</a>
+      </ng-template>
+    </div>
   </div>
 </div>
