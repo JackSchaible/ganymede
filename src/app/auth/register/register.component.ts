@@ -1,14 +1,14 @@
 import { Component, OnInit } from "@angular/core";
+import { FormControl, Validators, FormGroup } from "@angular/forms";
 import { AuthService } from "../../services/auth.service";
-import { FormGroup, FormControl, Validators } from "@angular/forms";
 import { Router } from "@angular/router";
 
 @Component({
-	selector: "login",
-	templateUrl: "./login.component.html",
+	selector: "register",
+	templateUrl: "./register.component.html",
 	styleUrls: ["../auth.scss"]
 })
-export class LoginComponent implements OnInit {
+export class RegisterComponent implements OnInit {
 	canSubmit: boolean = false;
 	authError: boolean = false;
 

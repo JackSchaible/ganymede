@@ -1,0 +1,54 @@
+<form [formGroup]="loginForm" class="c-bg_img">
+
+  <div class="container">
+    <div class="small-body col-lg-6 col-sm-8 u-center">
+      <div class="col-12">
+        <div class="u-text-center">
+          <h3>Register</h3>
+          <p>Register now to access advanced features like live encounter tracking, saving monsters, and more!</p>
+        </div>
+
+        <div class="u-margin-top-2x d-flex flex-wrap">
+
+          <div class="col-12">
+            <label for="email">
+              <strong>Email</strong>:
+            </label>
+            <div class="input-group">
+              <div class="input-group-prepend">
+                <span class="input-group-text"><i class="fa fa-user"></i></span>
+              </div>
+              <input formControlName="email" tabIndex="1" name="email" type="email" class="form-control" placeholder="username@example.com" />
+            </div>
+            <validation-message [errors]="email.errors" [show]="!email.untouched"></validation-message>
+          </div>
+
+          <div class="col-12">
+            <label for="pwd">
+              <strong>Password</strong>:
+            </label>
+            <div class="input-group">
+              <div class="input-group-prepend">
+                <span class="input-group-text"><i class="fa fa-key"></i></span>
+              </div>
+              <input formControlName="password" tabIndex="2" name="pwd" type="password" class="form-control"
+                placeholder="******" />
+            </div>
+            <validation-message [errors]="password.errors" [show]="!password.untouched" name="Your password"
+              patternMessage="Your password must contain one special character."></validation-message>
+          </div>
+
+          <div class="col-12">
+            <div class="u-flex">
+              <p *ngIf="authError"><i class="fa fa-warning"></i> It seems your password was incorrect. Please try
+                again.</p>
+              <button type="button" [disabled]="!canSubmit" class="btn btn-primary float-right" (click)="submit()"><i
+                  class="fa fa-login"></i>
+                Submit</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>
