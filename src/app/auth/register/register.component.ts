@@ -1,7 +1,15 @@
 import { Component, OnInit } from "@angular/core";
-import { FormControl, Validators, FormGroup } from "@angular/forms";
+import {
+	FormControl,
+	Validators,
+	FormGroup,
+	FormGroupDirective,
+	NgForm,
+	FormBuilder
+} from "@angular/forms";
 import { AuthService } from "../../services/auth.service";
 import { Router } from "@angular/router";
+import { ErrorStateMatcher } from "@angular/material/core";
 
 @Component({
 	selector: "register",
@@ -11,6 +19,7 @@ import { Router } from "@angular/router";
 export class RegisterComponent implements OnInit {
 	canSubmit: boolean = false;
 	authError: boolean = false;
+	errorMatcher: GmErrorStateMatcher = new GmErrorStateMatcher();
 
 	email: FormControl = new FormControl("", [
 		Validators.required,
@@ -22,15 +31,26 @@ export class RegisterComponent implements OnInit {
 		Validators.pattern(/[ !@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/)
 	]);
 
-	confirmPassword: FormControl = new FormControl("", []);
+	confirmPassword: FormControl = new FormControl();
 
-	loginForm: FormGroup = new FormGroup({
-		email: this.email,
-		password: this.password,
-		confirmPassword: this.confirmPassword
-	});
+	loginForm: FormGroup;
 
-	constructor(private authService: AuthService, private router: Router) {}
+	constructor(
+		private authService: AuthService,
+		private router: Router,
+		private formBuilder: FormBuilder
+	) {
+		this.loginForm = this.formBuilder.group(
+			{
+				email: this.email,
+				password: this.password,
+				confirmPassword: this.confirmPassword
+			},
+			{
+				validator: this.ValidateConfirmPassword
+			}
+		);
+	}
 
 	ngOnInit() {
 		this.loginForm.valueChanges.subscribe(() => {
@@ -65,7 +85,6 @@ export class RegisterComponent implements OnInit {
 				: "";
 	}
 	private getPasswordErrorMessage() {
-		console.log();
 		return this.password.hasError("required")
 			? "A value must be entered."
 			: this.password.hasError("minlength")
@@ -75,5 +94,33 @@ export class RegisterComponent implements OnInit {
 					: "";
 	}
 	private getPasswordConfirmErrorMessage() {}
+	ValidateConfirmPassword(group: FormGroup) {
+		let pass = group.controls.password.value;
+		let confirmPass = group.controls.confirmPassword.value;
+
+		return pass === confirmPass ? null : { notSame: true };
+	}
 	//#endregion
+}
+
+export class GmErrorStateMatcher implements ErrorStateMatcher {
+	isErrorState(
+		control: FormControl | null,
+		form: FormGroupDirective | NgForm | null
+	): boolean {
+		const invalidCtrl = !!(
+			control &&
+			control.invalid &&
+			control.parent.dirty
+		);
+		const invalidParent = !!(
+			control &&
+			control.parent &&
+			control.parent.errors &&
+			control.parent.errors["notSame"] &&
+			control.parent.dirty
+		);
+
+		return invalidCtrl || invalidParent;
+	}
 }
