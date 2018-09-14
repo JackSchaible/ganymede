@@ -8,9 +8,9 @@
           <p>Register now to access advanced features like live encounter tracking, saving monsters, and more!</p>
         </div>
 
-        <div class="u-margin-top-2x d-flex flex-wrap">
+        <div class="u-margin-top-2x d-flex u-flex__column">
 
-          <div class="col-12">
+          <!-- <div class="col-12">
             <label for="email">
               <strong>Email</strong>:
             </label>
@@ -36,17 +36,30 @@
             </div>
             <validation-message [errors]="password.errors" [show]="!password.untouched" name="Your password"
               patternMessage="Your password must contain one special character."></validation-message>
-          </div>
+          </div> -->
 
-          <div class="col-12">
-            <div class="u-flex">
-              <p *ngIf="authError"><i class="fa fa-warning"></i> It seems your password was incorrect. Please try
-                again.</p>
-              <button type="button" [disabled]="!canSubmit" class="btn btn-primary float-right" (click)="submit()"><i
-                  class="fa fa-login"></i>
-                Submit</button>
-            </div>
-          </div>
+          <mat-form-field>
+            <input matInput formControlName="email" tabIndex="1" name="email" type="email" placeholder="Email Address" />
+            <mat-hint>someone@example.com</mat-hint>
+            <mat-error *ngIf="email.invalid">{{getEmailErrorMessage()}}</mat-error>
+          </mat-form-field>
+
+          <mat-form-field>
+            <input matInput formControlName="password" tabIndex="2" name="password" type="password" placeholder="Password" />
+            <mat-hint>Min. 6, one special character</mat-hint>
+            <mat-error *ngIf="email.invalid">{{getPasswordErrorMessage()}}</mat-error>
+          </mat-form-field>
+
+          <mat-form-field>
+            <input matInput formControlName="confirmPassword" tabIndex="3" name="confirmgPassword" type="password"
+              placeholder="Confirm Password" />
+            <mat-hint>Make it the same as your first!</mat-hint>
+            <mat-error *ngIf="email.invalid">{{getPasswordConfirmErrorMessage()}}</mat-error>
+          </mat-form-field>
+
+          <p *ngIf="authError">
+            <i class="fa fa-warning"></i> It seems your password was incorrect. Please try again.</p>
+          <button [disabled]="!canSubmit" (click)="submit()" mat-fab color="primary" class="align-self-center"><i class="fa fa-user-plus"></i></button>
         </div>
       </div>
     </div>

@@ -22,9 +22,12 @@ export class RegisterComponent implements OnInit {
 		Validators.pattern(/[ !@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/)
 	]);
 
+	confirmPassword: FormControl = new FormControl("", []);
+
 	loginForm: FormGroup = new FormGroup({
 		email: this.email,
-		password: this.password
+		password: this.password,
+		confirmPassword: this.confirmPassword
 	});
 
 	constructor(private authService: AuthService, private router: Router) {}
@@ -52,4 +55,25 @@ export class RegisterComponent implements OnInit {
 				});
 		}
 	}
+
+	//#region Validation
+	private getEmailErrorMessage() {
+		return this.email.hasError("required")
+			? "A value must be entered."
+			: this.email.hasError("email")
+				? "Your email doesn't look like an email address."
+				: "";
+	}
+	private getPasswordErrorMessage() {
+		console.log();
+		return this.password.hasError("required")
+			? "A value must be entered."
+			: this.password.hasError("minlength")
+				? "Your password must be at least 6 characters long."
+				: this.password.hasError("pattern")
+					? "Your password must contain 1 special character."
+					: "";
+	}
+	private getPasswordConfirmErrorMessage() {}
+	//#endregion
 }
