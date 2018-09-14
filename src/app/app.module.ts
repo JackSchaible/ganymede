@@ -12,27 +12,31 @@ import { HttpClientModule } from "@angular/common/http";
 import { EncounterModule } from "./encounter/encounter.module";
 import { AuthModule } from "./auth/auth.module";
 import { FormsModule } from "./forms/forms.module";
-import { IsLoggedInDirective } from './directives/is-logged-in.directive';
+import {
+	IsLoggedInDirective,
+	IsLoggedOutDirective
+} from "./directives/is-logged-in.directive";
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    NavComponent,
-    HomeComponent,
-    CrCalculatorComponent,
-    RouteNotFoundComponent,
-    IsLoggedInDirective
-  ],
-  imports: [
-    BrowserModule,
-    ReactiveFormsModule,
-    HttpClientModule,
-    EncounterModule,
-    AuthModule,
-    AppRoutingModule,
-    FormsModule
-  ],
-  providers: [],
-  bootstrap: [AppComponent]
+	declarations: [
+		AppComponent,
+		NavComponent,
+		HomeComponent,
+		CrCalculatorComponent,
+		RouteNotFoundComponent,
+		IsLoggedInDirective,
+		IsLoggedOutDirective
+	],
+	imports: [
+		BrowserModule,
+		ReactiveFormsModule,
+		HttpClientModule,
+		EncounterModule,
+		AuthModule,
+		AppRoutingModule,
+		FormsModule
+	],
+	providers: [],
+	bootstrap: [AppComponent]
 })
 export class AppModule {}

@@ -12,7 +12,7 @@ namespace Api.Entities
 
 		private static string GetConnectionString()
 		{
-			const string databaseName = "hr";
+			const string databaseName = "ganymede";
 			const string databaseUser = "root";
 			const string databasePass = "";
 

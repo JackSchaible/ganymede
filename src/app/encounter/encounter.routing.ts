@@ -4,22 +4,22 @@ import { EncounterTrackerComponent } from "./encounter-tracker/encounter-tracker
 import { NgModule } from "@angular/core";
 
 const routes: Routes = [
-  {
-    path: "encounter",
-    component: EncounterComponent,
-    children: [
-      {
-        path: "",
-        children: [
-          { path: "encounter-tracker", component: EncounterTrackerComponent }
-        ]
-      }
-    ]
-  }
+	{
+		path: "encounter",
+		component: EncounterComponent,
+		children: [
+			{
+				path: "",
+				children: [
+					{ path: "encounter-tracker", component: EncounterTrackerComponent }
+				]
+			}
+		]
+	}
 ];
 
 @NgModule({
-  imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
+	imports: [RouterModule.forChild(routes)],
+	exports: [RouterModule]
 })
 export class EncounterRoutingModule {}

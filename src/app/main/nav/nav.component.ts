@@ -14,7 +14,7 @@ export class NavComponent implements OnInit {
 
 	ngOnInit() {
 		const u = this.authService.getUser();
-		this.user = u.user;
+		if (u) this.user = u.user;
 	}
 
 	toggleMenu() {

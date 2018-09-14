@@ -6,13 +6,13 @@ import { CrCalculatorComponent } from "./main/cr-calculator/cr-calculator.compon
 import { RouteNotFoundComponent } from "./main/route-not-found/route-not-found.component";
 
 const routes: Routes = [
-  { path: "", component: HomeComponent },
-  { path: "CRCalculator", component: CrCalculatorComponent },
-  { path: "**", component: RouteNotFoundComponent }
+	{ path: "", component: HomeComponent },
+	{ path: "CRCalculator", component: CrCalculatorComponent },
+	{ path: "**", component: RouteNotFoundComponent }
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+	imports: [RouterModule.forRoot(routes)],
+	exports: [RouterModule]
 })
 export class AppRoutingModule {}

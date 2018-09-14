@@ -11,81 +11,62 @@ export class AuthService {
 	public isLoggedIn: boolean = false;
 	public redirectUrl: string;
 
-	//TODO: How to change in prod?
+	// TODO: How to change in prod?
 	private apiUrl: string = "https://localhost:44377/api/Account";
 	private currentUserKey: string = "currentUser";
 
-	constructor(private http: HttpClient) {
-		// if (localStorage) {
-		// 	let user = localStorage.getItem(this.currentUserKey);
-		// 	if (user) {
-		// 		let json = JSON.parse(user);
-		// 		if (json.Expires > new Date()) this.isLoggedIn = true;
-		// 		else localStorage.removeItem(this.currentUserKey);
-		// 	}
-		// }
-	}
+	constructor(private http: HttpClient) {}
 
 	login(username: string, password: string): Observable<boolean> {
 		var url = this.apiUrl + "/login";
-		return this.http
-			.post(url, { email: username, password: password })
-			.pipe(
-				map(r => {
-					if (r) {
-						let json = JSON.parse(JSON.stringify(r));
+		return this.http.post(url, { email: username, password: password }).pipe(
+			map(r => {
+				if (r) {
+					let json = JSON.parse(JSON.stringify(r));
 
-						if (json.token) {
-							this.isLoggedIn = true;
+					if (json.token) {
+						this.isLoggedIn = true;
 
-							let user = {
-								token: json.token,
-								expiry: new Date(
-									new Date().getTime() + 1000 * 3600 * 24 * 30
-								),
-								user: username
-							};
+						let user = {
+							token: json.token,
+							expiry: new Date(new Date().getTime() + 1000 * 3600 * 24 * 30),
+							user: username
+						};
 
-							localStorage.setItem(
-								this.currentUserKey,
-								JSON.stringify(user)
-							);
-							return true;
-						} else if (json.error) {
-							return false;
-						}
-					} else return false;
-				})
-			);
+						localStorage.setItem(this.currentUserKey, JSON.stringify(user));
+						return true;
+					} else if (json.error) {
+						return false;
+					}
+				} else return false;
+			})
+		);
 	}
 
 	register(
 		username: string,
 		password: string
 	): Observable<boolean | ApiError[]> {
-		var url = this.apiUrl + "/register";
 		return this.http
-			.post(url, { email: username, password: password })
+			.post(this.apiUrl + "/register", {
+				email: username,
+				password: password
+			})
 			.pipe(
 				map(r => {
 					if (r) {
-						let json = JSON.parse(JSON.stringify(r));
+						const json = JSON.parse(JSON.stringify(r));
 
 						if (json.token) {
 							this.isLoggedIn = true;
 
-							let user = {
+							const user = {
 								token: json.token,
-								expiry: new Date(
-									new Date().getTime() + 1000 * 3600 * 24 * 30
-								),
+								expiry: new Date(new Date().getTime() + 1000 * 3600 * 24 * 30),
 								user: username
 							};
 
-							localStorage.setItem(
-								this.currentUserKey,
-								JSON.stringify(user)
-							);
+							localStorage.setItem(this.currentUserKey, JSON.stringify(user));
 							return true;
 						} else if (json.errors) {
 							return json.errors;
@@ -96,7 +77,6 @@ export class AuthService {
 	}
 
 	logout(): void {
-		return;
 		localStorage.removeItem(this.currentUserKey);
 		this.isLoggedIn = false;
 	}

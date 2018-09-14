@@ -41,7 +41,7 @@ export class LoginComponent implements OnInit {
 				.login(this.email.value, this.password.value)
 				.subscribe((e: boolean) => {
 					if (e) {
-						let rUrl = this.authService.redirectUrl
+						const rUrl = this.authService.redirectUrl
 							? this.authService.redirectUrl
 							: "/";
 
