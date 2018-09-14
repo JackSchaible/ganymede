@@ -2,21 +2,26 @@ import { Component, OnInit } from "@angular/core";
 import { AuthService } from "../../services/auth.service";
 
 @Component({
-  selector: "nav",
-  templateUrl: "./nav.component.html",
-  styleUrls: ["./nav.component.scss"]
+	selector: "nav",
+	templateUrl: "./nav.component.html",
+	styleUrls: ["./nav.component.scss"]
 })
 export class NavComponent implements OnInit {
-  showMenu: boolean;
-  constructor(private authService: AuthService) {}
+	showMenu: boolean;
+	user: string;
 
-  ngOnInit() {}
+	constructor(private authService: AuthService) {}
 
-  toggleMenu() {
-    this.showMenu = !this.showMenu;
-  }
+	ngOnInit() {
+		const u = this.authService.getUser();
+		this.user = u.user;
+	}
 
-  closeMenu() {
-    this.showMenu = false;
-  }
+	toggleMenu() {
+		this.showMenu = !this.showMenu;
+	}
+
+	closeMenu() {
+		this.showMenu = false;
+	}
 }
