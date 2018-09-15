@@ -10,6 +10,7 @@ using Microsoft.IdentityModel.Tokens;
 using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Text;
+using api.Entities;
 
 namespace api
 {
@@ -26,7 +27,7 @@ namespace api
     public void ConfigureServices(IServiceCollection services)
     {
       services.AddDbContext<ApplicationDbContext>();
-      services.AddIdentity<IdentityUser, IdentityRole>()
+      services.AddIdentity<AppUser, IdentityRole>()
           .AddEntityFrameworkStores<ApplicationDbContext>()
           .AddDefaultTokenProviders();
 

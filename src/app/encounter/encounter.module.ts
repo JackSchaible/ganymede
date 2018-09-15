@@ -4,9 +4,10 @@ import { EncounterTrackerComponent } from "./encounter-tracker/encounter-tracker
 import { EncounterComponent } from "./encounter/encounter.component";
 import { MatTabsModule } from "@angular/material/tabs";
 import { EncounterRoutingModule } from "./encounter.routing";
+import { MatCardModule } from "@angular/material";
 
 @NgModule({
-	imports: [CommonModule, MatTabsModule, EncounterRoutingModule],
+	imports: [CommonModule, MatTabsModule, EncounterRoutingModule, MatCardModule],
 	declarations: [EncounterTrackerComponent, EncounterComponent]
 })
 export class EncounterModule {}
