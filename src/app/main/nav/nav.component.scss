@@ -3,3 +3,21 @@
 	position: relative;
 	z-index: 1;
 }
+
+mat-toolbar {
+	background-color: #9c27b0;
+
+	button {
+		&.isBrand {
+			font-size: 1.5rem;
+		}
+	}
+	.c-nav__logged-in {
+		margin-left: auto;
+	}
+
+	.mat-button {
+		min-width: auto;
+		padding: 0;
+	}
+}
