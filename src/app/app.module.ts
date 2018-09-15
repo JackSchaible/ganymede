@@ -16,6 +16,8 @@ import {
 	IsLoggedInDirective,
 	IsLoggedOutDirective
 } from "./directives/is-logged-in.directive";
+import { MatToolbarModule, MatMenuModule } from "@angular/material";
+import { DeviceDetectorModule } from "ngx-device-detector";
 
 @NgModule({
 	declarations: [
@@ -34,7 +36,10 @@ import {
 		EncounterModule,
 		AuthModule,
 		AppRoutingModule,
-		FormsModule
+		FormsModule,
+		MatToolbarModule,
+		MatMenuModule,
+		DeviceDetectorModule.forRoot()
 	],
 	providers: [],
 	bootstrap: [AppComponent]

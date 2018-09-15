@@ -1,5 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import { AuthService } from "../../services/auth.service";
+import { DeviceDetectorService } from "ngx-device-detector";
 
 @Component({
 	selector: "gm-nav",
@@ -7,21 +8,53 @@ import { AuthService } from "../../services/auth.service";
 	styleUrls: ["./nav.component.scss"]
 })
 export class NavComponent implements OnInit {
-	showMenu: boolean;
+	isMobile: boolean;
+	isTablet: boolean;
+	isDesktop: boolean;
 	user: string;
 
-	constructor(private authService: AuthService) {}
+	items: NavItem[];
+
+	constructor(
+		private authService: AuthService,
+		private deviceService: DeviceDetectorService
+	) {
+		this.isMobile = this.deviceService.isMobile();
+		this.isTablet = this.deviceService.isTablet();
+		this.isDesktop = this.deviceService.isDesktop();
+		console.log(this.isMobile);
+		console.log(this.isTablet);
+		console.log(this.isDesktop);
+
+		this.items = [
+			new NavItem("", "fa fa-dice", "DM Tools", true),
+			new NavItem("", "fa fa-home", "Home"),
+			new NavItem("crcaclulator", "fa fa-calculator", "CR Calculator"),
+			new NavItem("encounters", "fa fa-pastafarianism", "Encounters")
+		];
+	}
 
 	ngOnInit() {
 		const u = this.authService.getUser();
 		if (u) this.user = u.user;
 	}
+}
 
-	toggleMenu() {
-		this.showMenu = !this.showMenu;
-	}
+class NavItem {
+	public url: string;
+	public icon: string;
+	public label: string;
+	public isBrand: boolean;
 
-	closeMenu() {
-		this.showMenu = false;
+	constructor(
+		url: string,
+		icon: string,
+		label: string,
+		isBrand: boolean = false
+	) {
+		this.url = url;
+		this.icon = icon;
+		this.label = label;
+		this.isBrand = isBrand;
 	}
 }
