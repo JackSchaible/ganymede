@@ -39,7 +39,7 @@
 
 <mat-toolbar>
   <nav *ngIf="isDesktop; else isMobile" class="u-flex w-100">
-    <button *ngFor="let item of items" mat-button [routerLink]="item.url" [class.isBrand]="item.isBrand">
+    <button *ngFor="let item of items" mat-button [routerLink]="item.url" [class.isBrand]="item.isBrand" class="mat-link">
       <strong *ngIf=" item.isBrand; else
       btn">
         <ng-container *ngTemplateOutlet="btn; context: {$implicit: item}"></ng-container>

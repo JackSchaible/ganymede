@@ -29,8 +29,8 @@ export class NavComponent implements OnInit {
 		this.items = [
 			new NavItem("", "fa fa-dice", "DM Tools", true),
 			new NavItem("", "fa fa-home", "Home"),
-			new NavItem("crcaclulator", "fa fa-calculator", "CR Calculator"),
-			new NavItem("encounters", "fa fa-pastafarianism", "Encounters")
+			new NavItem("CRCalculator", "fa fa-calculator", "CR Calculator"),
+			new NavItem("encounter", "fa fa-pastafarianism", "Encounters")
 		];
 	}
 

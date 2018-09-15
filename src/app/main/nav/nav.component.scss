@@ -16,7 +16,7 @@ mat-toolbar {
 		margin-left: auto;
 	}
 
-	.mat-button {
+	.mat-button:not(.mat-link) {
 		min-width: auto;
 		padding: 0;
 	}
