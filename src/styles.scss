@@ -19,7 +19,6 @@
 $font: "Futura PT", Helvetica, sans-serif;
 p {
 	font-family: $font;
-	font-size: 1.5em;
 	margin: 0;
 }
 
@@ -60,6 +59,10 @@ em {
 
 input.ng-invalid.ng-touched {
 	border: 2px solid #cc0000;
+}
+
+body {
+	background: #303030;
 }
 
 .container {

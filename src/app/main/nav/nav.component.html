@@ -1,4 +1,4 @@
-<div class="navbar navbar-expand-lg navbar-dark bg-primary" (clickOutside)="closeMenu()">
+<!-- <div class="navbar navbar-expand-lg navbar-dark bg-primary" (clickOutside)="closeMenu()">
   <a class="navbar-brand" routerLink="" (click)="closeMenu()">
     <i class="fa fa-dice"></i> High Roller
   </a>
@@ -19,8 +19,8 @@
         </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" routerLinkActive="active" routerLink="/test" (click)="closeMenu()">
-          <i class="fa fa-list"></i> Test Auth
+        <a class="nav-link" routerLinkActive="active" routerLink="/encounters" (click)="closeMenu()">
+          <i class="fa fa-pastafarianism"></i> Encounters
         </a>
       </li>
     </ul>
@@ -35,4 +35,56 @@
       <a *isLoggedOut routerLink="/login" class="text-white"><i class="fa fa-sign-in"></i> Login</a>
     </div>
   </div>
-</div>
+</div> -->
+
+<mat-toolbar>
+  <nav *ngIf="isDesktop; else isMobile" class="u-flex w-100">
+    <button *ngFor="let item of items" mat-button [routerLink]="item.url" [class.isBrand]="item.isBrand">
+      <strong *ngIf=" item.isBrand; else
+      btn">
+        <ng-container *ngTemplateOutlet="btn; context: {$implicit: item}"></ng-container>
+      </strong>
+
+      <ng-template #btn>
+        <i *ngIf="item.icon" [class]="item.icon"></i>
+        {{item.label}}
+      </ng-template>
+    </button>
+
+    <div *isLoggedIn class="u-flex c-nav__logged-in">
+      <p class="text-white"><i class="fa fa-user-circle"></i> Welcome, {{user}}!</p>
+
+      <button class="u-margin-x btn btn-danger" type="button" (click)="authService.logout()"><i class="fa fa-sign-out"></i>
+        Logout</button>
+    </div>
+    <a *isLoggedOut routerLink="/login" class="text-white"><i class="fa fa-sign-in"></i> Login</a>
+  </nav>
+
+  <ng-template #isMobile>
+    <nav class="u-flex w-100">
+      <mat-menu #appMenu="matMenu">
+        <button *ngFor="let item of items" mat-menu-item [routerLink]="item.url" [class.isBrand]="item.isBrand">
+          <strong *ngIf=" item.isBrand; else
+              btn">
+            <ng-container *ngTemplateOutlet="btn; context: {$implicit: item}"></ng-container>
+          </strong>
+
+          <ng-template #btn>
+            <i *ngIf="item.icon" [class]="item.icon"></i>
+            {{item.label}}
+          </ng-template>
+        </button>
+      </mat-menu>
+
+      <button mat-button [matMenuTriggerFor]="appMenu">
+        <i class="fa fa-2x fa-bars"></i>
+      </button>
+
+      <div *isLoggedIn class="u-flex c-nav__logged-in">
+        <button mat-button class="u-padding-x-half"><i class="fa fa-2x fa-user-circle"></i></button>
+        <button mat-button (click)="authService.logout()" class="u-padding-x-half"><i class="fa fa-2x fa-sign-out"></i></button>
+      </div>
+      <a *isLoggedOut routerLink="/login" class="text-white"><i class="fa fa-sign-in"></i></a>
+    </nav>
+  </ng-template>
+</mat-toolbar>
