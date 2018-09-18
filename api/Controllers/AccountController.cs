@@ -14,128 +14,129 @@ using System.Threading.Tasks;
 
 namespace api.Controllers
 {
-  [Route("api/[controller]/[action]")]
-  [ApiController]
-  public class AccountController : Controller
-  {
-    private Dictionary<string, ApiError> _errors = new Dictionary<string, ApiError>
-    {
-        { "DuplicateUserName", new ApiError("Username", "NOT_UNIQUE")},
-        { "PasswordRequiresNonAlphanumeric", new ApiError("Password", "NO_SPECIAL_CHAR") },
-        { "PasswordRequiresUpper", new ApiError("Password", "NO_UPPER") },
-        { "PasswordRequiresDigit", new ApiError("Password", "NO_DIGIT") },
-        { "InvalidPassword", new ApiError("Password", "WRONG") },
-    };
-    private readonly SignInManager<IdentityUser> _signinManager;
-    private readonly UserManager<IdentityUser> _userManager;
-    private readonly IConfiguration _configuration;
+	[Route("api/[controller]/[action]")]
+	[ApiController]
+	public class AccountController : Controller
+	{
+		private Dictionary<string, ApiError> _errors = new Dictionary<string, ApiError>
+		{
+			{ "DuplicateUserName", new ApiError("Username", "NOT_UNIQUE")},
+			{ "PasswordRequiresNonAlphanumeric", new ApiError("Password", "NO_SPECIAL_CHAR") },
+			{ "PasswordRequiresUpper", new ApiError("Password", "NO_UPPER") },
+			{ "PasswordRequiresDigit", new ApiError("Password", "NO_DIGIT") },
+			{ "InvalidPassword", new ApiError("Password", "WRONG") },
+		};
 
-    public AccountController(SignInManager<IdentityUser> signinManager, UserManager<IdentityUser> userManager, IConfiguration configuration)
-    {
-      _signinManager = signinManager;
-      _userManager = userManager;
-      _configuration = configuration;
-    }
+		private readonly SignInManager<IdentityUser> _signinManager;
+		private readonly UserManager<IdentityUser> _userManager;
+		private readonly IConfiguration _configuration;
 
-    [HttpPost]
-    public async Task<object> Login([FromBody] LoginData model)
-    {
-      var result = await _signinManager.PasswordSignInAsync(model.Email, model.Password, false, false);
+		public AccountController(SignInManager<IdentityUser> signinManager, UserManager<IdentityUser> userManager, IConfiguration configuration)
+		{
+			_signinManager = signinManager;
+			_userManager = userManager;
+			_configuration = configuration;
+		}
 
-      if (result.Succeeded)
-      {
-        var appUser = _userManager.Users.SingleOrDefault(r => r.Email == model.Email);
-        return Json(new { token = GenerateJwtToken(model.Email, appUser) });
-      }
-      else
-      {
-        if (!result.IsLockedOut && !result.RequiresTwoFactor && !result.IsNotAllowed)
-        {
-          return Json(new { error = _errors["InvalidPassword"] });
-        }
-      }
+		[HttpPost]
+		public async Task<object> Login([FromBody] LoginData model)
+		{
+			var result = await _signinManager.PasswordSignInAsync(model.Email, model.Password, false, false);
 
-      throw new ApplicationException("INVALID_LOGIN_ATTEMPT");
-    }
+			if (result.Succeeded)
+			{
+				var appUser = _userManager.Users.SingleOrDefault(r => r.Email == model.Email);
+				return Json(new { token = GenerateJwtToken(model.Email, appUser) });
+			}
+			else
+			{
+				if (!result.IsLockedOut && !result.RequiresTwoFactor && !result.IsNotAllowed)
+				{
+					return Json(new { error = _errors["InvalidPassword"] });
+				}
+			}
 
-    [HttpPost]
-    public async Task<object> Register([FromBody] RegisterData model)
-    {
-      var user = new IdentityUser
-      {
-        UserName = model.Email,
-        Email = model.Email
-      };
+			throw new ApplicationException("INVALID_LOGIN_ATTEMPT");
+		}
 
-      var result = await _userManager.CreateAsync(user, model.Password);
+		[HttpPost]
+		public async Task<object> Register([FromBody] RegisterData model)
+		{
+			var user = new IdentityUser
+			{
+				UserName = model.Email,
+				Email = model.Email
+			};
 
-      if (result.Succeeded)
-      {
-        await _signinManager.SignInAsync(user, false);
-        return Json(new { token = GenerateJwtToken(model.Email, user) });
-      }
-      else
-      {
-        List<ApiError> knownErrors = new List<ApiError>();
+			var result = await _userManager.CreateAsync(user, model.Password);
 
-        foreach (var err in result.Errors)
-        {
-          if (_errors.ContainsKey(err.Code))
-          {
-            knownErrors.Add(_errors[err.Code]);
-          }
-        }
+			if (result.Succeeded)
+			{
+				await _signinManager.SignInAsync(user, false);
+				return Json(new { token = GenerateJwtToken(model.Email, user) });
+			}
+			else
+			{
+				List<ApiError> knownErrors = new List<ApiError>();
 
-        if (knownErrors.Count > 0)
-        {
-          return Json(new { errors = knownErrors });
-        }
-      }
+				foreach (var err in result.Errors)
+				{
+					if (_errors.ContainsKey(err.Code))
+					{
+						knownErrors.Add(_errors[err.Code]);
+					}
+				}
 
-      throw new ApplicationException("UNKNOWN_ERROR");
-    }
+				if (knownErrors.Count > 0)
+				{
+					return Json(new { errors = knownErrors });
+				}
+			}
 
-    private object GenerateJwtToken(string email, IdentityUser user)
-    {
-      var claims = new List<Claim>
-            {
-                new Claim(JwtRegisteredClaimNames.Sub, email),
-                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                new Claim(ClaimTypes.NameIdentifier, user.Id)
-            };
+			throw new ApplicationException("UNKNOWN_ERROR");
+		}
 
-      var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JwtKey"]));
-      var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-      var expires = DateTime.Now.AddDays(Convert.ToDouble(_configuration["JwtExpireDays"]));
+		private object GenerateJwtToken(string email, IdentityUser user)
+		{
+			var claims = new List<Claim>
+			{
+				new Claim(JwtRegisteredClaimNames.Sub, email),
+				new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+				new Claim(ClaimTypes.NameIdentifier, user.Id)
+			};
 
-      var token = new JwtSecurityToken(
-          _configuration["JwtIssuer"],
-          _configuration["JwtIssuer"],
-          claims,
-          expires: expires,
-          signingCredentials: creds
-      );
+			var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JwtKey"]));
+			var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+			var expires = DateTime.Now.AddDays(Convert.ToDouble(_configuration["JwtExpireDays"]));
 
-      return new JwtSecurityTokenHandler().WriteToken(token);
-    }
+			var token = new JwtSecurityToken(
+				_configuration["JwtIssuer"],
+				_configuration["JwtIssuer"],
+				claims,
+				expires: expires,
+				signingCredentials: creds
+			);
 
-    public class LoginData
-    {
-      [Required]
-      public string Email { get; set; }
+			return new JwtSecurityTokenHandler().WriteToken(token);
+		}
 
-      [Required]
-      public string Password { get; set; }
-    }
+		public class LoginData
+		{
+			[Required]
+			public string Email { get; set; }
 
-    public class RegisterData
-    {
-      [Required]
-      public string Email { get; set; }
+			[Required]
+			public string Password { get; set; }
+		}
 
-      [Required]
-      [StringLength(128, ErrorMessage = "PWD_MIN_LEN", MinimumLength = 6)]
-      public string Password { get; set; }
-    }
-  }
+		public class RegisterData
+		{
+			[Required]
+			public string Email { get; set; }
+
+			[Required]
+			[StringLength(128, ErrorMessage = "PWD_MIN_LEN", MinimumLength = 6)]
+			public string Password { get; set; }
+		}
+	}
 }

@@ -1,3 +1,96 @@
-<p>
-  monster works!
-</p>
+<div class="u-flex">
+
+  <div class="col-lg-6 monster-form">
+    <form formGroup=""></form>
+  </div>
+
+  <div class="monster-card col-lg-6 u-center u-padding-x-none">
+    <div class="scroll"></div>
+
+    <div class="content u-padding-all-half">
+      <h1>{{monster.Name}}</h1>
+      <em class="subtitle"><span>{{monster.Size}}</span> {{monster.Race}}, {{monster.Type}}</em>
+
+      <!--Basic Stats-->
+      <div class="divider-thick"></div>
+
+      <div class="info-list">
+        <p><strong>Armor Class</strong> {{monster.AC}} <span *ngIf="monster.ArmorType">({{monster.ArmorType}})</span></p>
+        <p><strong>Hit Points</strong> {{monster.HP}} ({{monster.HPRoll}})</p>
+        <p><strong>Speed</strong> {{monster.Speed}} ft.<span *ngIf="monster.ExtraMovementTypes.length > 0">,</span>
+          <span class="comma-list-item" *ngFor="let e of monster.ExtraMovementTypes"> {{e}} ft.<span class="comma">,</span></span></p>
+      </div>
+
+      <!--Attributes-->
+      <div class="divider-thick"></div>
+
+      <div class="stats u-flex u-flex__justify--space-around u-text-center">
+        <div>
+          <h2>str</h2>
+          <h2 class="sub">{{monster.Strength}} ({{strMod}})</h2>
+        </div>
+
+        <div>
+          <h2>dex</h2>
+          <h2 class="sub">{{monster.Dexterity}} ({{dexMod}})</h2>
+        </div>
+
+        <div>
+          <h2>con</h2>
+          <h2 class="sub">{{monster.Constitution}} ({{conMod}})</h2>
+        </div>
+
+        <div>
+          <h2>int</h2>
+          <h2 class="sub">{{monster.Intelligence}} ({{intMod}})</h2>
+        </div>
+
+        <div>
+          <h2>wis</h2>
+          <h2 class="sub">{{monster.Wisdom}} ({{wisMod}})</h2>
+        </div>
+
+        <div>
+          <h2>cha</h2>
+          <h2 class="sub">{{monster.Charisma}} ({{chaMod}})</h2>
+        </div>
+      </div>
+
+      <!--Skills-->
+      <div class="divider-thick"></div>
+
+      <div class="info-list">
+        <p *ngFor="let skill of monster.Skills"><strong>{{skill.Name}} </strong> <span [innerHTML]="skill.Description"></span></p>
+        <p><strong>Senses</strong> {{monster.Senses}}</p>
+        <p><strong>Challenge</strong> {{cr}} ({{xp}} XP)</p>
+      </div>
+
+      <ng-container *ngTemplateOutlet="section; context: { list: monster.Features}"></ng-container>
+      <ng-container *ngTemplateOutlet="section; context: { list: monster.Actions, title: 'Actions'}"></ng-container>
+      <ng-container *ngTemplateOutlet="section; context: { list: monster.LegendaryActions, title: 'Legendary Actions', desc: monster.LegendaryActionsDescription}"></ng-container>
+    </div>
+    <div class="scroll">
+
+    </div>
+
+    <ng-template #section let-list="list" let-title="title" let-desc="LegendaryActionsDescription">
+      <div *ngIf="list && list.length > 0">
+
+        <div *ngIf="title; else bar">
+          <h3>{{title}}</h3>
+          <hr />
+        </div>
+
+        <ng-template #bar>
+          <div class="divider-thick"></div>
+        </ng-template>
+
+        <p *ngIf="desc">{{desc}}</p>
+
+        <div class="info-list actions">
+          <p *ngFor="let item of list"><strong>{{item.Name}}. </strong> <span [innerHTML]="item.Description"></span></p>
+        </div>
+      </div>
+    </ng-template>
+  </div>
+</div>

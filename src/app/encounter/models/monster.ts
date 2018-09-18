@@ -1,5 +1,4 @@
-import Attack from "./attack";
-import Feature from "./feature";
+import Description from "./description";
 
 export default class Monster {
 	public IsPlayer: boolean;
@@ -20,9 +19,18 @@ export default class Monster {
 	public Charisma: number;
 	public Initiative: number;
 	public Speed: number;
+	public ExtraMovementTypes: string[];
 	public AC: number;
-	public Attacks: Attack[];
-	public FeaturesAndSkills: Feature[];
+	public HP: number;
+	public HPRoll: string;
+	public ArmorType: string;
+
+	public Senses: string;
+	public Skills: Description[];
+	public Features: Description[];
+	public Actions: Description[];
+	public LegendaryActionsDescription: string;
+	public LegendaryActions: Description[];
 
 	constructor(
 		isPlayer: boolean,
@@ -41,9 +49,17 @@ export default class Monster {
 		charisma: number,
 		initiative: number,
 		speed: number,
+		extraMovementTypes: string[],
 		ac: number,
-		attacks: Attack[],
-		featuresAndSkills: Feature[]
+		armorType: string,
+		hp: number,
+		hpRoll: string,
+		senses: string,
+		skills: Description[],
+		features: Description[],
+		actions: Description[],
+		legendaryActionsDescription: string,
+		legendaryActions: Description[]
 	) {
 		this.IsPlayer = isPlayer;
 		this.InitiativeRoll = initiativeRoll;
@@ -63,8 +79,17 @@ export default class Monster {
 		this.Charisma = charisma;
 		this.Initiative = initiative;
 		this.Speed = speed;
+		this.ExtraMovementTypes = extraMovementTypes;
 		this.AC = ac;
-		this.Attacks = attacks;
-		this.FeaturesAndSkills = featuresAndSkills;
+		this.ArmorType = armorType;
+		this.HP = hp;
+		this.HPRoll = hpRoll;
+
+		this.Senses = senses;
+		this.Skills = skills;
+		this.Features = features;
+		this.Actions = actions;
+		this.LegendaryActions = legendaryActions;
+		this.LegendaryActionsDescription = legendaryActionsDescription;
 	}
 }

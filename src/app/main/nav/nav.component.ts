@@ -22,9 +22,6 @@ export class NavComponent implements OnInit {
 		this.isMobile = this.deviceService.isMobile();
 		this.isTablet = this.deviceService.isTablet();
 		this.isDesktop = this.deviceService.isDesktop();
-		console.log(this.isMobile);
-		console.log(this.isTablet);
-		console.log(this.isDesktop);
 
 		this.items = [
 			new NavItem("", "fa fa-dice", "DM Tools", true),
