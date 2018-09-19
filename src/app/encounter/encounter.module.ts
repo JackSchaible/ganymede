@@ -8,6 +8,7 @@ import { MatCardModule, MatButtonModule } from "@angular/material";
 import { MatGridListModule } from "@angular/material/grid-list";
 import { MonsterComponent } from "./monster/monster.component";
 import { EncounterHomeComponent } from "./encounter-home/encounter-home.component";
+import { GmCommonModule } from "../common/gm-common.module";
 
 @NgModule({
 	imports: [
@@ -16,7 +17,8 @@ import { EncounterHomeComponent } from "./encounter-home/encounter-home.componen
 		EncounterRoutingModule,
 		MatCardModule,
 		MatGridListModule,
-		MatButtonModule
+		MatButtonModule,
+		GmCommonModule
 	],
 	declarations: [
 		EncounterTrackerComponent,
