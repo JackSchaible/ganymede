@@ -4,11 +4,20 @@ import { EncounterTrackerComponent } from "./encounter-tracker/encounter-tracker
 import { EncounterComponent } from "./encounter.component";
 import { MatTabsModule } from "@angular/material/tabs";
 import { EncounterRoutingModule } from "./encounter.routing";
-import { MatCardModule, MatButtonModule } from "@angular/material";
+import {
+	MatCardModule,
+	MatButtonModule,
+	MatStepperModule,
+	MatAutocompleteModule,
+	MatChipsModule,
+	MatSnackBarModule
+} from "@angular/material";
 import { MatGridListModule } from "@angular/material/grid-list";
 import { MonsterComponent } from "./monster/monster.component";
 import { EncounterHomeComponent } from "./encounter-home/encounter-home.component";
 import { GmCommonModule } from "../common/gm-common.module";
+import { FormsModule } from "../forms/forms.module";
+import { ReactiveFormsModule } from "@angular/forms";
 
 @NgModule({
 	imports: [
@@ -18,7 +27,13 @@ import { GmCommonModule } from "../common/gm-common.module";
 		MatCardModule,
 		MatGridListModule,
 		MatButtonModule,
-		GmCommonModule
+		GmCommonModule,
+		FormsModule,
+		ReactiveFormsModule.withConfig({ warnOnNgModelWithFormControl: "never" }),
+		MatStepperModule,
+		MatAutocompleteModule,
+		MatChipsModule,
+		MatSnackBarModule
 	],
 	declarations: [
 		EncounterTrackerComponent,

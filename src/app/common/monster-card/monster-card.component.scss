@@ -1,4 +1,12 @@
+:host {
+	width: 100%;
+	min-width: 450px;
+}
+
 .monster-card {
+	width: 100%;
+	min-width: 450px;
+
 	h1 {
 		font-family: "mrs-eaves", "TiamatRegular", "Helvetica Neue", Helvetica,
 			sans-serif;
@@ -71,12 +79,6 @@
 			font-family: Georgia, serif;
 		}
 
-		.comma-list-item:last-child {
-			.comma {
-				display: none;
-			}
-		}
-
 		&.actions {
 			p {
 				margin-bottom: 0.625rem;
@@ -93,5 +95,11 @@
 		background-color: #a52a2a;
 		border: none;
 		margin: 10px 0px 5px 0px;
+	}
+
+	.comma-list-item:last-child {
+		.comma {
+			display: none;
+		}
 	}
 }

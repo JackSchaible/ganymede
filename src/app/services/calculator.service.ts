@@ -1,5 +1,7 @@
 import { Injectable } from "@angular/core";
 import Fraction from "../common/fraction";
+import Alignment from "../common/models/alignment";
+import { elementStart } from "@angular/core/src/render3/instructions";
 
 @Injectable({
 	providedIn: "root"
@@ -105,5 +107,108 @@ export class CalculatorService {
 		else if (cr === 30) xp = 155000;
 
 		return xp;
+	}
+
+	public GetAlignmentString(alignment: Alignment): string {
+		let results = [];
+		console.log(this);
+
+		const o1 = alignment.lawfulGood;
+		const o2 = alignment.neutralGood;
+		const o3 = alignment.chaoticGood;
+		const o4 = alignment.lawfulNeutral;
+		const o5 = alignment.neutral;
+		const o6 = alignment.chaoticNeutral;
+		const o7 = alignment.lawfulEvil;
+		const o8 = alignment.neutralEvil;
+		const o9 = alignment.chaoticEvil;
+
+		if (o1 && o2 && o3 && o4 && o5 && o6 && o7 && o8 && o9)
+			results.push("Any Alignment");
+		else {
+			if (o1 && o2 && o3) results.push("Any Good");
+			if (o4 && o5 && o6) results.push("Any Lawful/Neutral/Chaotic Neutral");
+			if (o7 && o8 && o9) results.push("Any Evil");
+			if (o1 && o4 && o7) results.push("Any Lawful");
+			if (o2 && o5 && o8) results.push("Any Good/Neutral/Evil Neutral");
+			if (o3 && o6 && o9) results.push("Any Chaotic.");
+
+			if (
+				o1 &&
+				results.indexOf("Any Good") === -1 &&
+				results.indexOf("Any Lawful") === -1
+			)
+				results.push("Lawful Good");
+
+			if (
+				o2 &&
+				results.indexOf("Any Good") === -1 &&
+				results.indexOf("Any Good/Neutral/Evil Neutral") === -1
+			)
+				results.push("Neutral Good");
+
+			if (
+				o3 &&
+				results.indexOf("Any Good") === -1 &&
+				results.indexOf("Any Chaotic") === -1
+			)
+				results.push("Chaotic Good");
+
+			if (
+				o4 &&
+				results.indexOf("Any Lawful/Neutral/Chaotic Neutral") === -1 &&
+				results.indexOf("Any Lawful") === -1
+			)
+				results.push("Lawful Neutral");
+
+			if (
+				o5 &&
+				results.indexOf("Any Lawful/Neutral/Chaotic Neutral") === -1 &&
+				results.indexOf("Any Good/Neutral/Evil Neutral") === -1
+			)
+				results.push("True Neutral");
+
+			if (
+				o6 &&
+				results.indexOf("Any Lawful/Neutral/Chaotic Neutral") === -1 &&
+				results.indexOf("Any Chaotic") === -1
+			)
+				results.push("Chaotic Neutral");
+
+			if (
+				o7 &&
+				results.indexOf("Any Evil") === -1 &&
+				results.indexOf("Any Lawful") === -1
+			)
+				results.push("Lawful Evil");
+
+			if (
+				o8 &&
+				results.indexOf("Any Evil") === -1 &&
+				results.indexOf("Any Good/Neutral/Evil Neutral") === -1
+			)
+				results.push("Neutral Evil");
+
+			if (
+				o9 &&
+				results.indexOf("Any Evil") === -1 &&
+				results.indexOf("Any Chaotic") === -1
+			)
+				results.push("Chaotic Evil");
+		}
+
+		if (results.length === 0) results.push("Unaligned");
+
+		let result = "";
+
+		for (let i = 0; i < results.length; i++) {
+			if (i == 0) result = results[i];
+			else {
+				if (i == results.length - 1) result += ", or " + results[i];
+				else result += ", " + results[i];
+			}
+		}
+
+		return result;
 	}
 }

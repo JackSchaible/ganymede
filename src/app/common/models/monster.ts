@@ -1,4 +1,5 @@
 import Description from "./description";
+import Alignment from "./alignment";
 
 export default class Monster {
 	public IsPlayer: boolean;
@@ -8,7 +9,8 @@ export default class Monster {
 	public Challenge: number;
 	public XP: number;
 	public Type: string;
-	public Race: string;
+	public Tags: string[];
+	public Alignment: Alignment;
 	public Size: string;
 
 	public Strength: number;
@@ -39,7 +41,8 @@ export default class Monster {
 		challenge: number,
 		xp: number,
 		type: string,
-		race: string,
+		tags: string[],
+		alignment: Alignment,
 		size: string,
 		strength: number,
 		dexterity: number,
@@ -68,7 +71,8 @@ export default class Monster {
 		this.Challenge = challenge;
 		this.XP = xp;
 		this.Type = type;
-		this.Race = race;
+		this.Tags = tags;
+		this.Alignment = alignment;
 		this.Size = size;
 
 		this.Strength = strength;

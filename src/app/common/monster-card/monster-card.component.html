@@ -3,7 +3,10 @@
 
   <div class="content u-padding-all-half">
     <h1>{{monster.Name}}</h1>
-    <em class="subtitle"><span>{{monster.Size}}</span> {{monster.Race}}, {{monster.Type}}</em>
+    <em class="subtitle"><span>{{monster.Size}}</span> {{monster.Type}}<span *ngIf="monster.Tags && monster.Tags.length > 0">
+        (<span><span class="comma-list-item" *ngFor="let tag of monster.Tags">{{tag}}<span class="comma">, </span></span></span>)</span><span
+        *ngIf="monster.Alignment && ((monster.Tags && monster.Tags.length > 0) || monster.Type || monster.Size)">,</span>
+      {{alignmentString}}</em>
 
     <!--Basic Stats-->
     <div class="divider-thick"></div>

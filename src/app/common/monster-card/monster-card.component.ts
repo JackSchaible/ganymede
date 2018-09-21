@@ -1,6 +1,7 @@
 import { Component, OnChanges, Input, OnInit } from "@angular/core";
 import Monster from "../models/monster";
 import { CalculatorService } from "../../services/calculator.service";
+import Alignment from "../models/alignment";
 
 @Component({
 	selector: "gm-monster-card",
@@ -10,6 +11,8 @@ import { CalculatorService } from "../../services/calculator.service";
 export class MonsterCardComponent implements OnChanges, OnInit {
 	@Input()
 	monster: Monster;
+
+	private alignmentString: string;
 
 	private strMod: string;
 	private dexMod: string;
@@ -30,7 +33,8 @@ export class MonsterCardComponent implements OnChanges, OnInit {
 				0,
 				0,
 				"Unknown",
-				"Unknown",
+				[],
+				new Alignment(),
 				"Medium",
 				10,
 				10,
@@ -62,7 +66,9 @@ export class MonsterCardComponent implements OnChanges, OnInit {
 		this.CalculateValues();
 	}
 
-	private CalculateValues(): void {
+	public CalculateValues(): void {
+		this.alignmentString = this.calc.GetAlignmentString(this.monster.Alignment);
+
 		const str = this.monster ? this.monster.Strength : 10;
 		const dex = this.monster ? this.monster.Dexterity : 10;
 		const con = this.monster ? this.monster.Constitution : 10;
