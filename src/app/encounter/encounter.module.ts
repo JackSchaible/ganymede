@@ -10,7 +10,10 @@ import {
 	MatStepperModule,
 	MatAutocompleteModule,
 	MatChipsModule,
-	MatSnackBarModule
+	MatSnackBarModule,
+	MatTooltipModule,
+	MatSelectModule,
+	MatExpansionModule
 } from "@angular/material";
 import { MatGridListModule } from "@angular/material/grid-list";
 import { MonsterComponent } from "./monster/monster.component";
@@ -33,7 +36,10 @@ import { ReactiveFormsModule } from "@angular/forms";
 		MatStepperModule,
 		MatAutocompleteModule,
 		MatChipsModule,
-		MatSnackBarModule
+		MatSnackBarModule,
+		MatTooltipModule,
+		MatSelectModule,
+		MatExpansionModule
 	],
 	declarations: [
 		EncounterTrackerComponent,

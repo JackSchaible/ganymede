@@ -1,99 +1,71 @@
 import Description from "./description";
+import Stats from "./stats/stats";
+import BasicInfo from "./basicInfo";
+import ExtraInfo from "./extraInfo";
 import Alignment from "./alignment";
+import Dice from "./generic/dice";
+import ArmorClass from "./stats/armorClass";
 
 export default class Monster {
-	public IsPlayer: boolean;
-	public InitiativeRoll: number;
-
-	public Name: string;
-	public Challenge: number;
-	public XP: number;
-	public Type: string;
-	public Tags: string[];
-	public Alignment: Alignment;
-	public Size: string;
-
-	public Strength: number;
-	public Dexterity: number;
-	public Constitution: number;
-	public Intelligence: number;
-	public Wisdom: number;
-	public Charisma: number;
-	public Initiative: number;
-	public Speed: number;
-	public ExtraMovementTypes: string[];
-	public AC: number;
-	public HP: number;
-	public HPRoll: string;
-	public ArmorType: string;
-
-	public Senses: string;
-	public Skills: Description[];
-	public Features: Description[];
-	public Actions: Description[];
-	public LegendaryActionsDescription: string;
-	public LegendaryActions: Description[];
-
 	constructor(
-		isPlayer: boolean,
-		initiativeRoll: number,
-		name: string,
-		challenge: number,
-		xp: number,
-		type: string,
-		tags: string[],
-		alignment: Alignment,
-		size: string,
-		strength: number,
-		dexterity: number,
-		constitution: number,
-		intelligence: number,
-		wisdom: number,
-		charisma: number,
-		initiative: number,
-		speed: number,
-		extraMovementTypes: string[],
-		ac: number,
-		armorType: string,
-		hp: number,
-		hpRoll: string,
-		senses: string,
-		skills: Description[],
-		features: Description[],
-		actions: Description[],
-		legendaryActionsDescription: string,
-		legendaryActions: Description[]
-	) {
-		this.IsPlayer = isPlayer;
-		this.InitiativeRoll = initiativeRoll;
+		public BasicInfo: BasicInfo,
+		public Stats: Stats,
+		public ExtraInfo: ExtraInfo,
+		public Features: Description[],
+		public Actions: Description[],
+		public LegendaryActionsDescription: string,
+		public LegendaryActions: Description[]
+	) {}
 
-		this.Name = name;
-		this.Challenge = challenge;
-		this.XP = xp;
-		this.Type = type;
-		this.Tags = tags;
-		this.Alignment = alignment;
-		this.Size = size;
+	static MakeDefault(): Monster {
+		return new Monster(
+			new BasicInfo("Unnamed", 0, "Unknown", [], Alignment.Default(), "Medium"),
+			new Stats(
+				10,
+				10,
+				10,
+				10,
+				10,
+				10,
+				0,
+				0,
+				[],
+				ArmorClass.Default(),
+				0,
+				Dice.Default(),
+				""
+			),
+			new ExtraInfo(0, "passive Perception 10", []),
+			[],
+			[],
+			null,
+			[]
+		);
+	}
 
-		this.Strength = strength;
-		this.Dexterity = dexterity;
-		this.Constitution = constitution;
-		this.Intelligence = intelligence;
-		this.Wisdom = wisdom;
-		this.Charisma = charisma;
-		this.Initiative = initiative;
-		this.Speed = speed;
-		this.ExtraMovementTypes = extraMovementTypes;
-		this.AC = ac;
-		this.ArmorType = armorType;
-		this.HP = hp;
-		this.HPRoll = hpRoll;
-
-		this.Senses = senses;
-		this.Skills = skills;
-		this.Features = features;
-		this.Actions = actions;
-		this.LegendaryActions = legendaryActions;
-		this.LegendaryActionsDescription = legendaryActionsDescription;
+	static New(): Monster {
+		return new Monster(
+			new BasicInfo("", 0, "", [], Alignment.Default(), ""),
+			new Stats(
+				10,
+				10,
+				10,
+				10,
+				10,
+				10,
+				0,
+				30,
+				[],
+				ArmorClass.Default(),
+				0,
+				new Dice(1, 4),
+				""
+			),
+			new ExtraInfo(0, "", []),
+			[],
+			[],
+			null,
+			[]
+		);
 	}
 }

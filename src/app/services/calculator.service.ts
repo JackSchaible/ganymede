@@ -2,6 +2,10 @@ import { Injectable } from "@angular/core";
 import Fraction from "../common/fraction";
 import Alignment from "../common/models/alignment";
 import { elementStart } from "@angular/core/src/render3/instructions";
+import Stats from "../common/models/stats/stats";
+import { DiceOptions } from "../common/models/generic/diceOptions";
+import Dice from "../common/models/generic/dice";
+import ArmorClass from "../common/models/stats/armorClass";
 
 @Injectable({
 	providedIn: "root"
@@ -10,8 +14,11 @@ export class CalculatorService {
 	constructor() {}
 
 	public getModifier(score: number): string {
-		const mod = Math.floor((score - 10) / 2);
+		const mod = this.getModifierNumber(score);
 		return `${score} (${mod < 0 ? "" : "+"}${mod})`;
+	}
+	public getModifierNumber(score: number): number {
+		return Math.floor((score - 10) / 2);
 	}
 
 	public getCrString(challenge: number) {
@@ -30,41 +37,30 @@ export class CalculatorService {
 			value = Math.abs(value);
 		}
 
-		// Accuracy is the maximum relative error; convert to absolute maxError
 		let maxError = sign == 0 ? accuracy : value * accuracy;
-
 		let n: number = Math.floor(value);
 		value -= n;
 
 		if (value < maxError) return new Fraction(sign * n, 1);
-
 		if (1 - maxError < value) return new Fraction(sign * (n + 1), 1);
 
-		// The lower fraction is 0/1
 		let lower_n: number = 0;
 		let lower_d: number = 1;
 
-		// The upper fraction is 1/1
 		let upper_n: number = 1;
 		let upper_d: number = 1;
 
 		while (true) {
-			// The middle fraction is (lower_n + upper_n) / (lower_d + upper_d)
 			let middle_n: number = lower_n + upper_n;
 			let middle_d: number = lower_d + upper_d;
 
 			if (middle_d * (value + maxError) < middle_n) {
-				// real + error < middle : middle is our new upper
 				upper_n = middle_n;
 				upper_d = middle_d;
 			} else if (middle_n < (value - maxError) * middle_d) {
-				// middle < real - error : middle is our new lower
 				lower_n = middle_n;
 				lower_d = middle_d;
-			} else {
-				// Middle is our best fraction
-				return new Fraction((n * middle_d + middle_n) * sign, middle_d);
-			}
+			} else return new Fraction((n * middle_d + middle_n) * sign, middle_d);
 		}
 	}
 
@@ -111,7 +107,6 @@ export class CalculatorService {
 
 	public GetAlignmentString(alignment: Alignment): string {
 		let results = [];
-		console.log(this);
 
 		const o1 = alignment.lawfulGood;
 		const o2 = alignment.neutralGood;
@@ -210,5 +205,83 @@ export class CalculatorService {
 		}
 
 		return result;
+	}
+
+	public randomStats(): Stats {
+		const dice = new Dice(4, 6);
+		const options = [DiceOptions.DropTheLowest];
+		let stats = Stats.Default();
+
+		stats.Strength = this.roll(dice, options);
+		stats.Dexterity = this.roll(dice, options);
+		stats.Constitution = this.roll(dice, options);
+		stats.Intelligence = this.roll(dice, options);
+		stats.Wisdom = this.roll(dice, options);
+		stats.Charisma = this.roll(dice, options);
+
+		const dexMod = this.getModifierNumber(stats.Dexterity);
+		stats.AC = new ArmorClass(10, "DEX", 0);
+		stats.HPRoll.Modifier = this.getModifierNumber(stats.Constitution);
+		stats.Initiative = dexMod;
+
+		return stats;
+	}
+
+	public roll(dice: Dice, options: DiceOptions[]): number {
+		let rolls: number[] = [];
+		let currentRoll = 1;
+
+		for (let i = 0; i < dice.Count; i++) {
+			if (options.indexOf(DiceOptions.RerollOnes) > -1)
+				while (currentRoll === 1) currentRoll = this.random(1, dice.Sides);
+			else if (options.indexOf(DiceOptions.AllUnique) > -1) {
+				if (dice.Count === dice.Sides)
+					throw "Count must less than sides if AllUnique is selected as an option.";
+				while (rolls.indexOf(currentRoll) > -1)
+					currentRoll = this.random(1, dice.Sides);
+			} else currentRoll = this.random(1, dice.Sides);
+
+			rolls.push(currentRoll);
+		}
+
+		if (options.indexOf(DiceOptions.DropTheLowest) > -1)
+			rolls.splice(rolls.indexOf(Math.min(...rolls)), 1);
+
+		return rolls.reduce((a, b) => a + b, 0);
+	}
+
+	public calcAC(stats: Stats) {
+		const b = stats.AC.Base;
+
+		let a: number = 0;
+		switch (stats.AC.AbilityModifier) {
+			case "STR":
+				a = stats.Strength;
+				break;
+			case "DEX":
+				a = stats.Dexterity;
+				break;
+			case "CON":
+				a = stats.Constitution;
+				break;
+			case "INT":
+				a = stats.Intelligence;
+				break;
+			case "WIS":
+				a = stats.Wisdom;
+				break;
+			case "CHA":
+				a = stats.Charisma;
+				break;
+		}
+		a = this.getModifierNumber(a);
+
+		const m = stats.AC.MiscModifier;
+
+		stats.AC.Score = b + a + m;
+	}
+
+	private random(min: number, max: number): number {
+		return Math.floor(Math.random() * (max - min + 1) + min);
 	}
 }

@@ -13,19 +13,22 @@
     </mat-autocomplete>
 
     <mat-horizontal-stepper #stepper>
-      <mat-step [stepControl]="basicInfoFormGroup">
+      <mat-step [stepControl]="basicInfoFormGroup" [completed]="form1Complete">
+        <ng-template matStepLabel>Basic info</ng-template>
+
         <form [formGroup]="basicInfoFormGroup" class="u-flex u-flex__wrap">
-          <ng-template matStepLabel>Basic info</ng-template>
           <mat-form-field class="col-12">
-            <input matInput placeholder="Name" [(ngModel)]="monster.Name" formControlName="name">
+            <input matInput placeholder="Name" [(ngModel)]="monster.BasicInfo.Name" formControlName="name">
           </mat-form-field>
 
           <mat-form-field class="col-12">
-            <input matInput placeholder="Size" [(ngModel)]="monster.Size" formControlName="size" [matAutocomplete]="sizeAC">
+            <input matInput placeholder="Size" [(ngModel)]="monster.BasicInfo.Size" formControlName="size"
+              [matAutocomplete]="sizeAC">
           </mat-form-field>
 
           <mat-form-field class="col-6">
-            <input matInput placeholder="Type" [(ngModel)]="monster.Type" formControlName="type" [matAutocomplete]="typeAC">
+            <input matInput placeholder="Type" [(ngModel)]="monster.BasicInfo.Type" formControlName="type"
+              [matAutocomplete]="typeAC">
           </mat-form-field>
 
           <div class="col-6 inline-block">
@@ -35,7 +38,7 @@
 
           <mat-form-field class="col-6">
             <mat-chip-list #chipList>
-              <mat-chip *ngFor="let tag of monster.Tags" (removed)="removeTag(tag)">
+              <mat-chip *ngFor="let tag of monster.BasicInfo.Tags" (removed)="removeTag(tag)">
                 {{tag}}
                 <i class="fa fa-times-circle" matChipRemove></i>
               </mat-chip>
@@ -46,17 +49,188 @@
 
           <div class="col-6">
             <label class="custom">Alignment</label>
-            <gm-alignment-table [alignment]="monster.Alignment" [changeCallback]="alignmentChanged"></gm-alignment-table>
-          </div>
-
-          <div>
-            <button mat-button matStepperNext>Next</button>
+            <gm-alignment-table [alignment]="monster.BasicInfo.Alignment" [changeCallback]="alignmentChanged"></gm-alignment-table>
           </div>
         </form>
+
+        <div>
+          <button mat-button matStepperNext>Next</button>
+        </div>
       </mat-step>
 
+      <mat-step [stepControl]="statsFormGroup" [completed]="form2Complete">
+        <ng-template matStepLabel>Stats</ng-template>
+
+        <form [formGroup]="statsFormGroup">
+          <mat-accordion>
+            <mat-expansion-panel>
+              <mat-expansion-panel-header>
+                <mat-panel-title>
+                  Attributes
+                </mat-panel-title>
+
+              </mat-expansion-panel-header>
+
+              <div class="col-12 row">
+                <button matTooltip="Roll 4d6, drop the lowest for each attribute" matTooltipPosition="right"
+                  matTooltipHideDelay="2000" mat-button (click)="randomStats()"><i class="fa fa-dice"></i> Random Roll</button>
+              </div>
+
+              <div class="u-flex u-margin-bottom">
+                <mat-form-field class="col-2">
+                  <input matInput placeholder="STR" [(ngModel)]="monster.Stats.Strength" formControlName="str" type="number">
+                </mat-form-field>
+                <mat-form-field class="col-2">
+                  <input matInput placeholder="DEX" [(ngModel)]="monster.Stats.Dexterity" formControlName="dex" type="number">
+                </mat-form-field>
+                <mat-form-field class="col-2">
+                  <input matInput placeholder="CON" [(ngModel)]="monster.Stats.Constitution" formControlName="con" type="number">
+                </mat-form-field>
+                <mat-form-field class="col-2">
+                  <input matInput placeholder="INT" [(ngModel)]="monster.Stats.Intelligence" formControlName="int" type="number">
+                </mat-form-field>
+                <mat-form-field class="col-2">
+                  <input matInput placeholder="WIS" [(ngModel)]="monster.Stats.Wisdom" formControlName="wis" type="number">
+                </mat-form-field>
+                <mat-form-field class="col-2">
+                  <input matInput placeholder="CHA" [(ngModel)]="monster.Stats.Charisma" formControlName="cha" type="number">
+                </mat-form-field>
+              </div>
+            </mat-expansion-panel>
+
+            <mat-expansion-panel>
+              <mat-expansion-panel-header>
+                <mat-panel-title>
+                  Armor Class
+                </mat-panel-title>
+
+              </mat-expansion-panel-header>
+              <div class="col-12 ac u-margin-bottom">
+                <p class="u-margin-bottom"><i>AC = Base + Ability Modifier + Miscellanious</i></p>
+                <div class="u-flex">
+                  <div>
+                    <p>{{monster.Stats.AC.Score}}</p>
+                  </div>
+
+                  <div>
+                    <p class="u-padding-x-half">=</p>
+                  </div>
+
+                  <mat-form-field class="col-2">
+                    <input matInput placeholder="Base" [(ngModel)]="monster.Stats.AC.Base" formControlName="ac_base"
+                      type="number">
+                  </mat-form-field>
+
+                  <div>
+                    <p class="u-padding-x-half">+</p>
+                  </div>
+
+                  <div class='col-3 u-flex u-flex__column u-text-center'>
+                    <mat-form-field>
+                      <input matInput [placeholder]="monster.Stats.AC.AbilityModifier" [(ngModel)]="abilityMod"
+                        formControlName="ac_ability" type="number">
+                    </mat-form-field>
+
+                    <mat-form-field>
+                      <mat-select placeholder="Ability" [(value)]="monster.Stats.AC.AbilityModifier" (selectionChange)="statFormChange()">
+                        <mat-option *ngFor="let ability of abilities" [value]="ability">
+                          {{ability}}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+
+                  <div>
+                    <p class="u-padding-x-half">+</p>
+                  </div>
+
+                  <mat-form-field class="col-2">
+                    <input matInput placeholder="Misc" [(ngModel)]="monster.Stats.AC.MiscModifier" formControlName="ac_misc"
+                      type="number">
+                  </mat-form-field>
+                </div>
+              </div>
+            </mat-expansion-panel>
+
+            <mat-expansion-panel>
+              <mat-expansion-panel-header>
+                <mat-panel-title>
+                  Hit Points
+                </mat-panel-title>
+
+              </mat-expansion-panel-header>
+              <div class="col-12 ac u-margin-bottom">
+                <p class="u-margin-bottom"><i>Average (<small>[Number of Hit Dice]</small>d<small>[Hit Dice Type]</small>)</i></p>
+
+                <div class="u-flex">
+                  <div>
+                    <p>{{monster.Stats.HPAverage}}</p>
+                  </div>
+
+                  <div>
+                    <p class="u-padding-x-half">(</p>
+                  </div>
+
+                  <mat-form-field class="col-2">
+                    <input matInput placeholder="#" [(ngModel)]="monster.Stats.HPRoll.Count" formControlName="hp_count"
+                      type="number">
+                  </mat-form-field>
+
+                  <div>
+                    <p class="u-padding-x-half">d</p>
+                  </div>
+
+                  <mat-form-field class="col-2">
+                    <mat-select placeholder="Sides" [(value)]="monster.Stats.HPRoll.Sides" (selectionChange)="statFormChange()">
+                      <mat-option *ngFor="let number of [4,6,8,10,12,20]" [value]="number">
+                        {{number}}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+
+                  <div>
+                    <p class="u-padding-x-half">)</p>
+                  </div>
+                </div>
+              </div>
+            </mat-expansion-panel>
+
+            <mat-expansion-panel>
+              <mat-expansion-panel-header>
+                <mat-panel-title>
+                  Movement
+                </mat-panel-title>
+
+              </mat-expansion-panel-header>
+              <mat-chip-list>
+                <mat-chip>{{monster.Stats.Speed}} ft.</mat-chip>
+                <mat-chip *ngFor="let m of monster.Stats.ExtraMovementTypes">{{m}} ft.</mat-chip>
+              </mat-chip-list>
+
+              <div>
+                <mat-form-field>
+                  <input matInput placeholder="Type" formControlName="speed_type">
+                </mat-form-field>
+
+                <mat-form-field>
+                  <input matInput placeholder="Distance" formControlName="speed_length">
+                  <button mat-button matSuffix mat-icon-button aria-label="Clear" (click)="value=''">
+                    <mat-icon>close</mat-icon>
+                  </button>
+                </mat-form-field>
+              </div>
+            </mat-expansion-panel>
+          </mat-accordion>
+        </form>
+
+        <div>
+          <button mat-button matStepperPrevious>Back</button>
+          <button mat-button matStepperNext>Next</button>
+        </div>
+      </mat-step>
     </mat-horizontal-stepper>
   </div>
+
   <div class="col-sm-6">
     <gm-monster-card [monster]="monster"></gm-monster-card>
   </div>

@@ -2,20 +2,20 @@
   <div class="scroll"></div>
 
   <div class="content u-padding-all-half">
-    <h1>{{monster.Name}}</h1>
-    <em class="subtitle"><span>{{monster.Size}}</span> {{monster.Type}}<span *ngIf="monster.Tags && monster.Tags.length > 0">
-        (<span><span class="comma-list-item" *ngFor="let tag of monster.Tags">{{tag}}<span class="comma">, </span></span></span>)</span><span
-        *ngIf="monster.Alignment && ((monster.Tags && monster.Tags.length > 0) || monster.Type || monster.Size)">,</span>
+    <h1>{{monster.BasicInfo.Name}}</h1>
+    <em class="subtitle"><span>{{monster.BasicInfo.Size}}</span> {{monster.BasicInfo.Type}}<span *ngIf="monster.Tags && monster.Tags.length > 0">
+        (<span><span class="comma-list-item" *ngFor="let tag of monster.BasicInfo.Tags">{{tag}}<span class="comma">,
+            </span></span></span>)</span><span *ngIf="monster.Alignment && ((monster.BasicInfo.Tags && monster.BasicInfo.Tags.length > 0) || monster.BasicInfo.Type || monster.BasicInfo.Size)">,</span>
       {{alignmentString}}</em>
 
     <!--Basic Stats-->
     <div class="divider-thick"></div>
 
     <div class="info-list">
-      <p><strong>Armor Class</strong> {{monster.AC}} <span *ngIf="monster.ArmorType">({{monster.ArmorType}})</span></p>
-      <p><strong>Hit Points</strong> {{monster.HP}} ({{monster.HPRoll}})</p>
-      <p><strong>Speed</strong> {{monster.Speed}} ft.<span *ngIf="monster.ExtraMovementTypes.length > 0">,</span>
-        <span class="comma-list-item" *ngFor="let e of monster.ExtraMovementTypes"> {{e}} ft.<span class="comma">,</span></span></p>
+      <p><strong>Armor Class</strong> {{monster.Stats.AC.Score}} <span *ngIf="monster.Stats.ArmorType">({{monster.Stats.ArmorType}})</span></p>
+      <p><strong>Hit Points</strong> {{monster.Stats.HPAverage}} ({{monster.Stats.HPRoll}})</p>
+      <p><strong>Speed</strong> {{monster.Stats.Speed}} ft.<span *ngIf="monster.Stats.ExtraMovementTypes.length > 0">,</span>
+        <span class="comma-list-item" *ngFor="let e of monster.Stats.ExtraMovementTypes"> {{e}} ft.<span class="comma">,</span></span></p>
     </div>
 
     <!--Attributes-->
@@ -24,32 +24,32 @@
     <div class="stats u-flex u-flex__justify--space-around u-text-center">
       <div>
         <h2>str</h2>
-        <h2 class="sub">{{monster.Strength}} ({{strMod}})</h2>
+        <h2 class="sub">{{monster.Stats.Strength}} ({{strMod}})</h2>
       </div>
 
       <div>
         <h2>dex</h2>
-        <h2 class="sub">{{monster.Dexterity}} ({{dexMod}})</h2>
+        <h2 class="sub">{{monster.Stats.Dexterity}} ({{dexMod}})</h2>
       </div>
 
       <div>
         <h2>con</h2>
-        <h2 class="sub">{{monster.Constitution}} ({{conMod}})</h2>
+        <h2 class="sub">{{monster.Stats.Constitution}} ({{conMod}})</h2>
       </div>
 
       <div>
         <h2>int</h2>
-        <h2 class="sub">{{monster.Intelligence}} ({{intMod}})</h2>
+        <h2 class="sub">{{monster.Stats.Intelligence}} ({{intMod}})</h2>
       </div>
 
       <div>
         <h2>wis</h2>
-        <h2 class="sub">{{monster.Wisdom}} ({{wisMod}})</h2>
+        <h2 class="sub">{{monster.Stats.Wisdom}} ({{wisMod}})</h2>
       </div>
 
       <div>
         <h2>cha</h2>
-        <h2 class="sub">{{monster.Charisma}} ({{chaMod}})</h2>
+        <h2 class="sub">{{monster.Stats.Charisma}} ({{chaMod}})</h2>
       </div>
     </div>
 
@@ -57,8 +57,8 @@
     <div class="divider-thick"></div>
 
     <div class="info-list">
-      <p *ngFor="let skill of monster.Skills"><strong>{{skill.Name}} </strong> <span [innerHTML]="skill.Description"></span></p>
-      <p><strong>Senses</strong> {{monster.Senses}}</p>
+      <p *ngFor="let skill of monster.ExtraInfo.Skills"><strong>{{skill.Name}} </strong> <span [innerHTML]="skill.Description"></span></p>
+      <p><strong>Senses</strong> {{monster.ExtraInfo.Senses}}</p>
       <p><strong>Challenge</strong> {{cr}} ({{xp}} XP)</p>
     </div>
 

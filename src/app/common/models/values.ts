@@ -1,33 +1,24 @@
 export class ISize {
-	public Name: string;
-	public Space: number;
-	public Examples: string[];
-
-	constructor(name: string, space: number, examples: string[]) {
-		this.Name = name;
-		this.Space = space;
-		this.Examples = examples;
-	}
+	constructor(
+		public Name: string,
+		public Space: number,
+		public Examples: string[],
+		public HitDice: number
+	) {}
 }
 
 export class IMonsterType {
-	public Name: string;
-	public Description: string;
-
-	constructor(name: string, description: string) {
-		this.Name = name;
-		this.Description = description;
-	}
+	constructor(public Name: string, public Description: string) {}
 }
 
 export default class Values {
 	public static Sizes: ISize[] = [
-		new ISize("Tiny", 2.5, ["Imp", "Sprite"]),
-		new ISize("Small", 5, ["Giant Rat", "Goblin"]),
-		new ISize("Medium", 5, ["Orc", "Werewolf"]),
-		new ISize("Large", 10, ["Hippogriff", "Ogre"]),
-		new ISize("Huge", 15, ["Fire Giant", "Treant"]),
-		new ISize("Gargantuan", 20, ["Kraken", "Purple Worm"])
+		new ISize("Tiny", 2.5, ["Imp", "Sprite"], 4),
+		new ISize("Small", 5, ["Giant Rat", "Goblin"], 6),
+		new ISize("Medium", 5, ["Orc", "Werewolf"], 8),
+		new ISize("Large", 10, ["Hippogriff", "Ogre"], 10),
+		new ISize("Huge", 15, ["Fire Giant", "Treant"], 12),
+		new ISize("Gargantuan", 20, ["Kraken", "Purple Worm"], 20)
 	];
 
 	public static Types: IMonsterType[] = [

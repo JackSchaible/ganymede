@@ -1,13 +1,9 @@
-import Dice from "../../common/dice";
+import Dice from "./generic/dice";
 
 export default class Attack {
-	public Name: string;
-	public AttackBonus: number;
-	public Dice: Dice;
-
-	constructor(name: string, attackBonus: number, dice: Dice) {
-		this.Name = name;
-		this.AttackBonus = attackBonus;
-		this.Dice = dice;
-	}
+	constructor(
+		public Name: string,
+		public AttackBonus: number,
+		public Dice: Dice
+	) {}
 }
