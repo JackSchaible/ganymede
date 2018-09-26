@@ -16,9 +16,14 @@
         {{type}}
       </mat-option>
     </mat-autocomplete>
+    <mat-autocomplete #senseAC="matAutocomplete">
+      <mat-option *ngFor="let type of senseTypes" [value]="type">
+        {{type}}
+      </mat-option>
+    </mat-autocomplete>
 
     <mat-horizontal-stepper #stepper>
-      <mat-step [stepControl]="basicInfoFormGroup" [completed]="form1Complete">
+      <mat-step [stepControl]="basicInfoFormGroup">
         <ng-template matStepLabel>Basic info</ng-template>
 
         <form [formGroup]="basicInfoFormGroup" class="u-flex u-flex__wrap">
@@ -63,7 +68,7 @@
         </div>
       </mat-step>
 
-      <mat-step [stepControl]="statsFormGroup" [completed]="form2Complete">
+      <mat-step [stepControl]="statsFormGroup">
         <ng-template matStepLabel>Stats</ng-template>
 
         <form [formGroup]="statsFormGroup">
@@ -233,6 +238,52 @@
                   <mat-form-field class="u-padding-x-none">
                     <input matInput placeholder="Distance" formControlName="speed_length" type="number">
                     <button mat-button matSuffix mat-icon-button aria-label="Clear" (click)="addMovement()">
+                      <i class="fa fa-plus"></i>
+                    </button>
+                  </mat-form-field>
+                </div>
+              </div>
+            </mat-expansion-panel>
+          </mat-accordion>
+        </form>
+
+        <div>
+          <button mat-button matStepperPrevious>Back</button>
+          <button mat-button matStepperNext>Next</button>
+        </div>
+      </mat-step>
+
+      <mat-step [stepControl]="featuresFormGroup">
+        <ng-template matStepLabel>Features</ng-template>
+
+        <form [formGroup]="featuresFormGroup">
+          <mat-accordion>
+            <mat-expansion-panel>
+              <mat-expansion-panel-header>
+                <mat-panel-title>
+                  Senses
+                </mat-panel-title>
+
+              </mat-expansion-panel-header>
+
+              <div class="u-margin-bottom-2x">
+                <mat-chip-list>
+                  <mat-chip>passive perception {{getPP()}}</mat-chip>
+                  <mat-chip *ngFor="let m of monster.Features.ExtraSenses" (removed)="removeSense(m.Type)">{{m.Type}}
+                    {{m.Distance}} ft. &nbsp; <i class="fa fa-times-circle" matChipRemove></i></mat-chip>
+                </mat-chip-list>
+              </div>
+
+              <div>
+                <label>Extra Senses</label>
+                <div>
+                  <mat-form-field class="u-padding-x-none">
+                    <input [matAutocomplete]="senseAC" matInput placeholder="Type" formControlName="senseType">
+                  </mat-form-field>
+
+                  <mat-form-field class="u-padding-x-none">
+                    <input matInput placeholder="Distance" formControlName="senseDistance" type="number">
+                    <button mat-button matSuffix mat-icon-button aria-label="Clear" (click)="addSense()">
                       <i class="fa fa-plus"></i>
                     </button>
                   </mat-form-field>

@@ -82,4 +82,11 @@ export default class Values {
 	];
 
 	public static MovementTypes: string[] = ["Burrow", "Climb", "Fly", "Swim"];
+
+	public static SenseTypes: string[] = [
+		"Blindsight",
+		"Darkvision",
+		"Tremorsense",
+		"Truesight"
+	];
 }

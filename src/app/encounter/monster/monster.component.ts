@@ -25,12 +25,13 @@ export class MonsterComponent implements OnInit {
 	private types: IMonsterType[] = Values.Types;
 	private selectedType: IMonsterType;
 	private separatorKeysCodes: number[] = [ENTER, COMMA];
-	private form1Complete: boolean = false;
 
 	private statsFormGroup: FormGroup;
 	private abilities = ["STR", "DEX", "CON", "INT", "WIS", "CHA"];
 	private abilityMod: number;
 	private movementTypes: string[] = Values.MovementTypes;
+
+	private featuresFormGroup: FormGroup;
 
 	constructor(
 		private formBuilder: FormBuilder,
@@ -66,22 +67,35 @@ export class MonsterComponent implements OnInit {
 			speed_length: []
 		});
 
-		this.basicInfoFormGroup.valueChanges.subscribe(form => {
-			this.card.CalculateValues();
-
-			if (form.type)
-				for (let i = 0; i < this.types.length; i++)
-					if (this.types[i].Name == form.type)
-						this.selectedType = this.types[i];
-
-			this.form1Complete = !!(
-				this.monster.BasicInfo.Name &&
-				this.monster.BasicInfo.Size &&
-				this.monster.BasicInfo.Type
-			);
+		this.featuresFormGroup = this.formBuilder.group({
+			senseType: [],
+			senseDistance: []
 		});
 
+		this.basicInfoFormGroup.valueChanges.subscribe(form =>
+			this.basicInfoFormChange(form)
+		);
+
 		this.statsFormGroup.valueChanges.subscribe(form => this.statFormChange());
+
+		this.featuresFormGroup.valueChanges.subscribe(form =>
+			this.featuresFormChange()
+		);
+	}
+
+	//#region Basic Info Form
+	private basicInfoFormChange(form) {
+		this.card.CalculateValues();
+
+		if (form.type)
+			for (let i = 0; i < this.types.length; i++)
+				if (this.types[i].Name === form.type) this.selectedType = this.types[i];
+
+		this.form1Complete = !!(
+			this.monster.BasicInfo.Name &&
+			this.monster.BasicInfo.Size &&
+			this.monster.BasicInfo.Type
+		);
 	}
 
 	private addTag(event) {
@@ -116,7 +130,9 @@ export class MonsterComponent implements OnInit {
 		this.monster.Stats = this.calculator.randomStats();
 		this.card.CalculateValues();
 	}
+	//#endregion
 
+	//#region Stat Form
 	private statFormChange() {
 		this.card.CalculateValues();
 		this.abilityMod = this.getAcMod();
@@ -190,4 +206,15 @@ export class MonsterComponent implements OnInit {
 			sb.dismiss();
 		}, 3000);
 	}
+	//#endregion
+
+	//#region Features Form
+	private featuresFormChange() {
+		this.card.CalculateValues();
+	}
+
+	private getPP() {
+		return this.calculator.calcPP(this.monster.Stats);
+	}
+	//#endregion
 }

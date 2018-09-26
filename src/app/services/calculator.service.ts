@@ -17,6 +17,7 @@ export class CalculatorService {
 		const mod = this.getModifierNumber(score);
 		return `${score} (${mod < 0 ? "" : "+"}${mod})`;
 	}
+
 	public getModifierNumber(score: number): number {
 		return Math.floor((score - 10) / 2);
 	}
@@ -279,6 +280,10 @@ export class CalculatorService {
 		const m = stats.AC.MiscModifier;
 
 		stats.AC.Score = b + a + m;
+	}
+
+	public calcPP(stats: Stats): number {
+		return 10 + this.getModifierNumber(stats.Wisdom);
 	}
 
 	private random(min: number, max: number): number {

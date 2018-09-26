@@ -79,5 +79,11 @@ export class MonsterCardComponent implements OnChanges, OnInit {
 			this.monster.Stats.HPRoll.Count *
 				((this.monster.Stats.HPRoll.Sides + 1) / 2)
 		);
+
+		this.calc.calcPP(this.monster.Stats);
+	}
+
+	private getPP(): number {
+		return this.calc.calcPP(this.monster.Stats);
 	}
 }

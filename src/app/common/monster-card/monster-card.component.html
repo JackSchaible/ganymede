@@ -59,7 +59,7 @@
 
     <div class="info-list">
       <p *ngFor="let skill of monster.ExtraInfo.Skills"><strong>{{skill.Name}} </strong> <span [innerHTML]="skill.Description"></span></p>
-      <p><strong>Senses</strong> {{monster.ExtraInfo.Senses}}</p>
+      <p><strong>Senses</strong> passive perception {{getPP()}} {{monster.ExtraInfo.Senses}}</p>
       <p><strong>Challenge</strong> {{cr}} ({{xp}} XP)</p>
     </div>
 
