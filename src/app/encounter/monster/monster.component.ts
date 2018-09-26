@@ -4,10 +4,9 @@ import { FormGroup, FormBuilder, Validators } from "@angular/forms";
 import Values, { ISize, IMonsterType } from "../../common/models/values";
 import { COMMA, ENTER } from "@angular/cdk/keycodes";
 import { MatSnackBar } from "@angular/material";
-import Alignment from "../../common/models/alignment";
 import { MonsterCardComponent } from "../../common/monster-card/monster-card.component";
 import { CalculatorService } from "../../services/calculator.service";
-import ArmorClass from "../../common/models/stats/armorClass";
+import MovementType from "../../common/models/stats/movementType";
 
 @Component({
 	selector: "gm-monster",
@@ -31,6 +30,7 @@ export class MonsterComponent implements OnInit {
 	private statsFormGroup: FormGroup;
 	private abilities = ["STR", "DEX", "CON", "INT", "WIS", "CHA"];
 	private abilityMod: number;
+	private movementTypes: string[] = Values.MovementTypes;
 
 	constructor(
 		private formBuilder: FormBuilder,
@@ -150,8 +150,41 @@ export class MonsterComponent implements OnInit {
 		return this.calculator.getModifierNumber(stat);
 	}
 
+	private addMovement(event) {
+		const typeInput = this.statsFormGroup.controls["speed_type"];
+		const distanceInput = this.statsFormGroup.controls["speed_length"];
+
+		let type = typeInput.value;
+		const distanceStr = distanceInput.value;
+
+		if (type && distanceStr) {
+			type = type.trim();
+			const dist = parseInt(distanceStr, 10);
+
+			const newMove = new MovementType(type, dist);
+
+			if (this.monster.Stats.ExtraMovementTypes.indexOf(newMove) === -1)
+				this.monster.Stats.ExtraMovementTypes.push(newMove);
+			else this.openSnackBar("That movement type already exists!");
+		}
+
+		if (typeInput) typeInput.setValue("");
+		if (distanceInput) distanceInput.setValue("");
+	}
+
+	private removeMovement(movement) {
+		let index = 0;
+
+		console.log("e");
+
+		for (let i = 0; i < this.monster.Stats.ExtraMovementTypes.length; i++)
+			if (this.monster.Stats.ExtraMovementTypes[i].Type === movement) index = i;
+
+		if (index >= 0) this.monster.Stats.ExtraMovementTypes.splice(index, 1);
+	}
+
 	private openSnackBar(message: string) {
-		let sb = this.snackBar.open(message);
+		const sb = this.snackBar.open(message);
 
 		setTimeout(() => {
 			sb.dismiss();

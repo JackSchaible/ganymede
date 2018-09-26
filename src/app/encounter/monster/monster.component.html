@@ -11,6 +11,11 @@
         {{type.Name}}
       </mat-option>
     </mat-autocomplete>
+    <mat-autocomplete #movementAC="matAutocomplete">
+      <mat-option *ngFor="let type of movementTypes" [value]="type">
+        {{type}}
+      </mat-option>
+    </mat-autocomplete>
 
     <mat-horizontal-stepper #stepper>
       <mat-step [stepControl]="basicInfoFormGroup" [completed]="form1Complete">
@@ -202,22 +207,36 @@
                 </mat-panel-title>
 
               </mat-expansion-panel-header>
-              <mat-chip-list>
-                <mat-chip>{{monster.Stats.Speed}} ft.</mat-chip>
-                <mat-chip *ngFor="let m of monster.Stats.ExtraMovementTypes">{{m}} ft.</mat-chip>
-              </mat-chip-list>
+
+              <div class="u-margin-bottom-2x">
+                <mat-chip-list>
+                  <mat-chip>Land {{monster.Stats.Speed}} ft.</mat-chip>
+                  <mat-chip *ngFor="let m of monster.Stats.ExtraMovementTypes" (removed)="removeMovement(m.Type)">{{m.Type}}
+                    {{m.Distance}} ft. &nbsp; <i class="fa fa-times-circle" matChipRemove></i></mat-chip>
+                </mat-chip-list>
+              </div>
 
               <div>
+                <div><label>Basic Movement</label></div>
                 <mat-form-field>
-                  <input matInput placeholder="Type" formControlName="speed_type">
+                  <input matInput placeholder="Land Speed" [(ngModel)]="monster.Stats.Speed" formControlName="speed">
                 </mat-form-field>
+              </div>
 
-                <mat-form-field>
-                  <input matInput placeholder="Distance" formControlName="speed_length">
-                  <button mat-button matSuffix mat-icon-button aria-label="Clear" (click)="value=''">
-                    <mat-icon>close</mat-icon>
-                  </button>
-                </mat-form-field>
+              <div>
+                <label>Extra Movement Types</label>
+                <div>
+                  <mat-form-field class="u-padding-x-none">
+                    <input [matAutocomplete]="movementAC" matInput placeholder="Type" formControlName="speed_type">
+                  </mat-form-field>
+
+                  <mat-form-field class="u-padding-x-none">
+                    <input matInput placeholder="Distance" formControlName="speed_length" type="number">
+                    <button mat-button matSuffix mat-icon-button aria-label="Clear" (click)="addMovement()">
+                      <i class="fa fa-plus"></i>
+                    </button>
+                  </mat-form-field>
+                </div>
               </div>
             </mat-expansion-panel>
           </mat-accordion>

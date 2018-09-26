@@ -3,7 +3,7 @@
 
   <div class="content u-padding-all-half">
     <h1>{{monster.BasicInfo.Name}}</h1>
-    <em class="subtitle"><span>{{monster.BasicInfo.Size}}</span> {{monster.BasicInfo.Type}}<span *ngIf="monster.Tags && monster.Tags.length > 0">
+    <em class="subtitle"><span>{{monster.BasicInfo.Size}}</span> {{monster.BasicInfo.Type}}<span *ngIf="monster.BasicInfo.Tags && monster.BasicInfo.Tags.length > 0">
         (<span><span class="comma-list-item" *ngFor="let tag of monster.BasicInfo.Tags">{{tag}}<span class="comma">,
             </span></span></span>)</span><span *ngIf="monster.Alignment && ((monster.BasicInfo.Tags && monster.BasicInfo.Tags.length > 0) || monster.BasicInfo.Type || monster.BasicInfo.Size)">,</span>
       {{alignmentString}}</em>
@@ -15,7 +15,8 @@
       <p><strong>Armor Class</strong> {{monster.Stats.AC.Score}} <span *ngIf="monster.Stats.ArmorType">({{monster.Stats.ArmorType}})</span></p>
       <p><strong>Hit Points</strong> {{monster.Stats.HPAverage}} ({{monster.Stats.HPRoll}})</p>
       <p><strong>Speed</strong> {{monster.Stats.Speed}} ft.<span *ngIf="monster.Stats.ExtraMovementTypes.length > 0">,</span>
-        <span class="comma-list-item" *ngFor="let e of monster.Stats.ExtraMovementTypes"> {{e}} ft.<span class="comma">,</span></span></p>
+        <span class="comma-list-item" *ngFor="let movement of monster.Stats.ExtraMovementTypes"> {{movement.Type}}
+          {{movement.Distance}} ft.<span class="comma">,</span></span></p>
     </div>
 
     <!--Attributes-->

@@ -1,5 +1,6 @@
 import Dice from "../generic/dice";
 import ArmorClass from "./armorClass";
+import MovementType from "./movementType";
 
 export default class Stats {
 	constructor(
@@ -11,7 +12,7 @@ export default class Stats {
 		public Charisma: number,
 		public Initiative: number,
 		public Speed: number,
-		public ExtraMovementTypes: string[],
+		public ExtraMovementTypes: MovementType[],
 		public AC: ArmorClass,
 		public HPAverage: number,
 		public HPRoll: Dice,
