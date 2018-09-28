@@ -8,7 +8,7 @@ import { MonsterCardComponent } from "../../common/monster-card/monster-card.com
 import { CalculatorService } from "../../services/calculator.service";
 import MovementType from "../../common/models/stats/movementType";
 import Sense from "../../common/models/features/sense";
-import Skill from "../../common/models/features/skill";
+import Skill, { SkillGroup } from "../../common/models/features/skill";
 
 @Component({
 	selector: "gm-monster",
@@ -35,7 +35,7 @@ export class MonsterComponent implements OnInit {
 
 	private featuresFormGroup: FormGroup;
 	private senseTypes: string[] = Values.SenseTypes;
-	private skills: Skill[] = Values.Skills;
+	private skills: SkillGroup[] = Values.Skills;
 
 	constructor(
 		private formBuilder: FormBuilder,
@@ -98,6 +98,8 @@ export class MonsterComponent implements OnInit {
 		if (form.type)
 			for (let i = 0; i < this.types.length; i++)
 				if (this.types[i].Name === form.type) this.selectedType = this.types[i];
+
+		this;
 	}
 
 	private addTag(event) {
