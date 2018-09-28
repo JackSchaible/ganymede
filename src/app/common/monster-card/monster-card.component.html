@@ -54,12 +54,19 @@
       </div>
     </div>
 
-    <!--Skills-->
+    <!--Features-->
     <div class="divider-thick"></div>
 
     <div class="info-list">
-      <p *ngFor="let skill of monster.ExtraInfo.Skills"><strong>{{skill.Name}} </strong> <span [innerHTML]="skill.Description"></span></p>
-      <p><strong>Senses</strong> passive perception {{getPP()}} {{monster.ExtraInfo.Senses}}</p>
+      <p *ngIf="monster.Features.SavingThrows.length > 0">
+        <strong>Saving Throws</strong>
+        <span class="comma-list-item" *ngFor="let savingThrow of monster.Features.SavingThrows"> {{savingThrow.Name}}
+          {{getST(savingThrow)}}<span class="comma">,</span></span>
+      </p>
+      <p><strong>Senses</strong><span *ngIf="monster.Features.ExtraSenses.length > 0">,</span>
+        <span *ngFor="let sense of monster.Features.ExtraSenses"> {{sense.Type}}
+          {{sense.Distance}} ft.,</span> passive perception {{getPP()}}</p>
+      <p *ngFor="let feature of monster.Features.ExtraFeatures"><strong>{{feature.Name}} </strong> <span [innerHTML]="feature.Description"></span></p>
       <p><strong>Challenge</strong> {{cr}} ({{xp}} XP)</p>
     </div>
 

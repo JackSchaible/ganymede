@@ -7,6 +7,7 @@ export default class BasicInfo {
 		public Type: string,
 		public Tags: string[],
 		public Alignment: Alignment,
-		public Size: string
+		public Size: string,
+		public ProficiencyModifier: number
 	) {}
 }

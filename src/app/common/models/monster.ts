@@ -1,17 +1,16 @@
 import Description from "./description";
 import Stats from "./stats/stats";
 import BasicInfo from "./basicInfo";
-import ExtraInfo from "./extraInfo";
 import Alignment from "./alignment";
 import Dice from "./generic/dice";
 import ArmorClass from "./stats/armorClass";
+import Features from "./features/features";
 
 export default class Monster {
 	constructor(
 		public BasicInfo: BasicInfo,
 		public Stats: Stats,
-		public ExtraInfo: ExtraInfo,
-		public Features: Description[],
+		public Features: Features,
 		public Actions: Description[],
 		public LegendaryActionsDescription: string,
 		public LegendaryActions: Description[]
@@ -19,7 +18,15 @@ export default class Monster {
 
 	static MakeDefault(): Monster {
 		return new Monster(
-			new BasicInfo("Unnamed", 0, "Unknown", [], Alignment.Default(), "Medium"),
+			new BasicInfo(
+				"Unnamed",
+				0,
+				"Unknown",
+				[],
+				Alignment.Default(),
+				"Medium",
+				2
+			),
 			new Stats(
 				10,
 				10,
@@ -35,8 +42,7 @@ export default class Monster {
 				Dice.Default(),
 				""
 			),
-			new ExtraInfo(0, "passive Perception 10", []),
-			[],
+			new Features([], [], [], [], [], [], [], [], [], 0),
 			[],
 			null,
 			[]
@@ -45,7 +51,7 @@ export default class Monster {
 
 	static New(): Monster {
 		return new Monster(
-			new BasicInfo("", 0, "", [], Alignment.Default(), ""),
+			new BasicInfo("", 0, "", [], Alignment.Default(), "", 0),
 			new Stats(
 				10,
 				10,
@@ -61,8 +67,7 @@ export default class Monster {
 				new Dice(1, 4),
 				""
 			),
-			new ExtraInfo(0, "", []),
-			[],
+			new Features([], [], [], [], [], [], [], [], [], 0),
 			[],
 			null,
 			[]

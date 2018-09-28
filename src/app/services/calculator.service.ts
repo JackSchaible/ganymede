@@ -6,6 +6,8 @@ import Stats from "../common/models/stats/stats";
 import { DiceOptions } from "../common/models/generic/diceOptions";
 import Dice from "../common/models/generic/dice";
 import ArmorClass from "../common/models/stats/armorClass";
+import Skill from "../common/models/features/skill";
+import Monster from "../common/models/monster";
 
 @Injectable({
 	providedIn: "root"
@@ -284,6 +286,34 @@ export class CalculatorService {
 
 	public calcPP(stats: Stats): number {
 		return 10 + this.getModifierNumber(stats.Wisdom);
+	}
+
+	public calcSavingThrow(savingThrow: Skill, monster: Monster): number {
+		let mod = 0;
+		switch (savingThrow.Name) {
+			case "Strength":
+				mod = this.getModifierNumber(monster.Stats.Strength);
+				break;
+			case "Dexterity":
+				mod = this.getModifierNumber(monster.Stats.Dexterity);
+				break;
+			case "Constitution":
+				mod = this.getModifierNumber(monster.Stats.Constitution);
+				break;
+			case "Intelligence":
+				mod = this.getModifierNumber(monster.Stats.Intelligence);
+				break;
+			case "Wisdom":
+				mod = this.getModifierNumber(monster.Stats.Wisdom);
+				break;
+			case "Charisma":
+				mod = this.getModifierNumber(monster.Stats.Charisma);
+				break;
+		}
+
+		return (
+			mod + monster.BasicInfo.ProficiencyModifier * savingThrow.Proficiency
+		);
 	}
 
 	private random(min: number, max: number): number {

@@ -3,10 +3,12 @@ import Monster from "../../common/models/monster";
 import { FormGroup, FormBuilder, Validators } from "@angular/forms";
 import Values, { ISize, IMonsterType } from "../../common/models/values";
 import { COMMA, ENTER } from "@angular/cdk/keycodes";
-import { MatSnackBar } from "@angular/material";
+import { MatSnackBar, MatCheckboxChange } from "@angular/material";
 import { MonsterCardComponent } from "../../common/monster-card/monster-card.component";
 import { CalculatorService } from "../../services/calculator.service";
 import MovementType from "../../common/models/stats/movementType";
+import Sense from "../../common/models/features/sense";
+import Skill from "../../common/models/features/skill";
 
 @Component({
 	selector: "gm-monster",
@@ -32,6 +34,8 @@ export class MonsterComponent implements OnInit {
 	private movementTypes: string[] = Values.MovementTypes;
 
 	private featuresFormGroup: FormGroup;
+	private senseTypes: string[] = Values.SenseTypes;
+	private skills: Skill[] = Values.Skills;
 
 	constructor(
 		private formBuilder: FormBuilder,
@@ -47,7 +51,8 @@ export class MonsterComponent implements OnInit {
 		this.basicInfoFormGroup = this.formBuilder.group({
 			name: [],
 			size: [],
-			type: []
+			type: [],
+			prof: []
 		});
 
 		this.statsFormGroup = this.formBuilder.group({
@@ -68,8 +73,11 @@ export class MonsterComponent implements OnInit {
 		});
 
 		this.featuresFormGroup = this.formBuilder.group({
-			senseType: [],
-			senseDistance: []
+			sense_type: [],
+			sense_distance: [],
+			skill_name: [],
+			skill_ability: [],
+			skill_prof: []
 		});
 
 		this.basicInfoFormGroup.valueChanges.subscribe(form =>
@@ -90,12 +98,6 @@ export class MonsterComponent implements OnInit {
 		if (form.type)
 			for (let i = 0; i < this.types.length; i++)
 				if (this.types[i].Name === form.type) this.selectedType = this.types[i];
-
-		this.form1Complete = !!(
-			this.monster.BasicInfo.Name &&
-			this.monster.BasicInfo.Size &&
-			this.monster.BasicInfo.Type
-		);
 	}
 
 	private addTag(event) {
@@ -191,8 +193,6 @@ export class MonsterComponent implements OnInit {
 	private removeMovement(movement) {
 		let index = 0;
 
-		console.log("e");
-
 		for (let i = 0; i < this.monster.Stats.ExtraMovementTypes.length; i++)
 			if (this.monster.Stats.ExtraMovementTypes[i].Type === movement) index = i;
 
@@ -213,8 +213,87 @@ export class MonsterComponent implements OnInit {
 		this.card.CalculateValues();
 	}
 
+	private triggerFeaturesForm(e: MatCheckboxChange) {
+		if (!e || !e.source) return;
+
+		if (e.checked) {
+			if (e.source.name === "Strength")
+				this.monster.Features.SavingThrows.push(
+					new Skill("Strength", "Strength", 1)
+				);
+			if (e.source.name === "Dexterity")
+				this.monster.Features.SavingThrows.push(
+					new Skill("Dexterity", "Dexterity", 1)
+				);
+			if (e.source.name === "Constitution")
+				this.monster.Features.SavingThrows.push(
+					new Skill("Constitution", "Constitution", 1)
+				);
+			if (e.source.name === "Intelligence")
+				this.monster.Features.SavingThrows.push(
+					new Skill("Intelligence", "Intelligence", 1)
+				);
+			if (e.source.name === "Wisdom")
+				this.monster.Features.SavingThrows.push(
+					new Skill("Wisdom", "Wisdom", 1)
+				);
+			if (e.source.name === "Charisma")
+				this.monster.Features.SavingThrows.push(
+					new Skill("Charisma", "Charisma", 1)
+				);
+		} else {
+			let index = -1;
+
+			for (let i = 0; i < this.monster.Features.SavingThrows.length; i++) {
+				if (this.monster.Features.SavingThrows[i].Name === e.source.name)
+					index = i;
+			}
+
+			if (index > -1) this.monster.Features.SavingThrows.splice(index, 1);
+		}
+
+		if (this.featuresFormGroup)
+			this.featuresFormGroup.updateValueAndValidity({
+				onlySelf: false,
+				emitEvent: true
+			});
+	}
+
 	private getPP() {
 		return this.calculator.calcPP(this.monster.Stats);
+	}
+
+	private addSense(event) {
+		const typeInput = this.featuresFormGroup.controls["sense_type"];
+		const distanceInput = this.featuresFormGroup.controls["sense_distance"];
+
+		let type = typeInput.value;
+		const distanceStr = distanceInput.value;
+
+		if (type && distanceStr) {
+			type = type.trim();
+			const dist = parseInt(distanceStr, 10);
+
+			const newSense = new Sense(type, dist);
+
+			if (this.monster.Features.ExtraSenses.indexOf(newSense) === -1)
+				this.monster.Features.ExtraSenses.push(newSense);
+			else this.openSnackBar("That sense type already exists!");
+		}
+
+		if (typeInput) typeInput.setValue("");
+		if (distanceInput) distanceInput.setValue("");
+	}
+
+	private removeSense(sense) {
+		let index = 0;
+
+		console.log("e");
+
+		for (let i = 0; i < this.monster.Features.ExtraSenses.length; i++)
+			if (this.monster.Features.ExtraSenses[i].Type === sense) index = i;
+
+		if (index >= 0) this.monster.Features.ExtraSenses.splice(index, 1);
 	}
 	//#endregion
 }

@@ -1,10 +1,13 @@
-import { Component, OnChanges, Input, OnInit } from "@angular/core";
+import {
+	Component,
+	OnChanges,
+	Input,
+	OnInit,
+	ChangeDetectorRef
+} from "@angular/core";
 import Monster from "../models/monster";
 import { CalculatorService } from "../../services/calculator.service";
-import Alignment from "../models/alignment";
-import BasicInfo from "../models/basicInfo";
-import Stats from "../models/stats/stats";
-import ExtraInfo from "../models/extraInfo";
+import Skill from "../models/features/skill";
 
 @Component({
 	selector: "gm-monster-card",
@@ -27,7 +30,10 @@ export class MonsterCardComponent implements OnChanges, OnInit {
 	private cr: string;
 	private xp: number;
 
-	constructor(private calc: CalculatorService) {
+	constructor(
+		private calc: CalculatorService,
+		private change: ChangeDetectorRef
+	) {
 		if (!this.monster) this.monster = Monster.MakeDefault();
 	}
 
@@ -69,7 +75,7 @@ export class MonsterCardComponent implements OnChanges, OnInit {
 		mod = Math.floor((cha - 10) / 2);
 		this.chaMod = `${mod < 0 ? "" : "+"}${mod}`;
 
-		const c = this.monster ? this.monster.ExtraInfo.Challenge : 0;
+		const c = this.monster ? this.monster.Features.Challenge : 0;
 		this.xp = this.calc.CrToXP(c);
 		this.cr = this.calc.getCrString(c);
 
@@ -81,9 +87,15 @@ export class MonsterCardComponent implements OnChanges, OnInit {
 		);
 
 		this.calc.calcPP(this.monster.Stats);
+		this.change.detectChanges();
 	}
 
 	private getPP(): number {
 		return this.calc.calcPP(this.monster.Stats);
+	}
+
+	private getST(savingThrow: Skill): string {
+		let num = this.calc.calcSavingThrow(savingThrow, this.monster);
+		return (num >= 0 ? "+" : "-") + num;
 	}
 }

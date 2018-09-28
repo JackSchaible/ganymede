@@ -1,3 +1,5 @@
+import Skill, { SkillGroup } from "./features/skill";
+
 export class ISize {
 	constructor(
 		public Name: string,
@@ -88,5 +90,34 @@ export default class Values {
 		"Darkvision",
 		"Tremorsense",
 		"Truesight"
+	];
+
+	public static Skills: SkillGroup[] = [
+		new SkillGroup("Strength", [new Skill("Athletics", "Strength")]),
+		new SkillGroup("Dexterity", [
+			new Skill("Acrobatics", "Dexterity"),
+			new Skill("Sleight of Hand", "Dexterity"),
+			new Skill("Stealth", "Dexterity")
+		]),
+		new SkillGroup("Intelligence", [
+			new Skill("Arcana", "Intelligence"),
+			new Skill("History", "Intelligence"),
+			new Skill("Investigation", "Intelligence"),
+			new Skill("Nature", "Intelligence"),
+			new Skill("Religion", "Intelligence")
+		]),
+		new SkillGroup("Wisdom", [
+			new Skill("Animal Handling", "Wisdom"),
+			new Skill("Insight", "Wisdom"),
+			new Skill("Medicine", "Wisdom"),
+			new Skill("Perception", "Wisdom"),
+			new Skill("Survival", "Wisdom")
+		]),
+		new SkillGroup("Charisma", [
+			new Skill("Deception", "Charisma"),
+			new Skill("Intimidate", "Charisma"),
+			new Skill("Performance", "Charisma"),
+			new Skill("Persuasion", "Charisma")
+		])
 	];
 }

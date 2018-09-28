@@ -1,5 +1,5 @@
 <div class="u-flex u-flex__wrap">
-  <div class="col-sm-6">
+  <div class="col-md-6">
     <h2>Describe Your Monster</h2>
     <mat-autocomplete #sizeAC="matAutocomplete">
       <mat-option *ngFor="let size of sizes" [value]="size.Name">
@@ -20,6 +20,13 @@
       <mat-option *ngFor="let type of senseTypes" [value]="type">
         {{type}}
       </mat-option>
+    </mat-autocomplete>
+    <mat-autocomplete #skillAC="matAutocomplete">
+      <mat-optgroup *ngFor="let group of skills" [label]="group.Ability">
+        <mat-option *ngFor="let skill of group.Skills" [value]="skill.Name">
+          {{skill.Name}}
+        </mat-option>
+      </mat-optgroup>
     </mat-autocomplete>
 
     <mat-horizontal-stepper #stepper>
@@ -46,16 +53,23 @@
               {{selectedType.Description}}</p>
           </div>
 
-          <mat-form-field class="col-6">
-            <mat-chip-list #chipList>
-              <mat-chip *ngFor="let tag of monster.BasicInfo.Tags" (removed)="removeTag(tag)">
-                {{tag}}
-                <i class="fa fa-times-circle" matChipRemove></i>
-              </mat-chip>
-              <input placeholder="New Tag" [matChipInputFor]="chipList" [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-                [matChipInputAddOnBlur]="true" (matChipInputTokenEnd)="addTag($event)">
-            </mat-chip-list>
-          </mat-form-field>
+          <div class="col-6 row">
+            <mat-form-field>
+              <mat-chip-list #chipList>
+                <mat-chip *ngFor="let tag of monster.BasicInfo.Tags" (removed)="removeTag(tag)">
+                  {{tag}}
+                  <i class="fa fa-times-circle" matChipRemove></i>
+                </mat-chip>
+                <input placeholder="New Tag" [matChipInputFor]="chipList" [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                  [matChipInputAddOnBlur]="true" (matChipInputTokenEnd)="addTag($event)">
+              </mat-chip-list>
+            </mat-form-field>
+
+            <mat-form-field>
+              <input matInput placeholder="Proficiency Bonus" [(ngModel)]="monster.BasicInfo.ProficiencyModifier"
+                formControlName="prof" type="number">
+            </mat-form-field>
+          </div>
 
           <div class="col-6">
             <label class="custom">Alignment</label>
@@ -73,6 +87,7 @@
 
         <form [formGroup]="statsFormGroup">
           <mat-accordion>
+            <!--Attributes-->
             <mat-expansion-panel>
               <mat-expansion-panel-header>
                 <mat-panel-title>
@@ -108,6 +123,7 @@
               </div>
             </mat-expansion-panel>
 
+            <!--AC-->
             <mat-expansion-panel>
               <mat-expansion-panel-header>
                 <mat-panel-title>
@@ -135,7 +151,7 @@
                     <p class="u-padding-x-half">+</p>
                   </div>
 
-                  <div class='col-3 u-flex u-flex__column u-text-center'>
+                  <div class='col-3 ac-ability u-flex u-flex__column u-text-center'>
                     <mat-form-field>
                       <input matInput [placeholder]="monster.Stats.AC.AbilityModifier" [(ngModel)]="abilityMod"
                         formControlName="ac_ability" type="number">
@@ -162,6 +178,7 @@
               </div>
             </mat-expansion-panel>
 
+            <!--HP-->
             <mat-expansion-panel>
               <mat-expansion-panel-header>
                 <mat-panel-title>
@@ -205,6 +222,7 @@
               </div>
             </mat-expansion-panel>
 
+            <!--Movement-->
             <mat-expansion-panel>
               <mat-expansion-panel-header>
                 <mat-panel-title>
@@ -258,6 +276,58 @@
 
         <form [formGroup]="featuresFormGroup">
           <mat-accordion>
+
+            <!--Saving Throws-->
+            <mat-expansion-panel>
+              <mat-expansion-panel-header>
+                <mat-panel-title>
+                  Saving Throws
+                </mat-panel-title>
+
+              </mat-expansion-panel-header>
+
+              <div class="u-flex u-flex__justify--space-between u-margin-bottom">
+                <mat-checkbox name='Strength' (change)="triggerFeaturesForm($event)">STR</mat-checkbox>
+                <mat-checkbox name='Dexterity' (change)="triggerFeaturesForm($event)">DEX</mat-checkbox>
+                <mat-checkbox name='Constitution' (change)="triggerFeaturesForm($event)">CON</mat-checkbox>
+                <mat-checkbox name='Intelligence' (change)="triggerFeaturesForm($event)">INT</mat-checkbox>
+                <mat-checkbox name='Wisdom' (change)="triggerFeaturesForm($event)">WIS</mat-checkbox>
+                <mat-checkbox name='Charisma' (change)="triggerFeaturesForm($event)">CHA</mat-checkbox>
+              </div>
+            </mat-expansion-panel>
+
+            <!--Skills-->
+            <mat-expansion-panel>
+              <mat-expansion-panel-header>
+                <mat-panel-title>
+                  Skills
+                </mat-panel-title>
+
+              </mat-expansion-panel-header>
+
+              <mat-form-field class="u-padding-x-none">
+                <input [matAutocomplete]="skillAC" matInput placeholder="Skill" formControlName="skill_name">
+              </mat-form-field>
+
+              <mat-form-field class="u-padding-x-none">
+                <mat-select placeholder="Ability" (selectionChange)="featuresFormChange()">
+                  <mat-option *ngFor="let ability of abilities" [value]="ability">
+                    {{ability}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+
+              <div class="inline-block">
+                <label>Proficiency</label>
+                <mat-checkbox></mat-checkbox>
+                <mat-checkbox></mat-checkbox>
+              </div>
+              <button mat-button matSuffix mat-icon-button aria-label="Clear" (click)="addSense()">
+                <i class="fa fa-plus"></i>
+              </button>
+            </mat-expansion-panel>
+
+            <!--Senses-->
             <mat-expansion-panel>
               <mat-expansion-panel-header>
                 <mat-panel-title>
@@ -278,11 +348,11 @@
                 <label>Extra Senses</label>
                 <div>
                   <mat-form-field class="u-padding-x-none">
-                    <input [matAutocomplete]="senseAC" matInput placeholder="Type" formControlName="senseType">
+                    <input [matAutocomplete]="senseAC" matInput placeholder="Type" formControlName="sense_type">
                   </mat-form-field>
 
                   <mat-form-field class="u-padding-x-none">
-                    <input matInput placeholder="Distance" formControlName="senseDistance" type="number">
+                    <input matInput placeholder="Distance" formControlName="sense_distance" type="number">
                     <button mat-button matSuffix mat-icon-button aria-label="Clear" (click)="addSense()">
                       <i class="fa fa-plus"></i>
                     </button>
@@ -301,7 +371,7 @@
     </mat-horizontal-stepper>
   </div>
 
-  <div class="col-sm-6">
+  <div class="col-md-6">
     <gm-monster-card [monster]="monster"></gm-monster-card>
   </div>
 </div>
