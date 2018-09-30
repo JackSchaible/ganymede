@@ -355,111 +355,86 @@
               </div>
             </mat-expansion-panel>
 
-            <!--Vulnerabilities-->
+            <!--Vulnerabilities, Resistances, Immunities-->
             <mat-expansion-panel>
               <mat-expansion-panel-header>
                 <mat-panel-title>
-                  Vulnerabilities
+                  Vulnerabilities, Resistances, & Immunities
                 </mat-panel-title>
               </mat-expansion-panel-header>
 
-              <div class="u-margin-bottom-2x">
-                <mat-chip-list>
-                  <mat-chip *ngFor="let v of monster.Features.DamageVulnerabilities" (removed)="removeVulnerability(v)">
-                    {{v}} <i class="fa fa-times-circle" matChipRemove></i>
-                  </mat-chip>
-                </mat-chip-list>
-              </div>
+              <div class="u-flex u-flex__wrap">
+                <div class="col-6 u-padding-x-none u-flex u-flex__column u-flex__justify--space-between">
+                  <label>Vulnerabilities</label>
+                  <div class="u-margin-bottom-2x" *ngIf="monster.Features.DamageVulnerabilities.length > 0">
+                    <mat-chip-list>
+                      <mat-chip *ngFor="let v of monster.Features.DamageVulnerabilities" (removed)="removeVulnerability(v)">
+                        {{v}} <i class="fa fa-times-circle" matChipRemove></i>
+                      </mat-chip>
+                    </mat-chip-list>
+                  </div>
 
-              <div>
-                <mat-form-field>
-                  <input [matAutocomplete]="dtAC" matInput placeholder="Vulnerability" formControlName="vulnerability">
-                </mat-form-field>
+                  <mat-form-field>
+                    <input [matAutocomplete]="dtAC" matInput placeholder="Vulnerability" formControlName="vulnerability">
+                    <button mat-button matSuffix mat-icon-button (click)="addVulnerability()">
+                      <i class="fa fa-plus"></i>
+                    </button>
+                  </mat-form-field>
+                </div>
 
-                <button mat-button matSuffix mat-icon-button (click)="addVulnerability()">
-                  <i class="fa fa-plus"></i>
-                </button>
-              </div>
-            </mat-expansion-panel>
+                <div class="col-6 u-padding-x-none u-flex u-flex__column u-flex__justify--space-between">
+                  <label>Resistances</label>
+                  <div class="u-margin-bottom-2x" *ngIf="monster.Features.DamageResistances.length > 0">
+                    <mat-chip-list>
+                      <mat-chip *ngFor="let r of monster.Features.DamageResistances" (removed)="removeResistance(r)">
+                        {{r}} <i class="fa fa-times-circle" matChipRemove></i>
+                      </mat-chip>
+                    </mat-chip-list>
+                  </div>
 
-            <!--Resistances-->
-            <mat-expansion-panel>
-              <mat-expansion-panel-header>
-                <mat-panel-title>
-                  Resistances
-                </mat-panel-title>
-              </mat-expansion-panel-header>
+                  <mat-form-field>
+                    <input [matAutocomplete]="dtAC" matInput placeholder="Resistance" formControlName="resistance">
+                    <button mat-button matSuffix mat-icon-button (click)="addResistance()">
+                      <i class="fa fa-plus"></i>
+                    </button>
+                  </mat-form-field>
+                </div>
 
-              <div class="u-margin-bottom-2x">
-                <mat-chip-list>
-                  <mat-chip *ngFor="let r of monster.Features.DamageResistances" (removed)="removeResistance(r)">
-                    {{r}} <i class="fa fa-times-circle" matChipRemove></i>
-                  </mat-chip>
-                </mat-chip-list>
-              </div>
+                <div class="col-6 u-padding-x-none u-flex u-flex__column u-flex__justify--space-between">
+                  <label>Immunities</label>
+                  <div class="u-margin-bottom-2x" *ngIf="monster.Features.DamageImmunities.length > 0">
+                    <mat-chip-list>
+                      <mat-chip (removed)="removeImmunity(i)">
+                        {{i}} <i class="fa fa-times-circle" matChipRemove></i>
+                      </mat-chip>
+                    </mat-chip-list>
+                  </div>
 
-              <div>
-                <mat-form-field>
-                  <input [matAutocomplete]="dtAC" matInput placeholder="Resistance" formControlName="resistance">
-                </mat-form-field>
+                  <mat-form-field>
+                    <input [matAutocomplete]="dtAC" matInput placeholder="Immunity" formControlName="immunity">
+                    <button mat-button matSuffix mat-icon-button (click)="addImmunity()">
+                      <i class="fa fa-plus"></i>
+                    </button>
+                  </mat-form-field>
+                </div>
 
-                <button mat-button matSuffix mat-icon-button (click)="addResistance()">
-                  <i class="fa fa-plus"></i>
-                </button>
-              </div>
-            </mat-expansion-panel>
+                <div class="col-6 u-padding-x-none u-flex u-flex__column u-flex__justify--space-between">
+                  <label>Condition Immunities</label>
+                  <div class="u-margin-bottom-2x" *ngIf="monster.Features.ConditionImmunities.length > 0">
+                    <mat-chip-list>
+                      <mat-chip *ngFor="let c of monster.Features.ConditionImmunities" (removed)="removeCondition(c)">
+                        {{c}} <i class="fa fa-times-circle" matChipRemove></i>
+                      </mat-chip>
+                    </mat-chip-list>
+                  </div>
 
-            <!--Immunities-->
-            <mat-expansion-panel>
-              <mat-expansion-panel-header>
-                <mat-panel-title>
-                  Damage Immunities
-                </mat-panel-title>
-              </mat-expansion-panel-header>
-
-              <div class="u-margin-bottom-2x">
-                <mat-chip-list>
-                  <mat-chip *ngFor="let i of monster.Features.DamageImmunities" (removed)="removeImmunity(i)">
-                    {{i}} <i class="fa fa-times-circle" matChipRemove></i>
-                  </mat-chip>
-                </mat-chip-list>
-              </div>
-
-              <div>
-                <mat-form-field>
-                  <input [matAutocomplete]="dtAC" matInput placeholder="Immunity" formControlName="immunity">
-                </mat-form-field>
-
-                <button mat-button matSuffix mat-icon-button (click)="addImmunity()">
-                  <i class="fa fa-plus"></i>
-                </button>
-              </div>
-            </mat-expansion-panel>
-
-            <!--Condition Immunities-->
-            <mat-expansion-panel>
-              <mat-expansion-panel-header>
-                <mat-panel-title>
-                  Condition Immunities
-                </mat-panel-title>
-              </mat-expansion-panel-header>
-
-              <div class="u-margin-bottom-2x">
-                <mat-chip-list>
-                  <mat-chip *ngFor="let c of monster.Features.ConditionImmunities" (removed)="removeCondition(c)">
-                    {{c}} <i class="fa fa-times-circle" matChipRemove></i>
-                  </mat-chip>
-                </mat-chip-list>
-              </div>
-
-              <div>
-                <mat-form-field>
-                  <input [matAutocomplete]="conditionAC" matInput placeholder="Immunity" formControlName="conditionImmunity">
-                </mat-form-field>
-
-                <button mat-button matSuffix mat-icon-button (click)="addCondition()">
-                  <i class="fa fa-plus"></i>
-                </button>
+                  <mat-form-field>
+                    <input [matAutocomplete]="conditionAC" matInput placeholder="Immunity" formControlName="conditionImmunity">
+                    <button mat-button matSuffix mat-icon-button (click)="addCondition()">
+                      <i class="fa fa-plus"></i>
+                    </button>
+                  </mat-form-field>
+                </div>
               </div>
             </mat-expansion-panel>
 
