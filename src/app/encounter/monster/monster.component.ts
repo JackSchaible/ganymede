@@ -9,6 +9,7 @@ import { CalculatorService } from "../../services/calculator.service";
 import MovementType from "../../common/models/stats/movementType";
 import Sense from "../../common/models/features/sense";
 import Skill, { SkillGroup } from "../../common/models/features/skill";
+import Feature from "../../common/models/feature";
 
 @Component({
 	selector: "gm-monster",
@@ -88,7 +89,9 @@ export class MonsterComponent implements OnInit {
 			immunity: [],
 			conditionImmunity: [],
 			language: [],
-			telepathy: []
+			telepathy: [],
+			ef_name: [],
+			ef_desc: []
 		});
 
 		this.basicInfoFormGroup.valueChanges.subscribe(form =>
@@ -472,6 +475,48 @@ export class MonsterComponent implements OnInit {
 	private removeLanguage(language) {
 		const index = this.monster.Features.Languages.Languages.indexOf(language);
 		if (index >= 0) this.monster.Features.Languages.Languages.splice(index, 1);
+	}
+
+	private addFeature() {
+		const nameInput = this.featuresFormGroup.controls["ef_name"];
+		const descInput = this.featuresFormGroup.controls["ef_desc"];
+
+		let name = nameInput.value;
+		let desc = descInput.value;
+
+		if (name && descInput) {
+			name = name.trim();
+			desc = desc.trim();
+
+			let newFeature = new Feature(name, desc);
+
+			const features = this.monster.Features.ExtraFeatures;
+			for (let i = 0; i < features.length; i++)
+				if (features[i].Name === newFeature.Name) {
+					this.monster.Features.ExtraFeatures[i].Description = desc;
+					newFeature = null;
+				}
+
+			if (newFeature) this.monster.Features.ExtraFeatures.push(newFeature);
+			this.triggerFeaturesForm(null);
+		}
+
+		if (nameInput) nameInput.setValue("");
+		if (descInput) descInput.setValue("");
+	}
+
+	private removeFeature(feature) {
+		let index = -1;
+
+		for (let i = 0; i < this.monster.Features.ExtraFeatures.length; i++)
+			if (this.monster.Features.ExtraFeatures[i].Name === feature) index = i;
+
+		if (index >= 0) this.monster.Features.ExtraFeatures.splice(index, 1);
+	}
+
+	private showFeature(feature: Feature) {
+		this.featuresFormGroup.controls["ef_name"].setValue(feature.Name);
+		this.featuresFormGroup.controls["ef_desc"].setValue(feature.Description);
 	}
 	//#endregion
 }

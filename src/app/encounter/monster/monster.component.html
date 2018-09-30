@@ -472,6 +472,42 @@
               </div>
             </mat-expansion-panel>
 
+            <!--Extra Features-->
+            <mat-expansion-panel>
+              <mat-expansion-panel-header>
+                <mat-panel-title>
+                  Extra Features
+                </mat-panel-title>
+
+              </mat-expansion-panel-header>
+
+              <div class="u-margin-bottom-2x">
+                <mat-chip-list>
+                  <mat-chip *ngFor="let f of monster.Features.ExtraFeatures" (click)="showFeature(f)" (removed)="removeFeature(f.Name)">
+                    {{f.Name}} <i class="fa fa-times-circle" matChipRemove></i></mat-chip>
+                </mat-chip-list>
+              </div>
+
+              <div>
+                <label>Extra Features</label>
+                <div>
+                  <mat-form-field class="col-12">
+                    <input matInput placeholder="Name" formControlName="ef_name">
+                  </mat-form-field>
+
+                  <mat-form-field class="col-12">
+                    <textarea matInput placeholder="Description" formControlName="ef_desc"></textarea>
+                  </mat-form-field>
+
+                  <div class="col-12 u-flex u-flex__justify--flex-end">
+                    <button mat-button matSuffix mat-icon-button class="pull-right" (click)="addFeature()">
+                      <i class="fa fa-plus"></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </mat-expansion-panel>
+
             <!--Languages-->
             <mat-expansion-panel>
               <mat-expansion-panel-header>
