@@ -102,4 +102,10 @@
 			display: none;
 		}
 	}
+
+	.comma-list {
+		.comma:last-child {
+			display: none;
+		}
+	}
 }

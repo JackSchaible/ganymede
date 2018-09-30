@@ -63,10 +63,57 @@
         <span class="comma-list-item" *ngFor="let savingThrow of monster.Features.SavingThrows"> {{savingThrow.Name}}
           {{getST(savingThrow)}}<span class="comma">,</span></span>
       </p>
+
+      <p *ngIf="monster.Features.Skills.length > 0">
+        <strong>Skills</strong>
+        <span class="comma-list-item" *ngFor="let skill of monster.Features.Skills">
+          {{getSkill(skill)}}<span class="comma">,</span>
+        </span>
+      </p>
+
+      <p *ngIf="monster.Features.DamageVulnerabilities.length > 0">
+        <strong>Vulnerabilities</strong>
+        <span class="comma-list-item" *ngFor="let v of monster.Features.DamageVulnerabilities">
+          {{v}}<span class="comma">,</span>
+        </span>
+      </p>
+
+      <p *ngIf="monster.Features.DamageResistances.length > 0">
+        <strong>Damage Resistances</strong>
+        <span class="comma-list-item" *ngFor="let r of monster.Features.DamageResistances">
+          {{r}}<span class="comma">,</span>
+        </span>
+      </p>
+
+      <p *ngIf="monster.Features.DamageImmunities.length > 0">
+        <strong>Damage Immunities</strong>
+        <span class="comma-list-item" *ngFor="let i of monster.Features.DamageImmunities">
+          {{i}}<span class="comma">,</span>
+        </span>
+      </p>
+
+      <p *ngIf="monster.Features.ConditionImmunities.length > 0">
+        <strong>Condition Immunities</strong>
+        <span class="comma-list-item" *ngFor="let i of monster.Features.ConditionImmunities">
+          {{i}}<span class="comma">,</span>
+        </span>
+      </p>
+
       <p><strong>Senses</strong><span *ngIf="monster.Features.ExtraSenses.length > 0">,</span>
         <span *ngFor="let sense of monster.Features.ExtraSenses"> {{sense.Type}}
           {{sense.Distance}} ft.,</span> passive perception {{getPP()}}</p>
       <p *ngFor="let feature of monster.Features.ExtraFeatures"><strong>{{feature.Name}} </strong> <span [innerHTML]="feature.Description"></span></p>
+
+      <p *ngIf="monster.Features.Languages.Languages.length > 0">
+        <strong>Languages</strong>
+        <span class="comma-list" *ngFor="let l of monster.Features.Languages.Languages">
+          {{l}}<span class="comma">,</span>
+        </span>
+        <span *ngIf="!monster.Features.Languages.CanSpeak">, But Can't Speak</span>
+        <span *ngIf="monster.Features.Languages.Telepathy > 0">, Telepathy {{monster.Features.Languages.Telepathy}}
+          ft.</span>
+      </p>
+
       <p><strong>Challenge</strong> {{cr}} ({{xp}} XP)</p>
     </div>
 

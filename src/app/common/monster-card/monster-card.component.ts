@@ -8,6 +8,7 @@ import {
 import Monster from "../models/monster";
 import { CalculatorService } from "../../services/calculator.service";
 import Skill from "../models/features/skill";
+import Values from "../models/values";
 
 @Component({
 	selector: "gm-monster-card",
@@ -97,5 +98,24 @@ export class MonsterCardComponent implements OnChanges, OnInit {
 	private getST(savingThrow: Skill): string {
 		let num = this.calc.calcSavingThrow(savingThrow, this.monster);
 		return (num >= 0 ? "+" : "-") + num;
+	}
+
+	private getSkill(skill: Skill): string {
+		let num = this.calc.calcSkill(skill, this.monster);
+
+		for (let i = 0; i < Values.Skills.length; i++) {
+			for (let j = 0; j < Values.Skills[i].Skills.length; j++)
+				if (skill.Name === Values.Skills[i].Skills[j].Name) {
+					return `${skill.Name} ${num >= 0 ? "+" : "-"}${num}`;
+				} else {
+					return `${skill.ModifyingAbility} (${skill.Name}) ${
+						num >= 0 ? "+" : "-"
+					}${num}`;
+				}
+		}
+
+		return `${skill.ModifyingAbility} (${skill.Name}) ${
+			num >= 0 ? "+" : "-"
+		}${num}`;
 	}
 }

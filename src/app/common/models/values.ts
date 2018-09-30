@@ -120,4 +120,62 @@ export default class Values {
 			new Skill("Persuasion", "Charisma")
 		])
 	];
+
+	public static DamageTypes: string[] = [
+		"Acid",
+		"Bludgeoning",
+		"Cold",
+		"Fire",
+		"Force",
+		"Lightning",
+		"Necrotic",
+		"Piercing",
+		"Poison",
+		"Psychic",
+		"Radiant",
+		"Slashing",
+		"Thunder"
+	];
+
+	public static Conditions: string[] = [
+		"Blinded",
+		"Charmed",
+		"Deafened",
+		"Fatigued",
+		"Frightened",
+		"Grappled",
+		"Incapacitated",
+		"Invisible",
+		"Paralyzed",
+		"Petrified",
+		"Poisoned",
+		"Restrained",
+		"Stunned",
+		"Unconscious"
+	];
+
+	public static Languages: string[] = [
+		"Abyssal",
+		"Aquan",
+		"Auran",
+		"Celestial",
+		"Common",
+		"Deep Speech",
+		"Draconic",
+		"Druidic",
+		"Dwarvish",
+		"Elvish",
+		"Giant",
+		"Gnomish",
+		"Goblin",
+		"Gnoll",
+		"Halfling",
+		"Ignan",
+		"Infernal",
+		"Orc",
+		"Primordial",
+		"Sylvan",
+		"Terran",
+		"Undercommon"
+	];
 }

@@ -289,8 +289,23 @@ export class CalculatorService {
 	}
 
 	public calcSavingThrow(savingThrow: Skill, monster: Monster): number {
+		return (
+			this.getModifierByName(savingThrow.Name, monster) +
+			monster.BasicInfo.ProficiencyModifier * savingThrow.Proficiency
+		);
+	}
+
+	public calcSkill(skill: Skill, monster: Monster): number {
+		return (
+			this.getModifierByName(skill.ModifyingAbility, monster) +
+			monster.BasicInfo.ProficiencyModifier * skill.Proficiency
+		);
+	}
+
+	public getModifierByName(name: string, monster: Monster) {
 		let mod = 0;
-		switch (savingThrow.Name) {
+
+		switch (name) {
 			case "Strength":
 				mod = this.getModifierNumber(monster.Stats.Strength);
 				break;
@@ -311,9 +326,7 @@ export class CalculatorService {
 				break;
 		}
 
-		return (
-			mod + monster.BasicInfo.ProficiencyModifier * savingThrow.Proficiency
-		);
+		return mod;
 	}
 
 	private random(min: number, max: number): number {

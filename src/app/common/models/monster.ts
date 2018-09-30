@@ -5,6 +5,7 @@ import Alignment from "./alignment";
 import Dice from "./generic/dice";
 import ArmorClass from "./stats/armorClass";
 import Features from "./features/features";
+import Languages from "./features/languages";
 
 export default class Monster {
 	constructor(
@@ -42,7 +43,18 @@ export default class Monster {
 				Dice.Default(),
 				""
 			),
-			new Features([], [], [], [], [], [], [], [], [], 0),
+			new Features(
+				[],
+				[],
+				[],
+				[],
+				[],
+				[],
+				[],
+				new Languages([], false, 0),
+				[],
+				0
+			),
 			[],
 			null,
 			[]
@@ -67,7 +79,18 @@ export default class Monster {
 				new Dice(1, 4),
 				""
 			),
-			new Features([], [], [], [], [], [], [], [], [], 0),
+			new Features(
+				[],
+				[],
+				[],
+				[],
+				[],
+				[],
+				[],
+				new Languages([], false, 0),
+				[],
+				0
+			),
 			[],
 			null,
 			[]
