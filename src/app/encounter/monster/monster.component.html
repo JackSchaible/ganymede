@@ -1,55 +1,47 @@
 <!--TODO: Set checked property of all checkboxes-->
-<div class="u-flex u-flex__wrap">
-  <div class="col-md-6">
-    <h2>Describe Your Monster</h2>
+<h2>Describe Your Monster</h2>
 
-    <mat-horizontal-stepper #stepper>
-      <mat-step [completed]="form1Complete">
-        <ng-template matStepLabel>Basic info</ng-template>
+<mat-horizontal-stepper #stepper>
+  <mat-step [completed]="form1Complete">
+    <ng-template matStepLabel>Basic info</ng-template>
 
-        <gm-basic-info-form [(monster)]="monster" [OnChange]="formChanged" [OpenSnackbar]="openSnackBar"></gm-basic-info-form>
+    <gm-basic-info-form [(monster)]="monster" [(complete)]="form1Complete"></gm-basic-info-form>
 
-        <div>
-          <button mat-button matStepperNext>Next</button>
-        </div>
-      </mat-step>
+    <div>
+      <button mat-button matStepperNext>Next</button>
+    </div>
+  </mat-step>
 
-      <mat-step [completed]="form2Complete">
-        <ng-template matStepLabel>Stats</ng-template>
+  <mat-step [completed]="form2Complete">
+    <ng-template matStepLabel>Stats</ng-template>
 
-        <gm-stats-form [(monster)]="monster" [OnChange]="formChanged" [OpenSnackbar]="openSnackBar"></gm-stats-form>
+    <gm-stats-form [(monster)]="monster" [(complete)]="form2Complete"></gm-stats-form>
 
-        <div>
-          <button mat-button matStepperPrevious>Back</button>
-          <button mat-button matStepperNext>Next</button>
-        </div>
-      </mat-step>
+    <div>
+      <button mat-button matStepperPrevious>Back</button>
+      <button mat-button matStepperNext>Next</button>
+    </div>
+  </mat-step>
 
-      <mat-step [completed]="form3Complete">
-        <ng-template matStepLabel>Features</ng-template>
+  <mat-step [completed]="form3Complete">
+    <ng-template matStepLabel>Features</ng-template>
 
-        <gm-features-form [(monster)]="monster" [OnChange]="formChanged" [OpenSnackbar]="openSnackBar"></gm-features-form>
+    <gm-features-form [(monster)]="monster" [(complete)]="form3Complete"></gm-features-form>
 
-        <div>
-          <button mat-button matStepperPrevious>Back</button>
-          <button mat-button matStepperNext>Next</button>
-        </div>
-      </mat-step>
+    <div>
+      <button mat-button matStepperPrevious>Back</button>
+      <button mat-button matStepperNext>Next</button>
+    </div>
+  </mat-step>
 
-      <mat-step [completed]="form4Complete">
-        <ng-template matStepLabel>Traits</ng-template>
+  <mat-step [completed]="form4Complete">
+    <ng-template matStepLabel>Traits</ng-template>
 
-        <gm-traits-form [(monster)]="monster" [OnChange]="formChanged" [OpenSnackbar]="openSnackBar"></gm-traits-form>
+    <gm-traits-form [(monster)]="monster" [(complete)]="form4Complete"></gm-traits-form>
 
-        <div>
-          <button mat-button matStepperPrevious>Back</button>
-          <button mat-button matStepperNext>Next</button>
-        </div>
-      </mat-step>
-    </mat-horizontal-stepper>
-  </div>
-
-  <div class="col-md-6">
-    <gm-monster-card [monster]="monster"></gm-monster-card>
-  </div>
-</div>
+    <div>
+      <button mat-button matStepperPrevious>Back</button>
+      <button mat-button matStepperNext>Next</button>
+    </div>
+  </mat-step>
+</mat-horizontal-stepper>

@@ -1,30 +1,34 @@
-import { Component, OnInit, Input, Output } from "@angular/core";
-import Monster from "../../../common/models/monster";
-import { FormGroup, FormBuilder } from "@angular/forms";
+import { Component, ChangeDetectorRef } from "@angular/core";
+import { FormBuilder } from "@angular/forms";
 import Values from "../../../common/models/values";
 import Skill, { SkillGroup } from "../../../common/models/features/skill";
 import Feature from "../../../common/models/feature";
 import Sense from "../../../common/models/features/sense";
-import { MatCheckboxChange } from "@angular/material";
+import { MatCheckboxChange, MatSnackBar } from "@angular/material";
 import { CalculatorService } from "../../../services/calculator.service";
+import MonsterForm from "../mosnterForm";
 
 @Component({
 	selector: "gm-features-form",
 	templateUrl: "./features-form.component.html",
 	styleUrls: ["../monster.component.scss"]
 })
-export class FeaturesFormComponent implements OnInit {
-	@Input()
-	@Output()
-	public monster: Monster;
+export class FeaturesFormComponent extends MonsterForm {
+	protected form = {
+		sense_type: [],
+		sense_distance: [],
+		skill_name: [],
+		skill_ability: [],
+		vulnerability: [],
+		resistance: [],
+		immunity: [],
+		conditionImmunity: [],
+		language: [],
+		telepathy: [],
+		ef_name: [],
+		ef_desc: []
+	};
 
-	@Input()
-	public OnChange: any;
-
-	@Input()
-	public OpenSnackbar: any;
-
-	private featuresFormGroup: FormGroup;
 	private senseTypes: string[] = Values.SenseTypes;
 	private skills: SkillGroup[] = Values.Skills;
 	private dblSkillProf: boolean;
@@ -35,47 +39,34 @@ export class FeaturesFormComponent implements OnInit {
 	private hasTelepathy: boolean = false;
 
 	constructor(
-		private formBuilder: FormBuilder,
-		private calculator: CalculatorService
-	) {}
-
-	ngOnInit() {
-		this.featuresFormGroup = this.formBuilder.group({
-			sense_type: [],
-			sense_distance: [],
-			skill_name: [],
-			skill_ability: [],
-			vulnerability: [],
-			resistance: [],
-			immunity: [],
-			conditionImmunity: [],
-			language: [],
-			telepathy: [],
-			ef_name: [],
-			ef_desc: []
-		});
-
-		this.featuresFormGroup.valueChanges.subscribe(form =>
-			this.featuresFormChange()
-		);
+		calculator: CalculatorService,
+		formBuilder: FormBuilder,
+		changeDetector: ChangeDetectorRef,
+		snackbar: MatSnackBar
+	) {
+		super(calculator, formBuilder, changeDetector, snackbar);
 	}
 
-	private featuresFormChange(validateSkillAbility: boolean = false) {
+	onFormChanges(form) {}
+
+	isComplete(): boolean {
+		return false;
+	}
+
+	private skillChanged(validateSkillAbility: boolean = false) {
 		if (
 			validateSkillAbility &&
-			this.featuresFormGroup.controls["skill_name"] &&
-			this.featuresFormGroup.controls["skill_name"].value
+			this.formGroup.controls["skill_name"] &&
+			this.formGroup.controls["skill_name"].value
 		) {
 			for (let i = 0; i < this.skills.length; i++)
 				for (let j = 0; j < this.skills[i].Skills.length; j++)
 					if (
 						this.skills[i].Skills[j].Name ===
-						this.featuresFormGroup.controls["skill_name"].value
+						this.formGroup.controls["skill_name"].value
 					)
 						this.skillAbility = this.skills[i].Ability;
 		}
-
-		this.OnChange();
 	}
 
 	private triggerFeaturesForm(e: MatCheckboxChange) {
@@ -126,8 +117,8 @@ export class FeaturesFormComponent implements OnInit {
 			}
 		}
 
-		if (this.featuresFormGroup)
-			this.featuresFormGroup.updateValueAndValidity({
+		if (this.formGroup)
+			this.formGroup.updateValueAndValidity({
 				onlySelf: false,
 				emitEvent: true
 			});
@@ -138,8 +129,8 @@ export class FeaturesFormComponent implements OnInit {
 	}
 
 	private addSense() {
-		const typeInput = this.featuresFormGroup.controls["sense_type"];
-		const distanceInput = this.featuresFormGroup.controls["sense_distance"];
+		const typeInput = this.formGroup.controls["sense_type"];
+		const distanceInput = this.formGroup.controls["sense_distance"];
 
 		let type = typeInput.value;
 		const distanceStr = distanceInput.value;
@@ -152,7 +143,7 @@ export class FeaturesFormComponent implements OnInit {
 
 			if (this.monster.Features.ExtraSenses.indexOf(newSense) === -1)
 				this.monster.Features.ExtraSenses.push(newSense);
-			else this.OpenSnackbar("That sense type already exists!");
+			else this.openSnackBar("That sense type already exists!");
 		}
 
 		if (typeInput) typeInput.setValue("");
@@ -169,7 +160,7 @@ export class FeaturesFormComponent implements OnInit {
 	}
 
 	private addSkill() {
-		const nameInput = this.featuresFormGroup.controls["skill_name"];
+		const nameInput = this.formGroup.controls["skill_name"];
 
 		let name = nameInput.value;
 		let ability = this.skillAbility;
@@ -183,7 +174,7 @@ export class FeaturesFormComponent implements OnInit {
 			const skills = this.monster.Features.Skills;
 			for (let i = 0; i < skills.length; i++)
 				if (skills[i].Name == newSkill.Name) {
-					this.OpenSnackbar("That skill already exists!");
+					this.openSnackBar("That skill already exists!");
 					return;
 				}
 
@@ -206,7 +197,7 @@ export class FeaturesFormComponent implements OnInit {
 	}
 
 	private addVulnerability() {
-		const input = this.featuresFormGroup.controls["vulnerability"];
+		const input = this.formGroup.controls["vulnerability"];
 
 		let vulnerability = input.value;
 
@@ -218,7 +209,7 @@ export class FeaturesFormComponent implements OnInit {
 				-1
 			)
 				this.monster.Features.DamageVulnerabilities.push(vulnerability);
-			else this.OpenSnackbar("That Damage Vulnerability already exists!");
+			else this.openSnackBar("That Damage Vulnerability already exists!");
 		}
 
 		if (input) input.setValue("");
@@ -233,7 +224,7 @@ export class FeaturesFormComponent implements OnInit {
 	}
 
 	private addResistance() {
-		const input = this.featuresFormGroup.controls["resistance"];
+		const input = this.formGroup.controls["resistance"];
 		let resistance = input.value;
 
 		if (resistance) {
@@ -241,7 +232,7 @@ export class FeaturesFormComponent implements OnInit {
 
 			if (this.monster.Features.DamageResistances.indexOf(resistance) === -1)
 				this.monster.Features.DamageResistances.push(resistance);
-			else this.OpenSnackbar("That Damage Resistance already exists!");
+			else this.openSnackBar("That Damage Resistance already exists!");
 		}
 
 		if (input) input.setValue("");
@@ -253,7 +244,7 @@ export class FeaturesFormComponent implements OnInit {
 	}
 
 	private addImmunity() {
-		const input = this.featuresFormGroup.controls["immunity"];
+		const input = this.formGroup.controls["immunity"];
 		let immunity = input.value;
 
 		if (immunity) {
@@ -261,7 +252,7 @@ export class FeaturesFormComponent implements OnInit {
 
 			if (this.monster.Features.DamageImmunities.indexOf(immunity) === -1)
 				this.monster.Features.DamageImmunities.push(immunity);
-			else this.OpenSnackbar("That Damage Immunity already exists!");
+			else this.openSnackBar("That Damage Immunity already exists!");
 		}
 
 		if (input) input.setValue("");
@@ -273,7 +264,7 @@ export class FeaturesFormComponent implements OnInit {
 	}
 
 	private addCondition() {
-		const input = this.featuresFormGroup.controls["conditionImmunity"];
+		const input = this.formGroup.controls["conditionImmunity"];
 		let condition = input.value;
 
 		if (condition) {
@@ -281,7 +272,7 @@ export class FeaturesFormComponent implements OnInit {
 
 			if (this.monster.Features.ConditionImmunities.indexOf(condition) === -1)
 				this.monster.Features.ConditionImmunities.push(condition);
-			else this.OpenSnackbar("That Condition Immunity already exists!");
+			else this.openSnackBar("That Condition Immunity already exists!");
 		}
 
 		if (input) input.setValue("");
@@ -293,7 +284,7 @@ export class FeaturesFormComponent implements OnInit {
 	}
 
 	private addLanguage() {
-		const input = this.featuresFormGroup.controls["language"];
+		const input = this.formGroup.controls["language"];
 		let language = input.value;
 
 		if (language) {
@@ -301,7 +292,7 @@ export class FeaturesFormComponent implements OnInit {
 
 			if (this.monster.Features.Languages.Languages.indexOf(language) === -1)
 				this.monster.Features.Languages.Languages.push(language);
-			else this.OpenSnackbar("That Language already exists!");
+			else this.openSnackBar("That Language already exists!");
 		}
 
 		if (input) input.setValue("");
@@ -313,8 +304,8 @@ export class FeaturesFormComponent implements OnInit {
 	}
 
 	private addFeature() {
-		const nameInput = this.featuresFormGroup.controls["ef_name"];
-		const descInput = this.featuresFormGroup.controls["ef_desc"];
+		const nameInput = this.formGroup.controls["ef_name"];
+		const descInput = this.formGroup.controls["ef_desc"];
 
 		let name = nameInput.value;
 		let desc = descInput.value;
@@ -348,14 +339,14 @@ export class FeaturesFormComponent implements OnInit {
 
 		if (index >= 0) this.monster.Features.ExtraFeatures.splice(index, 1);
 
-		const nameInput = this.featuresFormGroup.controls["ef_name"];
-		const descInput = this.featuresFormGroup.controls["ef_desc"];
+		const nameInput = this.formGroup.controls["ef_name"];
+		const descInput = this.formGroup.controls["ef_desc"];
 		if (nameInput) nameInput.setValue("");
 		if (descInput) descInput.setValue("");
 	}
 
 	private showFeature(feature: Feature) {
-		this.featuresFormGroup.controls["ef_name"].setValue(feature.Name);
-		this.featuresFormGroup.controls["ef_desc"].setValue(feature.Description);
+		this.formGroup.controls["ef_name"].setValue(feature.Name);
+		this.formGroup.controls["ef_desc"].setValue(feature.Description);
 	}
 }

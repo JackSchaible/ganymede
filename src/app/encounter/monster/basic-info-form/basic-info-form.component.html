@@ -9,46 +9,50 @@
   </mat-option>
 </mat-autocomplete>
 
-<form [formGroup]="basicInfoFormGroup" class="u-flex u-flex__wrap">
-  <input autocomplete="false" name="hidden" type="text" style="display:none;">
+<div class="u-flex u-flex__wrap">
+  <form [formGroup]="formGroup" class="col-md-6 u-flex u-flex__wrap">
+    <input autocomplete="false" name="hidden" type="text" style="display:none;">
 
-  <mat-form-field class="col-12">
-    <input matInput placeholder="Name" [(ngModel)]="monster.BasicInfo.Name" formControlName="name">
-  </mat-form-field>
-
-  <mat-form-field class="col-12">
-    <input matInput placeholder="Size" [(ngModel)]="monster.BasicInfo.Size" formControlName="size" [matAutocomplete]="sizeAC">
-  </mat-form-field>
-
-  <mat-form-field class="col-6">
-    <input matInput placeholder="Type" [(ngModel)]="monster.BasicInfo.Type" formControlName="type" [matAutocomplete]="typeAC">
-  </mat-form-field>
-
-  <div class="col-6 inline-block">
-    <p *ngIf="selectedType && selectedType.Description"><strong>{{selectedType.Name}} </strong>
-      {{selectedType.Description}}</p>
-  </div>
-
-  <div class="col-6 row">
-    <mat-form-field>
-      <mat-chip-list #chipList>
-        <mat-chip *ngFor="let tag of monster.BasicInfo.Tags" (removed)="removeTag(tag)">
-          {{tag}}
-          <i class="fa fa-times-circle" matChipRemove></i>
-        </mat-chip>
-        <input placeholder="New Tag" [matChipInputFor]="chipList" [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-          [matChipInputAddOnBlur]="true" (matChipInputTokenEnd)="addTag($event)">
-      </mat-chip-list>
+    <mat-form-field class="col-12">
+      <input matInput placeholder="Name" [(ngModel)]="monster.BasicInfo.Name" formControlName="name">
     </mat-form-field>
 
-    <mat-form-field>
-      <input matInput placeholder="Proficiency Bonus" [(ngModel)]="monster.BasicInfo.ProficiencyModifier"
-        formControlName="prof" type="number">
+    <mat-form-field class="col-12">
+      <input matInput placeholder="Size" [(ngModel)]="monster.BasicInfo.Size" formControlName="size" [matAutocomplete]="sizeAC">
     </mat-form-field>
-  </div>
 
-  <div class="col-6">
-    <label class="custom">Alignment</label>
-    <gm-alignment-table [alignment]="monster.BasicInfo.Alignment" [changeCallback]="alignmentChanged"></gm-alignment-table>
-  </div>
-</form>
+    <mat-form-field class="col-6">
+      <input matInput placeholder="Type" [(ngModel)]="monster.BasicInfo.Type" formControlName="type" [matAutocomplete]="typeAC">
+    </mat-form-field>
+
+    <div class="col-6 inline-block">
+      <p *ngIf="selectedType && selectedType.Description"><strong>{{selectedType.Name}} </strong>
+        {{selectedType.Description}}</p>
+    </div>
+
+    <div class="col-6 row">
+      <mat-form-field>
+        <mat-chip-list #chipList>
+          <mat-chip *ngFor="let tag of monster.BasicInfo.Tags" (removed)="removeTag(tag)">
+            {{tag}}
+            <i class="fa fa-times-circle" matChipRemove></i>
+          </mat-chip>
+          <input placeholder="New Tag" [matChipInputFor]="chipList" [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+            [matChipInputAddOnBlur]="true" (matChipInputTokenEnd)="addTag($event)">
+        </mat-chip-list>
+      </mat-form-field>
+
+      <mat-form-field>
+        <input matInput placeholder="Proficiency Bonus" [(ngModel)]="monster.BasicInfo.ProficiencyModifier"
+          formControlName="prof" type="number">
+      </mat-form-field>
+    </div>
+
+    <div class="col-6">
+      <label class="custom">Alignment</label>
+      <gm-alignment-table [alignment]="monster.BasicInfo.Alignment" [changeCallback]="alignmentChanged"></gm-alignment-table>
+    </div>
+  </form>
+
+  <gm-monster-card class="col-md-6" [monster]="monster"></gm-monster-card>
+</div>

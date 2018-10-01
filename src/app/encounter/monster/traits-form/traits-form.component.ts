@@ -1,28 +1,29 @@
-import { Component, OnInit, Input, Output } from "@angular/core";
+import { Component, ChangeDetectorRef } from "@angular/core";
 import { FormBuilder } from "@angular/forms";
 import { CalculatorService } from "../../../services/calculator.service";
-import Monster from "../../../common/models/monster";
+import { MatSnackBar } from "@angular/material";
+import MonsterForm from "../mosnterForm";
 
 @Component({
 	selector: "gm-traits-form",
 	templateUrl: "./traits-form.component.html",
 	styleUrls: ["../monster.component.scss"]
 })
-export class TraitsFormComponent implements OnInit {
-	@Input()
-	@Output()
-	public monster: Monster;
-
-	@Input()
-	public OnChange: any;
-
-	@Input()
-	public OpenSnackbar: any;
+export class TraitsFormComponent extends MonsterForm {
+	protected form = {};
 
 	constructor(
-		private formBuilder: FormBuilder,
-		private calculator: CalculatorService
-	) {}
+		calculator: CalculatorService,
+		formBuilder: FormBuilder,
+		changeDetector: ChangeDetectorRef,
+		snackBar: MatSnackBar
+	) {
+		super(calculator, formBuilder, changeDetector, snackBar);
+	}
 
-	ngOnInit() {}
+	onFormChanges(form: any): void {}
+
+	isComplete(): boolean {
+		return false;
+	}
 }

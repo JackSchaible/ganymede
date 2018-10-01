@@ -1,60 +1,53 @@
-import { Component, OnInit, Input, Output } from "@angular/core";
-import { FormGroup, FormBuilder } from "@angular/forms";
+import { Component, ChangeDetectorRef } from "@angular/core";
+import { FormBuilder } from "@angular/forms";
 import Values from "../../../common/models/values";
-import Monster from "../../../common/models/monster";
 import { CalculatorService } from "../../../services/calculator.service";
 import MovementType from "../../../common/models/stats/movementType";
+import MonsterForm from "../mosnterForm";
+import { MatSnackBar } from "@angular/material";
 
 @Component({
 	selector: "gm-stats-form",
 	templateUrl: "./stats-form.component.html",
 	styleUrls: ["../monster.component.scss"]
 })
-export class StatsFormComponent implements OnInit {
-	@Input()
-	@Output()
-	public monster: Monster;
+export class StatsFormComponent extends MonsterForm {
+	protected form = {
+		str: [],
+		dex: [],
+		con: [],
+		int: [],
+		wis: [],
+		cha: [],
+		ac_base: [],
+		ac_ability: [],
+		ac_misc: [],
+		hp_count: [],
+		hp_sides: [],
+		speed: [],
+		speed_type: [],
+		speed_length: []
+	};
 
-	@Input()
-	public OnChange: any;
-
-	@Input()
-	public OpenSnackbar: any;
-
-	private statsFormGroup: FormGroup;
 	private abilities = ["STR", "DEX", "CON", "INT", "WIS", "CHA"];
 	private abilityMod: number;
 	private movementTypes: string[] = Values.MovementTypes;
 
 	constructor(
-		private formBuilder: FormBuilder,
-		private calculator: CalculatorService
-	) {}
-
-	ngOnInit() {
-		this.statsFormGroup = this.formBuilder.group({
-			str: [],
-			dex: [],
-			con: [],
-			int: [],
-			wis: [],
-			cha: [],
-			ac_base: [],
-			ac_ability: [],
-			ac_misc: [],
-			hp_count: [],
-			hp_sides: [],
-			speed: [],
-			speed_type: [],
-			speed_length: []
-		});
-
-		this.statsFormGroup.valueChanges.subscribe(form => this.statFormChange());
+		calculator: CalculatorService,
+		formBuilder: FormBuilder,
+		changeDetector: ChangeDetectorRef,
+		snackBar: MatSnackBar
+	) {
+		super(calculator, formBuilder, changeDetector, snackBar);
 	}
 
-	private statFormChange() {
-		this.OnChange();
+	onFormChanges(form: any): void {
 		this.abilityMod = this.getAcMod();
+	}
+
+	isComplete(): boolean {
+		return false;
 	}
 
 	private getAcMod(): number {
@@ -87,12 +80,12 @@ export class StatsFormComponent implements OnInit {
 
 	private randomStats() {
 		this.calculator.randomStats(this.monster.Stats);
-		this.OnChange();
+		this.changeDetector.detectChanges();
 	}
 
 	private addMovement(event) {
-		const typeInput = this.statsFormGroup.controls["speed_type"];
-		const distanceInput = this.statsFormGroup.controls["speed_length"];
+		const typeInput = this.formGroup.controls["speed_type"];
+		const distanceInput = this.formGroup.controls["speed_length"];
 
 		let type = typeInput.value;
 		const distanceStr = distanceInput.value;
@@ -105,7 +98,7 @@ export class StatsFormComponent implements OnInit {
 
 			if (this.monster.Stats.ExtraMovementTypes.indexOf(newMove) === -1)
 				this.monster.Stats.ExtraMovementTypes.push(newMove);
-			else this.OpenSnackbar("That movement type already exists!");
+			else this.openSnackBar("That movement type already exists!");
 		}
 
 		if (typeInput) typeInput.setValue("");

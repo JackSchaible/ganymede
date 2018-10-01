@@ -1,3 +1,16 @@
-<p>
-  traits-form works!
-</p>
+<mat-autocomplete #movementAC="matAutocomplete">
+  <mat-option *ngFor="let type of movementTypes" [value]="type">
+    {{type}}
+  </mat-option>
+</mat-autocomplete>
+
+<div class="u-flex u-flex__wrap">
+  <form [formGroup]="formGroup" class="col-md-6">
+    <input autocomplete="false" name="hidden" type="text" style="display:none;">
+    <mat-accordion>
+
+    </mat-accordion>
+  </form>
+
+  <gm-monster-card class="col-md-6" [monster]="monster"></gm-monster-card>
+</div>
