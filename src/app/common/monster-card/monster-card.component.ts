@@ -88,6 +88,7 @@ export class MonsterCardComponent implements OnChanges, OnInit {
 		);
 
 		this.calc.calcPP(this.monster.Stats);
+		this.change.markForCheck();
 		this.change.detectChanges();
 	}
 
@@ -105,7 +106,10 @@ export class MonsterCardComponent implements OnChanges, OnInit {
 
 		for (let i = 0; i < Values.Skills.length; i++) {
 			for (let j = 0; j < Values.Skills[i].Skills.length; j++)
-				if (skill.Name === Values.Skills[i].Skills[j].Name) {
+				if (
+					skill.Name === Values.Skills[i].Skills[j].Name &&
+					skill.ModifyingAbility === Values.Skills[i].Ability
+				) {
 					return `${skill.Name} ${num >= 0 ? "+" : "-"}${num}`;
 				} else {
 					return `${skill.ModifyingAbility} (${skill.Name}) ${

@@ -210,10 +210,9 @@ export class CalculatorService {
 		return result;
 	}
 
-	public randomStats(): Stats {
+	public randomStats(stats: Stats): void {
 		const dice = new Dice(4, 6);
 		const options = [DiceOptions.DropTheLowest];
-		let stats = Stats.Default();
 
 		stats.Strength = this.roll(dice, options);
 		stats.Dexterity = this.roll(dice, options);
@@ -226,8 +225,6 @@ export class CalculatorService {
 		stats.AC = new ArmorClass(10, "DEX", 0);
 		stats.HPRoll.Modifier = this.getModifierNumber(stats.Constitution);
 		stats.Initiative = dexMod;
-
-		return stats;
 	}
 
 	public roll(dice: Dice, options: DiceOptions[]): number {

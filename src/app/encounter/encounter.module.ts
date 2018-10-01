@@ -22,6 +22,10 @@ import { EncounterHomeComponent } from "./encounter-home/encounter-home.componen
 import { GmCommonModule } from "../common/gm-common.module";
 import { FormsModule } from "../forms/forms.module";
 import { ReactiveFormsModule } from "@angular/forms";
+import { BasicInfoFormComponent } from "./monster/basic-info-form/basic-info-form.component";
+import { StatsFormComponent } from "./monster/stats-form/stats-form.component";
+import { FeaturesFormComponent } from "./monster/features-form/features-form.component";
+import { TraitsFormComponent } from "./monster/traits-form/traits-form.component";
 
 @NgModule({
 	imports: [
@@ -47,7 +51,11 @@ import { ReactiveFormsModule } from "@angular/forms";
 		EncounterTrackerComponent,
 		EncounterComponent,
 		MonsterComponent,
-		EncounterHomeComponent
+		EncounterHomeComponent,
+		BasicInfoFormComponent,
+		StatsFormComponent,
+		FeaturesFormComponent,
+		TraitsFormComponent
 	]
 })
 export class EncounterModule {}
