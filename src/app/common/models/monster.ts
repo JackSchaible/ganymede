@@ -6,12 +6,14 @@ import Dice from "./generic/dice";
 import ArmorClass from "./stats/armorClass";
 import Features from "./features/features";
 import Languages from "./features/languages";
+import Traits from "./traits/traits";
 
 export default class Monster {
 	constructor(
 		public BasicInfo: BasicInfo,
 		public Stats: Stats,
 		public Features: Features,
+		public Traits: Traits,
 		public Actions: Description[],
 		public LegendaryActionsDescription: string,
 		public LegendaryActions: Description[]
@@ -55,6 +57,7 @@ export default class Monster {
 				[],
 				0
 			),
+			new Traits([], null),
 			[],
 			null,
 			[]
@@ -91,6 +94,7 @@ export default class Monster {
 				[],
 				0
 			),
+			new Traits([], null),
 			[],
 			null,
 			[]

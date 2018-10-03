@@ -65,12 +65,7 @@ export class BasicInfoFormComponent extends MonsterForm {
 	}
 
 	private alignmentChanged() {
-		if (this.formGroup)
-			this.formGroup.updateValueAndValidity({
-				onlySelf: false,
-				emitEvent: true
-			});
-
+		this.triggerFormChange();
 		this.card.CalculateValues();
 	}
 }

@@ -57,6 +57,14 @@ export default abstract class MonsterForm implements OnInit {
 		this.complete = this.isComplete();
 	}
 
+	protected triggerFormChange() {
+		if (this.formGroup)
+			this.formGroup.updateValueAndValidity({
+				onlySelf: false,
+				emitEvent: true
+			});
+	}
+
 	protected abstract onFormChanges(form: any): void;
 
 	protected abstract isComplete(): boolean;

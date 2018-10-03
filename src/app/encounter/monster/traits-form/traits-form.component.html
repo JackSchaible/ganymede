@@ -8,7 +8,38 @@
   <form [formGroup]="formGroup" class="col-md-6">
     <input autocomplete="false" name="hidden" type="text" style="display:none;">
     <mat-accordion>
+      <!--Traits-->
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            Traits
+          </mat-panel-title>
+        </mat-expansion-panel-header>
 
+        <div class="u-margin-bottom-2x">
+          <mat-chip-list>
+            <mat-chip *ngFor="let t of monster.Traits.Traits" (click)="showTrait(t)" (removed)="removeTrait(t.Name)">
+              {{t.Name}} <i class="fa fa-times-circle" matChipRemove></i></mat-chip>
+          </mat-chip-list>
+        </div>
+
+        <div>
+          <mat-form-field class="col-12">
+            <input matInput placeholder="Name" formControlName="trait_name">
+          </mat-form-field>
+
+          <mat-form-field class="col-12">
+            <textarea rows="4" matInput placeholder="Description" formControlName="trait_desc"></textarea>
+          </mat-form-field>
+
+          <div class="col-12 u-flex u-flex__justify--flex-end">
+            <button mat-button matSuffix mat-icon-button class="pull-right" (click)="addTrait()">
+              <i class="fa fa-plus"></i>
+            </button>
+          </div>
+        </div>
+
+      </mat-expansion-panel>
     </mat-accordion>
   </form>
 

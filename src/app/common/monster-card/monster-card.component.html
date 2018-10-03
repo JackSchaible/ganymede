@@ -120,6 +120,15 @@
       <p><strong>Challenge</strong> {{cr}} ({{xp}} XP)</p>
     </div>
 
+    <!--Traits-->
+    <div class="divider-thick" *ngIf="monster.Traits.Traits.length > 0"></div>
+
+    <div class="info-list" *ngIf="monster.Traits.Traits.length > 0">
+      <p *ngFor="let t of monster.Traits.Traits">
+        <strong>{{t.Name}}</strong> <span [innerHTML]="t.Description"></span>
+      </p>
+    </div>
+
     <ng-container *ngTemplateOutlet="section; context: { list: monster.Features}"></ng-container>
     <ng-container *ngTemplateOutlet="section; context: { list: monster.Actions, title: 'Actions'}"></ng-container>
     <ng-container *ngTemplateOutlet="section; context: { list: monster.LegendaryActions, title: 'Legendary Actions', desc: monster.LegendaryActionsDescription}"></ng-container>

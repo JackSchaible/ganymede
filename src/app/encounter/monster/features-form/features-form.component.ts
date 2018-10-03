@@ -117,11 +117,7 @@ export class FeaturesFormComponent extends MonsterForm {
 			}
 		}
 
-		if (this.formGroup)
-			this.formGroup.updateValueAndValidity({
-				onlySelf: false,
-				emitEvent: true
-			});
+		this.triggerFormChange();
 	}
 
 	private getPP() {
