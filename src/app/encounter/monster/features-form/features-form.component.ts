@@ -6,7 +6,7 @@ import Feature from "../../../common/models/feature";
 import Sense from "../../../common/models/features/sense";
 import { MatCheckboxChange, MatSnackBar } from "@angular/material";
 import { CalculatorService } from "../../../services/calculator.service";
-import MonsterForm from "../mosnterForm";
+import MonsterForm from "../monsterForm";
 
 @Component({
 	selector: "gm-features-form",

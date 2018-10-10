@@ -9,6 +9,7 @@ import Monster from "../models/monster";
 import { CalculatorService } from "../../services/calculator.service";
 import Skill from "../models/features/skill";
 import Values from "../models/values";
+import { WordService } from "../../services/word.service";
 
 @Component({
 	selector: "gm-monster-card",
@@ -33,7 +34,8 @@ export class MonsterCardComponent implements OnChanges, OnInit {
 
 	constructor(
 		private calc: CalculatorService,
-		private change: ChangeDetectorRef
+		private change: ChangeDetectorRef,
+		private words: WordService
 	) {
 		if (!this.monster) this.monster = Monster.MakeDefault();
 	}

@@ -3,7 +3,7 @@ import { FormBuilder } from "@angular/forms";
 import Values, { ISize, IMonsterType } from "../../../common/models/values";
 import { ENTER, COMMA } from "@angular/cdk/keycodes";
 import { CalculatorService } from "../../../services/calculator.service";
-import MonsterForm from "../mosnterForm";
+import MonsterForm from "../monsterForm";
 import { MatSnackBar } from "@angular/material";
 
 @Component({

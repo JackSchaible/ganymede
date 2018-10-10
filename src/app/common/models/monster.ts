@@ -7,6 +7,7 @@ import ArmorClass from "./stats/armorClass";
 import Features from "./features/features";
 import Languages from "./features/languages";
 import Traits from "./traits/traits";
+import Spells from "./traits/spells/spells";
 
 export default class Monster {
 	constructor(
@@ -57,7 +58,7 @@ export default class Monster {
 				[],
 				0
 			),
-			new Traits([], null),
+			new Traits([], new Spells(null, null, null, [])),
 			[],
 			null,
 			[]
@@ -94,7 +95,7 @@ export default class Monster {
 				[],
 				0
 			),
-			new Traits([], null),
+			new Traits([], new Spells(null, null, null, [])),
 			[],
 			null,
 			[]

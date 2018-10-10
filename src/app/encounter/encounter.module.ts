@@ -16,6 +16,7 @@ import {
 	MatExpansionModule,
 	MatCheckboxModule
 } from "@angular/material";
+import { MatRadioModule } from "@angular/material/radio";
 import { MatGridListModule } from "@angular/material/grid-list";
 import { MonsterComponent } from "./monster/monster.component";
 import { EncounterHomeComponent } from "./encounter-home/encounter-home.component";
@@ -45,7 +46,8 @@ import { TraitsFormComponent } from "./monster/traits-form/traits-form.component
 		MatTooltipModule,
 		MatSelectModule,
 		MatExpansionModule,
-		MatCheckboxModule
+		MatCheckboxModule,
+		MatRadioModule
 	],
 	declarations: [
 		EncounterTrackerComponent,

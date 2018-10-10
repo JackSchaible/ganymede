@@ -3,7 +3,7 @@ import { FormBuilder } from "@angular/forms";
 import Values from "../../../common/models/values";
 import { CalculatorService } from "../../../services/calculator.service";
 import MovementType from "../../../common/models/stats/movementType";
-import MonsterForm from "../mosnterForm";
+import MonsterForm from "../monsterForm";
 import { MatSnackBar } from "@angular/material";
 
 @Component({

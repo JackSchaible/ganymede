@@ -178,4 +178,15 @@ export default class Values {
 		"Terran",
 		"Undercommon"
 	];
+
+	public static SpellClasses: string[] = [
+		"Bard",
+		"Cleric",
+		"Druid",
+		"Paladin",
+		"Ranger",
+		"Sorcerer",
+		"Warlock",
+		"Wizard"
+	];
 }

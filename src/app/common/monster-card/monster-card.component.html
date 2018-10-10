@@ -121,12 +121,17 @@
     </div>
 
     <!--Traits-->
-    <div class="divider-thick" *ngIf="monster.Traits.Traits.length > 0"></div>
+    <div class="divider-thick" *ngIf="monster.Traits.Traits.length > 0 || monster.Traits.Spells.Type !== 'none'"></div>
 
     <div class="info-list" *ngIf="monster.Traits.Traits.length > 0">
       <p *ngFor="let t of monster.Traits.Traits">
         <strong>{{t.Name}}</strong> <span [innerHTML]="t.Description"></span>
       </p>
+    </div>
+
+    <div *ngIf="monster.Traits.Spells.Type === 'spellcasting'">
+      <p><strong>Spellcasting</strong> The {{monster.BaiscInfo.Name ? monster.BasicInfo.Name : "monster"}} is a
+        {{monster.Traits.Spells.Level}}{{words.getSuffix(monster.Traits.Spells.Level)}}</p>
     </div>
 
     <ng-container *ngTemplateOutlet="section; context: { list: monster.Features}"></ng-container>

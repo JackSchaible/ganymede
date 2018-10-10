@@ -2,8 +2,9 @@ import { Component, ChangeDetectorRef } from "@angular/core";
 import { FormBuilder } from "@angular/forms";
 import { CalculatorService } from "../../../services/calculator.service";
 import { MatSnackBar } from "@angular/material";
-import MonsterForm from "../mosnterForm";
+import MonsterForm from "../monsterForm";
 import Trait from "../../../common/models/traits/trait";
+import Values from "../../../common/models/values";
 
 @Component({
 	selector: "gm-traits-form",
@@ -13,8 +14,14 @@ import Trait from "../../../common/models/traits/trait";
 export class TraitsFormComponent extends MonsterForm {
 	protected form = {
 		trait_name: [],
-		trait_desc: []
+		trait_desc: [],
+		spellClass: [],
+		spellLevel: []
 	};
+
+	private spellClasses = Values.SpellClasses;
+	private spellcastingType: string = "none";
+	private spells;
 
 	constructor(
 		calculator: CalculatorService,
