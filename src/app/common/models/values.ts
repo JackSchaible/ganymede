@@ -1,4 +1,4 @@
-import Skill, { SkillGroup } from "./features/skill";
+import Skill, { SkillGroup } from "./monster/features/skill";
 
 export class ISize {
 	constructor(

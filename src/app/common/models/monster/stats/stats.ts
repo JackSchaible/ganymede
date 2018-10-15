@@ -1,6 +1,6 @@
-import Dice from "../generic/dice";
 import ArmorClass from "./armorClass";
 import MovementType from "./movementType";
+import Dice from "../../generic/dice";
 
 export default class Stats {
 	constructor(

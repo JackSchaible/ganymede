@@ -1,4 +1,4 @@
-import Monster from "./monster";
+import Monster from "./monster/monster";
 
 export default class Encounter {
 	constructor(

@@ -1,5 +1,5 @@
 import { Component, Input } from "@angular/core";
-import Monster from "../../common/models/monster";
+import Monster from "../../common/models/monster/monster";
 
 @Component({
 	selector: "gm-monster",

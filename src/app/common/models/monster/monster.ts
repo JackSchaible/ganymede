@@ -1,13 +1,13 @@
-import BasicInfo from "./monster/basicInfo";
-import Stats from "./monster/stats/stats";
-import Features from "./monster/features/features";
-import Traits from "./monster/traits/traits";
-import Description from "./monster/description";
-import Alignment from "./monster/alignment";
-import ArmorClass from "./monster/stats/armorClass";
-import Dice from "./generic/dice";
-import Languages from "./monster/features/languages";
-import { Spells } from "./monster/traits/spells/spells";
+import Description from "./description";
+import Stats from "./stats/stats";
+import BasicInfo from "./basicInfo";
+import Alignment from "./alignment";
+import Dice from "../generic/dice";
+import ArmorClass from "./stats/armorClass";
+import Features from "./features/features";
+import Languages from "./features/languages";
+import Traits from "./traits/traits";
+import { Spells } from "./traits/spells/spells";
 
 export default class Monster {
 	constructor(

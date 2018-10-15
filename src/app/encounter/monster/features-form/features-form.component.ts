@@ -1,12 +1,14 @@
 import { Component, ChangeDetectorRef } from "@angular/core";
 import { FormBuilder } from "@angular/forms";
 import Values from "../../../common/models/values";
-import Skill, { SkillGroup } from "../../../common/models/features/skill";
-import Feature from "../../../common/models/feature";
-import Sense from "../../../common/models/features/sense";
+import Feature from "../../../common/models/monster/feature";
 import { MatCheckboxChange, MatSnackBar } from "@angular/material";
 import { CalculatorService } from "../../../services/calculator.service";
 import MonsterForm from "../monsterForm";
+import Skill, {
+	SkillGroup
+} from "src/app/common/models/monster/features/skill";
+import Sense from "src/app/common/models/monster/features/sense";
 
 @Component({
 	selector: "gm-features-form",

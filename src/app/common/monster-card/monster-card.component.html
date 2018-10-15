@@ -129,9 +129,15 @@
       </p>
     </div>
 
-    <div *ngIf="monster.Traits.Spells.Type === 'spellcasting'">
-      <p><strong>Spellcasting</strong> The {{monster.BaiscInfo.Name ? monster.BasicInfo.Name : "monster"}} is a
-        {{monster.Traits.Spells.Level}}{{words.getSuffix(monster.Traits.Spells.Level)}}</p>
+    <div class="info-list" *ngIf="monster.Traits.Spells.Type == 1">
+      <p><strong>Spellcasting</strong> The {{monster.BasicInfo.Name ? monster.BasicInfo.Name : "monster"}} is a
+        {{monster.Traits.Spells.ClassInstance.Level}}{{words.getSuffix(monster.Traits.Spells.ClassInstance.Level)}}-level
+        spellcaster. It's
+        spellcasting ability is {{monster.Traits.Spells.ClassInstance.BaseClass.SpellcastingAbility}} (spell save DC
+        {{getSpellsaveDC()}},
+        {{getSpellAttackMod()}} to hit with spell attacks).
+        The {{monster.BasicInfo.Name ? monster.BasicInfo.Name : "monster"}} has the following
+        {{monster.Traits.Spells.ClassInstance.BaseClass.Name}} spells prepared:</p>
     </div>
 
     <ng-container *ngTemplateOutlet="section; context: { list: monster.Features}"></ng-container>

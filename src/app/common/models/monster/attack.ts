@@ -1,4 +1,4 @@
-import Dice from "./generic/dice";
+import Dice from "../generic/dice";
 
 export default class Attack {
 	constructor(

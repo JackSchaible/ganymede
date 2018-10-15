@@ -5,11 +5,12 @@ import {
 	OnInit,
 	ChangeDetectorRef
 } from "@angular/core";
-import Monster from "../models/monster";
+import Monster from "../models/monster/monster";
 import { CalculatorService } from "../../services/calculator.service";
-import Skill from "../models/features/skill";
 import Values from "../models/values";
 import { WordService } from "../../services/word.service";
+import Skill from "../models/monster/features/skill";
+import { Spellcasting } from "../models/monster/traits/spells/spells";
 
 @Component({
 	selector: "gm-monster-card",
@@ -123,5 +124,29 @@ export class MonsterCardComponent implements OnChanges, OnInit {
 		return `${skill.ModifyingAbility} (${skill.Name}) ${
 			num >= 0 ? "+" : "-"
 		}${num}`;
+	}
+
+	private getSpellsaveDC(): number {
+		return (
+			8 +
+			this.monster.BasicInfo.ProficiencyModifier +
+			this.calc.getModifierByName(
+				(this.monster.Traits.Spells as Spellcasting).ClassInstance.BaseClass
+					.SpellcastingAbility,
+				this.monster
+			)
+		);
+	}
+
+	private getSpellAttackMod(): string {
+		const num =
+			this.monster.BasicInfo.ProficiencyModifier +
+			this.calc.getModifierByName(
+				(this.monster.Traits.Spells as Spellcasting).ClassInstance.BaseClass
+					.SpellcastingAbility,
+				this.monster
+			);
+
+		return (num >= 0 ? "+" : "-") + num;
 	}
 }

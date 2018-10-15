@@ -60,27 +60,21 @@
         </mat-expansion-panel-header>
 
         <mat-radio-group class="u-flex u-flex__justify--space-between">
-          <mat-radio-button [checked]="spellcastingType==='none'" (change)="spellcastingType='none'" value="none">None</mat-radio-button>
-          <mat-radio-button [checked]="spellcastingType==='innate'" (change)="spellcastingType='innate'" value="innate">Innate</mat-radio-button>
-          <mat-radio-button [checked]="spellcastingType==='spellcasting'" (change)="spellcastingType='spellcasting'"
-            value="spellcasting">Spellcasting</mat-radio-button>
-          <mat-radio-button [checked]="spellcastingType==='psionic'" (change)="spellcastingType='psionic'" value="psionic">Psionics</mat-radio-button>
+          <mat-radio-button [checked]="monster.Traits.Spells.Type === 0" (change)="changeSpellcastingType(0)" value="0">None</mat-radio-button>
+          <mat-radio-button [checked]="monster.Traits.Spells.Type === 1" (change)="changeSpellcastingType(1)" value="1">Spellcasting</mat-radio-button>
+          <mat-radio-button [checked]="monster.Traits.Spells.Type === 2" (change)="changeSpellcastingType(2)" value="2">Innate</mat-radio-button>
+          <mat-radio-button [checked]="monster.Traits.Spells.Type === 3" (change)="changeSpellcastingType(3)" value="3">Psionics</mat-radio-button>
         </mat-radio-group>
 
-        <div *ngIf="spellcastingType === 'spellcasting'">
-          <mat-form-field class="col-4">
-            <input matInput placeholder="Spellcasting Class" [(ngModel)]="monster.Traits.Spells.Class" formControlName="spellClass"
-              [matAutocomplete]="spellClassAC">
+        <div *ngIf="monster.Traits.Spells.Type===1">
+          <mat-form-field class="col-6">
+            <input matInput placeholder="Spellcasting Class" [(ngModel)]="monster.Traits.Spells.ClassInstance.BaseClass.Name"
+              formControlName="spellClass" [matAutocomplete]="spellClassAC">
           </mat-form-field>
 
-          <mat-form-field class="col-4">
-            <input matInput placeholder="Spellcasting Level" [(ngModel)]="monster.Traits.Spells.Level" formControlName="spellLevel"
-              type="number">
-          </mat-form-field>
-
-          <mat-form-field class="col-4">
-            <input matInput placeholder="Spellcasting Ability" [(ngModel)]="monster.Traits.Spells.Ability"
-              formControlName="spellAbility" [matAutocomplete]="spellAbilityAC">
+          <mat-form-field class="col-6">
+            <input matInput placeholder="Spellcasting Level" [(ngModel)]="monster.Traits.Spells.ClassInstance.Level"
+              formControlName="spellLevel" type="number">
           </mat-form-field>
         </div>
       </mat-expansion-panel>

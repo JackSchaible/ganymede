@@ -3,8 +3,16 @@ import { FormBuilder } from "@angular/forms";
 import { CalculatorService } from "../../../services/calculator.service";
 import { MatSnackBar } from "@angular/material";
 import MonsterForm from "../monsterForm";
-import Trait from "../../../common/models/traits/trait";
 import Values from "../../../common/models/values";
+import Trait from "src/app/common/models/monster/traits/trait";
+import {
+	Spells,
+	Spellcasting,
+	Innate,
+	Psionics
+} from "src/app/common/models/monster/traits/spells/spells";
+import ClassInstance from "src/app/common/models/monster/classes/ClassInstance";
+import Bard from "src/app/common/models/monster/classes/Bard/Bard";
 
 @Component({
 	selector: "gm-traits-form",
@@ -16,7 +24,8 @@ export class TraitsFormComponent extends MonsterForm {
 		trait_name: [],
 		trait_desc: [],
 		spellClass: [],
-		spellLevel: []
+		spellLevel: [],
+		spellAbility: []
 	};
 
 	private spellClasses = Values.SpellClasses;
@@ -83,5 +92,28 @@ export class TraitsFormComponent extends MonsterForm {
 	private showTrait(trait: Trait) {
 		this.formGroup.controls["trait_name"].setValue(trait.Name);
 		this.formGroup.controls["trait_desc"].setValue(trait.Description);
+	}
+
+	private changeSpellcastingType(newType: number): void {
+		switch (newType) {
+			case 0:
+				this.monster.Traits.Spells = new Spells();
+				break;
+
+			case 1:
+				this.monster.Traits.Spells = new Spellcasting(
+					new ClassInstance(new Bard(), 1),
+					[]
+				);
+				break;
+
+			case 2:
+				this.monster.Traits.Spells = new Innate();
+				break;
+
+			case 3:
+				this.monster.Traits.Spells = new Psionics();
+				break;
+		}
 	}
 }

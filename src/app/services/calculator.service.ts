@@ -1,13 +1,13 @@
 import { Injectable } from "@angular/core";
 import Fraction from "../common/fraction";
-import Alignment from "../common/models/alignment";
+import Alignment from "../common/models/monster/alignment";
 import { elementStart } from "@angular/core/src/render3/instructions";
-import Stats from "../common/models/stats/stats";
 import { DiceOptions } from "../common/models/generic/diceOptions";
 import Dice from "../common/models/generic/dice";
-import ArmorClass from "../common/models/stats/armorClass";
-import Skill from "../common/models/features/skill";
-import Monster from "../common/models/monster";
+import Monster from "../common/models/monster/monster";
+import ArmorClass from "../common/models/monster/stats/armorClass";
+import Stats from "../common/models/monster/stats/stats";
+import Skill from "../common/models/monster/features/skill";
 
 @Injectable({
 	providedIn: "root"

@@ -5,11 +5,12 @@ import { Injectable } from "@angular/core";
 })
 export class WordService {
 	public getSuffix(i: number): string {
+		if (!i) return null;
+
 		var result = "th";
 
 		const str = i.toString();
-		const len = str.length;
-		const lastChar = str[len];
+		const lastChar = str[str.length - 1];
 
 		if (i < 10 || i > 19)
 			if (lastChar === "1") result = "st";

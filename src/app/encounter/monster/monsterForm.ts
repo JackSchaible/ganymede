@@ -6,7 +6,7 @@ import {
 	OnInit,
 	ChangeDetectorRef
 } from "@angular/core";
-import Monster from "../../common/models/monster";
+import Monster from "../../common/models/monster/monster";
 import { MonsterCardComponent } from "../../common/monster-card/monster-card.component";
 import { CalculatorService } from "../../services/calculator.service";
 import { FormBuilder, FormGroup } from "@angular/forms";

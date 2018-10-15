@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from "@angular/core";
-import Alignment from "../models/alignment";
+import Alignment from "../models/monster/alignment";
 
 @Component({
 	selector: "gm-alignment-table",

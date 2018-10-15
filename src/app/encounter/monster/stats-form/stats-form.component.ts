@@ -2,9 +2,9 @@ import { Component, ChangeDetectorRef } from "@angular/core";
 import { FormBuilder } from "@angular/forms";
 import Values from "../../../common/models/values";
 import { CalculatorService } from "../../../services/calculator.service";
-import MovementType from "../../../common/models/stats/movementType";
 import MonsterForm from "../monsterForm";
 import { MatSnackBar } from "@angular/material";
+import MovementType from "src/app/common/models/monster/stats/movementType";
 
 @Component({
 	selector: "gm-stats-form",
