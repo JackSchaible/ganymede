@@ -138,6 +138,11 @@
         {{getSpellAttackMod()}} to hit with spell attacks).
         The {{monster.BasicInfo.Name ? monster.BasicInfo.Name : "monster"}} has the following
         {{monster.Traits.Spells.ClassInstance.BaseClass.Name}} spells prepared:</p>
+      <ul>
+        <li *ngFor="let level of getSpellSlots(); let i = index">
+          <p>{{level.Name}} ({{level.Name === 'Cantrips' ? 'at Will' : level.Slots + ' slots'}}): <span><span *ngFor=""></span></span></p>
+        </li>
+      </ul>
     </div>
 
     <ng-container *ngTemplateOutlet="section; context: { list: monster.Features}"></ng-container>

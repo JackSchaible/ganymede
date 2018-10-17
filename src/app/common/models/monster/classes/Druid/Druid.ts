@@ -1,7 +1,8 @@
-import BaseClass from "../BaseClass";
+import SpellcastingClass from "../SpellcastingClass";
+import SpellData from "../SpellData";
 
-export default class Druid extends BaseClass {
+export default class Druid extends SpellcastingClass {
 	constructor() {
-		super("Druid", "Wisdom");
+		super("Druid", "Wisdom", SpellData.SpellSlotAdvancement.FullCaster);
 	}
 }

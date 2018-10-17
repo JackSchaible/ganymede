@@ -11,6 +11,7 @@ import Values from "../models/values";
 import { WordService } from "../../services/word.service";
 import Skill from "../models/monster/features/skill";
 import { Spellcasting } from "../models/monster/traits/spells/spells";
+import SpellcastingClass from "../models/monster/classes/SpellcastingClass";
 
 @Component({
 	selector: "gm-monster-card",
@@ -131,8 +132,8 @@ export class MonsterCardComponent implements OnChanges, OnInit {
 			8 +
 			this.monster.BasicInfo.ProficiencyModifier +
 			this.calc.getModifierByName(
-				(this.monster.Traits.Spells as Spellcasting).ClassInstance.BaseClass
-					.SpellcastingAbility,
+				((this.monster.Traits.Spells as Spellcasting).ClassInstance
+					.BaseClass as SpellcastingClass).SpellcastingAbility,
 				this.monster
 			)
 		);
@@ -142,11 +143,29 @@ export class MonsterCardComponent implements OnChanges, OnInit {
 		const num =
 			this.monster.BasicInfo.ProficiencyModifier +
 			this.calc.getModifierByName(
-				(this.monster.Traits.Spells as Spellcasting).ClassInstance.BaseClass
-					.SpellcastingAbility,
+				((this.monster.Traits.Spells as Spellcasting).ClassInstance
+					.BaseClass as SpellcastingClass).SpellcastingAbility,
 				this.monster
 			);
 
 		return (num >= 0 ? "+" : "-") + num;
+	}
+
+	private getSpellSlots(): any[] {
+		const instance = (this.monster.Traits.Spells as Spellcasting).ClassInstance;
+
+		var slots = [];
+		var slotAllotment = (instance.BaseClass as SpellcastingClass)
+			.SpellAdvancement[instance.Level - 1];
+
+		for (let i = 0; i < slotAllotment.length; i++) {
+			if (slotAllotment[i] === 0) continue;
+			slots.push({
+				Name: i === 0 ? "Cantrips" : i + this.words.getSuffix(i) + " Level",
+				Slots: slotAllotment[i]
+			});
+		}
+
+		return slots;
 	}
 }

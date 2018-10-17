@@ -1,7 +1,8 @@
-import BaseClass from "../BaseClass";
+import SpellcastingClass from "../SpellcastingClass";
+import SpellData from "../SpellData";
 
-export default class Paladin extends BaseClass {
+export default class Paladin extends SpellcastingClass {
 	constructor() {
-		super("Paladin", "Charisma");
+		super("Paladin", "Charisma", SpellData.SpellSlotAdvancement.HalfCaster);
 	}
 }
