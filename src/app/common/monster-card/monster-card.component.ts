@@ -153,15 +153,20 @@ export class MonsterCardComponent implements OnChanges, OnInit {
 
 	private getSpellSlots(): any[] {
 		const instance = (this.monster.Traits.Spells as Spellcasting).ClassInstance;
+		const base = instance.BaseClass as SpellcastingClass;
 
-		var slots = [];
-		var slotAllotment = (instance.BaseClass as SpellcastingClass)
-			.SpellAdvancement[instance.Level - 1];
+		let slots = [];
+		const slotAllotment = base.SpellAdvancement[instance.Level - 1];
+
+		slots.push({
+			Name: "Cantrips",
+			Slots: base.Cantrips[instance.Level]
+		});
 
 		for (let i = 0; i < slotAllotment.length; i++) {
 			if (slotAllotment[i] === 0) continue;
 			slots.push({
-				Name: i === 0 ? "Cantrips" : i + this.words.getSuffix(i) + " Level",
+				Name: i + 1 + this.words.getSuffix(i) + " Level",
 				Slots: slotAllotment[i]
 			});
 		}

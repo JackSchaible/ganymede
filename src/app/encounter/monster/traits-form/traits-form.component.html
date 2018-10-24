@@ -71,17 +71,17 @@
             <input matInput placeholder="Spellcasting Level" [(ngModel)]="monster.Traits.Spells.ClassInstance.Level"
               formControlName="spellLevel" type="number">
           </mat-form-field>
-
-          <mat-accordion>
-            <mat-expansion-panel *ngFor="let spell of spellLevels">
-              <mat-expansion-panel-header>
-                <mat-panel-title>
-                  {{spell.Name}}
-                </mat-panel-title>
-              </mat-expansion-panel-header>
-            </mat-expansion-panel>
-          </mat-accordion>
         </div>
+
+        <mat-accordion *ngIf="monster.Traits.Spells.Type===1">
+          <mat-expansion-panel *ngFor="let spell of spellLevels">
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                {{spell.Name}}
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+          </mat-expansion-panel>
+        </mat-accordion>
       </mat-expansion-panel>
     </mat-accordion>
   </form>

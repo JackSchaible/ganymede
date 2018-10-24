@@ -44,6 +44,10 @@ export class StatsFormComponent extends MonsterForm {
 
 	onFormChanges(form: any): void {
 		this.abilityMod = this.getAcMod();
+		this.monster.Stats.HPRoll.Modifier = this.calculator.getModifierByName(
+			"Constitution",
+			this.monster
+		);
 	}
 
 	isComplete(): boolean {

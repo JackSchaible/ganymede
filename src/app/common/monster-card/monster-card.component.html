@@ -15,7 +15,7 @@
       <p><strong>Armor Class</strong> {{monster.Stats.AC.Score}} <span *ngIf="monster.Stats.ArmorType">({{monster.Stats.ArmorType}})</span></p>
       <p><strong>Hit Points</strong> {{monster.Stats.HPAverage}}
         ({{monster.Stats.HPRoll.Count}}d{{monster.Stats.HPRoll.Sides}}<span *ngIf="monster.Stats.HPRoll.Modifier != 0">{{monster.Stats.HPRoll.Modifier
-          > 0 ? '+' : '-'}}{{monster.Stats.HPRoll.Modifier}}</span>)
+          >= 0 ? "+" : ""}}{{monster.Stats.HPRoll.Modifier}}</span>)
       </p>
       <p><strong>Speed</strong> {{monster.Stats.Speed}} ft.<span *ngIf="monster.Stats.ExtraMovementTypes.length > 0">,</span>
         <span class="comma-list-item" *ngFor="let movement of monster.Stats.ExtraMovementTypes"> {{movement.Type}}

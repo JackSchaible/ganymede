@@ -22,6 +22,7 @@ import Ranger from "../../../common/models/monster/classes/Ranger/Ranger";
 import Sorcerer from "../../../common/models/monster/classes/Sorcerer/Sorcerer";
 import Warlock from "../../../common/models/monster/classes/Warlock/Warlock";
 import Wizard from "../../../common/models/monster/classes/Wizard/Wizard";
+import { WordService } from "src/app/services/word.service";
 
 @Component({
 	selector: "gm-traits-form",
@@ -39,25 +40,34 @@ export class TraitsFormComponent extends MonsterForm {
 
 	private spellClasses = Values.SpellClasses;
 	private spellcastingType: string = "none";
-	private spellAllotment: any[];
+	private spellAllotment: any[] = [];
+	private spellLevels: any[] = [];
 	private spells;
+
+	private words: WordService;
 
 	constructor(
 		calculator: CalculatorService,
 		formBuilder: FormBuilder,
 		changeDetector: ChangeDetectorRef,
-		snackBar: MatSnackBar
+		snackBar: MatSnackBar,
+		words: WordService
 	) {
 		super(calculator, formBuilder, changeDetector, snackBar);
+		this.words = words;
 	}
 
 	onFormChanges(form: any): void {
-		const spellLevel = parseInt(this.formGroup.controls["spellLevel"].value);
+		let spellLevel = parseInt(this.formGroup.controls["spellLevel"].value);
 		const spellClass = this.formGroup.controls["spellClass"].value;
 
-		if (spellLevel < 1) this.formGroup.controls["spellLevel"].setValue(1);
-		else if (spellLevel > 20)
-			this.formGroup.controls["spellLevel"].setValue(20);
+		if (spellLevel < 1) {
+			spellLevel = 1;
+			this.formGroup.controls["spellLevel"].setValue(1, { emitEvent: false });
+		} else if (spellLevel > 20) {
+			spellLevel = 20;
+			this.formGroup.controls["spellLevel"].setValue(20, { emitEvent: false });
+		}
 
 		if (
 			spellClass !==
@@ -106,33 +116,8 @@ export class TraitsFormComponent extends MonsterForm {
 			);
 		}
 
-		const advancementTable = ((this.monster.Traits.Spells as Spellcasting)
-			.ClassInstance.BaseClass as SpellcastingClass).SpellAdvancement;
-
 		this.spellAllotment = [];
-		for (
-			let i = 0;
-			i <
-			advancementTable[
-				(this.monster.Traits.Spells as Spellcasting).ClassInstance.Level
-			].length;
-			i++
-		) {
-			if (
-				advancementTable[
-					(this.monster.Traits.Spells as Spellcasting).ClassInstance.Level
-				][i] === 0
-			)
-				continue;
-
-			this.spellLevels.push({
-				Name: i === 0 ? "Cantrips" : "Level " + i + " Spells",
-				Slots:
-					advancementTable[
-						(this.monster.Traits.Spells as Spellcasting).ClassInstance.Level
-					][i]
-			});
-		}
+		this.getSpellSlots();
 	}
 
 	isComplete(): boolean {
@@ -206,6 +191,26 @@ export class TraitsFormComponent extends MonsterForm {
 			case 3:
 				this.monster.Traits.Spells = new Psionics();
 				break;
+		}
+	}
+
+	private getSpellSlots(): void {
+		const instance = (this.monster.Traits.Spells as Spellcasting).ClassInstance;
+		const base = instance.BaseClass as SpellcastingClass;
+		const slotAllotment = base.SpellAdvancement[instance.Level - 1];
+
+		this.spellLevels = [];
+		this.spellLevels.push({
+			Name: "Cantrips",
+			Slots: base.Cantrips[instance.Level]
+		});
+
+		for (let i = 0; i < slotAllotment.length; i++) {
+			if (slotAllotment[i] === 0) continue;
+			this.spellLevels.push({
+				Name: i + 1 + this.words.getSuffix(i) + " Level",
+				Slots: slotAllotment[i]
+			});
 		}
 	}
 }
