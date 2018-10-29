@@ -30,7 +30,7 @@
 
         <div>
           <mat-form-field class="col-12">
-            <input matInput placeholder="Name" formControlName="trait_name">
+            <input matInput placeholder="Name" formControlName="trait_name" />
           </mat-form-field>
 
           <mat-form-field class="col-12">
@@ -64,24 +64,44 @@
         <div *ngIf="monster.Traits.Spells.Type===1">
           <mat-form-field class="col-6">
             <input matInput placeholder="Spellcasting Class" [(ngModel)]="monster.Traits.Spells.ClassInstance.BaseClass.Name"
-              formControlName="spellClass" [matAutocomplete]="spellClassAC">
+              formControlName="spellClass" [matAutocomplete]="spellClassAC" />
           </mat-form-field>
 
           <mat-form-field class="col-6">
             <input matInput placeholder="Spellcasting Level" [(ngModel)]="monster.Traits.Spells.ClassInstance.Level"
-              formControlName="spellLevel" type="number">
+              formControlName="spellLevel" type="number" (input)="getSpellSlots()" />
           </mat-form-field>
+
+          <mat-accordion>
+            <mat-expansion-panel *ngFor="let spell of spellLevels">
+              <mat-expansion-panel-header>
+                <mat-panel-title>
+                  {{spell.Name}}
+                </mat-panel-title>
+              </mat-expansion-panel-header>
+
+              <div>
+                <mat-form-field class="u-padding-x-none">
+                  <input [matAutocomplete]="skillAC" matInput placeholder="Skill" formControlName="skill_name" (input)="skillChanged(true)">
+                </mat-form-field>
+
+                <mat-form-field class="u-padding-x-none">
+                  <mat-select placeholder="Ability" (selectionChange)="skillChanged()" [(value)]="skillAbility">
+                    <mat-option *ngFor="let ability of ['Strength', 'Dexterity', 'Constitution', 'Intelligence', 'Wisdom', 'Charisma']"
+                      [value]="ability">
+                      {{ability}}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+
+                <button mat-button matSuffix mat-icon-button (click)="addSkill()">
+                  <i class="fa fa-plus"></i>
+                </button>
+              </div>
+            </mat-expansion-panel>
+          </mat-accordion>
         </div>
 
-        <mat-accordion *ngIf="monster.Traits.Spells.Type===1">
-          <mat-expansion-panel *ngFor="let spell of spellLevels">
-            <mat-expansion-panel-header>
-              <mat-panel-title>
-                {{spell.Name}}
-              </mat-panel-title>
-            </mat-expansion-panel-header>
-          </mat-expansion-panel>
-        </mat-accordion>
       </mat-expansion-panel>
     </mat-accordion>
   </form>
