@@ -82,19 +82,11 @@
 
               <div>
                 <mat-form-field class="u-padding-x-none">
-                  <input [matAutocomplete]="skillAC" matInput placeholder="Skill" formControlName="skill_name" (input)="skillChanged(true)">
+                  <input [matAutocomplete]="spellAC" matInput placeholder="Spell Name" formControlName="spellName"
+                    (input)="skillChanged(true)">
                 </mat-form-field>
 
-                <mat-form-field class="u-padding-x-none">
-                  <mat-select placeholder="Ability" (selectionChange)="skillChanged()" [(value)]="skillAbility">
-                    <mat-option *ngFor="let ability of ['Strength', 'Dexterity', 'Constitution', 'Intelligence', 'Wisdom', 'Charisma']"
-                      [value]="ability">
-                      {{ability}}
-                    </mat-option>
-                  </mat-select>
-                </mat-form-field>
-
-                <button mat-button matSuffix mat-icon-button (click)="addSkill()">
+                <button mat-button matSuffix mat-icon-button (click)="addSpell()">
                   <i class="fa fa-plus"></i>
                 </button>
               </div>

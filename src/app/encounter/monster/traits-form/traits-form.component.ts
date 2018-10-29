@@ -35,7 +35,8 @@ export class TraitsFormComponent extends MonsterForm {
 		trait_desc: [],
 		spellClass: [],
 		spellLevel: [],
-		spellAbility: []
+		spellAbility: [],
+		spellName: []
 	};
 
 	private spellClasses = Values.SpellClasses;
@@ -117,7 +118,7 @@ export class TraitsFormComponent extends MonsterForm {
 		}
 
 		this.spellAllotment = [];
-		this.getSpellSlots();
+		//this.getSpellSlots();
 	}
 
 	isComplete(): boolean {
