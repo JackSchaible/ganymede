@@ -24,10 +24,11 @@ export class NavComponent implements OnInit {
 		this.isDesktop = this.deviceService.isDesktop();
 
 		this.items = [
-			new NavItem("", "fa fa-dice", "DM Tools", true),
+			new NavItem("", "fab fa-d-and-d", "DM Tools", true),
 			new NavItem("", "fa fa-home", "Home"),
 			new NavItem("CRCalculator", "fa fa-calculator", "CR Calculator"),
-			new NavItem("encounter", "fa fa-pastafarianism", "Encounters")
+			new NavItem("encounter", "fas fa-helmet-battle", "Encounters"),
+			new NavItem("encounter", "fas fa-wand-magic", "Spells")
 		];
 	}
 
