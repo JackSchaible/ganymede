@@ -18,6 +18,7 @@ import {
 } from "./directives/is-logged-in.directive";
 import { MatToolbarModule, MatMenuModule } from "@angular/material";
 import { DeviceDetectorModule } from "ngx-device-detector";
+import { SpellsModule } from "./spells/spells.module";
 
 @NgModule({
 	declarations: [
@@ -34,6 +35,7 @@ import { DeviceDetectorModule } from "ngx-device-detector";
 		ReactiveFormsModule,
 		HttpClientModule,
 		EncounterModule,
+		SpellsModule,
 		AuthModule,
 		AppRoutingModule,
 		FormsModule,
