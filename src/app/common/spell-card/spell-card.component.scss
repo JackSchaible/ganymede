@@ -1,0 +1,92 @@
+$red: #c03e2e;
+$white: #fff;
+$black: #010101;
+
+.spell-card {
+	&.red {
+		background: $red;
+
+		.details {
+			> div {
+				border-color: $red;
+
+				.details-title {
+					color: $red;
+				}
+			}
+		}
+	}
+
+	h1 {
+		font-family: "mrs-eaves", "TiamatRegular", "Helvetica Neue", Helvetica,
+			sans-serif;
+		color: $black;
+		font-size: 1.875rem;
+		font-weight: 700;
+		font-variant: small-caps;
+		text-transform: capitalize;
+		margin: 0px 0px -5px 0px;
+	}
+
+	max-width: 375px;
+
+	.name {
+		background: $white;
+		border-top-left-radius: 10px;
+		border-top-right-radius: 10px;
+	}
+
+	.level {
+		text-transform: lowercase;
+		font-family: sans-serif;
+	}
+
+	.details {
+		> div {
+			flex: 0 0 50%;
+			background: $white;
+			border-width: 3px;
+
+			&:first-child,
+			&:nth-child(2) {
+				border-bottom-style: solid;
+			}
+
+			&:first-child,
+			&:nth-child(3) {
+				border-right-style: solid;
+			}
+
+			.details-title {
+				font-family: Georgia, serif;
+				font-weight: 600;
+				text-transform: uppercase;
+				font-size: 0.7rem;
+			}
+
+			.details-value {
+				font-family: sans-serif;
+				color: $black;
+				font-weight: 600;
+			}
+		}
+	}
+
+	.description {
+		background: $white;
+
+		p,
+		div p {
+			//Why doesn't this effect the text in the description?
+			color: $black;
+			font-size: 0.9rem;
+			font-weight: 600;
+			font-family: sans-serif;
+			line-height: 1;
+		}
+	}
+}
+
+.white {
+	color: $white;
+}

@@ -1,0 +1,44 @@
+<div [class]="'spell-card u-padding ' + cardColor">
+  <div class="name u-text-center u-padding-smallest">
+    <h1>{{spell.Name}}</h1>
+  </div>
+
+  <div class="u-text-center">
+    <p class="level white">{{spellLevel}}-level {{spell.School}}</p>
+  </div>
+
+  <div class="u-flex u-flex__wrap u-text-center details">
+    <div>
+      <p class="details-title">Casting Time</p>
+      <p class="details-value">{{spell.CastingTime}}</p>
+    </div>
+
+    <div>
+      <p class="details-title">Range</p>
+      <p class="details-value">{{spell.Range}}</p>
+    </div>
+
+    <div>
+      <p class="details-title">Components</p>
+      <p class="details-value">
+        <span *ngIf="spell.Components.Verbal">V<span *ngIf="spell.Components.Somatic || spell.Components.Material">,</span></span>
+        <span *ngIf="spell.Components.Somatic">S<span *ngIf="spell.Components.Material">,</span></span>
+        <span *ngIf="spell.Components.Material">M</span>
+      </p>
+    </div>
+
+    <div>
+      <p class="details-title">Duration</p>
+      <p class="details-value">{{spell.Duration}}</p>
+    </div>
+  </div>
+
+  <div class="u-text-center">
+    <p class="level white">&nbsp;</p>
+  </div>
+
+  <div class="description u-padding-x u-padding-y-half">
+    <p *ngIf="spell.Components.Material">Material: {{spell.Components.Material}}</p>
+    <div [innerHTML]="spell.Description"></div>
+  </div>
+</div>

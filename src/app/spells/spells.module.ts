@@ -10,6 +10,8 @@ import {
 	MatTableModule,
 	MatPaginatorModule
 } from "@angular/material";
+import { MatButtonModule } from "@angular/material/button";
+import { GmCommonModule } from "../common/gm-common.module";
 
 @NgModule({
 	imports: [
@@ -18,7 +20,9 @@ import {
 		FormsModule,
 		MatTableModule,
 		MatCardModule,
-		MatPaginatorModule
+		MatPaginatorModule,
+		MatButtonModule,
+		GmCommonModule
 	],
 	declarations: [SpellsComponent, SpellsListComponent, SpellEditComponent]
 })

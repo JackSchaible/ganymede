@@ -76,3 +76,14 @@ export default class SpellData {
 		Sorcerer: [4, 4, 4, 5, 5, 5, 5, 5, 5, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6]
 	};
 }
+
+export enum SpellSchool {
+	Abjuration = "Abjuration",
+	Conjuration = "Conjuration",
+	Divination = "Divination",
+	Enchantment = "Enchantment",
+	Evocation = "Evocation",
+	Illusion = "Illusion",
+	Necromancy = "Necromancy",
+	Transmutation = "Transmutation"
+}

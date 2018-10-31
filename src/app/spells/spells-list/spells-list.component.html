@@ -1,6 +1,10 @@
 <h2>Your Spells <i class="fas fa-wand-magic"></i></h2>
 
-<main class="mat-elevation-z8">
+<main class="mat-elevation-z8 u-margin-top-2x">
+  <div class="u-padding">
+    <a mat-raised-button routerLink="/spells/add"><i class="fa fa-plus-square u-margin-right-half"></i> Add New Spell</a>
+  </div>
+
   <mat-form-field>
     <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
   </mat-form-field>

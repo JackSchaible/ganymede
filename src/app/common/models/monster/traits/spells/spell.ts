@@ -1,15 +1,16 @@
 import SpellComponents from "./spellComponents";
+import { SpellSchool } from "../../classes/SpellData";
+import { PlayerClass } from "../../../values";
 
 export default class Spell {
 	constructor(
 		public Name: string,
 		public Level: number,
-		public Category: string,
-		public Subcategory: string,
-		public Class: string,
+		public School: SpellSchool,
+		public Classes: PlayerClass[],
 		public CastingTime: string,
 		public Range: string,
-		public Comoponents: SpellComponents,
+		public Components: SpellComponents,
 		public Duration: string,
 		public Description: string,
 		public AtHigherLevels: string
