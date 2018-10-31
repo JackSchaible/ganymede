@@ -1,4 +1,26 @@
+<h2>
+  <span *ngIf="isNew">Create A</span>
+  <span *ngIf="!isNew">Edit Your</span>
+  Spell
+</h2>
+
 <main class="mat-elevation-z8 u-margin-all-2x">
 
-  <gm-spell-card></gm-spell-card>
+  <div class="u-flex">
+    <form [formGroup]="formGroup" class="flex-grow-1 u-flex u-flex__wrap">
+      <input autocomplete="false" name="hidden" type="text" style="display:none;">
+
+      <mat-form-field class="col-6">
+        <input matInput placeholder="Spell Name" [(ngModel)]="spell.Name" formControlName="spellName">
+      </mat-form-field>
+
+      <mat-form-field class="col-6">
+        <mat-select placeholder="Class(es)" [formControl]="spellClasses" [value]="currentClasses" multiple>
+          <mat-option *ngFor="let class of allClasses" [value]="class.value">{{class.text}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </form>
+
+    <gm-spell-card [spell]="spell"></gm-spell-card>
+  </div>
 </main>

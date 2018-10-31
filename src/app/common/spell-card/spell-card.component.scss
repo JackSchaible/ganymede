@@ -1,9 +1,28 @@
-$red: #c03e2e;
 $azure: #3ba3c0;
+$red: #c03e2e;
+$brown: #624a24;
+$purple: #8a1d6e;
+$green: #60a342;
+$yellow: #d8a413;
+
 $white: #fff;
 $black: #010101;
 
 .spell-card {
+	&.azure {
+		background: $azure;
+
+		.details {
+			> div {
+				border-color: $azure;
+
+				.details-title {
+					color: $azure;
+				}
+			}
+		}
+	}
+
 	&.red {
 		background: $red;
 
@@ -13,6 +32,62 @@ $black: #010101;
 
 				.details-title {
 					color: $red;
+				}
+			}
+		}
+	}
+
+	&.brown {
+		background: $brown;
+
+		.details {
+			> div {
+				border-color: $brown;
+
+				.details-title {
+					color: $brown;
+				}
+			}
+		}
+	}
+
+	&.purple {
+		background: $purple;
+
+		.details {
+			> div {
+				border-color: $purple;
+
+				.details-title {
+					color: $purple;
+				}
+			}
+		}
+	}
+
+	&.green {
+		background: $green;
+
+		.details {
+			> div {
+				border-color: $green;
+
+				.details-title {
+					color: $green;
+				}
+			}
+		}
+	}
+
+	&.yellow {
+		background: $yellow;
+
+		.details {
+			> div {
+				border-color: $yellow;
+
+				.details-title {
+					color: $yellow;
 				}
 			}
 		}

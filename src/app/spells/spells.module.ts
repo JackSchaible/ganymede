@@ -8,10 +8,13 @@ import { SpellsComponent } from "./spells.component";
 import {
 	MatCardModule,
 	MatTableModule,
-	MatPaginatorModule
+	MatPaginatorModule,
+	MatOptionModule,
+	MatSelectModule
 } from "@angular/material";
 import { MatButtonModule } from "@angular/material/button";
 import { GmCommonModule } from "../common/gm-common.module";
+import { ReactiveFormsModule } from "@angular/forms";
 
 @NgModule({
 	imports: [
@@ -22,7 +25,10 @@ import { GmCommonModule } from "../common/gm-common.module";
 		MatCardModule,
 		MatPaginatorModule,
 		MatButtonModule,
-		GmCommonModule
+		MatOptionModule,
+		MatSelectModule,
+		GmCommonModule,
+		ReactiveFormsModule.withConfig({ warnOnNgModelWithFormControl: "never" })
 	],
 	declarations: [SpellsComponent, SpellsListComponent, SpellEditComponent]
 })

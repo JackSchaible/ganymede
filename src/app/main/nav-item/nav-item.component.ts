@@ -11,9 +11,7 @@ export class NavItemComponent {
 	@Input()
 	public item: NavItem;
 
-	constructor(private router: Router) {
-		console.log(this.item);
-	}
+	constructor(private router: Router) {}
 
 	private navigate(url: string): void {
 		if (url) this.router.navigateByUrl(url);
