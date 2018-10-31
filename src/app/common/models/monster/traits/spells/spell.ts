@@ -12,7 +12,7 @@ export default class Spell {
 		public Range: string,
 		public Components: SpellComponents,
 		public Duration: string,
-		public Description: string,
+		public Description: string[],
 		public AtHigherLevels: string
 	) {}
 }

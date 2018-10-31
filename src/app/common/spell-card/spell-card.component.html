@@ -4,7 +4,8 @@
   </div>
 
   <div class="u-text-center">
-    <p class="level white">{{spellLevel}}-level {{spell.School}}</p>
+    <p *ngIf="spell.Level > 0" class="level white">{{spellLevel}}-level {{spell.School}}</p>
+    <p *ngIf="spell.Level === 0" class="level white">{{spell.School}} cantrip</p>
   </div>
 
   <div class="u-flex u-flex__wrap u-text-center details">
@@ -37,8 +38,16 @@
     <p class="level white">&nbsp;</p>
   </div>
 
-  <div class="description u-padding-x u-padding-y-half">
+  <div class="description u-padding-x u-padding-y-half" [class.bottom]="!spell.AtHigherLevels">
     <p *ngIf="spell.Components.Material">Material: {{spell.Components.Material}}</p>
-    <div [innerHTML]="spell.Description"></div>
+    <p class="u-margin-top" *ngFor="let desc of spell.Description">{{desc}}</p>
+  </div>
+
+  <div class="u-text-center" *ngIf="spell.AtHigherLevels">
+    <p class="white">At Higher Levels</p>
+  </div>
+
+  <div class="higher-levels u-padding-x u-padding-y-half" *ngIf="spell.AtHigherLevels">
+    <p>{{spell.AtHigherLevels}}</p>
   </div>
 </div>

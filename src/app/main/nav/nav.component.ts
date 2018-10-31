@@ -33,7 +33,7 @@ export class NavComponent implements OnInit {
 			new NavItem("encounter", "fas fa-helmet-battle", "Encounters"),
 			new NavItem(null, "fas fa-wand-magic", "Spells", false, [
 				new NavItem("spells", "fas fa-clipboard-list", "My Spells"),
-				new NavItem("spells/edit", "fa fa-plus-square", "New Spell")
+				new NavItem("spells/add", "fa fa-plus-square", "New Spell")
 			])
 		];
 	}
