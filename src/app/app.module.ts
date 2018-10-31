@@ -19,6 +19,7 @@ import {
 import { MatToolbarModule, MatMenuModule } from "@angular/material";
 import { DeviceDetectorModule } from "ngx-device-detector";
 import { SpellsModule } from "./spells/spells.module";
+import { NavItemComponent } from './main/nav-item/nav-item.component';
 
 @NgModule({
 	declarations: [
@@ -28,7 +29,8 @@ import { SpellsModule } from "./spells/spells.module";
 		CrCalculatorComponent,
 		RouteNotFoundComponent,
 		IsLoggedInDirective,
-		IsLoggedOutDirective
+		IsLoggedOutDirective,
+		NavItemComponent
 	],
 	imports: [
 		BrowserModule,

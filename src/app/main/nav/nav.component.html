@@ -1,16 +1,6 @@
 <mat-toolbar>
   <nav *ngIf="isDesktop; else isMobile" class="u-flex w-100">
-    <button *ngFor="let item of items" mat-button [routerLink]="item.url" [class.isBrand]="item.isBrand" class="mat-link">
-      <strong *ngIf=" item.isBrand; else
-      btn">
-        <ng-container *ngTemplateOutlet="btn; context: {$implicit: item}"></ng-container>
-      </strong>
-
-      <ng-template #btn>
-        <i *ngIf="item.icon" [class]="item.icon"></i>
-        <span class="u-margin-left-quarter">{{item.label}}</span>
-      </ng-template>
-    </button>
+    <gm-nav-item *ngFor="let item of items" [item]="item"></gm-nav-item>
 
     <div *isLoggedIn class="u-flex c-nav__logged-in">
       <p class="text-white"><i class="fa fa-user-circle"></i> Welcome, {{user}}!</p>
