@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from "@angular/core";
+import { Component, Input } from "@angular/core";
 import Spell from "../models/monster/traits/spells/spell";
 import { WordService } from "src/app/services/word.service";
 import { PlayerClass } from "../models/values";
@@ -8,19 +8,22 @@ import { PlayerClass } from "../models/values";
 	templateUrl: "./spell-card.component.html",
 	styleUrls: ["./spell-card.component.scss"]
 })
-export class SpellCardComponent implements OnInit {
+export class SpellCardComponent {
 	@Input()
 	public spell: Spell;
 
 	private cardColor: string;
 	private spellLevel: string;
 
-	constructor(private words: WordService) {}
+	constructor(private words: WordService) {
+		this.onChange();
+	}
 
-	ngOnInit() {
+	public onChange() {
+		if (!this.spell) return;
 		this.spellLevel = this.spell.Level + this.words.getSuffix(this.spell.Level);
 
-		if (this.spell && this.spell.Classes)
+		if (this.spell.Classes)
 			switch (this.spell.Classes[0]) {
 				case PlayerClass.Bard:
 					this.cardColor = "purple";

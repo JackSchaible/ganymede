@@ -10,7 +10,9 @@ import {
 	MatTableModule,
 	MatPaginatorModule,
 	MatOptionModule,
-	MatSelectModule
+	MatSelectModule,
+	MatAutocompleteModule,
+	MatChipsModule
 } from "@angular/material";
 import { MatButtonModule } from "@angular/material/button";
 import { GmCommonModule } from "../common/gm-common.module";
@@ -27,6 +29,8 @@ import { ReactiveFormsModule } from "@angular/forms";
 		MatButtonModule,
 		MatOptionModule,
 		MatSelectModule,
+		MatAutocompleteModule,
+		MatChipsModule,
 		GmCommonModule,
 		ReactiveFormsModule.withConfig({ warnOnNgModelWithFormControl: "never" })
 	],

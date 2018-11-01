@@ -1,9 +1,18 @@
-import { Component, OnInit, Input } from "@angular/core";
+import { Component, OnInit, Input, ViewChild } from "@angular/core";
 import Spell from "src/app/common/models/monster/traits/spells/spell";
 import { SpellSchool } from "src/app/common/models/monster/classes/SpellData";
 import { PlayerClass } from "src/app/common/models/values";
 import SpellComponents from "src/app/common/models/monster/traits/spells/spellComponents";
 import { FormGroup, FormBuilder, FormControl } from "@angular/forms";
+import { COMMA, ENTER } from "@angular/cdk/keycodes";
+import { Observable } from "rxjs";
+import { startWith, map } from "rxjs/operators";
+import {
+	MatChipInputEvent,
+	MatAutocomplete,
+	MatAutocompleteSelectedEvent
+} from "@angular/material";
+import { SpellCardComponent } from "src/app/common/spell-card/spell-card.component";
 
 @Component({
 	selector: "gm-spell-edit",
@@ -14,17 +23,24 @@ export class SpellEditComponent implements OnInit {
 	@Input()
 	public spell: Spell;
 
+	@ViewChild("card")
+	spellCard: SpellCardComponent;
+
 	private formGroup: FormGroup;
 	private form = {
 		spellName: [],
-		spellClasses: new FormControl()
+		spellClasses: []
 	};
 
 	private isNew: boolean;
 
-	private allClasses: any[];
-	private spellClasses = new FormControl();
-	private currentClasses: number[];
+	private selectedClasses: string[];
+	private separatorKeysCodes: number[] = [ENTER, COMMA];
+	private spellClassesInput: FormControl = new FormControl();
+	private filteredClasses: Observable<string[]>;
+	private allClasses: string[];
+	@ViewChild("spellsAC")
+	matAutocomplete: MatAutocomplete;
 
 	constructor(protected formBuilder: FormBuilder) {
 		if (!this.spell) {
@@ -42,33 +58,81 @@ export class SpellEditComponent implements OnInit {
 				null
 			);
 		}
-		this.allClasses = [
-			{ value: 1, text: "Barbarian" },
-			{ value: 2, text: "Bard" },
-			{ value: 3, text: "Cleric" },
-			{ value: 4, text: "Druid" },
-			{ value: 5, text: "Fighter" },
-			{ value: 6, text: "Monk" },
-			{ value: 7, text: "Paladin" },
-			{ value: 8, text: "Ranger" },
-			{ value: 9, text: "Rogue" },
-			{ value: 10, text: "Sorcerer" },
-			{ value: 11, text: "Warlock" },
-			{ value: 12, text: "Wizard" }
-		];
 
-		this.currentClasses = [];
+		this.allClasses = [];
+		this.selectedClasses = [];
 
-		for (let i = 0; i < this.spell.Classes.length; i++)
-			this.currentClasses.push(this.spell.Classes[i]);
+		let keys = Object.keys(PlayerClass);
+		keys = keys.splice(keys.length / 2, keys.length);
+
+		for (let i = 0; i < keys.length; i++) {
+			var text = keys[i];
+			this.allClasses.push(text);
+
+			if (this.spell.Classes.indexOf(PlayerClass[text]) >= 0)
+				this.selectedClasses.push(text);
+		}
+
+		this.filteredClasses = this.spellClassesInput.valueChanges.pipe(
+			startWith(null),
+			map(
+				(pc: string | null) => (pc ? this._filter(pc) : this.allClasses.slice())
+			)
+		);
 	}
 
 	ngOnInit() {
 		this.formGroup = this.formBuilder.group(this.form);
 		this.formGroup.valueChanges.subscribe(form => this.formChange(form));
+		this.spellCard.onChange();
 	}
 
 	formChange(form: any): void {
-		console.log(this.spellClasses.value);
+		this.spellCard.onChange();
+	}
+
+	private add(event: MatChipInputEvent): void {
+		if (!this.matAutocomplete.isOpen) {
+			const value = event.value;
+
+			if (
+				(value || "").trim() &&
+				this.spell.Classes.indexOf(PlayerClass[value.trim()]) === -1
+			) {
+				this.selectedClasses.push(value.trim());
+				this.spell.Classes.push(PlayerClass[value.trim()]);
+			}
+
+			this.spellClassesInput.setValue(null);
+			this.spellCard.onChange();
+		}
+	}
+
+	private remove(pc: string): void {
+		let index = this.selectedClasses.indexOf(pc);
+		if (index >= 0) this.selectedClasses.splice(index, 1);
+
+		index = this.spell.Classes.indexOf(PlayerClass[pc]);
+		if (index >= 0) this.spell.Classes.splice(index, 1);
+
+		this.spellCard.onChange();
+	}
+
+	private spellSelected(event: MatAutocompleteSelectedEvent): void {
+		if (this.spell.Classes.indexOf(PlayerClass[event.option.viewValue]) !== -1)
+			return;
+
+		this.selectedClasses.push(event.option.viewValue);
+		this.spell.Classes.push(PlayerClass[event.option.viewValue]);
+		this.spellClassesInput.setValue(null);
+		this.spellCard.onChange();
+	}
+
+	private _filter(value: string): string[] {
+		const filterValue = value.toLowerCase();
+
+		return this.allClasses.filter(
+			fruit => fruit.toLowerCase().indexOf(filterValue) === 0
+		);
 	}
 }
