@@ -19,6 +19,16 @@ $black: #010101;
 				.details-title {
 					color: $azure;
 				}
+
+				.concentration {
+					div {
+						border-bottom-color: $azure;
+
+						&:after {
+							border-top-color: $azure;
+						}
+					}
+				}
 			}
 		}
 	}
@@ -32,6 +42,16 @@ $black: #010101;
 
 				.details-title {
 					color: $red;
+				}
+
+				.concentration {
+					div {
+						border-bottom-color: $red;
+
+						&:after {
+							border-top-color: $red;
+						}
+					}
 				}
 			}
 		}
@@ -47,6 +67,16 @@ $black: #010101;
 				.details-title {
 					color: $brown;
 				}
+
+				.concentration {
+					div {
+						border-bottom-color: $brown;
+
+						&:after {
+							border-top-color: $brown;
+						}
+					}
+				}
 			}
 		}
 	}
@@ -60,6 +90,16 @@ $black: #010101;
 
 				.details-title {
 					color: $purple;
+				}
+
+				.concentration {
+					div {
+						border-bottom-color: $purple;
+
+						&:after {
+							border-top-color: $purple;
+						}
+					}
 				}
 			}
 		}
@@ -75,6 +115,16 @@ $black: #010101;
 				.details-title {
 					color: $green;
 				}
+
+				.concentration {
+					div {
+						border-bottom-color: $green;
+
+						&:after {
+							border-top-color: $green;
+						}
+					}
+				}
 			}
 		}
 	}
@@ -88,6 +138,16 @@ $black: #010101;
 
 				.details-title {
 					color: $yellow;
+				}
+
+				.concentration {
+					div {
+						border-bottom-color: $yellow;
+
+						&:after {
+							border-top-color: $yellow;
+						}
+					}
 				}
 			}
 		}
@@ -115,10 +175,15 @@ $black: #010101;
 		font-family: sans-serif;
 		font-size: 0.9375rem;
 		margin: 3px 0;
+
+		&.atHigherLevels {
+			text-transform: capitalize;
+		}
 	}
 
 	.details {
 		> div {
+			position: relative;
 			flex: 0 0 50%;
 			background: $white;
 			border-width: 3px;
@@ -147,6 +212,40 @@ $black: #010101;
 				font-weight: 300;
 				margin: 2px 0 0 0;
 			}
+
+			.concentration {
+				position: absolute;
+				right: 5px;
+				top: -10%;
+
+				div {
+					width: 0;
+					height: 0;
+					border: 10px solid transparent;
+					border-bottom: 15px solid red;
+					position: relative;
+
+					span {
+						color: #fff;
+						font-weight: 600;
+						position: relative;
+						left: -4px;
+						top: 4px;
+						z-index: 1;
+					}
+
+					&:after {
+						content: "";
+						position: absolute;
+						left: -10px;
+						top: 15px;
+						width: 0;
+						height: 0;
+						border: 10px solid transparent;
+						border-top: 15px solid red;
+					}
+				}
+			}
 		}
 	}
 
@@ -165,6 +264,14 @@ $black: #010101;
 		background: $white;
 		border-bottom-left-radius: 10px;
 		border-bottom-right-radius: 10px;
+	}
+
+	.className {
+		color: #fff;
+		font-size: 1.1rem;
+		text-transform: capitalize;
+		font-family: modesto-expanded, serif;
+		font-weight: 400;
 	}
 }
 

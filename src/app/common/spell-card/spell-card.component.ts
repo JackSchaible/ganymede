@@ -59,4 +59,8 @@ export class SpellCardComponent implements OnInit, OnChanges {
 			}
 		else this.cardColor = "red";
 	}
+
+	private getClassName(pc: PlayerClass): string {
+		return PlayerClass[pc];
+	}
 }

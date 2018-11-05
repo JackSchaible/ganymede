@@ -37,7 +37,8 @@ export class SpellEditComponent implements OnInit, AfterViewInit {
 		rangeType: [],
 		rangeAmount: [],
 		materialComponent: [],
-		description: []
+		description: [],
+		atHigherLevels: []
 	};
 
 	private isNew: boolean;
@@ -143,6 +144,12 @@ export class SpellEditComponent implements OnInit, AfterViewInit {
 
 			case "c":
 				this.spell.Duration.Concentration = !this.spell.Duration.Concentration;
+				break;
+
+			case "a":
+				if (this.spell.AtHigherLevels || this.spell.AtHigherLevels === "")
+					this.spell.AtHigherLevels = null;
+				else this.spell.AtHigherLevels = "";
 				break;
 		}
 	}

@@ -35,6 +35,12 @@
       <p *ngIf="spell.Duration.Concentration">Up to {{spell.Duration.Length}} {{spell.Duration.DurationType}}</p>
       <p *ngIf="!spell.Duration.Concentration" class="details-value"><span *ngIf="spell.Duration.DurationType === 'round' || spell.Duration.DurationType === 'minute' || spell.Duration.DurationType === 'hour' || spell.Duration.DurationType === 'day' || spell.Duration.DurationType === 'year'">{{spell.Duration.Length}}
         </span>{{spell.Duration.DurationType}}</p>
+
+      <div class="concentration" *ngIf="spell.Duration.Concentration">
+        <div>
+          <span>C</span>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -47,11 +53,13 @@
     <div [class.u-margin-top]="spell.Components.Material || spell.Components.Material === ''" [innerHTML]="spell.Description"></div>
   </div>
 
-  <div class="u-text-center" *ngIf="spell.AtHigherLevels">
-    <p class="white">At Higher Levels</p>
+  <div class="u-text-center" *ngIf="spell.AtHigherLevels || spell.AtHigherLevels === ''">
+    <p class="level white atHigherLevels">At Higher Levels</p>
   </div>
 
-  <div class="higher-levels u-padding-x u-padding-y-half" *ngIf="spell.AtHigherLevels">
+  <div class="higher-levels u-padding-x u-padding-y-half" *ngIf="spell.AtHigherLevels || spell.AtHigherLevels === ''">
     <p>{{spell.AtHigherLevels}}</p>
   </div>
+
+  <p class="className u-margin-top-half">{{getClassName(spell.Classes[0])}}</p>
 </div>

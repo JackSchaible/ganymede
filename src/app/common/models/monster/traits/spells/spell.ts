@@ -27,9 +27,9 @@ export default class Spell {
 			[PlayerClass.Bard],
 			new CastingTime("unknown", null),
 			new Range("unknown", null),
-			new SpellComponents(true, false, null),
+			new SpellComponents(false, false, null),
 			new SpellDuration("unknown", null),
-			"<p>asdf</p>",
+			"<p></p>",
 			null
 		);
 	}
@@ -44,7 +44,7 @@ export default class Spell {
 			new Range("", null),
 			new SpellComponents(false, false, null),
 			new SpellDuration("unknown", null),
-			"",
+			"<p></p>",
 			null
 		);
 	}
