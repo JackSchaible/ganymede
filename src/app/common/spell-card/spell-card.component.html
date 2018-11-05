@@ -11,26 +11,30 @@
   <div class="u-flex u-flex__wrap u-text-center details">
     <div>
       <p class="details-title">Casting Time</p>
-      <p class="details-value">{{spell.CastingTime}}</p>
+      <p class="details-value"><span *ngIf="spell.CastingTime.TimeType !== 'Reaction'">{{spell.CastingTime.Amount}}
+        </span>{{spell.CastingTime.TimeType}}</p>
     </div>
 
     <div>
       <p class="details-title">Range</p>
-      <p class="details-value">{{spell.Range}}</p>
+      <p class="details-value"><span *ngIf="spell.Range.RangeType !== 'Self' && spell.Range.RangeType !== 'Touch'">{{spell.Range.Amount}}
+        </span>{{spell.Range.RangeType}}</p>
     </div>
 
     <div>
       <p class="details-title">Components</p>
       <p class="details-value">
-        <span *ngIf="spell.Components.Verbal">V<span *ngIf="spell.Components.Somatic || spell.Components.Material">,</span></span>
-        <span *ngIf="spell.Components.Somatic">S<span *ngIf="spell.Components.Material">,</span></span>
-        <span *ngIf="spell.Components.Material">M</span>
+        <span *ngIf="spell.Components.Verbal">V<span *ngIf="spell.Components.Somatic || spell.Components.Material || spell.Components.Material === ''">,</span></span>
+        <span *ngIf="spell.Components.Somatic">S<span *ngIf="spell.Components.Material || spell.Components.Material === ''">,</span></span>
+        <span *ngIf="spell.Components.Material || spell.Components.Material === ''">M</span>
       </p>
     </div>
 
-    <div>
+    <div [class.rel]="spell.Duration.Concentration">
       <p class="details-title">Duration</p>
-      <p class="details-value">{{spell.Duration}}</p>
+      <p *ngIf="spell.Duration.Concentration">Up to {{spell.Duration.Length}} {{spell.Duration.DurationType}}</p>
+      <p *ngIf="!spell.Duration.Concentration" class="details-value"><span *ngIf="spell.Duration.DurationType === 'round' || spell.Duration.DurationType === 'minute' || spell.Duration.DurationType === 'hour' || spell.Duration.DurationType === 'day' || spell.Duration.DurationType === 'year'">{{spell.Duration.Length}}
+        </span>{{spell.Duration.DurationType}}</p>
     </div>
   </div>
 
@@ -39,8 +43,8 @@
   </div>
 
   <div class="description u-padding-x u-padding-y-half" [class.bottom]="!spell.AtHigherLevels">
-    <p *ngIf="spell.Components.Material">Material: {{spell.Components.Material}}</p>
-    <p class="u-margin-top" *ngFor="let desc of spell.Description">{{desc}}</p>
+    <p *ngIf="spell.Components.Material || spell.Components.Material === ''">Material: {{spell.Components.Material}}</p>
+    <div [class.u-margin-top]="spell.Components.Material || spell.Components.Material === ''" [innerHTML]="spell.Description"></div>
   </div>
 
   <div class="u-text-center" *ngIf="spell.AtHigherLevels">

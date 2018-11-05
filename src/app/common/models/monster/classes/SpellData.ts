@@ -75,6 +75,28 @@ export default class SpellData {
 		ClericWizard: [3, 3, 3, 4, 4, 4, 4, 4, 4, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5],
 		Sorcerer: [4, 4, 4, 5, 5, 5, 5, 5, 5, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6]
 	};
+
+	public static CastingTimes: string[] = [
+		"action",
+		"Reaction",
+		"bonus action",
+		"round",
+		"minute",
+		"hour"
+	];
+	public static Ranges: string[] = ["Self", "Touch", "feet", "hour"];
+	public static Durations: string[] = [
+		"Instantaneous",
+		"round",
+		"minute",
+		"hour",
+		"day",
+		"year",
+		"special",
+		"Until dispelled",
+		"Until triggered",
+		"Until dispelled or triggered"
+	];
 }
 
 export enum SpellSchool {

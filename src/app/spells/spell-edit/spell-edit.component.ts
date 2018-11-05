@@ -1,25 +1,26 @@
-import { Component, OnInit, Input, ViewChild } from "@angular/core";
+import {
+	Component,
+	OnInit,
+	Input,
+	ViewChild,
+	AfterViewInit
+} from "@angular/core";
 import Spell from "src/app/common/models/monster/traits/spells/spell";
-import { SpellSchool } from "src/app/common/models/monster/classes/SpellData";
 import { PlayerClass } from "src/app/common/models/values";
-import SpellComponents from "src/app/common/models/monster/traits/spells/spellComponents";
 import { FormGroup, FormBuilder, FormControl } from "@angular/forms";
 import { COMMA, ENTER } from "@angular/cdk/keycodes";
-import { Observable } from "rxjs";
-import { startWith, map } from "rxjs/operators";
-import {
-	MatChipInputEvent,
-	MatAutocomplete,
-	MatAutocompleteSelectedEvent
-} from "@angular/material";
+import { MatAutocompleteSelectedEvent } from "@angular/material";
 import { SpellCardComponent } from "src/app/common/spell-card/spell-card.component";
+import SpellData, {
+	SpellSchool
+} from "src/app/common/models/monster/classes/SpellData";
 
 @Component({
 	selector: "gm-spell-edit",
 	templateUrl: "./spell-edit.component.html",
 	styleUrls: ["./spell-edit.component.scss"]
 })
-export class SpellEditComponent implements OnInit {
+export class SpellEditComponent implements OnInit, AfterViewInit {
 	@Input()
 	public spell: Spell;
 
@@ -28,84 +29,78 @@ export class SpellEditComponent implements OnInit {
 
 	private formGroup: FormGroup;
 	private form = {
-		spellName: [],
-		spellClasses: []
+		name: [],
+		classes: [],
+		school: [],
+		timeType: [],
+		timeAmount: [],
+		rangeType: [],
+		rangeAmount: [],
+		materialComponent: [],
+		description: []
 	};
 
 	private isNew: boolean;
 
 	private selectedClasses: string[];
 	private separatorKeysCodes: number[] = [ENTER, COMMA];
-	private spellClassesInput: FormControl = new FormControl();
-	private filteredClasses: Observable<string[]>;
-	private allClasses: string[];
-	@ViewChild("spellsAC")
-	matAutocomplete: MatAutocomplete;
+
+	private classes: string[];
+	private schools: SpellSchool[];
+	private castingTimes: string[] = SpellData.CastingTimes;
+	private ranges: string[] = SpellData.Ranges;
+	private durations: string[] = SpellData.Durations;
 
 	constructor(protected formBuilder: FormBuilder) {
-		if (!this.spell) {
-			this.isNew = true;
-			this.spell = new Spell(
-				"Spell Name",
-				0,
-				SpellSchool.Abjuration,
-				[PlayerClass.Bard],
-				"1 Round",
-				"Touch",
-				new SpellComponents(true, true, null),
-				"Instantaneous",
-				["Spell description goes here"],
-				null
-			);
-		}
+		if (!this.spell) this.spell = Spell.MakeDefault();
 
-		this.allClasses = [];
+		this.classes = [];
 		this.selectedClasses = [];
 
-		let keys = Object.keys(PlayerClass);
-		keys = keys.splice(keys.length / 2, keys.length);
+		let classKeys = Object.keys(PlayerClass);
+		classKeys = classKeys.splice(classKeys.length / 2, classKeys.length);
 
-		for (let i = 0; i < keys.length; i++) {
-			var text = keys[i];
-			this.allClasses.push(text);
+		for (let i = 0; i < classKeys.length; i++) {
+			var text = classKeys[i];
+			this.classes.push(text);
 
-			if (this.spell.Classes.indexOf(PlayerClass[text]) >= 0)
+			if (this.spell && this.spell.Classes.indexOf(PlayerClass[text]) >= 0)
 				this.selectedClasses.push(text);
 		}
 
-		this.filteredClasses = this.spellClassesInput.valueChanges.pipe(
-			startWith(null),
-			map(
-				(pc: string | null) => (pc ? this._filter(pc) : this.allClasses.slice())
-			)
-		);
+		this.schools = Object.keys(SpellSchool).map(key => SpellSchool[key]);
+
+		this.formChange = this.formChange.bind(this);
 	}
 
 	ngOnInit() {
 		this.formGroup = this.formBuilder.group(this.form);
+		this.isNew = !!this.spell;
 		this.formGroup.valueChanges.subscribe(form => this.formChange(form));
-		this.spellCard.onChange();
 	}
+
+	ngAfterViewInit() {}
 
 	formChange(form: any): void {
 		this.spellCard.onChange();
 	}
 
-	private add(event: MatChipInputEvent): void {
-		if (!this.matAutocomplete.isOpen) {
-			const value = event.value;
+	//#region spell classes
+	private addClass(): void {
+		const control = this.formGroup.controls["spellClasses"];
+		if (!control) return;
+		let value: string = control.value;
+		if (!value) return;
 
-			if (
-				(value || "").trim() &&
-				this.spell.Classes.indexOf(PlayerClass[value.trim()]) === -1
-			) {
-				this.selectedClasses.push(value.trim());
-				this.spell.Classes.push(PlayerClass[value.trim()]);
-			}
+		value = value.trim();
 
-			this.spellClassesInput.setValue(null);
-			this.spellCard.onChange();
+		if (this.spell.Classes.indexOf(PlayerClass[value]) === -1) {
+			this.selectedClasses.push(value);
+			this.spell.Classes.push(PlayerClass[value]);
 		}
+
+		control.setValue(null);
+		this.spellCard.onChange();
 	}
 
 	private remove(pc: string): void {
@@ -118,21 +113,37 @@ export class SpellEditComponent implements OnInit {
 		this.spellCard.onChange();
 	}
 
-	private spellSelected(event: MatAutocompleteSelectedEvent): void {
-		if (this.spell.Classes.indexOf(PlayerClass[event.option.viewValue]) !== -1)
-			return;
+	private getClassName(pc: PlayerClass): string {
+		return PlayerClass[pc];
+	}
+	//#endregion
 
-		this.selectedClasses.push(event.option.viewValue);
-		this.spell.Classes.push(PlayerClass[event.option.viewValue]);
-		this.spellClassesInput.setValue(null);
-		this.spellCard.onChange();
+	private getSchoolName(school: SpellSchool): string {
+		return SpellSchool[school];
 	}
 
-	private _filter(value: string): string[] {
-		const filterValue = value.toLowerCase();
+	private handleComponentChange(type: string): void {
+		switch (type) {
+			case "v":
+				this.spell.Components.Verbal = !this.spell.Components.Verbal;
+				break;
 
-		return this.allClasses.filter(
-			fruit => fruit.toLowerCase().indexOf(filterValue) === 0
-		);
+			case "s":
+				this.spell.Components.Somatic = !this.spell.Components.Somatic;
+				break;
+
+			case "m":
+				if (
+					this.spell.Components.Material ||
+					this.spell.Components.Material === ""
+				)
+					this.spell.Components.Material = null;
+				else this.spell.Components.Material = "";
+				break;
+
+			case "c":
+				this.spell.Duration.Concentration = !this.spell.Duration.Concentration;
+				break;
+		}
 	}
 }

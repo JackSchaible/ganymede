@@ -10,8 +10,7 @@ const routes: Routes = [
 		component: SpellsComponent,
 		children: [
 			{ path: "", component: SpellsListComponent },
-			{ path: "add", component: SpellEditComponent },
-			{ path: "edit/{id}", component: SpellEditComponent }
+			{ path: "add", component: SpellEditComponent }
 		]
 	}
 ];

@@ -1,3 +1,27 @@
+<mat-autocomplete #classesAC="matAutocomplete">
+  <mat-option *ngFor="let pc of classes" [value]="pc">
+    {{pc}}
+  </mat-option>
+</mat-autocomplete>
+
+<mat-autocomplete #castingTimesAC="matAutocomplete">
+  <mat-option *ngFor="let time of castingTimes" [value]="time">
+    {{time}}
+  </mat-option>
+</mat-autocomplete>
+
+<mat-autocomplete #rangesAC="matAutocomplete">
+  <mat-option *ngFor="let range of ranges" [value]="range">
+    {{range}}
+  </mat-option>
+</mat-autocomplete>
+
+<mat-autocomplete #durationsAC="matAutocomplete">
+  <mat-option *ngFor="let duration of durations" [value]="duration">
+    {{duration}}
+  </mat-option>
+</mat-autocomplete>
+
 <h2>
   <span *ngIf="isNew">Create A</span>
   <span *ngIf="!isNew">Edit Your</span>
@@ -7,28 +31,107 @@
 <main class="mat-elevation-z8 u-margin-all-2x">
 
   <div class="u-flex">
-    <form [formGroup]="formGroup" class="flex-grow-1 u-flex u-flex__wrap">
+    <form [formGroup]="formGroup" class="flex-grow-1">
       <input autocomplete="false" name="hidden" type="text" style="display:none;">
 
+      <!--Name-->
       <mat-form-field class="col-6">
-        <input matInput placeholder="Spell Name" [(ngModel)]="spell.Name" formControlName="spellName">
+        <input matInput placeholder="Name" [(ngModel)]="spell.Name" formControlName="name">
       </mat-form-field>
 
-      <mat-form-field class="col-12">
-        <mat-chip-list #classList>
-          <mat-chip *ngFor="let pc of selectedClasses" (removed)="remove(pc)">
-            {{pc}}
-            <i matChipRemove class="fas fa-times-circle"></i>
-          </mat-chip>
-          <input placeholder="Add a Class" #classInput [formControl]="spellClassesInput" [matAutocomplete]="spellsAC"
-            [matChipInputFor]="classList" [matChipInputSeparatorKeyCodes]="separatorKeysCodes" (matChipInputTokenEnd)="addSpell($event)">
-        </mat-chip-list>
-        <mat-autocomplete #spellsAC="matAutocomplete" (optionSelected)="spellSelected($event)">
-          <mat-option *ngFor="let pc of filteredClasses | async" [value]="pc">
-            {{pc}}
+      <!--School-->
+      <mat-form-field class="col-6">
+        <mat-select placeholder="School" [(value)]="spell.School">
+          <mat-option *ngFor="let school of schools" [value]="school">
+            {{getSchoolName(school)}}
           </mat-option>
-        </mat-autocomplete>
+        </mat-select>
       </mat-form-field>
+
+      <!--Class(es)-->
+      <div>
+        <label>Classes</label>
+        <div class="col-12">
+          <mat-chip-list>
+            <mat-chip *ngFor="let pc of spell.Classes" (removed)="removeClass(pc)">
+              {{getClassName(pc)}}
+              <i class="fa fa-times-circle" matChipRemove></i>
+            </mat-chip>
+          </mat-chip-list>
+        </div>
+
+        <mat-form-field class="col-12">
+          <input matInput placeholder="Add a Class" formControlName="classes" [matAutocomplete]="classesAC">
+          <button mat-button matSuffix mat-icon-button aria-label="Clear" (click)="addClass()">
+            <i class="fa fa-plus"></i>
+          </button>
+          <mat-hint>The first class will determine the card color</mat-hint>
+        </mat-form-field>
+      </div>
+
+      <div class="u-margin-top u-flex u-flex__wrap">
+        <!--Casting Time-->
+        <div class="col-6 u-flex">
+          <mat-form-field class="u-padding-x-none">
+            <input [matAutocomplete]="castingTimesAC" matInput placeholder="Casting Time" [(ngModel)]="spell.CastingTime.TimeType"
+              formControlName="timeType">
+          </mat-form-field>
+
+          <mat-form-field class="u-padding-x-none" *ngIf="spell.CastingTime.TimeType !== 'Reaction'">
+            <input matInput placeholder="Time" formControlName="timeAmount" type="text" [(ngModel)]="spell.CastingTime.Amount">
+          </mat-form-field>
+        </div>
+
+        <!--Range-->
+        <div class="col-6 u-flex">
+          <mat-form-field class="u-padding-x-none">
+            <input [matAutocomplete]="rangesAC" matInput placeholder="Range" [(ngModel)]="spell.Range.RangeType"
+              formControlName="rangeType">
+          </mat-form-field>
+
+          <mat-form-field class="u-padding-x-none" *ngIf="spell.Range.RangeType !== 'Self' && spell.Range.RangeType !== 'Touch'">
+            <input matInput placeholder="Distance" formControlName="rangeAmount" type="text" [(ngModel)]="spell.Range.Amount">
+          </mat-form-field>
+        </div>
+
+        <!--Components-->
+        <div class="col-6">
+          <label>Components</label>
+
+          <div class="u-flex u-flex__justify--space-between">
+            <mat-checkbox [checked]="spell.Components.Verbal" (change)="handleComponentChange('v')">Verbal</mat-checkbox>
+            <mat-checkbox [checked]="spell.Components.Somatic" (change)="handleComponentChange('s')">Somatic</mat-checkbox>
+            <mat-checkbox [checked]="!!spell.Components.Material" (change)="handleComponentChange('m')">Material</mat-checkbox>
+          </div>
+
+          <mat-form-field class="u-padding-none" *ngIf="spell.Components.Material || spell.Components.Material === ''">
+            <input matInput placeholder="What Materials?" formControlName="materialComponent" type="text" [(ngModel)]="spell.Components.Material">
+          </mat-form-field>
+        </div>
+
+        <!--Duration-->
+        <div class="col-6">
+          <div class="u-flex">
+            <mat-form-field class="u-padding-x-none">
+              <input [matAutocomplete]="durationsAC" matInput placeholder="Duration" [(ngModel)]="spell.Duration.DurationType"
+                formControlName="rangeType">
+            </mat-form-field>
+
+            <mat-form-field class="u-padding-x-none" class="details-value" *ngIf="spell.Duration.DurationType === 'round' || spell.Duration.DurationType === 'minute' || spell.Duration.DurationType === 'hour' || spell.Duration.DurationType === 'day' || spell.Duration.DurationType === 'year'">
+              <input matInput placeholder="Distance" formControlName="rangeAmount" type="text" [(ngModel)]="spell.Duration.Length">
+            </mat-form-field>
+          </div>
+
+          <mat-checkbox *ngIf="spell.Duration.DurationType === 'round' || spell.Duration.DurationType === 'minute' || spell.Duration.DurationType === 'hour' || spell.Duration.DurationType === 'day' || spell.Duration.DurationType === 'year'"
+            [checked]="spell.Duration.Concentration" (change)="handleComponentChange('c')">Concentration</mat-checkbox>
+        </div>
+
+        <div class="col-12">
+          <mat-form-field class="u-padding-x-none w-100">
+            <textarea rows="4" matInput placeholder="Description" [(ngModel)]="spell.Description" formControlName="description"></textarea>
+          </mat-form-field>
+        </div>
+      </div>
     </form>
 
     <gm-spell-card #card [spell]="spell"></gm-spell-card>
