@@ -76,9 +76,9 @@ namespace api
 
 			app.UseHttpsRedirection();
 			app.UseMvc();
-			
-			initializer.Initialize();
+
 			context.Database.EnsureCreated();
+			initializer.Initialize().Wait();
 		}
 	}
 }

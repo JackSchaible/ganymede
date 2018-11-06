@@ -1,4 +1,10 @@
-import { Component, Input, OnInit, OnChanges } from "@angular/core";
+import {
+	Component,
+	Input,
+	OnInit,
+	OnChanges,
+	ViewEncapsulation
+} from "@angular/core";
 import Spell from "../models/monster/traits/spells/spell";
 import { WordService } from "src/app/services/word.service";
 import { PlayerClass } from "../models/values";
@@ -6,7 +12,8 @@ import { PlayerClass } from "../models/values";
 @Component({
 	selector: "gm-spell-card",
 	templateUrl: "./spell-card.component.html",
-	styleUrls: ["./spell-card.component.scss"]
+	styleUrls: ["./spell-card.component.scss"],
+	encapsulation: ViewEncapsulation.Emulated
 })
 export class SpellCardComponent implements OnInit, OnChanges {
 	@Input()

@@ -1,15 +1,7 @@
 using api.Errors;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
-using Microsoft.IdentityModel.Tokens;
-using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
-using System.Security.Claims;
-using System.Text;
 using System.Threading.Tasks;
 using Api.Entities;
 
@@ -35,10 +27,10 @@ namespace api.Controllers
 			_ctx = ctx;
 		}
 
-		[HttpGet]
-		public async Task<object> Get(int id)
-		{
-			return Json(_ctx.Monsters.FirstOrDefault(x => x.MonsterId == id));
-		}
+		//[HttpGet]
+		//public async Task<object> Get(int id)
+		//{
+		//	return Json(_ctx.Monsters.FirstOrDefault(x => x.MonsterId == id));
+		//}
 	}
 }

@@ -24,6 +24,9 @@ export class SpellEditComponent implements OnInit, AfterViewInit {
 	@Input()
 	public spell: Spell;
 
+	@Input()
+	public isModal: boolean;
+
 	@ViewChild("card")
 	spellCard: SpellCardComponent;
 
@@ -32,9 +35,7 @@ export class SpellEditComponent implements OnInit, AfterViewInit {
 		name: [],
 		classes: [],
 		school: [],
-		timeType: [],
 		timeAmount: [],
-		rangeType: [],
 		rangeAmount: [],
 		materialComponent: [],
 		description: [],
@@ -83,12 +84,12 @@ export class SpellEditComponent implements OnInit, AfterViewInit {
 	ngAfterViewInit() {}
 
 	formChange(form: any): void {
-		this.spellCard.onChange();
+		if (this.spellCard) this.spellCard.onChange();
 	}
 
 	//#region spell classes
 	private addClass(): void {
-		const control = this.formGroup.controls["spellClasses"];
+		const control = this.formGroup.controls["classes"];
 		if (!control) return;
 		let value: string = control.value;
 		if (!value) return;
@@ -104,7 +105,8 @@ export class SpellEditComponent implements OnInit, AfterViewInit {
 		this.spellCard.onChange();
 	}
 
-	private remove(pc: string): void {
+	private removeClass(pcStr: string): void {
+		const pc = PlayerClass[pcStr];
 		let index = this.selectedClasses.indexOf(pc);
 		if (index >= 0) this.selectedClasses.splice(index, 1);
 
@@ -152,5 +154,13 @@ export class SpellEditComponent implements OnInit, AfterViewInit {
 				else this.spell.AtHigherLevels = "";
 				break;
 		}
+	}
+
+	private save(): void {
+		//TODO: save?
+	}
+
+	private delete(): void {
+		//TODO: delete?
 	}
 }

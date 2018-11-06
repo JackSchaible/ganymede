@@ -1,4 +1,5 @@
 using api.Entities;
+using api.Entities.Spells;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
@@ -6,63 +7,29 @@ namespace Api.Entities
 {
 	public class ApplicationDbContext : IdentityDbContext<AppUser>
 	{
-		public DbSet<Attack> Attacks { get; set; }
-		public DbSet<Dice> Dices { get; set; }
-		public DbSet<Encounter> Encounters { get; set; }
-		public DbSet<EncounterMonster> EncounterMonsters { get; set; }
-		public DbSet<EncounterGroup> EncounterGroups { get; set; }
-		public DbSet<Feature> Features { get; set; }
-		public DbSet<Monster> Monsters { get; set; }
+		public DbSet<Spell> Spells { get; set; }
 
 		protected override void OnModelCreating(ModelBuilder builder)
 		{
 			base.OnModelCreating(builder);
 
-			builder.Entity<AppUser>()
-					  .HasMany<EncounterGroup>()
-					  .WithOne(a => a.AppUser)
-					  .HasForeignKey(a => a.AppUserId);
+			builder.Entity<Spell>()
+				.Property(x => x.SpellSchool)
+				.HasConversion(
+					x => (int)(object)x,
+					x => (SpellSchools)(object)x);
 
-			builder.Entity<EncounterGroup>()
-				.HasMany<EncounterGroup>()
-				.WithOne(a => a.ParentEncounterGroup)
-					  .HasForeignKey(a => a.ParentEncounterGroupId)
-				.IsRequired(false);
-
-			builder.Entity<EncounterGroup>()
-				  .HasMany<Encounter>()
-				  .WithOne(a => a.EncounterGroup)
-				  .HasForeignKey(a => a.EncounterGroupId);
-
-			builder.Entity<Encounter>()
-				.HasMany<EncounterMonster>()
-				.WithOne()
-				.HasForeignKey(a => a.EncounterId);
-
-			builder.Entity<Monster>()
-				.HasMany<EncounterMonster>()
-				.WithOne()
-				.HasForeignKey(a => a.MonsterId);
-
-			builder.Entity<Monster>()
-				.HasMany<Attack>()
-				.WithOne()
-				.HasForeignKey(a => a.MonsterId);
-
-			builder.Entity<Monster>()
-				.HasMany<Feature>()
-				.WithOne()
-				.HasForeignKey(a => a.MonsterId);
-
-			builder.Entity<Attack>()
-				.HasOne(a => a.Dice)
-				.WithOne(b => b.AttackRoll)
-				.HasForeignKey<Dice>(b => b.AttackId);
+			builder.Entity<Spell>()
+				.Property<string>("ClassesCollection")
+				.HasField("_classes");
 		}
 
 		protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 		{
-			optionsBuilder.UseMySql(GetConnectionString());
+			optionsBuilder
+				.UseSqlServer(@"Server=.;Database=Ganymede;Trusted_Connection=True;",
+					opts => opts.EnableRetryOnFailure(3));
+			//optionsBuilder.UseMySql(GetConnectionString());
 		}
 
 		private static string GetConnectionString()
