@@ -11,6 +11,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using api.Entities;
 
 namespace api.Controllers
 {
@@ -27,11 +28,11 @@ namespace api.Controllers
 			{ "InvalidPassword", new ApiError("Password", "WRONG") },
 		};
 
-		private readonly SignInManager<IdentityUser> _signinManager;
-		private readonly UserManager<IdentityUser> _userManager;
+		private readonly SignInManager<AppUser> _signinManager;
+		private readonly UserManager<AppUser> _userManager;
 		private readonly IConfiguration _configuration;
 
-		public AccountController(SignInManager<IdentityUser> signinManager, UserManager<IdentityUser> userManager, IConfiguration configuration)
+		public AccountController(SignInManager<AppUser> signinManager, UserManager<AppUser> userManager, IConfiguration configuration)
 		{
 			_signinManager = signinManager;
 			_userManager = userManager;
@@ -62,7 +63,7 @@ namespace api.Controllers
 		[HttpPost]
 		public async Task<object> Register([FromBody] RegisterData model)
 		{
-			var user = new IdentityUser
+			var user = new AppUser
 			{
 				UserName = model.Email,
 				Email = model.Email

@@ -52,6 +52,9 @@ namespace api
 					};
 				});
 
+		    services.AddAuthorization(o =>
+		        o.AddPolicy("ApiUser", p => p.RequireClaim("rol", "api_access")));
+
 			services.AddCors();
 
 			services.AddScoped<IDbInitializer, DbInitializer>();
@@ -74,6 +77,7 @@ namespace api
 				app.UseHsts();
 			}
 
+		    app.UseAuthentication();
 			app.UseHttpsRedirection();
 			app.UseMvc();
 

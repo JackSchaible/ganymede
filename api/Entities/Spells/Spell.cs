@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 
 namespace api.Entities.Spells
@@ -14,11 +15,11 @@ namespace api.Entities.Spells
 
 		[NotMapped]
 		public PlayerClasses[] Classes
-		{
-			get { return _classes.Split(",").Select(x => (PlayerClasses) (object) x).ToArray(); }
-			set { _classes = string.Join(",", value.Select(x => (int)(object)x)); }
-		}
-		private string _classes;
+        {
+            get => _classes.Split(",").Select(x => (PlayerClasses)Enum.ToObject(typeof(PlayerClasses), int.Parse(x))).ToArray();
+            set => _classes = string.Join(",", value.Select(x => (int)(object)x));
+        }
+        private string _classes;
 
 		public CastingTime CastingTime { get; set; }
 		public Range Range { get; set; }
