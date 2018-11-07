@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using api.Entities.Spells;
+using api.ViewModels.Models.Spells;
 using Api.Entities;
+using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -13,40 +15,60 @@ namespace api.Controllers
     [ApiController]
     public class SpellsController : ControllerBase
     {
-        private ApplicationDbContext _ctx;
+        private readonly ApplicationDbContext _ctx;
+        private readonly IMapper _mapper;
 
-        public SpellsController(ApplicationDbContext ctx)
+        public SpellsController(ApplicationDbContext ctx, IMapper mapper)
         {
             _ctx = ctx;
+            _mapper = mapper;
         }
         
-        // GET: api/Spells
+        // GET: api/SpellModels
         [HttpGet]
-        public IEnumerable<Spell> Get()
+        public IEnumerable<SpellModel> Get()
         {
-            return _ctx.Spells.Where(x => x.User.Email == User.FindFirst("sub").Value);
+            return _mapper.Map<List<SpellModel>>(_ctx.Spells.Where(x => x.User.Email == User.FindFirst("sub").Value));
         }
 
         [Route("GetAll")]
-        public IEnumerable<Spell> GetAll()
+        public IEnumerable<SpellModel> GetAll()
         {
-            return _ctx.Spells;
+            return _mapper.Map<List<SpellModel>>(_ctx.Spells);
         }
 
-        // GET: api/Spells/5
+        // GET: api/SpellModels/5
         [HttpGet("{id}", Name = "Get")]
-        public Spell Get(int id)
+        public SpellModel Get(int id)
         {
-            return _ctx.Spells.First(x => x.SpellID == id);
+            return _mapper.Map<SpellModel>(_ctx.Spells.First(x => x.SpellID == id));
         }
 
-        // POST: api/Spells
+        // POST: api/SpellModels
         [HttpPost]
-        public void Post([FromBody] Spell value)
+        public void Post([FromBody] SpellModel value)
         {
             try
             {
-                _ctx.Spells.Add(value);
+                _ctx.Spells.Add(_mapper.Map<Spell>(value));
+                _ctx.SaveChanges();
+            }
+            catch (Exception e)
+            {
+                //TODO: Process error messages
+            }
+        }
+
+        // PUT api/SpellModels
+        [HttpPut]
+        public void Put([FromBody] SpellModel value)
+        {
+            try
+            {
+                var old = _ctx.Spells.First(x => x.SpellID == value.SpellID);
+
+                old = _mapper.Map<Spell>(value);
+
                 _ctx.SaveChanges();
             }
             catch (Exception e)

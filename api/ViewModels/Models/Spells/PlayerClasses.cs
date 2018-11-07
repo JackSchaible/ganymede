@@ -1,4 +1,4 @@
-﻿namespace api.Entities.Spells
+﻿namespace api.ViewModels.Models.Spells
 {
 	public enum PlayerClasses
 	{

@@ -11,6 +11,7 @@ using Microsoft.IdentityModel.Tokens;
 using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Text;
+using AutoMapper;
 
 namespace api
 {
@@ -59,6 +60,7 @@ namespace api
 
 			services.AddScoped<IDbInitializer, DbInitializer>();
 
+		    services.AddAutoMapper();
 			services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 		}
 
