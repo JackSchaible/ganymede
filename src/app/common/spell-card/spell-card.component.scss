@@ -162,6 +162,16 @@ $black: #010101;
 		margin: 0px 0px -5px 0px;
 	}
 
+	::ng-deep {
+		p {
+			color: $black;
+			font-size: 0.9rem;
+			font-family: modesto-text, serif;
+			font-weight: 300;
+			line-height: 1;
+		}
+	}
+
 	width: 375px;
 
 	.name {
@@ -289,14 +299,4 @@ p {
 	font-family: modesto-text, serif;
 	font-weight: 300;
 	line-height: 1;
-}
-
-::ng-deep {
-	p {
-		color: $black;
-		font-size: 0.9rem;
-		font-family: modesto-text, serif;
-		font-weight: 300;
-		line-height: 1;
-	}
 }
