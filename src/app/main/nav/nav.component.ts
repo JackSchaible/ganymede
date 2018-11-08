@@ -42,4 +42,8 @@ export class NavComponent implements OnInit {
 		const u = this.authService.getUser();
 		if (u) this.user = u.user;
 	}
+
+	logout() {
+		this.authService.logout();
+	}
 }

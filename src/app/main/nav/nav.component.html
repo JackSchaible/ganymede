@@ -1,11 +1,12 @@
 <mat-toolbar>
-  <nav *ngIf="isDesktop; else isMobile" class="u-flex w-100">
-    <gm-nav-item *ngFor="let item of items" [item]="item"></gm-nav-item>
-
+  <nav *ngIf="isDesktop; else isMobile" class="u-flex u-flex__justify--space-between w-100">
+    <div class="u-flex">
+      <gm-nav-item *ngFor="let item of items" [item]="item"></gm-nav-item>
+    </div>
     <div *isLoggedIn class="u-flex c-nav__logged-in">
       <p class="text-white"><i class="fa fa-user-circle"></i> Welcome, {{user}}!</p>
 
-      <button class="u-margin-x btn btn-danger" type="button" (click)="authService.logout()"><i class="fa fa-sign-out"></i>
+      <button class="u-margin-x btn btn-danger" type="button" (click)="logout()"><i class="fa fa-sign-out"></i>
         Logout</button>
     </div>
     <a *isLoggedOut routerLink="/login" class="text-white"><i class="fa fa-sign-in"></i> Login</a>

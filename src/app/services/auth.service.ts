@@ -17,7 +17,7 @@ export class AuthService {
 
 	constructor(private http: HttpClient) {}
 
-	login(username: string, password: string): Observable<boolean> {
+	public login(username: string, password: string): Observable<boolean> {
 		var url = this.apiUrl + "/login";
 		return this.http.post(url, { email: username, password: password }).pipe(
 			map(r => {
@@ -43,7 +43,7 @@ export class AuthService {
 		);
 	}
 
-	register(
+	public register(
 		username: string,
 		password: string
 	): Observable<boolean | ApiError[]> {
@@ -76,14 +76,19 @@ export class AuthService {
 			);
 	}
 
-	logout(): void {
+	public logout(): void {
 		localStorage.removeItem(this.currentUserKey);
 		this.isLoggedIn = false;
 	}
 
-	getAuthHeader(): void {}
+	public getAuthHeader(): HttpHeaders {
+		var user = JSON.parse(localStorage.getItem(this.currentUserKey));
+		return new HttpHeaders({
+			Authorization: `Bearer ${user.token}`
+		});
+	}
 
-	getUser() {
+	public getUser() {
 		if (!localStorage) return;
 
 		if (localStorage.getItem(this.currentUserKey))
