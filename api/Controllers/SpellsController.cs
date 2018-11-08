@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using api.Entities.Spells;
+using api.Errors;
 using api.ViewModels.Models.Spells;
 using Api.Entities;
 using AutoMapper;
@@ -17,8 +18,12 @@ namespace api.Controllers
     {
         private readonly ApplicationDbContext _ctx;
         private readonly IMapper _mapper;
+	    private Dictionary<string, ApiError> _errors = new Dictionary<string, ApiError>
+	    {
+		    { "UnknownError", new ApiError("Unknown", "API_ERR_UNK")}
+	    };
 
-        public SpellsController(ApplicationDbContext ctx, IMapper mapper)
+		public SpellsController(ApplicationDbContext ctx, IMapper mapper)
         {
             _ctx = ctx;
             _mapper = mapper;
@@ -46,26 +51,38 @@ namespace api.Controllers
 
         // POST: api/SpellModels
         [HttpPost]
-        public void Post([FromBody] SpellModel value)
+        public object Post([FromBody] SpellModel value)
         {
+	        Spell newSpell = null;
             try
             {
-                _ctx.Spells.Add(_mapper.Map<Spell>(value));
+                newSpell = _ctx.Spells.Add(_mapper.Map<Spell>(value)).Entity;
                 _ctx.SaveChanges();
             }
             catch (Exception e)
             {
-                //TODO: Process error messages
-            }
-        }
+	            ApiError err;
+	            if (_errors.ContainsKey(e.Message))
+		            err = _errors[e.Message];
+				else
+					err = _errors["UnknownError"];
+
+				return new { error = err };
+
+				//TODO: Process error messages
+			}
+
+	        return newSpell.SpellID;
+		}
 
         // PUT api/SpellModels
         [HttpPut]
-        public void Put([FromBody] SpellModel value)
+        public object Put([FromBody] SpellModel value)
         {
+	        Spell old = null;
             try
             {
-                var old = _ctx.Spells.First(x => x.SpellID == value.SpellID);
+                old = _ctx.Spells.First(x => x.SpellID == value.SpellID);
 
                 old = _mapper.Map<Spell>(value);
 
@@ -73,13 +90,16 @@ namespace api.Controllers
             }
             catch (Exception e)
             {
-                //TODO: Process error messages
-            }
+	            return new { error = _errors["InvalidPassword"] };
+				//TODO: Process error messages
+			}
+
+	        return old;
         }
 
         // DELETE: api/ApiWithActions/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public object Delete(int id)
         {
             try
             {
@@ -88,8 +108,11 @@ namespace api.Controllers
             }
             catch (Exception e)
             {
-                //TODO: Process error messages here, too
-            }
-        }
+	            return new { error = _errors["InvalidPassword"] };
+				//TODO: Process error messages here, too
+			}
+
+	        return true;
+		}
     }
 }

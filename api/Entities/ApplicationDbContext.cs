@@ -12,16 +12,6 @@ namespace Api.Entities
 		protected override void OnModelCreating(ModelBuilder builder)
 		{
 			base.OnModelCreating(builder);
-
-			builder.Entity<Spell>()
-				.Property(x => x.SpellSchool)
-				.HasConversion(
-					x => (int)(object)x,
-					x => (SpellSchools)(object)x);
-
-			builder.Entity<Spell>()
-				.Property<string>("ClassesCollection")
-				.HasField("_classes");
 		}
 
 		protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

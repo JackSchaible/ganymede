@@ -12,15 +12,15 @@ namespace api.ViewModels.Automapper
         {
             CreateMap<Spell, SpellModel>()
                 .ForMember(d => d.SpellSchool, o => o.MapFrom(s => (SpellSchools)Enum.ToObject(typeof(SpellSchools), s.SpellSchool)))
-                .ForMember(d => d.Classes, o => o.MapFrom(s => s.Classes.Select(x => (PlayerClasses)Enum.ToObject(typeof(PlayerClasses), x)).ToList()))
+                .ForMember(d => d.Classes, o => o.MapFrom(s => GetClasses(s.Classes)))
                 .ForMember(d => d.CastingTime, o => o.MapFrom(s => new CastingTime(s.TimeType, s.TimeLength)))
                 .ForMember(d => d.Range, o => o.MapFrom(s => new Range(s.RangeType, s.RangeLength)))
                 .ForMember(d => d.Components, o => o.MapFrom(s => new Components(s.Verbal, s.Somatic, s.Material)))
                 .ForMember(d => d.SpellDuration, o => o.MapFrom(s => new Duration(s.DurationType, s.DurationLength, s.Concentration)));
 
             CreateMap<SpellModel, Spell>()
-                .ForMember(d => d.SpellSchool, o => o.MapFrom(s => (int)(object)s))
-                .ForMember(d => d.Classes, o => o.MapFrom(s => s.Classes.Select(x => (int)(object)x).ToList()))
+                .ForMember(d => d.SpellSchool, o => o.MapFrom(s => (int)(object)s.SpellSchool))
+                .ForMember(d => d.Classes, o => o.MapFrom(s => string.Join(",", s.Classes.Select(x => x.ToString()))))
                 .ForMember(d => d.TimeType, o => o.MapFrom(s => s.CastingTime.TimeType))
                 .ForMember(d => d.TimeLength, o => o.MapFrom(s => s.CastingTime.Amount))
                 .ForMember(d => d.RangeType, o => o.MapFrom(s => s.Range.RangeType))
@@ -31,5 +31,11 @@ namespace api.ViewModels.Automapper
                 .ForMember(d => d.DurationType, o => o.MapFrom(s => s.SpellDuration.DurationType))
                 .ForMember(d => d.DurationLength, o => o.MapFrom(s => s.SpellDuration.Length));
         }
+
+	    private PlayerClasses[] GetClasses(string s)
+	    {
+		    return s.Split(",").Select(x => (PlayerClasses)(object)int.Parse(x)).ToArray();
+
+	    }
     }
 }

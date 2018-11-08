@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
 
 namespace api.Entities.Spells
 {
@@ -8,7 +9,7 @@ namespace api.Entities.Spells
         public string Name { get; set; }
         public int Level { get; set; }
         public int SpellSchool { get; set; }
-        public int[] Classes { get; set; }
+        public string Classes { get; set; }
         public string TimeType { get; set; }
         public string TimeLength { get; set; }
         public string RangeType { get; set; }
