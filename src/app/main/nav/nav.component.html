@@ -1,60 +1,12 @@
-<!-- <div class="navbar navbar-expand-lg navbar-dark bg-primary" (clickOutside)="closeMenu()">
-  <a class="navbar-brand" routerLink="" (click)="closeMenu()">
-    <i class="fa fa-dice"></i> High Roller
-  </a>
-  <button class="navbar-toggler" type="button" (click)="toggleMenu()">
-    <i class="fa fa-bars"></i>
-  </button>
-
-  <div class="collapse navbar-collapse" [class.show]="showMenu">
-    <ul class="navbar-nav mr-auto">
-      <li class="nav-item">
-        <a class="nav-link" routerLinkActive="active" routerLink="" [routerLinkActiveOptions]="{exact: true}" (click)="closeMenu()">
-          <i class="fa fa-home"></i> Home
-        </a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" routerLinkActive="active" routerLink="/CRCalculator" (click)="closeMenu()">
-          <i class="fa fa-calculator"></i> CR Calculator
-        </a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" routerLinkActive="active" routerLink="/encounters" (click)="closeMenu()">
-          <i class="fa fa-pastafarianism"></i> Encounters
-        </a>
-      </li>
-    </ul>
-
-    <div>
-      <div *isLoggedIn class="u-flex">
-        <p class="text-white"><i class="fa fa-flag"></i> Welcome, {{user}}!</p>
-
-        <button class="u-margin-x btn btn-danger" type="button" (click)="authService.logout()"><i class="fa fa-sign-out"></i>
-          Logout</button>
-      </div>
-      <a *isLoggedOut routerLink="/login" class="text-white"><i class="fa fa-sign-in"></i> Login</a>
-    </div>
-  </div>
-</div> -->
-
 <mat-toolbar>
-  <nav *ngIf="isDesktop; else isMobile" class="u-flex w-100">
-    <button *ngFor="let item of items" mat-button [routerLink]="item.url" [class.isBrand]="item.isBrand">
-      <strong *ngIf=" item.isBrand; else
-      btn">
-        <ng-container *ngTemplateOutlet="btn; context: {$implicit: item}"></ng-container>
-      </strong>
-
-      <ng-template #btn>
-        <i *ngIf="item.icon" [class]="item.icon"></i>
-        {{item.label}}
-      </ng-template>
-    </button>
-
+  <nav *ngIf="isDesktop; else isMobile" class="u-flex u-flex__justify--space-between w-100">
+    <div class="u-flex">
+      <gm-nav-item *ngFor="let item of items" [item]="item"></gm-nav-item>
+    </div>
     <div *isLoggedIn class="u-flex c-nav__logged-in">
       <p class="text-white"><i class="fa fa-user-circle"></i> Welcome, {{user}}!</p>
 
-      <button class="u-margin-x btn btn-danger" type="button" (click)="authService.logout()"><i class="fa fa-sign-out"></i>
+      <button class="u-margin-x btn btn-danger" type="button" (click)="logout()"><i class="fa fa-sign-out"></i>
         Logout</button>
     </div>
     <a *isLoggedOut routerLink="/login" class="text-white"><i class="fa fa-sign-in"></i> Login</a>
@@ -71,7 +23,7 @@
 
           <ng-template #btn>
             <i *ngIf="item.icon" [class]="item.icon"></i>
-            {{item.label}}
+            <span class="u-margin-left-quarter">{{item.label}}</span>
           </ng-template>
         </button>
       </mat-menu>

@@ -1,0 +1,21 @@
+<mat-grid-list cols="4" gutterSize="0">
+  <mat-grid-tile><button mat-button (click)="set('x')"></button></mat-grid-tile>
+  <mat-grid-tile><button mat-button (click)="set('l')">Lawful</button></mat-grid-tile>
+  <mat-grid-tile><button mat-button (click)="set('n1')">Neutral</button></mat-grid-tile>
+  <mat-grid-tile><button mat-button (click)="set('c')">Chaotic</button></mat-grid-tile>
+
+  <mat-grid-tile><button mat-button (click)="set('g')">Good</button></mat-grid-tile>
+  <mat-grid-tile><button mat-button (click)="set('lg')" [color]="alignment.lawfulGood ? 'accent' : null"></button></mat-grid-tile>
+  <mat-grid-tile><button mat-button (click)="set('ng')" [color]="alignment.neutralGood ? 'accent' : null"></button></mat-grid-tile>
+  <mat-grid-tile><button mat-button (click)="set('cg')" [color]="alignment.chaoticGood ? 'accent' : null"></button></mat-grid-tile>
+
+  <mat-grid-tile><button mat-button (click)="set('n2')">Neutral</button></mat-grid-tile>
+  <mat-grid-tile><button mat-button (click)="set('ln')" [color]="alignment.lawfulNeutral ? 'accent' : null"></button></mat-grid-tile>
+  <mat-grid-tile><button mat-button (click)="set('n')" [color]="alignment.neutral ? 'accent' : null"></button></mat-grid-tile>
+  <mat-grid-tile><button mat-button (click)="set('cn')" [color]="alignment.chaoticNeutral ? 'accent' : null"></button></mat-grid-tile>
+
+  <mat-grid-tile><button mat-button (click)="set('e')">Evil</button></mat-grid-tile>
+  <mat-grid-tile><button mat-button (click)="set('le')" [color]="alignment.lawfulEvil ? 'accent' : null"></button></mat-grid-tile>
+  <mat-grid-tile><button mat-button (click)="set('ne')" [color]="alignment.neutralEvil ? 'accent' : null"></button></mat-grid-tile>
+  <mat-grid-tile><button mat-button (click)="set('ce')" [color]="alignment.chaoticEvil ? 'accent' : null"></button></mat-grid-tile>
+</mat-grid-list>

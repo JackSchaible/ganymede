@@ -1,6 +1,8 @@
 import { Component, OnInit } from "@angular/core";
 import { AuthService } from "../../services/auth.service";
 import { DeviceDetectorService } from "ngx-device-detector";
+import { Router } from "@angular/router";
+import NavItem from "src/app/common/models/nav/navItem";
 
 @Component({
 	selector: "gm-nav",
@@ -17,20 +19,22 @@ export class NavComponent implements OnInit {
 
 	constructor(
 		private authService: AuthService,
-		private deviceService: DeviceDetectorService
+		private deviceService: DeviceDetectorService,
+		private router: Router
 	) {
 		this.isMobile = this.deviceService.isMobile();
 		this.isTablet = this.deviceService.isTablet();
 		this.isDesktop = this.deviceService.isDesktop();
-		console.log(this.isMobile);
-		console.log(this.isTablet);
-		console.log(this.isDesktop);
 
 		this.items = [
-			new NavItem("", "fa fa-dice", "DM Tools", true),
+			new NavItem("", "fab fa-d-and-d", "DM Tools", true),
 			new NavItem("", "fa fa-home", "Home"),
-			new NavItem("crcaclulator", "fa fa-calculator", "CR Calculator"),
-			new NavItem("encounters", "fa fa-pastafarianism", "Encounters")
+			new NavItem("CRCalculator", "fa fa-calculator", "CR Calculator"),
+			new NavItem("encounter", "fas fa-helmet-battle", "Encounters"),
+			new NavItem(null, "fas fa-wand-magic", "Spells", false, [
+				new NavItem("spells", "fas fa-clipboard-list", "My Spells"),
+				new NavItem("spells/add", "fa fa-plus-square", "New Spell")
+			])
 		];
 	}
 
@@ -38,23 +42,8 @@ export class NavComponent implements OnInit {
 		const u = this.authService.getUser();
 		if (u) this.user = u.user;
 	}
-}
 
-class NavItem {
-	public url: string;
-	public icon: string;
-	public label: string;
-	public isBrand: boolean;
-
-	constructor(
-		url: string,
-		icon: string,
-		label: string,
-		isBrand: boolean = false
-	) {
-		this.url = url;
-		this.icon = icon;
-		this.label = label;
-		this.isBrand = isBrand;
+	logout() {
+		this.authService.logout();
 	}
 }

@@ -1,0 +1,112 @@
+:host {
+	height: 100%;
+	width: 100%;
+	min-width: 450px;
+}
+
+.monster-card {
+	width: 100%;
+	min-width: 450px;
+
+	h1 {
+		font-family: "mrs-eaves", "TiamatRegular", "Helvetica Neue", Helvetica,
+			sans-serif;
+		color: #58170d;
+		font-size: 1.875rem;
+		font-weight: 700;
+		font-variant: small-caps;
+		text-transform: capitalize;
+		margin: 0px 0px -5px 0px;
+	}
+
+	h2 {
+		font-size: 1.25rem;
+		color: #58170d;
+		font-family: Georgia, serif;
+		font-weight: 600;
+		text-transform: uppercase;
+	}
+
+	h2.sub {
+		display: block;
+		font-weight: 400;
+	}
+
+	h3 {
+		font-family: sans-serif;
+		font-variant: small-caps;
+		font-size: 1.25rem;
+		text-transform: capitalize;
+		color: #58170d;
+		margin: 5px 0px -12px 0px;
+		font-weight: 400;
+	}
+
+	background-image: url("/assets/img/monster-background.png");
+
+	.divider-thick {
+		border-top: solid 3px transparent;
+		border-left: solid 215px #a52a2a;
+		border-bottom: solid 3px #a52a2a;
+		border-right: solid 215px transparent;
+		margin: 5px 0px 5px 0px;
+	}
+
+	.scroll {
+		height: 6px;
+		width: 102%;
+		background-image: url("/assets/img/monster-border.png");
+		border: 1px solid #2f2112;
+		border-radius: 2px;
+		margin: 0px 0px 0px -3px;
+	}
+
+	em.subtitle {
+		color: #000;
+		font-family: Georgia, serif;
+		font-size: 0.9375rem;
+		text-transform: lowercase;
+
+		span {
+			text-transform: capitalize;
+		}
+	}
+
+	.info-list {
+		color: #58170d;
+		font-size: 0.9375rem;
+
+		p {
+			font-family: Georgia, serif;
+		}
+
+		&.actions {
+			p {
+				margin-bottom: 0.625rem;
+
+				strong {
+					font-style: italic;
+				}
+			}
+		}
+	}
+
+	hr {
+		height: 1px;
+		background-color: #a52a2a;
+		border: none;
+		margin: 10px 0px 5px 0px;
+	}
+
+	.comma-list-item:last-child {
+		.comma {
+			display: none;
+		}
+	}
+
+	.comma-list {
+		.comma:last-child {
+			display: none;
+		}
+	}
+}

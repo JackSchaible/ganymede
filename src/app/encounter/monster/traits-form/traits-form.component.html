@@ -1,0 +1,102 @@
+<mat-autocomplete #spellClassAC="matAutocomplete">
+  <mat-option *ngFor="let class of spellClasses" [value]="class">
+    {{class}}
+  </mat-option>
+</mat-autocomplete>
+<mat-autocomplete #spellAC="matAutocomplete">
+  <mat-option *ngFor="let spell of spells" [value]="spell.Name">
+    {{spell.Name}}
+  </mat-option>
+</mat-autocomplete>
+
+<div class="u-flex u-flex__wrap">
+  <form [formGroup]="formGroup" class="col-md-6">
+    <input autocomplete="false" name="hidden" type="text" style="display:none;">
+    <mat-accordion>
+      <!--Traits-->
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            Traits
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+
+        <div class="u-margin-bottom-2x">
+          <mat-chip-list>
+            <mat-chip *ngFor="let t of monster.Traits.Traits" (click)="showTrait(t)" (removed)="removeTrait(t.Name)">
+              {{t.Name}} <i class="fa fa-times-circle" matChipRemove></i></mat-chip>
+          </mat-chip-list>
+        </div>
+
+        <div>
+          <mat-form-field class="col-12">
+            <input matInput placeholder="Name" formControlName="trait_name" />
+          </mat-form-field>
+
+          <mat-form-field class="col-12">
+            <textarea rows="4" matInput placeholder="Description" formControlName="trait_desc"></textarea>
+          </mat-form-field>
+
+          <div class="col-12 u-flex u-flex__justify--flex-end">
+            <button mat-button matSuffix mat-icon-button class="pull-right" (click)="addTrait()">
+              <i class="fa fa-plus"></i>
+            </button>
+          </div>
+        </div>
+
+      </mat-expansion-panel>
+
+      <!--Spells-->
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            Spells
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+
+        <mat-radio-group class="u-flex u-flex__justify--space-between">
+          <mat-radio-button [checked]="monster.Traits.Spells.Type === 0" (change)="changeSpellcastingType(0)" value="0">None</mat-radio-button>
+          <mat-radio-button [checked]="monster.Traits.Spells.Type === 1" (change)="changeSpellcastingType(1)" value="1">Spellcasting</mat-radio-button>
+          <mat-radio-button [checked]="monster.Traits.Spells.Type === 2" (change)="changeSpellcastingType(2)" value="2">Innate</mat-radio-button>
+          <mat-radio-button [checked]="monster.Traits.Spells.Type === 3" (change)="changeSpellcastingType(3)" value="3">Psionics</mat-radio-button>
+        </mat-radio-group>
+
+        <div *ngIf="monster.Traits.Spells.Type===1">
+          <mat-form-field class="col-6">
+            <input matInput placeholder="Spellcasting Class" [(ngModel)]="monster.Traits.Spells.ClassInstance.BaseClass.Name"
+              formControlName="spellClass" [matAutocomplete]="spellClassAC" />
+          </mat-form-field>
+
+          <mat-form-field class="col-6">
+            <input matInput placeholder="Spellcasting Level" [(ngModel)]="monster.Traits.Spells.ClassInstance.Level"
+              formControlName="spellLevel" type="number" (input)="getSpellSlots()" />
+          </mat-form-field>
+
+          <mat-accordion>
+            <mat-expansion-panel *ngFor="let spell of spellLevels">
+              <mat-expansion-panel-header>
+                <mat-panel-title>
+                  {{spell.Name}}
+                </mat-panel-title>
+              </mat-expansion-panel-header>
+
+              <div>
+                <mat-form-field class="u-padding-x-none">
+                  <input [matAutocomplete]="spellAC" matInput placeholder="Spell Name" formControlName="spellName"
+                    (input)="skillChanged(true)">
+                </mat-form-field>
+
+                <button mat-button matSuffix mat-icon-button (click)="addSpell()">
+                  <i class="fa fa-plus"></i>
+                </button>
+              </div>
+            </mat-expansion-panel>
+          </mat-accordion>
+        </div>
+
+      </mat-expansion-panel>
+    </mat-accordion>
+  </form>
+
+  <gm-monster-card class="col-md-6" [monster]="monster"></gm-monster-card>
+</div>
