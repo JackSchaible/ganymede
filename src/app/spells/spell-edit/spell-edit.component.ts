@@ -1,26 +1,19 @@
-import {
-	Component,
-	OnInit,
-	Input,
-	ViewChild,
-	AfterViewInit
-} from "@angular/core";
+import { Component, OnInit, Input, ViewChild, OnDestroy } from "@angular/core";
 import Spell from "src/app/common/models/monster/traits/spells/spell";
 import { PlayerClass } from "src/app/common/models/values";
-import { FormGroup, FormBuilder, FormControl } from "@angular/forms";
-import { COMMA, ENTER } from "@angular/cdk/keycodes";
-import { MatAutocompleteSelectedEvent } from "@angular/material";
+import { FormGroup, FormBuilder } from "@angular/forms";
 import { SpellCardComponent } from "src/app/common/spell-card/spell-card.component";
 import SpellData, {
 	SpellSchool
 } from "src/app/common/models/monster/classes/SpellData";
 import { SpellService } from "src/app/services/spell.service";
+import { Router } from "@angular/router";
 
 @Component({
 	selector: "gm-spell-edit",
 	templateUrl: "./spell-edit.component.html"
 })
-export class SpellEditComponent implements OnInit, AfterViewInit {
+export class SpellEditComponent implements OnInit, OnDestroy {
 	@Input()
 	public spell: Spell;
 
@@ -45,7 +38,6 @@ export class SpellEditComponent implements OnInit, AfterViewInit {
 	private isNew: boolean;
 
 	private selectedClasses: string[];
-	private separatorKeysCodes: number[] = [ENTER, COMMA];
 
 	private classes: string[];
 	private schools: SpellSchool[];
@@ -56,13 +48,18 @@ export class SpellEditComponent implements OnInit, AfterViewInit {
 	private processing: boolean;
 	private processingMessage: string;
 	private errorMessage: string;
+	private successMessage: string;
 	private knownErrors: any = {
 		API_ERR_UNK: "An unknown error has occurred. Please try again later."
 	};
+	private successTimeout: number = 10000;
+	private deleteTimeout: number = 5000;
+	private timeoutId: NodeJS.Timer;
 
 	constructor(
 		protected formBuilder: FormBuilder,
-		private spellService: SpellService
+		private spellService: SpellService,
+		private router: Router
 	) {
 		if (!this.spell) this.spell = Spell.MakeDefault();
 
@@ -91,7 +88,9 @@ export class SpellEditComponent implements OnInit, AfterViewInit {
 		this.formGroup.valueChanges.subscribe(form => this.formChange(form));
 	}
 
-	ngAfterViewInit() {}
+	ngOnDestroy(): void {
+		clearTimeout(this.timeoutId);
+	}
 
 	formChange(form: any): void {
 		if (this.spellCard) this.spellCard.onChange();
@@ -188,7 +187,14 @@ export class SpellEditComponent implements OnInit, AfterViewInit {
 
 			if (isNaN(id)) this.errorMessage = this.knownErrors["API_ERR_UNK"];
 			else this.spell.ID = id;
+			this.successMessage = `Your spell ${
+				this.spell.Name
+			} has been successfully ${this.isNew ? "created" : "updated"}!`;
 			this.isNew = false;
+
+			this.timeoutId = setTimeout(() => {
+				this.successMessage = null;
+			}, this.successTimeout);
 		}
 
 		this.processing = false;
@@ -200,8 +206,18 @@ export class SpellEditComponent implements OnInit, AfterViewInit {
 		this.processingMessage = `Deleting your spell: ${this.spell.Name}`;
 
 		this.spellService.deleteSpell(this.spell).subscribe(r => {
-			if (r.error) this.processError(r.error);
 			this.processing = false;
+
+			if (r.error) this.processError(r.error);
+			else {
+				this.successMessage = `Your spell ${
+					this.spell.Name
+				} has been successfully deleted!`;
+				this.timeoutId = setTimeout(() => {
+					this.successMessage = null;
+					this.router.navigateByUrl("/spells");
+				}, this.deleteTimeout);
+			}
 		});
 	}
 

@@ -174,11 +174,16 @@
           </mat-expansion-panel>
         </mat-accordion>
 
-        <div class="u-flex u-flex__align-items--center" [class.u-flex__justify--space-between]="errorMessage"
-          [class.u-flex__justify--flex-end]="!errorMessage">
-          <p class="u-margin-left white u-flex u-flex__align-items--center" *ngIf="errorMessage">
+        <div class="u-flex u-flex__align-items--center" [class.u-flex__justify--space-between]="errorMessage || successMessage"
+          [class.u-flex__justify--flex-end]="!errorMessage && !successMessage">
+          <p class="u-margin-left white u-flex u-flex__align-items--center text-danger" *ngIf="errorMessage">
             <i class="fas fa-engine-warning fa-2x"></i>
             <span class="u-margin-left-half">{{errorMessage}}</span>
+          </p>
+
+          <p class="u-margin-left white text-success" *ngIf="successMessage">
+            <i class="fas fa-check fa-2x"></i>
+            <span class="u-margin-left-half">{{successMessage}}</span>
           </p>
           <div class="u-flex">
             <button *ngIf="!isNew" title="delete" (click)="delete()" type="button" class="pull-right u-margin-all"
