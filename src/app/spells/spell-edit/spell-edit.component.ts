@@ -14,11 +14,11 @@ import { SpellCardComponent } from "src/app/common/spell-card/spell-card.compone
 import SpellData, {
 	SpellSchool
 } from "src/app/common/models/monster/classes/SpellData";
+import { SpellService } from "src/app/services/spell.service";
 
 @Component({
 	selector: "gm-spell-edit",
-	templateUrl: "./spell-edit.component.html",
-	styleUrls: ["./spell-edit.component.scss"]
+	templateUrl: "./spell-edit.component.html"
 })
 export class SpellEditComponent implements OnInit, AfterViewInit {
 	@Input()
@@ -53,7 +53,17 @@ export class SpellEditComponent implements OnInit, AfterViewInit {
 	private ranges: string[] = SpellData.Ranges;
 	private durations: string[] = SpellData.Durations;
 
-	constructor(protected formBuilder: FormBuilder) {
+	private processing: boolean;
+	private processingMessage: string;
+	private errorMessage: string;
+	private knownErrors: any = {
+		API_ERR_UNK: "An unknown error has occurred. Please try again later."
+	};
+
+	constructor(
+		protected formBuilder: FormBuilder,
+		private spellService: SpellService
+	) {
 		if (!this.spell) this.spell = Spell.MakeDefault();
 
 		this.classes = [];
@@ -110,7 +120,7 @@ export class SpellEditComponent implements OnInit, AfterViewInit {
 		let index = this.selectedClasses.indexOf(pc);
 		if (index >= 0) this.selectedClasses.splice(index, 1);
 
-		index = this.spell.Classes.indexOf(PlayerClass[pc]);
+		index = this.spell.Classes.indexOf(pc);
 		if (index >= 0) this.spell.Classes.splice(index, 1);
 
 		this.spellCard.onChange();
@@ -157,10 +167,46 @@ export class SpellEditComponent implements OnInit, AfterViewInit {
 	}
 
 	private save(): void {
-		//TODO: save?
+		if (this.processing) return;
+		this.processing = true;
+
+		if (this.isNew) {
+			this.processingMessage = `Creating your new spell: ${this.spell.Name}`;
+			this.spellService.addSpell(this.spell).subscribe(o => this.handleSave(o));
+		} else {
+			this.processingMessage = `Editing your spell: ${this.spell.Name}`;
+			this.spellService
+				.saveSpell(this.spell)
+				.subscribe(o => this.handleSave(o));
+		}
+	}
+
+	private handleSave(result: any) {
+		if (result.error) this.processError(result.error);
+		else {
+			const id = parseInt(result);
+
+			if (isNaN(id)) this.errorMessage = this.knownErrors["API_ERR_UNK"];
+			else this.spell.ID = id;
+			this.isNew = false;
+		}
+
+		this.processing = false;
 	}
 
 	private delete(): void {
-		//TODO: delete?
+		if (this.processing) return;
+		this.processing = true;
+		this.processingMessage = `Deleting your spell: ${this.spell.Name}`;
+
+		this.spellService.deleteSpell(this.spell).subscribe(r => {
+			if (r.error) this.processError(r.error);
+			this.processing = false;
+		});
+	}
+
+	private processError(errorCode: string): void {
+		this.errorMessage = this.knownErrors[errorCode];
+		if (!this.errorMessage) this.errorMessage = this.knownErrors["API_ERR_UNK"];
 	}
 }

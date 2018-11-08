@@ -3,6 +3,7 @@
     {{pc}}
   </mat-option>
 </mat-autocomplete>
+<gm-processing-overlay [isActive]="processing" [message]="processingMessage"></gm-processing-overlay>
 
 <div *ngIf="isModal; else standalone">
   <h1 mat-dialog-title>
@@ -30,7 +31,7 @@
   <main class="u-margin-all-2x">
 
     <div class="u-flex">
-      <form [formGroup]="formGroup" class="flex-grow-1 u-margin-right-half mat-elevation-z8">
+      <form [formGroup]="formGroup" class="flex-grow-1 u-margin-right-half mat-elevation-z8 u-flex u-flex__column u-flex__justify--space-around">
         <input autocomplete="false" name="hidden" type="text" style="display:none;">
 
         <mat-accordion>
@@ -173,15 +174,22 @@
           </mat-expansion-panel>
         </mat-accordion>
 
-        <div class="u-flex u-flex__justify--flex-end">
-          <button *ngIf="!isNew" title="delete" (click)="delete()" type="button" class="pull-right u-margin-all"
-            mat-fab color="warn">
-            <i class="fa fa-trash"></i>
-          </button>
+        <div class="u-flex u-flex__align-items--center" [class.u-flex__justify--space-between]="errorMessage"
+          [class.u-flex__justify--flex-end]="!errorMessage">
+          <p class="u-margin-left white u-flex u-flex__align-items--center" *ngIf="errorMessage">
+            <i class="fas fa-engine-warning fa-2x"></i>
+            <span class="u-margin-left-half">{{errorMessage}}</span>
+          </p>
+          <div class="u-flex">
+            <button *ngIf="!isNew" title="delete" (click)="delete()" type="button" class="pull-right u-margin-all"
+              mat-fab color="warn">
+              <i class="fa fa-trash"></i>
+            </button>
 
-          <button title="save" (click)="save()" type="button" class="pull-right u-margin-all" mat-fab color="primary">
-            <i class="fa fa-save"></i>
-          </button>
+            <button title="save" (click)="save()" type="button" class="pull-right u-margin-all" mat-fab color="primary">
+              <i class="fa fa-save"></i>
+            </button>
+          </div>
         </div>
       </form>
 

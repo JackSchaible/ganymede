@@ -7,6 +7,7 @@ import SpellDuration from "./spellDuration";
 
 export default class Spell {
 	constructor(
+		public ID: number,
 		public Name: string,
 		public Level: number,
 		public School: SpellSchool,
@@ -21,6 +22,7 @@ export default class Spell {
 
 	public static MakeDefault() {
 		return new Spell(
+			-1,
 			"Unknown Name",
 			0,
 			SpellSchool.Abjuration,
@@ -36,6 +38,7 @@ export default class Spell {
 
 	public static New() {
 		return new Spell(
+			-1,
 			"",
 			0,
 			SpellSchool.Abjuration,
