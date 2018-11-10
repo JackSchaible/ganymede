@@ -19,7 +19,8 @@ import {
 import { MatToolbarModule, MatMenuModule } from "@angular/material";
 import { DeviceDetectorModule } from "ngx-device-detector";
 import { SpellsModule } from "./spells/spells.module";
-import { NavItemComponent } from './main/nav-item/nav-item.component';
+import { NavItemComponent } from "./main/nav-item/nav-item.component";
+import "hammerjs";
 
 @NgModule({
 	declarations: [
