@@ -1,37 +1,37 @@
-import Description from "./description";
-import Stats from "./stats/stats";
-import BasicInfo from "./basicInfo";
-import Alignment from "./alignment";
-import Dice from "../generic/dice";
-import ArmorClass from "./stats/armorClass";
-import Features from "./features/features";
-import Languages from "./features/languages";
-import Traits from "./traits/traits";
-import { Spells } from "./traits/spells/spells";
+import description from "./description";
+import stats from "./stats/stats";
+import basicInfo from "./basicInfo";
+import alignment from "./alignment";
+import dice from "../generic/dice";
+import armorClass from "./stats/armorClass";
+import features from "./features/features";
+import languages from "./features/languages";
+import traits from "./traits/traits";
+import { spells } from "./traits/spells/spells";
 
-export default class Monster {
+export default class monster {
 	constructor(
-		public BasicInfo: BasicInfo,
-		public Stats: Stats,
-		public Features: Features,
-		public Traits: Traits,
-		public Actions: Description[],
-		public LegendaryActionsDescription: string,
-		public LegendaryActions: Description[]
+		public basicInfo: basicInfo,
+		public stats: stats,
+		public features: features,
+		public traits: traits,
+		public actions: description[],
+		public legendaryActionsDescription: string,
+		public legendaryActions: description[]
 	) {}
 
-	static MakeDefault(): Monster {
-		return new Monster(
-			new BasicInfo(
+	static makeDefault(): monster {
+		return new monster(
+			new basicInfo(
 				"Unnamed",
 				0,
 				"Unknown",
 				[],
-				Alignment.Default(),
+				alignment.default(),
 				"Medium",
 				2
 			),
-			new Stats(
+			new stats(
 				10,
 				10,
 				10,
@@ -41,12 +41,12 @@ export default class Monster {
 				0,
 				0,
 				[],
-				ArmorClass.Default(),
+				armorClass.default(),
 				0,
-				Dice.Default(),
+				dice.default(),
 				""
 			),
-			new Features(
+			new features(
 				[],
 				[],
 				[],
@@ -54,21 +54,21 @@ export default class Monster {
 				[],
 				[],
 				[],
-				new Languages([], false, 0),
+				new languages([], false, 0),
 				[],
 				0
 			),
-			new Traits([], new Spells()),
+			new traits([], new spells()),
 			[],
 			null,
 			[]
 		);
 	}
 
-	static New(): Monster {
-		return new Monster(
-			new BasicInfo("", 0, "", [], Alignment.Default(), "", 0),
-			new Stats(
+	static newMonster(): monster {
+		return new monster(
+			new basicInfo("", 0, "", [], alignment.default(), "", 0),
+			new stats(
 				10,
 				10,
 				10,
@@ -78,12 +78,12 @@ export default class Monster {
 				0,
 				30,
 				[],
-				ArmorClass.Default(),
+				armorClass.default(),
 				0,
-				new Dice(1, 4),
+				new dice(1, 4),
 				""
 			),
-			new Features(
+			new features(
 				[],
 				[],
 				[],
@@ -91,11 +91,11 @@ export default class Monster {
 				[],
 				[],
 				[],
-				new Languages([], false, 0),
+				new languages([], false, 0),
 				[],
 				0
 			),
-			new Traits([], new Spells()),
+			new traits([], new spells()),
 			[],
 			null,
 			[]

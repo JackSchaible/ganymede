@@ -1,5 +1,5 @@
-import EncounterGroup from "./encounterGroup";
+import encounterGroup from "./encounterGroup";
 
-export default class {
-	constructor(public EncounterGroups: EncounterGroup[]) {}
+export default class encounters {
+	constructor(public encounterGroups: encounterGroup[]) {}
 }

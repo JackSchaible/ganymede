@@ -6,7 +6,7 @@ import {
 	OnInit,
 	ChangeDetectorRef
 } from "@angular/core";
-import Monster from "../../common/models/monster/monster";
+import monster from "../../common/models/monster/monster";
 import { MonsterCardComponent } from "../../common/monster-card/monster-card.component";
 import { CalculatorService } from "../../services/calculator.service";
 import { FormBuilder, FormGroup } from "@angular/forms";
@@ -18,7 +18,7 @@ import { MatSnackBar } from "@angular/material";
 export default abstract class MonsterForm implements OnInit {
 	@Input()
 	@Output()
-	public monster: Monster;
+	public monster: monster;
 
 	@Input()
 	@Output()
@@ -51,7 +51,7 @@ export default abstract class MonsterForm implements OnInit {
 	}
 
 	protected formChange(form: any): void {
-		this.card.CalculateValues();
+		this.card.calculateValues();
 		this.onFormChanges(form);
 
 		this.complete = this.isComplete();

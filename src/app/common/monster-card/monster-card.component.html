@@ -2,24 +2,24 @@
   <div class="scroll"></div>
 
   <div class="content u-padding-all-half">
-    <h1>{{monster.BasicInfo.Name}}</h1>
-    <em class="subtitle"><span>{{monster.BasicInfo.Size}}</span> {{monster.BasicInfo.Type}}<span *ngIf="monster.BasicInfo.Tags && monster.BasicInfo.Tags.length > 0">
-        (<span><span class="comma-list-item" *ngFor="let tag of monster.BasicInfo.Tags">{{tag}}<span class="comma">,
-            </span></span></span>)</span><span *ngIf="(monster.BasicInfo.Tags && monster.BasicInfo.Tags.length > 0) || monster.BasicInfo.Type || monster.BasicInfo.Size">,</span>
+    <h1>{{monster.basicInfo.name}}</h1>
+    <em class="subtitle"><span>{{monster.basicInfo.size}}</span> {{monster.basicInfo.type}}<span *ngIf="monster.basicInfo.tags && monster.basicInfo.tags.length > 0">
+        (<span><span class="comma-list-item" *ngFor="let tag of monster.basicInfo.tags">{{tag}}<span class="comma">,
+            </span></span></span>)</span><span *ngIf="(monster.basicInfo.tags && monster.basicInfo.tags.length > 0) || monster.basicInfo.type || monster.basicInfo.size">,</span>
       {{alignmentString}}</em>
 
     <!--Basic Stats-->
     <div class="divider-thick"></div>
 
     <div class="info-list">
-      <p><strong>Armor Class</strong> {{monster.Stats.AC.Score}} <span *ngIf="monster.Stats.ArmorType">({{monster.Stats.ArmorType}})</span></p>
-      <p><strong>Hit Points</strong> {{monster.Stats.HPAverage}}
-        ({{monster.Stats.HPRoll.Count}}d{{monster.Stats.HPRoll.Sides}}<span *ngIf="monster.Stats.HPRoll.Modifier != 0">{{monster.Stats.HPRoll.Modifier
-          >= 0 ? "+" : ""}}{{monster.Stats.HPRoll.Modifier}}</span>)
+      <p><strong>Armor Class</strong> {{monster.stats.ac.score}} <span *ngIf="monster.stats.armorType">({{monster.stats.armorType}})</span></p>
+      <p><strong>Hit Points</strong> {{monster.stats.hpAverage}}
+        ({{monster.stats.hpRoll.count}}d{{monster.stats.hpRoll.sides}}<span *ngIf="monster.stats.hpRoll.modifier != 0">{{monster.stats.hpRoll.modifier
+          >= 0 ? "+" : ""}}{{monster.stats.hpRoll.modifier}}</span>)
       </p>
-      <p><strong>Speed</strong> {{monster.Stats.Speed}} ft.<span *ngIf="monster.Stats.ExtraMovementTypes.length > 0">,</span>
-        <span class="comma-list-item" *ngFor="let movement of monster.Stats.ExtraMovementTypes"> {{movement.Type}}
-          {{movement.Distance}} ft.<span class="comma">,</span></span></p>
+      <p><strong>Speed</strong> {{monster.stats.speed}} ft.<span *ngIf="monster.stats.extraMovementTypes.length > 0">,</span>
+        <span class="comma-list-item" *ngFor="let movement of monster.stats.extraMovementTypes"> {{movement.type}}
+          {{movement.distance}} ft.<span class="comma">,</span></span></p>
     </div>
 
     <!--Attributes-->
@@ -28,32 +28,32 @@
     <div class="stats u-flex u-flex__justify--space-around u-text-center">
       <div>
         <h2>str</h2>
-        <h2 class="sub">{{monster.Stats.Strength}} ({{strMod}})</h2>
+        <h2 class="sub">{{monster.stats.strength}} ({{strMod}})</h2>
       </div>
 
       <div>
         <h2>dex</h2>
-        <h2 class="sub">{{monster.Stats.Dexterity}} ({{dexMod}})</h2>
+        <h2 class="sub">{{monster.stats.dexterity}} ({{dexMod}})</h2>
       </div>
 
       <div>
         <h2>con</h2>
-        <h2 class="sub">{{monster.Stats.Constitution}} ({{conMod}})</h2>
+        <h2 class="sub">{{monster.stats.constitution}} ({{conMod}})</h2>
       </div>
 
       <div>
         <h2>int</h2>
-        <h2 class="sub">{{monster.Stats.Intelligence}} ({{intMod}})</h2>
+        <h2 class="sub">{{monster.stats.intelligence}} ({{intMod}})</h2>
       </div>
 
       <div>
         <h2>wis</h2>
-        <h2 class="sub">{{monster.Stats.Wisdom}} ({{wisMod}})</h2>
+        <h2 class="sub">{{monster.stats.wisdom}} ({{wisMod}})</h2>
       </div>
 
       <div>
         <h2>cha</h2>
-        <h2 class="sub">{{monster.Stats.Charisma}} ({{chaMod}})</h2>
+        <h2 class="sub">{{monster.stats.charisma}} ({{chaMod}})</h2>
       </div>
     </div>
 
@@ -61,59 +61,59 @@
     <div class="divider-thick"></div>
 
     <div class="info-list">
-      <p *ngIf="monster.Features.SavingThrows.length > 0">
+      <p *ngIf="monster.features.savingThrows.length > 0">
         <strong>Saving Throws</strong>
-        <span class="comma-list-item" *ngFor="let savingThrow of monster.Features.SavingThrows"> {{savingThrow.Name}}
+        <span class="comma-list-item" *ngFor="let savingThrow of monster.features.savingThrows"> {{savingThrow.name}}
           {{getST(savingThrow)}}<span class="comma">,</span></span>
       </p>
 
-      <p *ngIf="monster.Features.Skills.length > 0">
+      <p *ngIf="monster.features.skills.length > 0">
         <strong>Skills</strong>
-        <span class="comma-list-item" *ngFor="let skill of monster.Features.Skills">
+        <span class="comma-list-item" *ngFor="let skill of monster.features.skills">
           {{getSkill(skill)}}<span class="comma">,</span>
         </span>
       </p>
 
-      <p *ngIf="monster.Features.DamageVulnerabilities.length > 0">
+      <p *ngIf="monster.features.damageVulnerabilities.length > 0">
         <strong>Vulnerabilities</strong>
-        <span class="comma-list-item" *ngFor="let v of monster.Features.DamageVulnerabilities">
+        <span class="comma-list-item" *ngFor="let v of monster.features.damageVulnerabilities">
           {{v}}<span class="comma">,</span>
         </span>
       </p>
 
-      <p *ngIf="monster.Features.DamageResistances.length > 0">
+      <p *ngIf="monster.features.damageResistances.length > 0">
         <strong>Damage Resistances</strong>
-        <span class="comma-list-item" *ngFor="let r of monster.Features.DamageResistances">
+        <span class="comma-list-item" *ngFor="let r of monster.features.damageResistances">
           {{r}}<span class="comma">,</span>
         </span>
       </p>
 
-      <p *ngIf="monster.Features.DamageImmunities.length > 0">
+      <p *ngIf="monster.features.damageImmunities.length > 0">
         <strong>Damage Immunities</strong>
-        <span class="comma-list-item" *ngFor="let i of monster.Features.DamageImmunities">
+        <span class="comma-list-item" *ngFor="let i of monster.features.damageImmunities">
           {{i}}<span class="comma">,</span>
         </span>
       </p>
 
-      <p *ngIf="monster.Features.ConditionImmunities.length > 0">
+      <p *ngIf="monster.features.conditionImmunities.length > 0">
         <strong>Condition Immunities</strong>
-        <span class="comma-list-item" *ngFor="let i of monster.Features.ConditionImmunities">
+        <span class="comma-list-item" *ngFor="let i of monster.features.conditionImmunities">
           {{i}}<span class="comma">,</span>
         </span>
       </p>
 
-      <p><strong>Senses</strong><span *ngIf="monster.Features.ExtraSenses.length > 0">,</span>
-        <span *ngFor="let sense of monster.Features.ExtraSenses"> {{sense.Type}}
-          {{sense.Distance}} ft.,</span> passive perception {{getPP()}}</p>
-      <p *ngFor="let feature of monster.Features.ExtraFeatures"><strong>{{feature.Name}} </strong> <span [innerHTML]="feature.Description"></span></p>
+      <p><strong>Senses</strong><span *ngIf="monster.features.extraSenses.length > 0">,</span>
+        <span *ngFor="let sense of monster.features.extraSenses"> {{sense.type}}
+          {{sense.distance}} ft.,</span> passive perception {{getPP()}}</p>
+      <p *ngFor="let feature of monster.features.extraFeatures"><strong>{{feature.name}} </strong> <span [innerHTML]="feature.description"></span></p>
 
-      <p *ngIf="monster.Features.Languages.Languages.length > 0">
+      <p *ngIf="monster.features.languages.languages.length > 0">
         <strong>Languages</strong>
-        <span class="comma-list" *ngFor="let l of monster.Features.Languages.Languages">
+        <span class="comma-list" *ngFor="let l of monster.features.languages.languages">
           {{l}}<span class="comma">,</span>
         </span>
-        <span *ngIf="!monster.Features.Languages.CanSpeak">, But Can't Speak</span>
-        <span *ngIf="monster.Features.Languages.Telepathy > 0">, Telepathy {{monster.Features.Languages.Telepathy}}
+        <span *ngIf="!monster.features.languages.canSpeak">, But Can't Speak</span>
+        <span *ngIf="monster.features.languages.telepathy > 0">, Telepathy {{monster.features.languages.telepathy}}
           ft.</span>
       </p>
 
@@ -121,33 +121,33 @@
     </div>
 
     <!--Traits-->
-    <div class="divider-thick" *ngIf="monster.Traits.Traits.length > 0 || monster.Traits.Spells.Type !== 'none'"></div>
+    <div class="divider-thick" *ngIf="monster.traits.traits.length > 0 || monster.traits.spells.type !== 'none'"></div>
 
-    <div class="info-list" *ngIf="monster.Traits.Traits.length > 0">
-      <p *ngFor="let t of monster.Traits.Traits">
-        <strong>{{t.Name}}</strong> <span [innerHTML]="t.Description"></span>
+    <div class="info-list" *ngIf="monster.traits.traits.length > 0">
+      <p *ngFor="let t of monster.traits.traits">
+        <strong>{{t.name}}</strong> <span [innerHTML]="t.description"></span>
       </p>
     </div>
 
-    <div class="info-list" *ngIf="monster.Traits.Spells.Type == 1">
-      <p><strong>Spellcasting</strong> The {{monster.BasicInfo.Name ? monster.BasicInfo.Name : "monster"}} is a
-        {{monster.Traits.Spells.ClassInstance.Level}}{{words.getSuffix(monster.Traits.Spells.ClassInstance.Level)}}-level
+    <div class="info-list" *ngIf="monster.traits.spells.type == 1">
+      <p><strong>Spellcasting</strong> The {{monster.basicInfo.name ? monster.basicInfo.name : "monster"}} is a
+        {{monster.traits.spells.classInstance.level}}{{words.getSuffix(monster.traits.spells.classInstance.level)}}-level
         spellcaster. It's
-        spellcasting ability is {{monster.Traits.Spells.ClassInstance.BaseClass.SpellcastingAbility}} (spell save DC
+        spellcasting ability is {{monster.traits.spells.classInstance.baseClass.spellcastingAbility}} (spell save DC
         {{getSpellsaveDC()}},
         {{getSpellAttackMod()}} to hit with spell attacks).
-        The {{monster.BasicInfo.Name ? monster.BasicInfo.Name : "monster"}} has the following
-        {{monster.Traits.Spells.ClassInstance.BaseClass.Name}} spells prepared:</p>
+        The {{monster.basicInfo.name ? monster.basicInfo.name : "monster"}} has the following
+        {{monster.traits.spells.classInstance.baseClass.name}} spells prepared:</p>
       <ul>
         <li *ngFor="let level of getSpellSlots(); let i = index">
-          <p>{{level.Name}} ({{level.Name === 'Cantrips' ? 'at Will' : level.Slots + ' slots'}}): <span><span *ngFor=""></span></span></p>
+          <p>{{level.name}} ({{level.name === 'Cantrips' ? 'at Will' : level.slots + ' slots'}}): <span><span *ngFor=""></span></span></p>
         </li>
       </ul>
     </div>
 
-    <ng-container *ngTemplateOutlet="section; context: { list: monster.Features}"></ng-container>
-    <ng-container *ngTemplateOutlet="section; context: { list: monster.Actions, title: 'Actions'}"></ng-container>
-    <ng-container *ngTemplateOutlet="section; context: { list: monster.LegendaryActions, title: 'Legendary Actions', desc: monster.LegendaryActionsDescription}"></ng-container>
+    <ng-container *ngTemplateOutlet="section; context: { list: monster.features}"></ng-container>
+    <ng-container *ngTemplateOutlet="section; context: { list: monster.actions, title: 'Actions'}"></ng-container>
+    <ng-container *ngTemplateOutlet="section; context: { list: monster.legendaryActions, title: 'Legendary Actions', desc: monster.legendaryActionsDescription}"></ng-container>
   </div>
   <div class="scroll">
 
@@ -168,7 +168,7 @@
       <p *ngIf="desc">{{desc}}</p>
 
       <div class="info-list actions">
-        <p *ngFor="let item of list"><strong>{{item.Name}}. </strong> <span [innerHTML]="item.Description"></span></p>
+        <p *ngFor="let item of list"><strong>{{item.name}}. </strong> <span [innerHTML]="item.description"></span></p>
       </div>
     </div>
   </ng-template>

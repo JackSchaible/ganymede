@@ -3,25 +3,25 @@ import { FormBuilder } from "@angular/forms";
 import { CalculatorService } from "../../../services/calculator.service";
 import { MatSnackBar } from "@angular/material";
 import MonsterForm from "../monsterForm";
-import Values from "../../../common/models/values";
-import Trait from "../../../common/models/monster/traits/trait";
+import values from "../../../common/models/values";
+import trait from "../../../common/models/monster/traits/trait";
 import {
-	Spells,
-	Spellcasting,
+	spells,
+	spellcasting,
 	Innate,
 	Psionics
 } from "../../../common/models/monster/traits/spells/spells";
-import ClassInstance from "../../../common/models/monster/classes/ClassInstance";
-import Bard from "../../../common/models/monster/classes/Bard/Bard";
-import SpellcastingClass from "../../../common/models/monster/classes/SpellcastingClass";
-import BaseClass from "../../../common/models/monster/classes/BaseClass";
-import Cleric from "../../../common/models/monster/classes/Cleric/Cleric";
-import Druid from "../../../common/models/monster/classes/Druid/Druid";
-import Paladin from "../../../common/models/monster/classes/Paladin/Paladin";
-import Ranger from "../../../common/models/monster/classes/Ranger/Ranger";
-import Sorcerer from "../../../common/models/monster/classes/Sorcerer/Sorcerer";
-import Warlock from "../../../common/models/monster/classes/Warlock/Warlock";
-import Wizard from "../../../common/models/monster/classes/Wizard/Wizard";
+import classInstance from "../../../common/models/monster/classes/ClassInstance";
+import bard from "../../../common/models/monster/classes/Bard/Bard";
+import spellcastingClass from "../../../common/models/monster/classes/SpellcastingClass";
+import baseClass from "../../../common/models/monster/classes/BaseClass";
+import cleric from "../../../common/models/monster/classes/Cleric/Cleric";
+import druid from "../../../common/models/monster/classes/Druid/Druid";
+import paladin from "../../../common/models/monster/classes/Paladin/Paladin";
+import ranger from "../../../common/models/monster/classes/Ranger/Ranger";
+import sorcerer from "../../../common/models/monster/classes/Sorcerer/Sorcerer";
+import warlock from "../../../common/models/monster/classes/Warlock/Warlock";
+import wizard from "../../../common/models/monster/classes/Wizard/Wizard";
 import { WordService } from "src/app/services/word.service";
 
 @Component({
@@ -39,7 +39,7 @@ export class TraitsFormComponent extends MonsterForm {
 		spellName: []
 	};
 
-	private spellClasses = Values.SpellClasses;
+	private spellClasses = values.spellClasses;
 	private spellcastingType: string = "none";
 	private spellAllotment: any[] = [];
 	private spellLevels: any[] = [];
@@ -72,47 +72,47 @@ export class TraitsFormComponent extends MonsterForm {
 
 		if (
 			spellClass !==
-			((this.monster.Traits.Spells as Spellcasting).ClassInstance
-				.BaseClass as SpellcastingClass).Name
+			((this.monster.traits.spells as spellcasting).classInstance
+				.baseClass as spellcastingClass).name
 		) {
-			let classType: BaseClass;
+			let classType: baseClass;
 
 			switch (spellClass) {
 				case "Bard":
-					classType = new Bard();
+					classType = new bard();
 					break;
 
 				case "Cleric":
-					classType = new Cleric();
+					classType = new cleric();
 					break;
 
 				case "Druid":
-					classType = new Druid();
+					classType = new druid();
 					break;
 
 				case "Paladin":
-					classType = new Paladin();
+					classType = new paladin();
 					break;
 
 				case "Ranger":
-					classType = new Ranger();
+					classType = new ranger();
 					break;
 
 				case "Sorcerer":
-					classType = new Sorcerer();
+					classType = new sorcerer();
 					break;
 
 				case "Warlock":
-					classType = new Warlock();
+					classType = new warlock();
 					break;
 
 				case "Wizard":
-					classType = new Wizard();
+					classType = new wizard();
 					break;
 			}
 
-			this.monster.Traits.Spells = new Spellcasting(
-				new ClassInstance(classType, spellLevel),
+			this.monster.traits.spells = new spellcasting(
+				new classInstance(classType, spellLevel),
 				[]
 			);
 		}
@@ -137,16 +137,16 @@ export class TraitsFormComponent extends MonsterForm {
 		name = name.trim();
 		desc = desc.trim();
 
-		let newTrait = new Trait(name, desc);
+		let newTrait = new trait(name, desc);
 
-		const traits = this.monster.Traits.Traits;
+		const traits = this.monster.traits.traits;
 		for (let i = 0; i < traits.length; i++)
-			if (traits[i].Name === newTrait.Name) {
-				this.monster.Traits.Traits[i].Description = desc;
+			if (traits[i].name === newTrait.name) {
+				this.monster.traits.traits[i].description = desc;
 				newTrait = null;
 			}
 
-		if (newTrait) this.monster.Traits.Traits.push(newTrait);
+		if (newTrait) this.monster.traits.traits.push(newTrait);
 		this.triggerFormChange();
 
 		if (nameInput) nameInput.setValue("");
@@ -156,10 +156,10 @@ export class TraitsFormComponent extends MonsterForm {
 	private removeTrait(traitName: string) {
 		let index = -1;
 
-		for (let i = 0; i < this.monster.Traits.Traits.length; i++)
-			if (this.monster.Traits.Traits[i].Name === traitName) index = i;
+		for (let i = 0; i < this.monster.traits.traits.length; i++)
+			if (this.monster.traits.traits[i].name === traitName) index = i;
 
-		if (index >= 0) this.monster.Traits.Traits.splice(index, 1);
+		if (index >= 0) this.monster.traits.traits.splice(index, 1);
 
 		const nameInput = this.formGroup.controls["trait_name"];
 		const descInput = this.formGroup.controls["trait_desc"];
@@ -167,43 +167,43 @@ export class TraitsFormComponent extends MonsterForm {
 		if (descInput) descInput.setValue("");
 	}
 
-	private showTrait(trait: Trait) {
-		this.formGroup.controls["trait_name"].setValue(trait.Name);
-		this.formGroup.controls["trait_desc"].setValue(trait.Description);
+	private showTrait(trait: trait) {
+		this.formGroup.controls["trait_name"].setValue(trait.name);
+		this.formGroup.controls["trait_desc"].setValue(trait.description);
 	}
 
 	private changeSpellcastingType(newType: number): void {
 		switch (newType) {
 			case 0:
-				this.monster.Traits.Spells = new Spells();
+				this.monster.traits.spells = new spells();
 				break;
 
 			case 1:
-				this.monster.Traits.Spells = new Spellcasting(
-					new ClassInstance(new Bard(), 1),
+				this.monster.traits.spells = new spellcasting(
+					new classInstance(new bard(), 1),
 					[]
 				);
 				break;
 
 			case 2:
-				this.monster.Traits.Spells = new Innate();
+				this.monster.traits.spells = new Innate();
 				break;
 
 			case 3:
-				this.monster.Traits.Spells = new Psionics();
+				this.monster.traits.spells = new Psionics();
 				break;
 		}
 	}
 
 	private getSpellSlots(): void {
-		const instance = (this.monster.Traits.Spells as Spellcasting).ClassInstance;
-		const base = instance.BaseClass as SpellcastingClass;
-		const slotAllotment = base.SpellAdvancement[instance.Level - 1];
+		const instance = (this.monster.traits.spells as spellcasting).classInstance;
+		const base = instance.baseClass as spellcastingClass;
+		const slotAllotment = base.spellAdvancement[instance.level - 1];
 
 		this.spellLevels = [];
 		this.spellLevels.push({
 			Name: "Cantrips",
-			Slots: base.Cantrips[instance.Level]
+			Slots: base.cantrips[instance.level]
 		});
 
 		for (let i = 0; i < slotAllotment.length; i++) {

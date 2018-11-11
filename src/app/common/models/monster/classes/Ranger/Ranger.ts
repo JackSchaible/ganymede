@@ -1,8 +1,8 @@
-import SpellcastingClass from "../SpellcastingClass";
-import SpellData from "../SpellData";
+import spellcastingClass from "../SpellcastingClass";
+import spellData from "../SpellData";
 
-export default class Ranger extends SpellcastingClass {
+export default class ranger extends spellcastingClass {
 	constructor() {
-		super("Ranger", "Wisdom", SpellData.SpellSlotAdvancement.HalfCaster);
+		super("Ranger", "Wisdom", spellData.spellSlotAdvancement.halfCaster);
 	}
 }

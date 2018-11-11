@@ -1,4 +1,4 @@
-export default class Alignment {
+export default class alignment {
 	constructor(
 		public lawfulGood: boolean,
 		public lawfulNeutral: boolean,
@@ -11,8 +11,8 @@ export default class Alignment {
 		public chaoticEvil: boolean
 	) {}
 
-	public static Default() {
-		return new Alignment(
+	public static default() {
+		return new alignment(
 			false,
 			false,
 			false,

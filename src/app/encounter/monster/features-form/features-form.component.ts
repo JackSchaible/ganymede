@@ -1,14 +1,14 @@
 import { Component, ChangeDetectorRef } from "@angular/core";
 import { FormBuilder } from "@angular/forms";
-import Values from "../../../common/models/values";
-import Feature from "../../../common/models/monster/feature";
+import values from "../../../common/models/values";
+import feature from "../../../common/models/monster/feature";
 import { MatCheckboxChange, MatSnackBar } from "@angular/material";
 import { CalculatorService } from "../../../services/calculator.service";
 import MonsterForm from "../monsterForm";
-import Skill, {
-	SkillGroup
+import skill, {
+	skillGroup
 } from "src/app/common/models/monster/features/skill";
-import Sense from "src/app/common/models/monster/features/sense";
+import sense from "src/app/common/models/monster/features/sense";
 
 @Component({
 	selector: "gm-features-form",
@@ -31,13 +31,13 @@ export class FeaturesFormComponent extends MonsterForm {
 		ef_desc: []
 	};
 
-	private senseTypes: string[] = Values.SenseTypes;
-	private skills: SkillGroup[] = Values.Skills;
+	private senseTypes: string[] = values.senseTypes;
+	private skills: skillGroup[] = values.skills;
 	private dblSkillProf: boolean;
 	private skillAbility: string;
-	private damageTypes: string[] = Values.DamageTypes;
-	private conditions: string[] = Values.Conditions;
-	private languages: string[] = Values.Languages;
+	private damageTypes: string[] = values.damageTypes;
+	private conditions: string[] = values.conditions;
+	private languages: string[] = values.languages;
 	private hasTelepathy: boolean = false;
 
 	constructor(
@@ -62,12 +62,12 @@ export class FeaturesFormComponent extends MonsterForm {
 			this.formGroup.controls["skill_name"].value
 		) {
 			for (let i = 0; i < this.skills.length; i++)
-				for (let j = 0; j < this.skills[i].Skills.length; j++)
+				for (let j = 0; j < this.skills[i].skills.length; j++)
 					if (
-						this.skills[i].Skills[j].Name ===
+						this.skills[i].skills[j].name ===
 						this.formGroup.controls["skill_name"].value
 					)
-						this.skillAbility = this.skills[i].Ability;
+						this.skillAbility = this.skills[i].ability;
 		}
 	}
 
@@ -75,47 +75,47 @@ export class FeaturesFormComponent extends MonsterForm {
 		if (e && e.source) {
 			if (e.checked) {
 				if (e.source.name === "Strength")
-					this.monster.Features.SavingThrows.push(
-						new Skill("Strength", "Strength", 1)
+					this.monster.features.savingThrows.push(
+						new skill("Strength", "Strength", 1)
 					);
 				if (e.source.name === "Dexterity")
-					this.monster.Features.SavingThrows.push(
-						new Skill("Dexterity", "Dexterity", 1)
+					this.monster.features.savingThrows.push(
+						new skill("Dexterity", "Dexterity", 1)
 					);
 				if (e.source.name === "Constitution")
-					this.monster.Features.SavingThrows.push(
-						new Skill("Constitution", "Constitution", 1)
+					this.monster.features.savingThrows.push(
+						new skill("Constitution", "Constitution", 1)
 					);
 				if (e.source.name === "Intelligence")
-					this.monster.Features.SavingThrows.push(
-						new Skill("Intelligence", "Intelligence", 1)
+					this.monster.features.savingThrows.push(
+						new skill("Intelligence", "Intelligence", 1)
 					);
 				if (e.source.name === "Wisdom")
-					this.monster.Features.SavingThrows.push(
-						new Skill("Wisdom", "Wisdom", 1)
+					this.monster.features.savingThrows.push(
+						new skill("Wisdom", "Wisdom", 1)
 					);
 				if (e.source.name === "Charisma")
-					this.monster.Features.SavingThrows.push(
-						new Skill("Charisma", "Charisma", 1)
+					this.monster.features.savingThrows.push(
+						new skill("Charisma", "Charisma", 1)
 					);
 				if (e.source.name === "Double Proficiency") this.dblSkillProf = true;
 				if (e.source.name === "Can Speak")
-					this.monster.Features.Languages.CanSpeak = true;
+					this.monster.features.languages.canSpeak = true;
 				if (e.source.name === "Has Telepathy") this.hasTelepathy = true;
 			} else if (e.source.name === "Double Proficiency")
 				this.dblSkillProf = false;
 			else if (e.source.name === "Can Speak")
-				this.monster.Features.Languages.CanSpeak = false;
+				this.monster.features.languages.canSpeak = false;
 			else if (e.source.name === "Has Telepathy") this.hasTelepathy = false;
 			else {
 				let index = -1;
 
-				for (let i = 0; i < this.monster.Features.SavingThrows.length; i++) {
-					if (this.monster.Features.SavingThrows[i].Name === e.source.name)
+				for (let i = 0; i < this.monster.features.savingThrows.length; i++) {
+					if (this.monster.features.savingThrows[i].name === e.source.name)
 						index = i;
 				}
 
-				if (index > -1) this.monster.Features.SavingThrows.splice(index, 1);
+				if (index > -1) this.monster.features.savingThrows.splice(index, 1);
 			}
 		}
 
@@ -123,7 +123,7 @@ export class FeaturesFormComponent extends MonsterForm {
 	}
 
 	private getPP() {
-		return this.calculator.calcPP(this.monster.Stats);
+		return this.calculator.calcPP(this.monster.stats);
 	}
 
 	private addSense() {
@@ -137,10 +137,10 @@ export class FeaturesFormComponent extends MonsterForm {
 			type = type.trim();
 			const dist = parseInt(distanceStr, 10);
 
-			const newSense = new Sense(type, dist);
+			const newSense = new sense(type, dist);
 
-			if (this.monster.Features.ExtraSenses.indexOf(newSense) === -1)
-				this.monster.Features.ExtraSenses.push(newSense);
+			if (this.monster.features.extraSenses.indexOf(newSense) === -1)
+				this.monster.features.extraSenses.push(newSense);
 			else this.openSnackBar("That sense type already exists!");
 		}
 
@@ -151,10 +151,10 @@ export class FeaturesFormComponent extends MonsterForm {
 	private removeSense(sense) {
 		let index = -1;
 
-		for (let i = 0; i < this.monster.Features.ExtraSenses.length; i++)
-			if (this.monster.Features.ExtraSenses[i].Type === sense) index = i;
+		for (let i = 0; i < this.monster.features.extraSenses.length; i++)
+			if (this.monster.features.extraSenses[i].type === sense) index = i;
 
-		if (index >= 0) this.monster.Features.ExtraSenses.splice(index, 1);
+		if (index >= 0) this.monster.features.extraSenses.splice(index, 1);
 	}
 
 	private addSkill() {
@@ -167,16 +167,16 @@ export class FeaturesFormComponent extends MonsterForm {
 			name = name.trim();
 			ability = ability.trim();
 
-			const newSkill = new Skill(name, ability, this.dblSkillProf ? 2 : 1);
+			const newSkill = new skill(name, ability, this.dblSkillProf ? 2 : 1);
 
-			const skills = this.monster.Features.Skills;
+			const skills = this.monster.features.skills;
 			for (let i = 0; i < skills.length; i++)
-				if (skills[i].Name == newSkill.Name) {
+				if (skills[i].name == newSkill.name) {
 					this.openSnackBar("That skill already exists!");
 					return;
 				}
 
-			this.monster.Features.Skills.push(newSkill);
+			this.monster.features.skills.push(newSkill);
 			this.triggerFeaturesForm(null);
 		}
 
@@ -188,10 +188,10 @@ export class FeaturesFormComponent extends MonsterForm {
 	private removeSkill(skillName) {
 		let index = -1;
 
-		for (let i = 0; i < this.monster.Features.Skills.length; i++)
-			if (this.monster.Features.Skills[i].Name === skillName) index = i;
+		for (let i = 0; i < this.monster.features.skills.length; i++)
+			if (this.monster.features.skills[i].name === skillName) index = i;
 
-		if (index >= 0) this.monster.Features.Skills.splice(index, 1);
+		if (index >= 0) this.monster.features.skills.splice(index, 1);
 	}
 
 	private addVulnerability() {
@@ -203,10 +203,10 @@ export class FeaturesFormComponent extends MonsterForm {
 			vulnerability = vulnerability.trim();
 
 			if (
-				this.monster.Features.DamageVulnerabilities.indexOf(vulnerability) ===
+				this.monster.features.damageVulnerabilities.indexOf(vulnerability) ===
 				-1
 			)
-				this.monster.Features.DamageVulnerabilities.push(vulnerability);
+				this.monster.features.damageVulnerabilities.push(vulnerability);
 			else this.openSnackBar("That Damage Vulnerability already exists!");
 		}
 
@@ -214,11 +214,11 @@ export class FeaturesFormComponent extends MonsterForm {
 	}
 
 	private removeVulnerability(vulnerability) {
-		const index = this.monster.Features.DamageVulnerabilities.indexOf(
+		const index = this.monster.features.damageVulnerabilities.indexOf(
 			vulnerability
 		);
 		if (index >= 0)
-			this.monster.Features.DamageVulnerabilities.splice(index, 1);
+			this.monster.features.damageVulnerabilities.splice(index, 1);
 	}
 
 	private addResistance() {
@@ -228,8 +228,8 @@ export class FeaturesFormComponent extends MonsterForm {
 		if (resistance) {
 			resistance = resistance.trim();
 
-			if (this.monster.Features.DamageResistances.indexOf(resistance) === -1)
-				this.monster.Features.DamageResistances.push(resistance);
+			if (this.monster.features.damageResistances.indexOf(resistance) === -1)
+				this.monster.features.damageResistances.push(resistance);
 			else this.openSnackBar("That Damage Resistance already exists!");
 		}
 
@@ -237,8 +237,8 @@ export class FeaturesFormComponent extends MonsterForm {
 	}
 
 	private removeResistance(resistance) {
-		const index = this.monster.Features.DamageResistances.indexOf(resistance);
-		if (index >= 0) this.monster.Features.DamageResistances.splice(index, 1);
+		const index = this.monster.features.damageResistances.indexOf(resistance);
+		if (index >= 0) this.monster.features.damageResistances.splice(index, 1);
 	}
 
 	private addImmunity() {
@@ -248,8 +248,8 @@ export class FeaturesFormComponent extends MonsterForm {
 		if (immunity) {
 			immunity = immunity.trim();
 
-			if (this.monster.Features.DamageImmunities.indexOf(immunity) === -1)
-				this.monster.Features.DamageImmunities.push(immunity);
+			if (this.monster.features.damageImmunities.indexOf(immunity) === -1)
+				this.monster.features.damageImmunities.push(immunity);
 			else this.openSnackBar("That Damage Immunity already exists!");
 		}
 
@@ -257,8 +257,8 @@ export class FeaturesFormComponent extends MonsterForm {
 	}
 
 	private removeImmunity(immunity) {
-		const index = this.monster.Features.DamageImmunities.indexOf(immunity);
-		if (index >= 0) this.monster.Features.DamageImmunities.splice(index, 1);
+		const index = this.monster.features.damageImmunities.indexOf(immunity);
+		if (index >= 0) this.monster.features.damageImmunities.splice(index, 1);
 	}
 
 	private addCondition() {
@@ -268,8 +268,8 @@ export class FeaturesFormComponent extends MonsterForm {
 		if (condition) {
 			condition = condition.trim();
 
-			if (this.monster.Features.ConditionImmunities.indexOf(condition) === -1)
-				this.monster.Features.ConditionImmunities.push(condition);
+			if (this.monster.features.conditionImmunities.indexOf(condition) === -1)
+				this.monster.features.conditionImmunities.push(condition);
 			else this.openSnackBar("That Condition Immunity already exists!");
 		}
 
@@ -277,8 +277,8 @@ export class FeaturesFormComponent extends MonsterForm {
 	}
 
 	private removeCondition(condition) {
-		const index = this.monster.Features.ConditionImmunities.indexOf(condition);
-		if (index >= 0) this.monster.Features.ConditionImmunities.splice(index, 1);
+		const index = this.monster.features.conditionImmunities.indexOf(condition);
+		if (index >= 0) this.monster.features.conditionImmunities.splice(index, 1);
 	}
 
 	private addLanguage() {
@@ -288,8 +288,8 @@ export class FeaturesFormComponent extends MonsterForm {
 		if (language) {
 			language = language.trim();
 
-			if (this.monster.Features.Languages.Languages.indexOf(language) === -1)
-				this.monster.Features.Languages.Languages.push(language);
+			if (this.monster.features.languages.languages.indexOf(language) === -1)
+				this.monster.features.languages.languages.push(language);
 			else this.openSnackBar("That Language already exists!");
 		}
 
@@ -297,8 +297,8 @@ export class FeaturesFormComponent extends MonsterForm {
 	}
 
 	private removeLanguage(language) {
-		const index = this.monster.Features.Languages.Languages.indexOf(language);
-		if (index >= 0) this.monster.Features.Languages.Languages.splice(index, 1);
+		const index = this.monster.features.languages.languages.indexOf(language);
+		if (index >= 0) this.monster.features.languages.languages.splice(index, 1);
 	}
 
 	private addFeature() {
@@ -313,16 +313,16 @@ export class FeaturesFormComponent extends MonsterForm {
 		name = name.trim();
 		desc = desc.trim();
 
-		let newFeature = new Feature(name, desc);
+		let newFeature = new feature(name, desc);
 
-		const features = this.monster.Features.ExtraFeatures;
+		const features = this.monster.features.extraFeatures;
 		for (let i = 0; i < features.length; i++)
-			if (features[i].Name === newFeature.Name) {
-				this.monster.Features.ExtraFeatures[i].Description = desc;
+			if (features[i].name === newFeature.name) {
+				this.monster.features.extraFeatures[i].description = desc;
 				newFeature = null;
 			}
 
-		if (newFeature) this.monster.Features.ExtraFeatures.push(newFeature);
+		if (newFeature) this.monster.features.extraFeatures.push(newFeature);
 		this.triggerFeaturesForm(null);
 
 		if (nameInput) nameInput.setValue("");
@@ -332,10 +332,10 @@ export class FeaturesFormComponent extends MonsterForm {
 	private removeFeature(feature) {
 		let index = -1;
 
-		for (let i = 0; i < this.monster.Features.ExtraFeatures.length; i++)
-			if (this.monster.Features.ExtraFeatures[i].Name === feature) index = i;
+		for (let i = 0; i < this.monster.features.extraFeatures.length; i++)
+			if (this.monster.features.extraFeatures[i].name === feature) index = i;
 
-		if (index >= 0) this.monster.Features.ExtraFeatures.splice(index, 1);
+		if (index >= 0) this.monster.features.extraFeatures.splice(index, 1);
 
 		const nameInput = this.formGroup.controls["ef_name"];
 		const descInput = this.formGroup.controls["ef_desc"];
@@ -343,8 +343,8 @@ export class FeaturesFormComponent extends MonsterForm {
 		if (descInput) descInput.setValue("");
 	}
 
-	private showFeature(feature: Feature) {
-		this.formGroup.controls["ef_name"].setValue(feature.Name);
-		this.formGroup.controls["ef_desc"].setValue(feature.Description);
+	private showFeature(feature: feature) {
+		this.formGroup.controls["ef_name"].setValue(feature.name);
+		this.formGroup.controls["ef_desc"].setValue(feature.description);
 	}
 }

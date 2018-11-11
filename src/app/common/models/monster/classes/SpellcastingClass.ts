@@ -1,12 +1,12 @@
-import BaseClass from "./BaseClass";
+import baseClass from "./BaseClass";
 
-export default abstract class SpellcastingClass extends BaseClass {
+export default abstract class spellcastingClass extends baseClass {
 	constructor(
-		Name: string,
-		public SpellcastingAbility: string,
-		public SpellAdvancement: number[][],
-		public Cantrips: number[] = null
+		name: string,
+		public spellcastingAbility: string,
+		public spellAdvancement: number[][],
+		public cantrips: number[] = null
 	) {
-		super(Name);
+		super(name);
 	}
 }

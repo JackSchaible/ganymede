@@ -1,5 +1,5 @@
 import { Component, Input } from "@angular/core";
-import Monster from "../../common/models/monster/monster";
+import monster from "../../common/models/monster/monster";
 
 @Component({
 	selector: "gm-monster",
@@ -8,7 +8,7 @@ import Monster from "../../common/models/monster/monster";
 })
 export class MonsterComponent {
 	@Input()
-	public monster: Monster;
+	public monster: monster;
 
 	private form1Complete: boolean;
 	private form2Complete: boolean;
@@ -16,6 +16,6 @@ export class MonsterComponent {
 	private form4Complete: boolean;
 
 	constructor() {
-		if (!this.monster) this.monster = Monster.New();
+		if (!this.monster) this.monster = monster.newMonster();
 	}
 }

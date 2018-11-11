@@ -1,3 +1,3 @@
-export default class MovementType {
-	constructor(public Type: string, public Distance: number) {}
+export default class movementType {
+	constructor(public type: string, public distance: number) {}
 }

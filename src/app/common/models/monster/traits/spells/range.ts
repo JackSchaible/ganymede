@@ -1,3 +1,3 @@
-export default class Range {
-	constructor(public RangeType: string, public Amount: string) {}
+export default class range {
+	constructor(public rangeType: string, public amount: string) {}
 }

@@ -1,9 +1,9 @@
-import Description from "./description";
+import description from "./description";
 
-export default class ExtraInfo {
+export default class extraInfo {
 	constructor(
-		public Challenge: number,
-		public Senses: string,
-		public Skills: Description[]
+		public challenge: number,
+		public senses: string,
+		public skills: description[]
 	) {}
 }

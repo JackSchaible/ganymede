@@ -1,38 +1,38 @@
-import Spell from "./spell";
-import ClassInstance from "../../classes/ClassInstance";
+import spell from "./spell";
+import classInstance from "../../classes/ClassInstance";
 
-export enum SpellcastingType {
-	None = 0,
-	Spellcasting = 1,
-	Innate = 2,
-	Psionics = 3
+export enum spellcastingType {
+	none = 0,
+	spellcasting = 1,
+	innate = 2,
+	psionics = 3
 }
 
-export class Spells {
-	public Type: SpellcastingType;
+export class spells {
+	public type: spellcastingType;
 
 	constructor() {
-		this.Type = SpellcastingType.None;
+		this.type = spellcastingType.none;
 	}
 }
 
-export class Spellcasting extends Spells {
-	constructor(public ClassInstance: ClassInstance, public Spells: Spell[]) {
+export class spellcasting extends spells {
+	constructor(public classInstance: classInstance, public spells: spell[]) {
 		super();
-		this.Type = SpellcastingType.Spellcasting;
+		this.type = spellcastingType.spellcasting;
 	}
 }
 
-export class Innate extends Spells {
+export class Innate extends spells {
 	constructor() {
 		super();
-		this.Type = SpellcastingType.Innate;
+		this.type = spellcastingType.innate;
 	}
 }
 
-export class Psionics extends Spells {
+export class Psionics extends spells {
 	constructor() {
 		super();
-		this.Type = SpellcastingType.Psionics;
+		this.type = spellcastingType.psionics;
 	}
 }

@@ -24,22 +24,22 @@
 
         <div class="u-flex u-margin-bottom">
           <mat-form-field class="col-2">
-            <input matInput placeholder="STR" [(ngModel)]="monster.Stats.Strength" formControlName="str" type="number">
+            <input matInput placeholder="STR" [(ngModel)]="monster.stats.strength" formControlName="str" type="number">
           </mat-form-field>
           <mat-form-field class="col-2">
-            <input matInput placeholder="DEX" [(ngModel)]="monster.Stats.Dexterity" formControlName="dex" type="number">
+            <input matInput placeholder="DEX" [(ngModel)]="monster.stats.dexterity" formControlName="dex" type="number">
           </mat-form-field>
           <mat-form-field class="col-2">
-            <input matInput placeholder="CON" [(ngModel)]="monster.Stats.Constitution" formControlName="con" type="number">
+            <input matInput placeholder="CON" [(ngModel)]="monster.stats.constitution" formControlName="con" type="number">
           </mat-form-field>
           <mat-form-field class="col-2">
-            <input matInput placeholder="INT" [(ngModel)]="monster.Stats.Intelligence" formControlName="int" type="number">
+            <input matInput placeholder="INT" [(ngModel)]="monster.stats.intelligence" formControlName="int" type="number">
           </mat-form-field>
           <mat-form-field class="col-2">
-            <input matInput placeholder="WIS" [(ngModel)]="monster.Stats.Wisdom" formControlName="wis" type="number">
+            <input matInput placeholder="WIS" [(ngModel)]="monster.stats.wisdom" formControlName="wis" type="number">
           </mat-form-field>
           <mat-form-field class="col-2">
-            <input matInput placeholder="CHA" [(ngModel)]="monster.Stats.Charisma" formControlName="cha" type="number">
+            <input matInput placeholder="CHA" [(ngModel)]="monster.stats.charisma" formControlName="cha" type="number">
           </mat-form-field>
         </div>
       </mat-expansion-panel>
@@ -56,7 +56,7 @@
           <p class="u-margin-bottom"><i>AC = Base + Ability Modifier + Miscellanious</i></p>
           <div class="u-flex">
             <div>
-              <p>{{monster.Stats.AC.Score}}</p>
+              <p>{{monster.stats.ac.score}}</p>
             </div>
 
             <div>
@@ -64,7 +64,7 @@
             </div>
 
             <mat-form-field class="col-2">
-              <input matInput placeholder="Base" [(ngModel)]="monster.Stats.AC.Base" formControlName="ac_base" type="number">
+              <input matInput placeholder="Base" [(ngModel)]="monster.stats.ac.base" formControlName="ac_base" type="number">
             </mat-form-field>
 
             <div>
@@ -75,7 +75,7 @@
               <p class="c-monster_form--ability-modifier">{{abilityMod}}</p>
 
               <mat-form-field>
-                <mat-select placeholder="Ability" [(value)]="monster.Stats.AC.AbilityModifier" (selectionChange)="statFormChange()">
+                <mat-select placeholder="Ability" [(value)]="monster.stats.ac.abilityModifier" (selectionChange)="statFormChange()">
                   <mat-option *ngFor="let ability of abilities" [value]="ability">
                     {{ability}}
                   </mat-option>
@@ -88,7 +88,7 @@
             </div>
 
             <mat-form-field class="col-2">
-              <input matInput placeholder="Misc" [(ngModel)]="monster.Stats.AC.MiscModifier" formControlName="ac_misc"
+              <input matInput placeholder="Misc" [(ngModel)]="monster.stats.ac.miscModifier" formControlName="ac_misc"
                 type="number">
             </mat-form-field>
           </div>
@@ -109,7 +109,7 @@
 
           <div class="u-flex">
             <div>
-              <p>{{monster.Stats.HPAverage}}</p>
+              <p>{{monster.stats.hpAverage}}</p>
             </div>
 
             <div>
@@ -117,7 +117,7 @@
             </div>
 
             <mat-form-field class="col-2">
-              <input matInput placeholder="#" [(ngModel)]="monster.Stats.HPRoll.Count" formControlName="hp_count" type="number">
+              <input matInput placeholder="#" [(ngModel)]="monster.stats.hpRoll.count" formControlName="hp_count" type="number">
             </mat-form-field>
 
             <div>
@@ -125,7 +125,7 @@
             </div>
 
             <mat-form-field class="col-2">
-              <mat-select placeholder="Sides" [(value)]="monster.Stats.HPRoll.Sides" (selectionChange)="statFormChange()">
+              <mat-select placeholder="Sides" [(value)]="monster.stats.hpRoll.sides" (selectionChange)="statFormChange()">
                 <mat-option *ngFor="let number of [4,6,8,10,12,20]" [value]="number">
                   {{number}}
                 </mat-option>
@@ -150,16 +150,16 @@
 
         <div class="u-margin-bottom-2x">
           <mat-chip-list>
-            <mat-chip>Land {{monster.Stats.Speed}} ft.</mat-chip>
-            <mat-chip *ngFor="let m of monster.Stats.ExtraMovementTypes" (removed)="removeMovement(m.Type)">{{m.Type}}
-              {{m.Distance}} ft. &nbsp; <i class="fa fa-times-circle" matChipRemove></i></mat-chip>
+            <mat-chip>Land {{monster.stats.speed}} ft.</mat-chip>
+            <mat-chip *ngFor="let m of monster.stats.extraMovementTypes" (removed)="removeMovement(m.type)">{{m.type}}
+              {{m.distance}} ft. &nbsp; <i class="fa fa-times-circle" matChipRemove></i></mat-chip>
           </mat-chip-list>
         </div>
 
         <div>
           <div><label>Basic Movement</label></div>
           <mat-form-field>
-            <input matInput placeholder="Land Speed" [(ngModel)]="monster.Stats.Speed" formControlName="speed">
+            <input matInput placeholder="Land Speed" [(ngModel)]="monster.stats.speed" formControlName="speed">
           </mat-form-field>
         </div>
 

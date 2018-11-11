@@ -1,6 +1,6 @@
 import { Component, ChangeDetectorRef } from "@angular/core";
 import { FormBuilder } from "@angular/forms";
-import Values, { ISize, IMonsterType } from "../../../common/models/values";
+import values, { size, monsterType } from "../../../common/models/values";
 import { ENTER, COMMA } from "@angular/cdk/keycodes";
 import { CalculatorService } from "../../../services/calculator.service";
 import MonsterForm from "../monsterForm";
@@ -19,9 +19,9 @@ export class BasicInfoFormComponent extends MonsterForm {
 		prof: []
 	};
 
-	private sizes: ISize[] = Values.Sizes;
-	private types: IMonsterType[] = Values.Types;
-	private selectedType: IMonsterType;
+	private sizes: size[] = values.sizes;
+	private types: monsterType[] = values.types;
+	private selectedType: monsterType;
 	private separatorKeysCodes: number[] = [ENTER, COMMA];
 
 	constructor(
@@ -37,7 +37,7 @@ export class BasicInfoFormComponent extends MonsterForm {
 	onFormChanges(form) {
 		if (form.type)
 			for (let i = 0; i < this.types.length; i++)
-				if (this.types[i].Name === form.type) this.selectedType = this.types[i];
+				if (this.types[i].name === form.type) this.selectedType = this.types[i];
 	}
 
 	isComplete(): boolean {
@@ -51,8 +51,8 @@ export class BasicInfoFormComponent extends MonsterForm {
 		if (value) {
 			value = value.trim();
 
-			if (this.monster.BasicInfo.Tags.indexOf(value) === -1)
-				this.monster.BasicInfo.Tags.push(value);
+			if (this.monster.basicInfo.tags.indexOf(value) === -1)
+				this.monster.basicInfo.tags.push(value);
 			else this.openSnackBar("That tag already exists!");
 		}
 
@@ -60,12 +60,12 @@ export class BasicInfoFormComponent extends MonsterForm {
 	}
 
 	private removeTag(tag: string) {
-		const index = this.monster.BasicInfo.Tags.indexOf(tag);
-		if (index >= 0) this.monster.BasicInfo.Tags.splice(index, 1);
+		const index = this.monster.basicInfo.tags.indexOf(tag);
+		if (index >= 0) this.monster.basicInfo.tags.splice(index, 1);
 	}
 
 	private alignmentChanged() {
 		this.triggerFormChange();
-		this.card.CalculateValues();
+		this.card.calculateValues();
 	}
 }

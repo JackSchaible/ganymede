@@ -1,20 +1,20 @@
-export default class Dice {
+export default class dice {
 	constructor(
-		public Count: number,
-		public Sides: number,
-		public Modifier: number = 0
+		public count: number,
+		public sides: number,
+		public modifier: number = 0
 	) {}
 
-	static Default() {
-		return new Dice(0, 0, 0);
+	static default() {
+		return new dice(0, 0, 0);
 	}
 
 	toString() {
-		let result = `${this.Count}d${this.Sides}`;
+		let result = `${this.count}d${this.sides}`;
 
-		if (this.Modifier)
+		if (this.modifier)
 			result +=
-				this.Modifier > 0 ? `+` : this.Modifier < 0 ? `-` : `` + this.Modifier;
+				this.modifier > 0 ? `+` : this.modifier < 0 ? `-` : `` + this.modifier;
 
 		return result;
 	}

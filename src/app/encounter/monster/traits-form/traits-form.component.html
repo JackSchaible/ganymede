@@ -4,8 +4,8 @@
   </mat-option>
 </mat-autocomplete>
 <mat-autocomplete #spellAC="matAutocomplete">
-  <mat-option *ngFor="let spell of spells" [value]="spell.Name">
-    {{spell.Name}}
+  <mat-option *ngFor="let spell of spells" [value]="spell.name">
+    {{spell.name}}
   </mat-option>
 </mat-autocomplete>
 
@@ -23,8 +23,8 @@
 
         <div class="u-margin-bottom-2x">
           <mat-chip-list>
-            <mat-chip *ngFor="let t of monster.Traits.Traits" (click)="showTrait(t)" (removed)="removeTrait(t.Name)">
-              {{t.Name}} <i class="fa fa-times-circle" matChipRemove></i></mat-chip>
+            <mat-chip *ngFor="let t of monster.traits.traits" (click)="showTrait(t)" (removed)="removeTrait(t.name)">
+              {{t.name}} <i class="fa fa-times-circle" matChipRemove></i></mat-chip>
           </mat-chip-list>
         </div>
 
@@ -55,20 +55,20 @@
         </mat-expansion-panel-header>
 
         <mat-radio-group class="u-flex u-flex__justify--space-between">
-          <mat-radio-button [checked]="monster.Traits.Spells.Type === 0" (change)="changeSpellcastingType(0)" value="0">None</mat-radio-button>
-          <mat-radio-button [checked]="monster.Traits.Spells.Type === 1" (change)="changeSpellcastingType(1)" value="1">Spellcasting</mat-radio-button>
-          <mat-radio-button [checked]="monster.Traits.Spells.Type === 2" (change)="changeSpellcastingType(2)" value="2">Innate</mat-radio-button>
-          <mat-radio-button [checked]="monster.Traits.Spells.Type === 3" (change)="changeSpellcastingType(3)" value="3">Psionics</mat-radio-button>
+          <mat-radio-button [checked]="monster.traits.spells.type === 0" (change)="changeSpellcastingType(0)" value="0">None</mat-radio-button>
+          <mat-radio-button [checked]="monster.traits.spells.type === 1" (change)="changeSpellcastingType(1)" value="1">Spellcasting</mat-radio-button>
+          <mat-radio-button [checked]="monster.traits.spells.type === 2" (change)="changeSpellcastingType(2)" value="2">Innate</mat-radio-button>
+          <mat-radio-button [checked]="monster.traits.spells.type === 3" (change)="changeSpellcastingType(3)" value="3">Psionics</mat-radio-button>
         </mat-radio-group>
 
-        <div *ngIf="monster.Traits.Spells.Type===1">
+        <div *ngIf="monster.traits.spells.type===1">
           <mat-form-field class="col-6">
-            <input matInput placeholder="Spellcasting Class" [(ngModel)]="monster.Traits.Spells.ClassInstance.BaseClass.Name"
+            <input matInput placeholder="Spellcasting Class" [(ngModel)]="monster.traits.spells.classInstance.baseClass.name"
               formControlName="spellClass" [matAutocomplete]="spellClassAC" />
           </mat-form-field>
 
           <mat-form-field class="col-6">
-            <input matInput placeholder="Spellcasting Level" [(ngModel)]="monster.Traits.Spells.ClassInstance.Level"
+            <input matInput placeholder="Spellcasting Level" [(ngModel)]="monster.traits.spells.classInstance.level"
               formControlName="spellLevel" type="number" (input)="getSpellSlots()" />
           </mat-form-field>
 
@@ -76,7 +76,7 @@
             <mat-expansion-panel *ngFor="let spell of spellLevels">
               <mat-expansion-panel-header>
                 <mat-panel-title>
-                  {{spell.Name}}
+                  {{spell.name}}
                 </mat-panel-title>
               </mat-expansion-panel-header>
 

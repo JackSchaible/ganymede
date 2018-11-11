@@ -1,42 +1,42 @@
 <div [class]="'spell-card u-padding ' + cardColor">
   <div class="name u-text-center u-padding-smallest">
-    <h1>{{spell.Name}}</h1>
+    <h1>{{spell.name}}</h1>
   </div>
 
   <div class="u-text-center">
-    <p *ngIf="spell.Level > 0" class="level white">{{spellLevel}}-level {{spell.School}}</p>
-    <p *ngIf="spell.Level === 0" class="level white">{{spell.School}} cantrip</p>
+    <p *ngIf="spell.level > 0" class="level white">{{spellLevel}}-level {{spell.school}}</p>
+    <p *ngIf="spell.level === 0" class="level white">{{spell.school}} cantrip</p>
   </div>
 
   <div class="u-flex u-flex__wrap u-text-center details">
     <div>
       <p class="details-title">Casting Time</p>
-      <p class="details-value"><span *ngIf="spell.CastingTime.TimeType !== 'Reaction'">{{spell.CastingTime.Amount}}
-        </span>{{spell.CastingTime.TimeType}}</p>
+      <p class="details-value"><span *ngIf="spell.castingTime.timeType !== 'Reaction'">{{spell.castingTime.amount}}
+        </span>{{spell.castingTime.timeType}}</p>
     </div>
 
     <div>
       <p class="details-title">Range</p>
-      <p class="details-value"><span *ngIf="spell.Range.RangeType !== 'Self' && spell.Range.RangeType !== 'Touch'">{{spell.Range.Amount}}
-        </span>{{spell.Range.RangeType}}</p>
+      <p class="details-value"><span *ngIf="spell.range.rangeType !== 'Self' && spell.range.rangeType !== 'Touch'">{{spell.range.amount}}
+        </span>{{spell.range.rangeType}}</p>
     </div>
 
     <div>
       <p class="details-title">Components</p>
       <p class="details-value">
-        <span *ngIf="spell.Components.Verbal">V<span *ngIf="spell.Components.Somatic || spell.Components.Material || spell.Components.Material === ''">,</span></span>
-        <span *ngIf="spell.Components.Somatic">S<span *ngIf="spell.Components.Material || spell.Components.Material === ''">,</span></span>
-        <span *ngIf="spell.Components.Material || spell.Components.Material === ''">M</span>
+        <span *ngIf="spell.components.verbal">V<span *ngIf="spell.components.somatic || spell.components.material || spell.components.material === ''">,</span></span>
+        <span *ngIf="spell.components.somatic">S<span *ngIf="spell.components.material || spell.components.material === ''">,</span></span>
+        <span *ngIf="spell.components.material || spell.components.material === ''">M</span>
       </p>
     </div>
 
-    <div [class.rel]="spell.Duration.Concentration">
+    <div [class.rel]="spell.duration.concentration">
       <p class="details-title">Duration</p>
-      <p *ngIf="spell.Duration.Concentration">Up to {{spell.Duration.Length}} {{spell.Duration.DurationType}}</p>
-      <p *ngIf="!spell.Duration.Concentration" class="details-value"><span *ngIf="spell.Duration.DurationType === 'round' || spell.Duration.DurationType === 'minute' || spell.Duration.DurationType === 'hour' || spell.Duration.DurationType === 'day' || spell.Duration.DurationType === 'year'">{{spell.Duration.Length}}
-        </span>{{spell.Duration.DurationType}}</p>
+      <p *ngIf="spell.duration.concentration">Up to {{spell.duration.length}} {{spell.duration.durationType}}</p>
+      <p *ngIf="!spell.duration.concentration" class="details-value"><span *ngIf="spell.duration.durationType === 'round' || spell.duration.durationType === 'minute' || spell.duration.durationType === 'hour' || spell.duration.durationType === 'day' || spell.duration.durationType === 'year'">{{spell.duration.length}}
+        </span>{{spell.duration.durationType}}</p>
 
-      <div class="concentration" *ngIf="spell.Duration.Concentration">
+      <div class="concentration" *ngIf="spell.duration.concentration">
         <div>
           <span>C</span>
         </div>
@@ -48,18 +48,18 @@
     <p class="level white">&nbsp;</p>
   </div>
 
-  <div class="description u-padding-x u-padding-y-half" [class.bottom]="!spell.AtHigherLevels">
-    <p *ngIf="spell.Components.Material || spell.Components.Material === ''">Material: {{spell.Components.Material}}</p>
-    <div [class.u-margin-top]="spell.Components.Material || spell.Components.Material === ''" [innerHTML]="spell.Description"></div>
+  <div class="description u-padding-x u-padding-y-half" [class.bottom]="!spell.atHigherLevels">
+    <p *ngIf="spell.components.material || spell.components.material === ''">Material: {{spell.components.material}}</p>
+    <div [class.u-margin-top]="spell.components.material || spell.components.material === ''" [innerHTML]="spell.description"></div>
   </div>
 
-  <div class="u-text-center" *ngIf="spell.AtHigherLevels || spell.AtHigherLevels === ''">
+  <div class="u-text-center" *ngIf="spell.atHigherLevels || spell.atHigherLevels === ''">
     <p class="level white atHigherLevels">At Higher Levels</p>
   </div>
 
-  <div class="higher-levels u-padding-x u-padding-y-half" *ngIf="spell.AtHigherLevels || spell.AtHigherLevels === ''">
-    <p>{{spell.AtHigherLevels}}</p>
+  <div class="higher-levels u-padding-x u-padding-y-half" *ngIf="spell.atHigherLevels || spell.atHigherLevels === ''">
+    <p>{{spell.atHigherLevels}}</p>
   </div>
 
-  <p class="className u-margin-top-half">{{getClassName(spell.Classes[0])}}</p>
+  <p class="className u-margin-top-half">{{getClassName(spell.classes[0])}}</p>
 </div>

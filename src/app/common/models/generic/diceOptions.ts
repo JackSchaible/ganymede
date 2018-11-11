@@ -1,5 +1,5 @@
-export enum DiceOptions {
-	DropTheLowest = 0,
-	RerollOnes = 1,
-	AllUnique = 2
+export enum diceOptions {
+	dropTheLowest = 0,
+	rerollOnes = 1,
+	allUnique = 2
 }

@@ -5,9 +5,9 @@ import {
 	OnChanges,
 	ViewEncapsulation
 } from "@angular/core";
-import Spell from "../models/monster/traits/spells/spell";
+import spell from "../models/monster/traits/spells/spell";
 import { WordService } from "src/app/services/word.service";
-import { PlayerClass } from "../models/values";
+import { playerClass } from "../models/values";
 
 @Component({
 	selector: "gm-spell-card",
@@ -17,7 +17,7 @@ import { PlayerClass } from "../models/values";
 })
 export class SpellCardComponent implements OnInit, OnChanges {
 	@Input()
-	public spell: Spell;
+	public spell: spell;
 
 	private cardColor: string;
 	private spellLevel: string;
@@ -34,40 +34,40 @@ export class SpellCardComponent implements OnInit, OnChanges {
 	public onChange() {
 		if (!this.spell) return;
 
-		this.spellLevel = this.spell.Level + this.words.getSuffix(this.spell.Level);
+		this.spellLevel = this.spell.level + this.words.getSuffix(this.spell.level);
 
-		if (this.spell.Classes && this.spell.Classes.length > 0)
-			switch (this.spell.Classes[0]) {
-				case PlayerClass.Bard:
+		if (this.spell.classes && this.spell.classes.length > 0)
+			switch (this.spell.classes[0]) {
+				case playerClass.bard:
 					this.cardColor = "purple";
 					break;
 
-				case PlayerClass.Cleric:
+				case playerClass.cleric:
 					this.cardColor = "yellow";
 					break;
 
-				case PlayerClass.Druid:
+				case playerClass.druid:
 					this.cardColor = "green";
 					break;
 
-				case PlayerClass.Paladin:
+				case playerClass.paladin:
 					this.cardColor = "azure";
 					break;
 
-				case PlayerClass.Ranger:
+				case playerClass.ranger:
 					this.cardColor = "brown";
 					break;
 
-				case PlayerClass.Sorcerer:
-				case PlayerClass.Warlock:
-				case PlayerClass.Wizard:
+				case playerClass.sorcerer:
+				case playerClass.warlock:
+				case playerClass.wizard:
 					this.cardColor = "red";
 					break;
 			}
 		else this.cardColor = "red";
 	}
 
-	private getClassName(pc: PlayerClass): string {
-		return PlayerClass[pc];
+	private getClassName(pc: playerClass): string {
+		return playerClass[pc];
 	}
 }

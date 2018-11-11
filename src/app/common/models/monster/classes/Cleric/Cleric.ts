@@ -1,13 +1,13 @@
-import SpellData from "../SpellData";
-import SpellcastingClass from "../SpellcastingClass";
+import spellData from "../SpellData";
+import spellcastingClass from "../SpellcastingClass";
 
-export default class Cleric extends SpellcastingClass {
+export default class cleric extends spellcastingClass {
 	constructor() {
 		super(
 			"Cleric",
 			"Wisdom",
-			SpellData.SpellSlotAdvancement.FullCaster,
-			SpellData.Cantrips.ClericWizard
+			spellData.spellSlotAdvancement.fullCaster,
+			spellData.cantrips.clericWizard
 		);
 	}
 }

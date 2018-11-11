@@ -1,13 +1,13 @@
-import Alignment from "./alignment";
+import alignment from "./alignment";
 
-export default class BasicInfo {
+export default class basicInfo {
 	constructor(
-		public Name: string,
-		public XP: number,
-		public Type: string,
-		public Tags: string[],
-		public Alignment: Alignment,
-		public Size: string,
-		public ProficiencyModifier: number
+		public name: string,
+		public xp: number,
+		public type: string,
+		public tags: string[],
+		public alignment: alignment,
+		public size: string,
+		public proficiencyModifier: number
 	) {}
 }

@@ -45,12 +45,12 @@
 
             <!--Name-->
             <mat-form-field class="col-6">
-              <input matInput placeholder="Name" [(ngModel)]="spell.Name" formControlName="name">
+              <input matInput placeholder="Name" [(ngModel)]="spell.name" formControlName="name">
             </mat-form-field>
 
             <!--School-->
             <mat-form-field class="col-6">
-              <mat-select placeholder="School" [(value)]="spell.School">
+              <mat-select placeholder="School" [(value)]="spell.school">
                 <mat-option *ngFor="let school of schools" [value]="school">
                   {{getSchoolName(school)}}
                 </mat-option>
@@ -62,7 +62,7 @@
               <label>Classes</label>
               <div class="col-12">
                 <mat-chip-list>
-                  <mat-chip *ngFor="let pc of spell.Classes" (removed)="removeClass(pc)">
+                  <mat-chip *ngFor="let pc of spell.classes" (removed)="removeClass(pc)">
                     {{getClassName(pc)}}
                     <i class="fa fa-times-circle" matChipRemove></i>
                   </mat-chip>
@@ -90,26 +90,26 @@
               <!--Casting Time-->
               <div class="col-6 u-flex">
                 <mat-form-field class="u-padding-x-none col-6">
-                  <mat-select placeholder="Casting Time" [(value)]="spell.CastingTime.TimeType">
+                  <mat-select placeholder="Casting Time" [(value)]="spell.castingTime.timeType">
                     <mat-option *ngFor="let time of castingTimes" [value]="time">{{time}}</mat-option>
                   </mat-select>
                 </mat-form-field>
 
-                <mat-form-field class="u-padding-x-none col-6" *ngIf="spell.CastingTime.TimeType !== 'Reaction'">
-                  <input matInput placeholder="Time" formControlName="timeAmount" type="text" [(ngModel)]="spell.CastingTime.Amount">
+                <mat-form-field class="u-padding-x-none col-6" *ngIf="spell.castingTime.timeType !== 'Reaction'">
+                  <input matInput placeholder="Time" formControlName="timeAmount" type="text" [(ngModel)]="spell.castingTime.amount">
                 </mat-form-field>
               </div>
 
               <!--Range-->
               <div class="col-6 u-flex">
                 <mat-form-field class="u-padding-x-none col-6">
-                  <mat-select placeholder="Range" [(value)]="spell.Range.RangeType">
+                  <mat-select placeholder="Range" [(value)]="spell.range.rangeType">
                     <mat-option *ngFor="let range of ranges" [value]="range">{{range}}</mat-option>
                   </mat-select>
                 </mat-form-field>
 
-                <mat-form-field class="u-padding-x-none col-6" *ngIf="spell.Range.RangeType !== 'Self' && spell.Range.RangeType !== 'Touch'">
-                  <input matInput placeholder="Distance" formControlName="rangeAmount" type="text" [(ngModel)]="spell.Range.Amount">
+                <mat-form-field class="u-padding-x-none col-6" *ngIf="spell.range.rangeType !== 'Self' && spell.range.rangeType !== 'Touch'">
+                  <input matInput placeholder="Distance" formControlName="rangeAmount" type="text" [(ngModel)]="spell.range.amount">
                 </mat-form-field>
               </div>
             </div>
@@ -120,14 +120,14 @@
                 <label>Components</label>
 
                 <div class="u-flex u-flex__justify--space-between">
-                  <mat-checkbox [checked]="spell.Components.Verbal" (change)="handleComponentChange('v')">Verbal</mat-checkbox>
-                  <mat-checkbox [checked]="spell.Components.Somatic" (change)="handleComponentChange('s')">Somatic</mat-checkbox>
-                  <mat-checkbox [checked]="!!spell.Components.Material" (change)="handleComponentChange('m')">Material</mat-checkbox>
+                  <mat-checkbox [checked]="spell.components.verbal" (change)="handleComponentChange('v')">Verbal</mat-checkbox>
+                  <mat-checkbox [checked]="spell.components.somatic" (change)="handleComponentChange('s')">Somatic</mat-checkbox>
+                  <mat-checkbox [checked]="!!spell.components.material" (change)="handleComponentChange('m')">Material</mat-checkbox>
                 </div>
 
-                <mat-form-field class="u-padding-none" *ngIf="spell.Components.Material || spell.Components.Material === ''">
+                <mat-form-field class="u-padding-none" *ngIf="spell.components.material || spell.components.material === ''">
                   <input matInput placeholder="What Materials?" formControlName="materialComponent" type="text"
-                    [(ngModel)]="spell.Components.Material">
+                    [(ngModel)]="spell.components.material">
                 </mat-form-field>
               </div>
 
@@ -135,18 +135,18 @@
               <div class="col-6">
                 <div class="u-flex">
                   <mat-form-field class="u-padding-x-none col-6">
-                    <mat-select placeholder="Duration" [(value)]="spell.Duration.DurationType">
+                    <mat-select placeholder="Duration" [(value)]="spell.duration.durationType">
                       <mat-option *ngFor="let duration of durations" [value]="duration">{{duration}}</mat-option>
                     </mat-select>
                   </mat-form-field>
 
-                  <mat-form-field class="u-padding-x-none col-6" *ngIf="spell.Duration.DurationType === 'round' || spell.Duration.DurationType === 'minute' || spell.Duration.DurationType === 'hour' || spell.Duration.DurationType === 'day' || spell.Duration.DurationType === 'year'">
-                    <input matInput placeholder="Distance" formControlName="rangeAmount" type="text" [(ngModel)]="spell.Duration.Length">
+                  <mat-form-field class="u-padding-x-none col-6" *ngIf="spell.duration.durationType === 'round' || spell.duration.durationType === 'minute' || spell.duration.durationType === 'hour' || spell.duration.durationType === 'day' || spell.duration.durationType === 'year'">
+                    <input matInput placeholder="Distance" formControlName="rangeAmount" type="text" [(ngModel)]="spell.duration.length">
                   </mat-form-field>
                 </div>
 
-                <mat-checkbox *ngIf="spell.Duration.DurationType === 'round' || spell.Duration.DurationType === 'minute' || spell.Duration.DurationType === 'hour' || spell.Duration.DurationType === 'day' || spell.Duration.DurationType === 'year'"
-                  [checked]="spell.Duration.Concentration" (change)="handleComponentChange('c')">Concentration</mat-checkbox>
+                <mat-checkbox *ngIf="spell.duration.durationType === 'round' || spell.duration.durationType === 'minute' || spell.duration.durationType === 'hour' || spell.duration.durationType === 'day' || spell.duration.durationType === 'year'"
+                  [checked]="spell.duration.concentration" (change)="handleComponentChange('c')">Concentration</mat-checkbox>
               </div>
             </div>
           </mat-expansion-panel>
@@ -161,15 +161,15 @@
 
             <!--Description-->
             <mat-form-field class="u-padding-x-none w-100">
-              <textarea matInput placeholder="Description" [(ngModel)]="spell.Description" formControlName="description"></textarea>
+              <textarea matInput placeholder="Description" [(ngModel)]="spell.description" formControlName="description"></textarea>
             </mat-form-field>
 
             <!--At Higher Levels-->
-            <mat-checkbox [checked]="spell.AtHigherLevels || spell.AtHigherLevels === ''" (change)="handleComponentChange('a')">
+            <mat-checkbox [checked]="spell.atHigherLevels || spell.atHigherLevels === ''" (change)="handleComponentChange('a')">
               At Higher Levels?
             </mat-checkbox>
-            <mat-form-field class="u-padding-x-none w-100" *ngIf="spell.AtHigherLevels || spell.AtHigherLevels === ''">
-              <textarea matInput placeholder="At Higher Levels" [(ngModel)]="spell.AtHigherLevels" formControlName="atHigherLevels"></textarea>
+            <mat-form-field class="u-padding-x-none w-100" *ngIf="spell.atHigherLevels || spell.atHigherLevels === ''">
+              <textarea matInput placeholder="At Higher Levels" [(ngModel)]="spell.atHigherLevels" formControlName="atHigherLevels"></textarea>
             </mat-form-field>
           </mat-expansion-panel>
         </mat-accordion>

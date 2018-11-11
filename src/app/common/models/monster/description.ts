@@ -1,3 +1,3 @@
-export default class Description {
-	constructor(public Name: string, public Description: string) {}
+export default class description {
+	constructor(public name: string, public description: string) {}
 }

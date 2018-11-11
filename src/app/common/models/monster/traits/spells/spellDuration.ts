@@ -1,7 +1,7 @@
-export default class SpellDuration {
+export default class spellDuration {
 	constructor(
-		public DurationType: string,
-		public Length: string,
-		public Concentration: boolean = false
+		public durationType: string,
+		public length: string,
+		public concentration: boolean = false
 	) {}
 }

@@ -1,18 +1,18 @@
-export default class Skill {
+export default class skill {
 	constructor(
-		public Name: string,
-		public ModifyingAbility: string,
-		public Proficiency: number = 0
+		public name: string,
+		public modifyingAbility: string,
+		public proficiency: number = 0
 	) {
-		if (this.Proficiency < 0)
+		if (this.proficiency < 0)
 			throw Error("A creature cannot have a negative proficiency in a skill.");
-		else if (this.Proficiency > 2)
+		else if (this.proficiency > 2)
 			throw Error(
 				"A creature cannot have more than double proficiency in a skill."
 			);
 	}
 }
 
-export class SkillGroup {
-	constructor(public Ability: string, public Skills: Skill[]) {}
+export class skillGroup {
+	constructor(public ability: string, public skills: skill[]) {}
 }

@@ -1,12 +1,12 @@
-import Monster from "./monster/monster";
+import monster from "./monster/monster";
 
-export default class Encounter {
+export default class encounter {
 	constructor(
-		public Name: string,
-		public Difficulty: string,
-		public XP: number,
-		public Location: number,
-		public Monsters: Monster[],
-		public Notes: string
+		public name: string,
+		public difficulty: string,
+		public xp: number,
+		public location: number,
+		public monsters: monster[],
+		public notes: string
 	) {}
 }

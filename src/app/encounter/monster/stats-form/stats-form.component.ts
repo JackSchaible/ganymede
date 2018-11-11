@@ -1,10 +1,10 @@
 import { Component, ChangeDetectorRef } from "@angular/core";
 import { FormBuilder } from "@angular/forms";
-import Values from "../../../common/models/values";
+import values from "../../../common/models/values";
 import { CalculatorService } from "../../../services/calculator.service";
 import MonsterForm from "../monsterForm";
 import { MatSnackBar } from "@angular/material";
-import MovementType from "src/app/common/models/monster/stats/movementType";
+import movementType from "src/app/common/models/monster/stats/movementType";
 
 @Component({
 	selector: "gm-stats-form",
@@ -31,7 +31,7 @@ export class StatsFormComponent extends MonsterForm {
 
 	private abilities = ["STR", "DEX", "CON", "INT", "WIS", "CHA"];
 	private abilityMod: number;
-	private movementTypes: string[] = Values.MovementTypes;
+	private movementTypes: string[] = values.movementTypes;
 
 	constructor(
 		calculator: CalculatorService,
@@ -44,7 +44,7 @@ export class StatsFormComponent extends MonsterForm {
 
 	onFormChanges(form: any): void {
 		this.abilityMod = this.getAcMod();
-		this.monster.Stats.HPRoll.Modifier = this.calculator.getModifierByName(
+		this.monster.stats.hpRoll.modifier = this.calculator.getModifierByName(
 			"Constitution",
 			this.monster
 		);
@@ -57,25 +57,25 @@ export class StatsFormComponent extends MonsterForm {
 	private getAcMod(): number {
 		let stat: number = 0;
 
-		const stats = this.monster.Stats;
-		switch (this.monster.Stats.AC.AbilityModifier) {
+		const stats = this.monster.stats;
+		switch (this.monster.stats.ac.abilityModifier) {
 			case "STR":
-				stat = stats.Strength;
+				stat = stats.strength;
 				break;
 			case "DEX":
-				stat = stats.Dexterity;
+				stat = stats.dexterity;
 				break;
 			case "CON":
-				stat = stats.Constitution;
+				stat = stats.constitution;
 				break;
 			case "INT":
-				stat = stats.Intelligence;
+				stat = stats.intelligence;
 				break;
 			case "WIS":
-				stat = stats.Wisdom;
+				stat = stats.wisdom;
 				break;
 			case "CHA":
-				stat = stats.Charisma;
+				stat = stats.charisma;
 				break;
 		}
 
@@ -83,7 +83,7 @@ export class StatsFormComponent extends MonsterForm {
 	}
 
 	private randomStats() {
-		this.calculator.randomStats(this.monster.Stats);
+		this.calculator.randomStats(this.monster.stats);
 		this.changeDetector.detectChanges();
 	}
 
@@ -98,10 +98,10 @@ export class StatsFormComponent extends MonsterForm {
 			type = type.trim();
 			const dist = parseInt(distanceStr, 10);
 
-			const newMove = new MovementType(type, dist);
+			const newMove = new movementType(type, dist);
 
-			if (this.monster.Stats.ExtraMovementTypes.indexOf(newMove) === -1)
-				this.monster.Stats.ExtraMovementTypes.push(newMove);
+			if (this.monster.stats.extraMovementTypes.indexOf(newMove) === -1)
+				this.monster.stats.extraMovementTypes.push(newMove);
 			else this.openSnackBar("That movement type already exists!");
 		}
 
@@ -112,9 +112,9 @@ export class StatsFormComponent extends MonsterForm {
 	private removeMovement(movement) {
 		let index = -1;
 
-		for (let i = 0; i < this.monster.Stats.ExtraMovementTypes.length; i++)
-			if (this.monster.Stats.ExtraMovementTypes[i].Type === movement) index = i;
+		for (let i = 0; i < this.monster.stats.extraMovementTypes.length; i++)
+			if (this.monster.stats.extraMovementTypes[i].type === movement) index = i;
 
-		if (index >= 0) this.monster.Stats.ExtraMovementTypes.splice(index, 1);
+		if (index >= 0) this.monster.stats.extraMovementTypes.splice(index, 1);
 	}
 }

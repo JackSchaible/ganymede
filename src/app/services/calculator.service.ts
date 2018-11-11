@@ -1,13 +1,12 @@
 import { Injectable } from "@angular/core";
-import Fraction from "../common/fraction";
-import Alignment from "../common/models/monster/alignment";
-import { elementStart } from "@angular/core/src/render3/instructions";
-import { DiceOptions } from "../common/models/generic/diceOptions";
-import Dice from "../common/models/generic/dice";
-import Monster from "../common/models/monster/monster";
-import ArmorClass from "../common/models/monster/stats/armorClass";
-import Stats from "../common/models/monster/stats/stats";
-import Skill from "../common/models/monster/features/skill";
+import fraction from "../common/fraction";
+import alignment from "../common/models/monster/alignment";
+import { diceOptions } from "../common/models/generic/diceOptions";
+import dice from "../common/models/generic/dice";
+import monster from "../common/models/monster/monster";
+import armorClass from "../common/models/monster/stats/armorClass";
+import stats from "../common/models/monster/stats/stats";
+import skill from "../common/models/monster/features/skill";
 
 @Injectable({
 	providedIn: "root"
@@ -26,11 +25,11 @@ export class CalculatorService {
 
 	public getCrString(challenge: number) {
 		if (challenge < 1 && challenge > 0)
-			return this.RealToFraction(challenge, 0.0000001).toString();
+			return this.realToFraction(challenge, 0.0000001).toString();
 		else return challenge.toString();
 	}
 
-	private RealToFraction(value: number, accuracy: number): Fraction {
+	private realToFraction(value: number, accuracy: number): fraction {
 		if (accuracy <= 0.0 || accuracy >= 1.0)
 			throw new Error("Must be > 0 and < 1.");
 
@@ -44,8 +43,8 @@ export class CalculatorService {
 		let n: number = Math.floor(value);
 		value -= n;
 
-		if (value < maxError) return new Fraction(sign * n, 1);
-		if (1 - maxError < value) return new Fraction(sign * (n + 1), 1);
+		if (value < maxError) return new fraction(sign * n, 1);
+		if (1 - maxError < value) return new fraction(sign * (n + 1), 1);
 
 		let lower_n: number = 0;
 		let lower_d: number = 1;
@@ -63,11 +62,11 @@ export class CalculatorService {
 			} else if (middle_n < (value - maxError) * middle_d) {
 				lower_n = middle_n;
 				lower_d = middle_d;
-			} else return new Fraction((n * middle_d + middle_n) * sign, middle_d);
+			} else return new fraction((n * middle_d + middle_n) * sign, middle_d);
 		}
 	}
 
-	public CrToXP(cr: number): number {
+	public crToXP(cr: number): number {
 		let xp = 0;
 
 		if (cr < 0.125) xp = 10;
@@ -108,7 +107,7 @@ export class CalculatorService {
 		return xp;
 	}
 
-	public GetAlignmentString(alignment: Alignment): string {
+	public getAlignmentString(alignment: alignment): string {
 		let results = [];
 
 		const o1 = alignment.lawfulGood;
@@ -210,116 +209,116 @@ export class CalculatorService {
 		return result;
 	}
 
-	public randomStats(stats: Stats): void {
-		const dice = new Dice(4, 6);
-		const options = [DiceOptions.DropTheLowest];
+	public randomStats(stats: stats): void {
+		const statDice = new dice(4, 6);
+		const options = [diceOptions.dropTheLowest];
 
-		stats.Strength = this.roll(dice, options);
-		stats.Dexterity = this.roll(dice, options);
-		stats.Constitution = this.roll(dice, options);
-		stats.Intelligence = this.roll(dice, options);
-		stats.Wisdom = this.roll(dice, options);
-		stats.Charisma = this.roll(dice, options);
+		stats.strength = this.roll(statDice, options);
+		stats.dexterity = this.roll(statDice, options);
+		stats.constitution = this.roll(statDice, options);
+		stats.intelligence = this.roll(statDice, options);
+		stats.wisdom = this.roll(statDice, options);
+		stats.charisma = this.roll(statDice, options);
 
-		const dexMod = this.getModifierNumber(stats.Dexterity);
-		stats.AC = new ArmorClass(10, "DEX", 0);
-		stats.HPRoll.Modifier = this.getModifierNumber(stats.Constitution);
-		stats.Initiative = dexMod;
+		const dexMod = this.getModifierNumber(stats.dexterity);
+		stats.ac = new armorClass(10, "DEX", 0);
+		stats.hpRoll.modifier = this.getModifierNumber(stats.constitution);
+		stats.initiative = dexMod;
 	}
 
-	public roll(dice: Dice, options: DiceOptions[]): number {
+	public roll(dice: dice, options: diceOptions[]): number {
 		let rolls: number[] = [];
 		let currentRoll = 1;
 
-		for (let i = 0; i < dice.Count; i++) {
-			if (options.indexOf(DiceOptions.RerollOnes) > -1)
-				while (currentRoll === 1) currentRoll = this.random(1, dice.Sides);
-			else if (options.indexOf(DiceOptions.AllUnique) > -1) {
-				if (dice.Count === dice.Sides)
+		for (let i = 0; i < dice.count; i++) {
+			if (options.indexOf(diceOptions.rerollOnes) > -1)
+				while (currentRoll === 1) currentRoll = this.random(1, dice.sides);
+			else if (options.indexOf(diceOptions.allUnique) > -1) {
+				if (dice.count === dice.sides)
 					throw "Count must less than sides if AllUnique is selected as an option.";
 				while (rolls.indexOf(currentRoll) > -1)
-					currentRoll = this.random(1, dice.Sides);
-			} else currentRoll = this.random(1, dice.Sides);
+					currentRoll = this.random(1, dice.sides);
+			} else currentRoll = this.random(1, dice.sides);
 
 			rolls.push(currentRoll);
 		}
 
-		if (options.indexOf(DiceOptions.DropTheLowest) > -1)
+		if (options.indexOf(diceOptions.dropTheLowest) > -1)
 			rolls.splice(rolls.indexOf(Math.min(...rolls)), 1);
 
 		return rolls.reduce((a, b) => a + b, 0);
 	}
 
-	public calcAC(stats: Stats) {
-		const b = stats.AC.Base;
+	public calcAC(stats: stats) {
+		const b = stats.ac.base;
 
 		let a: number = 0;
-		switch (stats.AC.AbilityModifier) {
+		switch (stats.ac.abilityModifier) {
 			case "STR":
-				a = stats.Strength;
+				a = stats.strength;
 				break;
 			case "DEX":
-				a = stats.Dexterity;
+				a = stats.dexterity;
 				break;
 			case "CON":
-				a = stats.Constitution;
+				a = stats.constitution;
 				break;
 			case "INT":
-				a = stats.Intelligence;
+				a = stats.intelligence;
 				break;
 			case "WIS":
-				a = stats.Wisdom;
+				a = stats.wisdom;
 				break;
 			case "CHA":
-				a = stats.Charisma;
+				a = stats.charisma;
 				break;
 		}
 		a = this.getModifierNumber(a);
 
-		const m = stats.AC.MiscModifier;
+		const m = stats.ac.miscModifier;
 
-		stats.AC.Score = b + a + m;
+		stats.ac.score = b + a + m;
 	}
 
-	public calcPP(stats: Stats): number {
-		return 10 + this.getModifierNumber(stats.Wisdom);
+	public calcPP(stats: stats): number {
+		return 10 + this.getModifierNumber(stats.wisdom);
 	}
 
-	public calcSavingThrow(savingThrow: Skill, monster: Monster): number {
+	public calcSavingThrow(savingThrow: skill, monster: monster): number {
 		return (
-			this.getModifierByName(savingThrow.Name, monster) +
-			monster.BasicInfo.ProficiencyModifier * savingThrow.Proficiency
+			this.getModifierByName(savingThrow.name, monster) +
+			monster.basicInfo.proficiencyModifier * savingThrow.proficiency
 		);
 	}
 
-	public calcSkill(skill: Skill, monster: Monster): number {
+	public calcSkill(skill: skill, monster: monster): number {
 		return (
-			this.getModifierByName(skill.ModifyingAbility, monster) +
-			monster.BasicInfo.ProficiencyModifier * skill.Proficiency
+			this.getModifierByName(skill.modifyingAbility, monster) +
+			monster.basicInfo.proficiencyModifier * skill.proficiency
 		);
 	}
 
-	public getModifierByName(name: string, monster: Monster) {
+	public getModifierByName(name: string, monster: monster) {
 		let mod = 0;
 
 		switch (name) {
 			case "Strength":
-				mod = this.getModifierNumber(monster.Stats.Strength);
+				mod = this.getModifierNumber(monster.stats.strength);
 				break;
 			case "Dexterity":
-				mod = this.getModifierNumber(monster.Stats.Dexterity);
+				mod = this.getModifierNumber(monster.stats.dexterity);
 				break;
 			case "Constitution":
-				mod = this.getModifierNumber(monster.Stats.Constitution);
+				mod = this.getModifierNumber(monster.stats.constitution);
 				break;
 			case "Intelligence":
-				mod = this.getModifierNumber(monster.Stats.Intelligence);
+				mod = this.getModifierNumber(monster.stats.intelligence);
 				break;
 			case "Wisdom":
-				mod = this.getModifierNumber(monster.Stats.Wisdom);
+				mod = this.getModifierNumber(monster.stats.wisdom);
 				break;
 			case "Charisma":
-				mod = this.getModifierNumber(monster.Stats.Charisma);
+				mod = this.getModifierNumber(monster.stats.charisma);
 				break;
 		}
 

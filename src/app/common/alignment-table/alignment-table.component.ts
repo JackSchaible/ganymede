@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from "@angular/core";
-import Alignment from "../models/monster/alignment";
+import alignment from "../models/monster/alignment";
 
 @Component({
 	selector: "gm-alignment-table",
@@ -8,7 +8,7 @@ import Alignment from "../models/monster/alignment";
 })
 export class AlignmentTableComponent implements OnInit {
 	@Input()
-	public alignment: Alignment;
+	public alignment: alignment;
 
 	@Input()
 	public changeCallback: any;

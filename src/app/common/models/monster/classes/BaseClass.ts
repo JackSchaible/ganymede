@@ -1,3 +1,3 @@
-export default abstract class BaseClass {
-	constructor(public Name: string) {}
+export default abstract class baseClass {
+	constructor(public name: string) {}
 }

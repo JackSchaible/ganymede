@@ -1,3 +1,3 @@
-export default class CastingTime {
-	constructor(public TimeType: string, public Amount: string) {}
+export default class castingTime {
+	constructor(public timeType: string, public amount: string) {}
 }

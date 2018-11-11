@@ -1,10 +1,10 @@
-import Encounter from "./encounter";
+import encounter from "./encounter";
 
-export default class EncounterGroup {
+export default class encounterGroup {
 	constructor(
-		public Name: string,
-		public Description: string,
-		public Children: EncounterGroup[],
-		public Encounters: Encounter[]
+		public name: string,
+		public description: string,
+		public children: encounterGroup[],
+		public encounters: encounter[]
 	) {}
 }

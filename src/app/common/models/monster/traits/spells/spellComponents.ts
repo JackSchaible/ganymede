@@ -1,7 +1,7 @@
-export default class SpellComponents {
+export default class spellComponents {
 	constructor(
-		public Verbal: boolean,
-		public Somatic: boolean,
-		public Material: string
+		public verbal: boolean,
+		public somatic: boolean,
+		public material: string
 	) {}
 }

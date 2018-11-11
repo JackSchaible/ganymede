@@ -1,7 +1,7 @@
-export default class Languages {
+export default class languages {
 	constructor(
-		public Languages: string[],
-		public CanSpeak: boolean,
-		public Telepathy: number
+		public languages: string[],
+		public canSpeak: boolean,
+		public telepathy: number
 	) {}
 }

@@ -1,9 +1,9 @@
-import Dice from "../generic/dice";
+import dice from "../generic/dice";
 
-export default class Attack {
+export default class attack {
 	constructor(
-		public Name: string,
-		public AttackBonus: number,
-		public Dice: Dice
+		public name: string,
+		public attackBonus: number,
+		public dice: dice
 	) {}
 }

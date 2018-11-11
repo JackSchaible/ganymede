@@ -4,9 +4,9 @@
   </mat-option>
 </mat-autocomplete>
 <mat-autocomplete #skillAC="matAutocomplete" (optionSelected)="skillChanged(true)">
-  <mat-optgroup *ngFor="let group of skills" [label]="group.Ability">
-    <mat-option *ngFor="let skill of group.Skills" [value]="skill.Name">
-      {{skill.Name}}
+  <mat-optgroup *ngFor="let group of skills" [label]="group.ability">
+    <mat-option *ngFor="let skill of group.skills" [value]="skill.name">
+      {{skill.name}}
     </mat-option>
   </mat-optgroup>
 </mat-autocomplete>
@@ -59,8 +59,8 @@
 
         <div class="u-margin-bottom-2x">
           <mat-chip-list>
-            <mat-chip *ngFor="let s of monster.Features.Skills" (removed)="removeSkill(s.Name)">
-              {{s.ModifyingAbility}} ({{s.Name}}) <i class="fa fa-times-circle" matChipRemove></i>
+            <mat-chip *ngFor="let s of monster.features.skills" (removed)="removeSkill(s.name)">
+              {{s.modifyingAbility}} ({{s.name}}) <i class="fa fa-times-circle" matChipRemove></i>
             </mat-chip>
           </mat-chip-list>
         </div>
@@ -104,9 +104,9 @@
         <div class="u-flex u-flex__wrap">
           <div class="col-6 u-padding-x-none u-flex u-flex__column u-flex__justify--space-between">
             <label>Vulnerabilities</label>
-            <div class="u-margin-bottom-2x" *ngIf="monster.Features.DamageVulnerabilities.length > 0">
+            <div class="u-margin-bottom-2x" *ngIf="monster.features.damageVulnerabilities.length > 0">
               <mat-chip-list>
-                <mat-chip *ngFor="let v of monster.Features.DamageVulnerabilities" (removed)="removeVulnerability(v)">
+                <mat-chip *ngFor="let v of monster.features.damageVulnerabilities" (removed)="removeVulnerability(v)">
                   {{v}} <i class="fa fa-times-circle" matChipRemove></i>
                 </mat-chip>
               </mat-chip-list>
@@ -122,9 +122,9 @@
 
           <div class="col-6 u-padding-x-none u-flex u-flex__column u-flex__justify--space-between">
             <label>Resistances</label>
-            <div class="u-margin-bottom-2x" *ngIf="monster.Features.DamageResistances.length > 0">
+            <div class="u-margin-bottom-2x" *ngIf="monster.features.damageResistances.length > 0">
               <mat-chip-list>
-                <mat-chip *ngFor="let r of monster.Features.DamageResistances" (removed)="removeResistance(r)">
+                <mat-chip *ngFor="let r of monster.features.damageResistances" (removed)="removeResistance(r)">
                   {{r}} <i class="fa fa-times-circle" matChipRemove></i>
                 </mat-chip>
               </mat-chip-list>
@@ -140,7 +140,7 @@
 
           <div class="col-6 u-padding-x-none u-flex u-flex__column u-flex__justify--space-between">
             <label>Immunities</label>
-            <div class="u-margin-bottom-2x" *ngIf="monster.Features.DamageImmunities.length > 0">
+            <div class="u-margin-bottom-2x" *ngIf="monster.features.damageImmunities.length > 0">
               <mat-chip-list>
                 <mat-chip (removed)="removeImmunity(i)">
                   {{i}} <i class="fa fa-times-circle" matChipRemove></i>
@@ -158,9 +158,9 @@
 
           <div class="col-6 u-padding-x-none u-flex u-flex__column u-flex__justify--space-between">
             <label>Condition Immunities</label>
-            <div class="u-margin-bottom-2x" *ngIf="monster.Features.ConditionImmunities.length > 0">
+            <div class="u-margin-bottom-2x" *ngIf="monster.features.conditionImmunities.length > 0">
               <mat-chip-list>
-                <mat-chip *ngFor="let c of monster.Features.ConditionImmunities" (removed)="removeCondition(c)">
+                <mat-chip *ngFor="let c of monster.features.conditionImmunities" (removed)="removeCondition(c)">
                   {{c}} <i class="fa fa-times-circle" matChipRemove></i>
                 </mat-chip>
               </mat-chip-list>
@@ -188,8 +188,8 @@
         <div class="u-margin-bottom-2x">
           <mat-chip-list>
             <mat-chip>passive perception {{getPP()}}</mat-chip>
-            <mat-chip *ngFor="let m of monster.Features.ExtraSenses" (removed)="removeSense(m.Type)">{{m.Type}}
-              {{m.Distance}} ft. &nbsp; <i class="fa fa-times-circle" matChipRemove></i></mat-chip>
+            <mat-chip *ngFor="let m of monster.features.extraSenses" (removed)="removeSense(m.type)">{{m.type}}
+              {{m.distance}} ft. &nbsp; <i class="fa fa-times-circle" matChipRemove></i></mat-chip>
           </mat-chip-list>
         </div>
 
@@ -220,8 +220,8 @@
 
         <div class="u-margin-bottom-2x">
           <mat-chip-list>
-            <mat-chip *ngFor="let f of monster.Features.ExtraFeatures" (click)="showFeature(f)" (removed)="removeFeature(f.Name)">
-              {{f.Name}} <i class="fa fa-times-circle" matChipRemove></i></mat-chip>
+            <mat-chip *ngFor="let f of monster.features.extraFeatures" (click)="showFeature(f)" (removed)="removeFeature(f.name)">
+              {{f.name}} <i class="fa fa-times-circle" matChipRemove></i></mat-chip>
           </mat-chip-list>
         </div>
 
@@ -252,7 +252,7 @@
 
         <div class="u-margin-bottom-2x">
           <mat-chip-list>
-            <mat-chip *ngFor="let l of monster.Features.Languages.Languages" (removed)="removeLanguage(l)">
+            <mat-chip *ngFor="let l of monster.features.languages.languages" (removed)="removeLanguage(l)">
               {{l}} <i class="fa fa-times-circle" matChipRemove></i>
             </mat-chip>
           </mat-chip-list>
@@ -273,11 +273,11 @@
             Speak</mat-checkbox>
         </div>
 
-        <div *ngIf="monster.Features.Languages.Languages.length > 0">
-          <mat-checkbox [checked]="monster.Features.Languages.Telepathy > 0" (change)="triggerFeaturesForm($event)"
+        <div *ngIf="monster.features.languages.languages.length > 0">
+          <mat-checkbox [checked]="monster.features.languages.telepathy > 0" (change)="triggerFeaturesForm($event)"
             name="Has Telepathy" labelPosition="before">Has Telepathy</mat-checkbox>
           <mat-form-field *ngIf="hasTelepathy">
-            <input formControlName="telepathy" matInput type="number" placeholder="Distance" [(ngModel)]="monster.Features.Languages.Telepathy">
+            <input formControlName="telepathy" matInput type="number" placeholder="Distance" [(ngModel)]="monster.features.languages.telepathy">
             <span matSuffix>ft.</span>
           </mat-form-field>
         </div>

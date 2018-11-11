@@ -1,26 +1,26 @@
-import ArmorClass from "./armorClass";
-import MovementType from "./movementType";
-import Dice from "../../generic/dice";
+import armorClass from "./armorClass";
+import movementType from "./movementType";
+import dice from "../../generic/dice";
 
-export default class Stats {
+export default class stats {
 	constructor(
-		public Strength: number,
-		public Dexterity: number,
-		public Constitution: number,
-		public Intelligence: number,
-		public Wisdom: number,
-		public Charisma: number,
-		public Initiative: number,
-		public Speed: number,
-		public ExtraMovementTypes: MovementType[],
-		public AC: ArmorClass,
-		public HPAverage: number,
-		public HPRoll: Dice,
-		public ArmorType: string
+		public strength: number,
+		public dexterity: number,
+		public constitution: number,
+		public intelligence: number,
+		public wisdom: number,
+		public charisma: number,
+		public initiative: number,
+		public speed: number,
+		public extraMovementTypes: movementType[],
+		public ac: armorClass,
+		public hpAverage: number,
+		public hpRoll: dice,
+		public armorType: string
 	) {}
 
-	static Default() {
-		return new Stats(
+	static default() {
+		return new stats(
 			0,
 			0,
 			0,
@@ -30,9 +30,9 @@ export default class Stats {
 			0,
 			0,
 			[],
-			ArmorClass.Default(),
+			armorClass.default(),
 			0,
-			Dice.Default(),
+			dice.default(),
 			""
 		);
 	}

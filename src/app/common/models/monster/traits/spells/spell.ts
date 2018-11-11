@@ -1,52 +1,52 @@
-import SpellComponents from "./spellComponents";
-import { SpellSchool } from "../../classes/SpellData";
-import { PlayerClass } from "../../../values";
-import CastingTime from "./castingTime";
-import Range from "./range";
-import SpellDuration from "./spellDuration";
+import spellComponents from "./spellComponents";
+import { spellSchool } from "../../classes/SpellData";
+import { playerClass } from "../../../values";
+import castingTime from "./castingTime";
+import range from "./range";
+import spellDuration from "./spellDuration";
 
-export default class Spell {
+export default class spell {
 	constructor(
-		public ID: number,
-		public Name: string,
-		public Level: number,
-		public School: SpellSchool,
-		public Classes: PlayerClass[],
-		public CastingTime: CastingTime,
-		public Range: Range,
-		public Components: SpellComponents,
-		public Duration: SpellDuration,
-		public Description: string,
-		public AtHigherLevels: string
+		public id: number,
+		public name: string,
+		public level: number,
+		public school: spellSchool,
+		public classes: playerClass[],
+		public castingTime: castingTime,
+		public range: range,
+		public components: spellComponents,
+		public duration: spellDuration,
+		public description: string,
+		public atHigherLevels: string
 	) {}
 
-	public static MakeDefault() {
-		return new Spell(
+	public static makeDefault() {
+		return new spell(
 			-1,
 			"Unknown Name",
 			0,
-			SpellSchool.Abjuration,
-			[PlayerClass.Bard],
-			new CastingTime("unknown", null),
-			new Range("unknown", null),
-			new SpellComponents(false, false, null),
-			new SpellDuration("unknown", null),
+			spellSchool.abjuration,
+			[playerClass.bard],
+			new castingTime("unknown", null),
+			new range("unknown", null),
+			new spellComponents(false, false, null),
+			new spellDuration("unknown", null),
 			"<p></p>",
 			null
 		);
 	}
 
-	public static New() {
-		return new Spell(
+	public static newSpell() {
+		return new spell(
 			-1,
 			"",
 			0,
-			SpellSchool.Abjuration,
+			spellSchool.abjuration,
 			[],
-			new CastingTime("", null),
-			new Range("", null),
-			new SpellComponents(false, false, null),
-			new SpellDuration("unknown", null),
+			new castingTime("", null),
+			new range("", null),
+			new spellComponents(false, false, null),
+			new spellDuration("unknown", null),
 			"<p></p>",
 			null
 		);

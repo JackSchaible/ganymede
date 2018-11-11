@@ -1,8 +1,8 @@
-import SpellcastingClass from "../SpellcastingClass";
-import SpellData from "../SpellData";
+import spellcastingClass from "../SpellcastingClass";
+import spellData from "../SpellData";
 
-export default class Warlock extends SpellcastingClass {
+export default class warlock extends spellcastingClass {
 	constructor() {
-		super("Warlock", "Charisma", SpellData.SpellSlotAdvancement.Warlock);
+		super("Warlock", "Charisma", spellData.spellSlotAdvancement.warlock);
 	}
 }

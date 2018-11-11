@@ -1,6 +1,6 @@
-export default class SpellData {
-	public static SpellSlotAdvancement = {
-		FullCaster: [
+export default class spellData {
+	public static spellSlotAdvancement = {
+		fullCaster: [
 			[2, 0, 0, 0, 0, 0, 0, 0, 0], //1
 			[3, 0, 0, 0, 0, 0, 0, 0, 0], //2
 			[4, 2, 0, 0, 0, 0, 0, 0, 0], //3
@@ -23,7 +23,7 @@ export default class SpellData {
 			[4, 3, 3, 3, 3, 2, 2, 1, 1] //20
 		],
 
-		HalfCaster: [
+		halfCaster: [
 			[0, 0, 0, 0, 0], //1
 			[2, 0, 0, 0, 0], //2
 			[3, 0, 0, 0, 0], //3
@@ -46,7 +46,7 @@ export default class SpellData {
 			[4, 3, 3, 3, 2] //20
 		],
 
-		Warlock: [
+		warlock: [
 			[1, 0, 0, 0, 0], //1
 			[2, 0, 0, 0, 0], //2
 			[0, 2, 0, 0, 0], //3
@@ -70,13 +70,13 @@ export default class SpellData {
 		]
 	};
 
-	public static Cantrips = {
-		BardDruid: [2, 2, 2, 3, 3, 3, 3, 3, 3, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4],
-		ClericWizard: [3, 3, 3, 4, 4, 4, 4, 4, 4, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5],
-		Sorcerer: [4, 4, 4, 5, 5, 5, 5, 5, 5, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6]
+	public static cantrips = {
+		bardDruid: [2, 2, 2, 3, 3, 3, 3, 3, 3, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4],
+		clericWizard: [3, 3, 3, 4, 4, 4, 4, 4, 4, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5],
+		sorcerer: [4, 4, 4, 5, 5, 5, 5, 5, 5, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6]
 	};
 
-	public static CastingTimes: string[] = [
+	public static castingTimes: string[] = [
 		"action",
 		"Reaction",
 		"bonus action",
@@ -84,8 +84,8 @@ export default class SpellData {
 		"minute",
 		"hour"
 	];
-	public static Ranges: string[] = ["Self", "Touch", "feet", "hour"];
-	public static Durations: string[] = [
+	public static ranges: string[] = ["Self", "Touch", "feet", "hour"];
+	public static durations: string[] = [
 		"Instantaneous",
 		"round",
 		"minute",
@@ -99,13 +99,13 @@ export default class SpellData {
 	];
 }
 
-export enum SpellSchool {
-	Abjuration = "Abjuration",
-	Conjuration = "Conjuration",
-	Divination = "Divination",
-	Enchantment = "Enchantment",
-	Evocation = "Evocation",
-	Illusion = "Illusion",
-	Necromancy = "Necromancy",
-	Transmutation = "Transmutation"
+export enum spellSchool {
+	abjuration = "Abjuration",
+	conjuration = "Conjuration",
+	divination = "Divination",
+	enchantment = "Enchantment",
+	evocation = "Evocation",
+	illusion = "Illusion",
+	necromancy = "Necromancy",
+	transmutation = "Transmutation"
 }

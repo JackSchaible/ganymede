@@ -1,6 +1,6 @@
-import Trait from "./trait";
-import { Spells } from "./spells/spells";
+import trait from "./trait";
+import { spells } from "./spells/spells";
 
-export default class Traits {
-	constructor(public Traits: Trait[], public Spells: Spells) {}
+export default class traits {
+	constructor(public traits: trait[], public spells: spells) {}
 }

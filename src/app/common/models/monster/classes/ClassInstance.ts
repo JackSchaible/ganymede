@@ -1,5 +1,5 @@
-import BaseClass from "./BaseClass";
+import baseClass from "./BaseClass";
 
-export default class ClassInstance {
-	constructor(public BaseClass: BaseClass, public Level: number) {}
+export default class classInstance {
+	constructor(public baseClass: baseClass, public level: number) {}
 }

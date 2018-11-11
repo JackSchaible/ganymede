@@ -1,3 +1,3 @@
-export default class Sense {
-	constructor(public Type: string, public Distance: number) {}
+export default class sense {
+	constructor(public type: string, public distance: number) {}
 }

@@ -1,6 +1,6 @@
-import BaseClass from "../BaseClass";
+import baseClass from "../BaseClass";
 
-export default class Fighter extends BaseClass {
+export default class fighter extends baseClass {
 	constructor() {
 		super("Fighter");
 	}

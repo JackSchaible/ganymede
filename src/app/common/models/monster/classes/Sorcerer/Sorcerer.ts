@@ -1,13 +1,13 @@
-import SpellcastingClass from "../SpellcastingClass";
-import SpellData from "../SpellData";
+import spellcastingClass from "../SpellcastingClass";
+import spellData from "../SpellData";
 
-export default class Sorcerer extends SpellcastingClass {
+export default class sorcerer extends spellcastingClass {
 	constructor() {
 		super(
 			"Sorcerer",
 			"Charisma",
-			SpellData.SpellSlotAdvancement.FullCaster,
-			SpellData.Cantrips.Sorcerer
+			spellData.spellSlotAdvancement.fullCaster,
+			spellData.cantrips.sorcerer
 		);
 	}
 }

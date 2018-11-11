@@ -1,13 +1,13 @@
-import SpellcastingClass from "../SpellcastingClass";
-import SpellData from "../SpellData";
+import spellcastingClass from "../SpellcastingClass";
+import spellData from "../SpellData";
 
-export default class Bard extends SpellcastingClass {
+export default class bard extends spellcastingClass {
 	constructor() {
 		super(
 			"Bard",
 			"Charisma",
-			SpellData.SpellSlotAdvancement.FullCaster,
-			SpellData.Cantrips.BardDruid
+			spellData.spellSlotAdvancement.fullCaster,
+			spellData.cantrips.bardDruid
 		);
 	}
 }

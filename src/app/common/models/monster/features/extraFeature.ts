@@ -1,3 +1,3 @@
-export default class ExtraFeature {
-	constructor(public Name: string, public Description: string) {}
+export default class extraFeature {
+	constructor(public name: string, public description: string) {}
 }
