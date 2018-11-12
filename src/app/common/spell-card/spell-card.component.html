@@ -4,21 +4,27 @@
   </div>
 
   <div class="u-text-center">
-    <p *ngIf="spell.level > 0" class="level white">{{spellLevel}}-level {{spell.school}}</p>
-    <p *ngIf="spell.level === 0" class="level white">{{spell.school}} cantrip</p>
+    <p *ngIf="spell.level > 0" class="level white">{{spellLevel}}-level {{getSchoolName(spell.school)}}</p>
+    <p *ngIf="spell.level === 0" class="level white">{{getSchoolName(spell.school)}} cantrip</p>
   </div>
 
   <div class="u-flex u-flex__wrap u-text-center details">
     <div>
       <p class="details-title">Casting Time</p>
-      <p class="details-value"><span *ngIf="spell.castingTime.timeType !== 'Reaction'">{{spell.castingTime.amount}}
-        </span>{{spell.castingTime.timeType}}</p>
+      <p class="details-value">
+        <span *ngIf="spell.castingTime.timeType !== 'Reaction'">{{spell.castingTime.amount}}</span>
+        {{spell.castingTime.timeType}}
+      </p>
     </div>
 
     <div>
       <p class="details-title">Range</p>
-      <p class="details-value"><span *ngIf="spell.range.rangeType !== 'Self' && spell.range.rangeType !== 'Touch'">{{spell.range.amount}}
-        </span>{{spell.range.rangeType}}</p>
+      <p class="details-value">
+        <span *ngIf="spell.range.rangeType !== 'Self' && spell.range.rangeType !== 'Touch'">
+          {{spell.range.amount}}
+        </span>
+        {{spell.range.rangeType}}
+      </p>
     </div>
 
     <div>
@@ -58,7 +64,7 @@
   </div>
 
   <div class="higher-levels u-padding-x u-padding-y-half" *ngIf="spell.atHigherLevels || spell.atHigherLevels === ''">
-    <p>{{spell.atHigherLevels}}</p>
+    <p [innerHTML]="spell.atHigherLevels"></p>
   </div>
 
   <p class="className u-margin-top-half">{{getClassName(spell.classes[0])}}</p>

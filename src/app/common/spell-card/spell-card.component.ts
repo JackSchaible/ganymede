@@ -5,9 +5,10 @@ import {
 	OnChanges,
 	ViewEncapsulation
 } from "@angular/core";
-import spell from "../models/monster/traits/spells/spell";
+import Spell from "../models/monster/traits/spells/spell";
 import { WordService } from "src/app/services/word.service";
-import { playerClass } from "../models/values";
+import { PlayerClass } from "../models/values";
+import { SpellSchool } from "../models/monster/classes/SpellData";
 
 @Component({
 	selector: "gm-spell-card",
@@ -17,12 +18,12 @@ import { playerClass } from "../models/values";
 })
 export class SpellCardComponent implements OnInit, OnChanges {
 	@Input()
-	public spell: spell;
+	public spell: Spell;
 
 	private cardColor: string;
 	private spellLevel: string;
 
-	constructor(private words: WordService) {}
+	constructor(private words: WordService) { }
 
 	ngOnInit() {
 		this.onChange();
@@ -38,36 +39,40 @@ export class SpellCardComponent implements OnInit, OnChanges {
 
 		if (this.spell.classes && this.spell.classes.length > 0)
 			switch (this.spell.classes[0]) {
-				case playerClass.bard:
+				case PlayerClass.bard:
 					this.cardColor = "purple";
 					break;
 
-				case playerClass.cleric:
+				case PlayerClass.cleric:
 					this.cardColor = "yellow";
 					break;
 
-				case playerClass.druid:
+				case PlayerClass.druid:
 					this.cardColor = "green";
 					break;
 
-				case playerClass.paladin:
+				case PlayerClass.paladin:
 					this.cardColor = "azure";
 					break;
 
-				case playerClass.ranger:
+				case PlayerClass.ranger:
 					this.cardColor = "brown";
 					break;
 
-				case playerClass.sorcerer:
-				case playerClass.warlock:
-				case playerClass.wizard:
+				case PlayerClass.sorcerer:
+				case PlayerClass.warlock:
+				case PlayerClass.wizard:
 					this.cardColor = "red";
 					break;
 			}
 		else this.cardColor = "red";
 	}
 
-	private getClassName(pc: playerClass): string {
-		return playerClass[pc];
+	private getClassName(pc: PlayerClass): string {
+		return PlayerClass[pc];
+	}
+
+	private getSchoolName(school: SpellSchool): string {
+		return SpellSchool[school];
 	}
 }

@@ -1,13 +1,20 @@
-import { Component, OnInit, Input, ViewChild, OnDestroy } from "@angular/core";
-import spell from "src/app/common/models/monster/traits/spells/spell";
-import { playerClass } from "src/app/common/models/values";
+import {
+	Component,
+	OnInit,
+	Input,
+	ViewChild,
+	OnDestroy,
+	ChangeDetectorRef
+} from "@angular/core";
+import Spell from "src/app/common/models/monster/traits/spells/spell";
+import { PlayerClass } from "src/app/common/models/values";
 import { FormGroup, FormBuilder } from "@angular/forms";
 import { SpellCardComponent } from "src/app/common/spell-card/spell-card.component";
 import spellData, {
-	spellSchool
+	SpellSchool
 } from "src/app/common/models/monster/classes/SpellData";
 import { SpellService } from "src/app/services/spell.service";
-import { Router } from "@angular/router";
+import { Router, ActivatedRoute } from "@angular/router";
 
 @Component({
 	selector: "gm-spell-edit",
@@ -15,7 +22,7 @@ import { Router } from "@angular/router";
 })
 export class SpellEditComponent implements OnInit, OnDestroy {
 	@Input()
-	public spell: spell;
+	public spell: Spell;
 
 	@Input()
 	public isModal: boolean;
@@ -31,6 +38,7 @@ export class SpellEditComponent implements OnInit, OnDestroy {
 		timeAmount: [],
 		rangeAmount: [],
 		materialComponent: [],
+		durationAmount: [],
 		description: [],
 		atHigherLevels: []
 	};
@@ -40,7 +48,7 @@ export class SpellEditComponent implements OnInit, OnDestroy {
 	private selectedClasses: string[];
 
 	private classes: string[];
-	private schools: spellSchool[];
+	private schools: SpellSchool[];
 	private castingTimes: string[] = spellData.castingTimes;
 	private ranges: string[] = spellData.ranges;
 	private durations: string[] = spellData.durations;
@@ -59,30 +67,40 @@ export class SpellEditComponent implements OnInit, OnDestroy {
 	constructor(
 		protected formBuilder: FormBuilder,
 		private spellService: SpellService,
-		private router: Router
+		private router: Router,
+		private route: ActivatedRoute,
+		private change: ChangeDetectorRef
 	) {
-		if (!this.spell) this.spell = spell.makeDefault();
-
 		this.classes = [];
 		this.selectedClasses = [];
-
-		let classKeys = Object.keys(playerClass);
-		classKeys = classKeys.splice(classKeys.length / 2, classKeys.length);
-
-		for (let i = 0; i < classKeys.length; i++) {
-			var text = classKeys[i];
-			this.classes.push(text);
-
-			if (this.spell && this.spell.classes.indexOf(playerClass[text]) >= 0)
-				this.selectedClasses.push(text);
-		}
-
-		this.schools = Object.keys(spellSchool).map(key => spellSchool[key]);
-
 		this.formChange = this.formChange.bind(this);
+
+		if (!this.spell) this.spell = Spell.makeDefault();
 	}
 
 	ngOnInit() {
+		this.route.params.subscribe(p => {
+			const id = +p["spellId"];
+
+			this.spellService.getSpell(id).subscribe(s => {
+				this.spell = s;
+
+				let classKeys = Object.keys(PlayerClass);
+				classKeys = classKeys.splice(classKeys.length / 2, classKeys.length);
+
+				for (let i = 0; i < classKeys.length; i++) {
+					var text = classKeys[i];
+					this.classes.push(text);
+
+					if (this.spell && this.spell.classes.indexOf(PlayerClass[text]) >= 0)
+						this.selectedClasses.push(text);
+				}
+
+				this.schools = Object.keys(SpellSchool).map(key => SpellSchool[key]);
+				this.change.detectChanges();
+			});
+		});
+
 		this.formGroup = this.formBuilder.group(this.form);
 		this.isNew = !!this.spell;
 		this.formGroup.valueChanges.subscribe(form => this.formChange(form));
@@ -105,9 +123,9 @@ export class SpellEditComponent implements OnInit, OnDestroy {
 
 		value = value.trim();
 
-		if (this.spell.classes.indexOf(playerClass[value]) === -1) {
+		if (this.spell.classes.indexOf(PlayerClass[value]) === -1) {
 			this.selectedClasses.push(value);
-			this.spell.classes.push(playerClass[value]);
+			this.spell.classes.push(PlayerClass[value]);
 		}
 
 		control.setValue(null);
@@ -115,7 +133,7 @@ export class SpellEditComponent implements OnInit, OnDestroy {
 	}
 
 	private removeClass(pcStr: string): void {
-		const pc = playerClass[pcStr];
+		const pc = PlayerClass[pcStr];
 		let index = this.selectedClasses.indexOf(pc);
 		if (index >= 0) this.selectedClasses.splice(index, 1);
 
@@ -125,13 +143,13 @@ export class SpellEditComponent implements OnInit, OnDestroy {
 		this.spellCard.onChange();
 	}
 
-	private getClassName(pc: playerClass): string {
-		return playerClass[pc];
+	private getClassName(pc: PlayerClass): string {
+		return PlayerClass[pc];
 	}
 	//#endregion
 
-	private getSchoolName(school: spellSchool): string {
-		return spellSchool[school];
+	private getSchoolName(school: SpellSchool): string {
+		return SpellSchool[school];
 	}
 
 	private handleComponentChange(type: string): void {
@@ -186,10 +204,10 @@ export class SpellEditComponent implements OnInit, OnDestroy {
 			const id = parseInt(result);
 
 			if (isNaN(id)) this.errorMessage = this.knownErrors["API_ERR_UNK"];
-			else this.spell.id = id;
+			else this.spell.spellID = id;
 			this.successMessage = `Your spell ${
 				this.spell.name
-			} has been successfully ${this.isNew ? "created" : "updated"}!`;
+				} has been successfully ${this.isNew ? "created" : "updated"}!`;
 			this.isNew = false;
 
 			this.timeoutId = setTimeout(() => {
@@ -212,7 +230,7 @@ export class SpellEditComponent implements OnInit, OnDestroy {
 			else {
 				this.successMessage = `Your spell ${
 					this.spell.name
-				} has been successfully deleted!`;
+					} has been successfully deleted!`;
 				this.timeoutId = setTimeout(() => {
 					this.successMessage = null;
 					this.router.navigateByUrl("/spells");

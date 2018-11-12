@@ -99,13 +99,13 @@ export default class spellData {
 	];
 }
 
-export enum spellSchool {
-	abjuration = "Abjuration",
-	conjuration = "Conjuration",
-	divination = "Divination",
-	enchantment = "Enchantment",
-	evocation = "Evocation",
-	illusion = "Illusion",
-	necromancy = "Necromancy",
-	transmutation = "Transmutation"
+export enum SpellSchool {
+	abjuration,
+	conjuration,
+	divination,
+	enchantment,
+	evocation,
+	illusion,
+	necromancy,
+	transmutation
 }

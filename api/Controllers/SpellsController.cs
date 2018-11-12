@@ -33,7 +33,10 @@ namespace api.Controllers
         [HttpGet]
         public IEnumerable<SpellModel> Get()
         {
-            return _mapper.Map<List<SpellModel>>(_ctx.Spells.Where(x => x.User.Email == User.FindFirst("sub").Value));
+            return _mapper.Map<List<SpellModel>>(_ctx.Spells.Where(x => x.User.Email == User.FindFirst("sub").Value))
+	            .OrderBy(x => x.Classes.First().ToString())
+	            .ThenBy(x => x.Level)
+	            .ThenBy(x => x.Name);
         }
 
         [Route("GetAll")]
@@ -46,7 +49,12 @@ namespace api.Controllers
         [HttpGet("{id}", Name = "Get")]
         public SpellModel Get(int id)
         {
-            return _mapper.Map<SpellModel>(_ctx.Spells.First(x => x.SpellID == id));
+            var spell = _mapper.Map<SpellModel>(
+	            _ctx.Spells
+		            .Where(x => x.User.Email == User.FindFirst("sub").Value)
+		            .First(x => x.SpellID == id));
+
+	        return spell;
         }
 
         // POST: api/SpellModels

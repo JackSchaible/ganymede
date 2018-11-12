@@ -1,204 +1,185 @@
 <mat-autocomplete #classesAC="matAutocomplete">
-  <mat-option *ngFor="let pc of classes" [value]="pc">
-    {{pc}}
-  </mat-option>
+	<mat-option *ngFor="let pc of classes" [value]="pc">{{ pc }}</mat-option>
 </mat-autocomplete>
 <gm-processing-overlay [isActive]="processing" [message]="processingMessage"></gm-processing-overlay>
 
-<div *ngIf="isModal; else standalone">
-  <h1 mat-dialog-title>
-    <span *ngIf="isNew">Create A</span>
-    <span *ngIf="!isNew">Edit Your</span>
-    Spell
-  </h1>
+<div *ngIf="isModal; else: standalone">
+	<h1 mat-dialog-title>
+		<span *ngIf="isNew">Create A</span> <span *ngIf="!isNew">Edit Your</span> Spell
+	</h1>
 
-  <div mat-dialog-content>
-    <ng-container *ngTemplateOutlet="form; context: this"></ng-container>
-  </div>
+	<div mat-dialog-content>
+		<ng-container *ngTemplateOutlet="form; context: this"></ng-container>
+	</div>
 </div>
 
 <ng-template #standalone>
-  <ng-container *ngTemplateOutlet="form; context: this"></ng-container>
+	<ng-container *ngTemplateOutlet="form; context: this"></ng-container>
 </ng-template>
 
 <ng-template #form>
-  <h2 *ngIf="!isModal">
-    <span *ngIf="isNew">Create A</span>
-    <span *ngIf="!isNew">Edit Your</span>
-    Spell
-  </h2>
+	<h2 *ngIf="!isModal">
+		<span *ngIf="isNew">Create A</span> <span *ngIf="!isNew">Edit Your</span> Spell
+	</h2>
 
-  <main class="u-margin-all-2x">
+	<main class="u-margin-all-2x">
+		<div class="u-flex">
+			<form [formGroup]="formGroup" class="flex-grow-1 u-margin-right-half mat-elevation-z8 u-flex u-flex__column u-flex__justify--space-around">
+				<input autocomplete="false" name="hidden" type="text" style="display:none;" />
 
-    <div class="u-flex">
-      <form [formGroup]="formGroup" class="flex-grow-1 u-margin-right-half mat-elevation-z8 u-flex u-flex__column u-flex__justify--space-around">
-        <input autocomplete="false" name="hidden" type="text" style="display:none;">
+				<mat-accordion>
+					<mat-expansion-panel [expanded]="true">
+						<mat-expansion-panel-header>
+							<mat-panel-title>Basic Info</mat-panel-title>
+						</mat-expansion-panel-header>
 
-        <mat-accordion>
-          <mat-expansion-panel [expanded]="true">
-            <mat-expansion-panel-header>
-              <mat-panel-title>
-                Basic Info
-              </mat-panel-title>
-            </mat-expansion-panel-header>
+						<!-- Name -->
+						<mat-form-field class="col-6"><input matInput placeholder="Name" [(ngModel)]="spell.name" formControlName="name" /></mat-form-field>
 
+						<!-- School -->
+						<mat-form-field class="col-6">
+							<mat-select placeholder="School" [(value)]="spell.school">
+								<mat-option *ngFor="let school of schools" [value]="school">{{ getSchoolName(school) }}</mat-option>
+							</mat-select>
+						</mat-form-field>
 
-            <!--Name-->
-            <mat-form-field class="col-6">
-              <input matInput placeholder="Name" [(ngModel)]="spell.name" formControlName="name">
-            </mat-form-field>
+						<!-- Class(es) -->
+						<div>
+							<label>Classes</label>
+							<div class="col-12">
+								<mat-chip-list>
+									<mat-chip *ngFor="let pc of spell.classes" (removed)="removeClass(pc)">
+										{{ getClassName(pc) }} <i class="fa fa-times-circle" matChipRemove></i>
+									</mat-chip>
+								</mat-chip-list>
+							</div>
 
-            <!--School-->
-            <mat-form-field class="col-6">
-              <mat-select placeholder="School" [(value)]="spell.school">
-                <mat-option *ngFor="let school of schools" [value]="school">
-                  {{getSchoolName(school)}}
-                </mat-option>
-              </mat-select>
-            </mat-form-field>
+							<mat-form-field class="col-12">
+								<input matInput placeholder="Add a Class" formControlName="classes" [matAutocomplete]="classesAC" />
+								<button mat-button matSuffix mat-icon-button aria-label="Clear" (click)="addClass()">
+									<i class="fa fa-plus"></i>
+								</button>
+								<mat-hint>The first class will determine the card color</mat-hint>
+							</mat-form-field>
+						</div>
+					</mat-expansion-panel>
 
-            <!--Class(es)-->
-            <div>
-              <label>Classes</label>
-              <div class="col-12">
-                <mat-chip-list>
-                  <mat-chip *ngFor="let pc of spell.classes" (removed)="removeClass(pc)">
-                    {{getClassName(pc)}}
-                    <i class="fa fa-times-circle" matChipRemove></i>
-                  </mat-chip>
-                </mat-chip-list>
-              </div>
+					<mat-expansion-panel>
+						<mat-expansion-panel-header>
+							<mat-panel-title>Spell Info</mat-panel-title>
+						</mat-expansion-panel-header>
 
-              <mat-form-field class="col-12">
-                <input matInput placeholder="Add a Class" formControlName="classes" [matAutocomplete]="classesAC">
-                <button mat-button matSuffix mat-icon-button aria-label="Clear" (click)="addClass()">
-                  <i class="fa fa-plus"></i>
-                </button>
-                <mat-hint>The first class will determine the card color</mat-hint>
-              </mat-form-field>
-            </div>
-          </mat-expansion-panel>
+						<div class="u-margin-top u-flex">
+							<!-- Casting Time -->
+							<div class="col-6 u-flex">
+								<mat-form-field class="u-padding-x-none col-6">
+									<mat-select placeholder="Casting Time" [(value)]="spell.castingTime.timeType">
+										<mat-option *ngFor="let time of castingTimes" [value]="time">{{ time }}</mat-option>
+									</mat-select>
+								</mat-form-field>
 
-          <mat-expansion-panel>
-            <mat-expansion-panel-header>
-              <mat-panel-title>
-                Spell Info
-              </mat-panel-title>
-            </mat-expansion-panel-header>
+								<mat-form-field class="u-padding-x-none col-6" *ngIf="spell.castingTime.timeType !== 'Reaction'">
+									<input matInput placeholder="Time" formControlName="timeAmount" type="text" [(ngModel)]="spell.castingTime.amount" />
+								</mat-form-field>
+							</div>
 
-            <div class="u-margin-top u-flex">
-              <!--Casting Time-->
-              <div class="col-6 u-flex">
-                <mat-form-field class="u-padding-x-none col-6">
-                  <mat-select placeholder="Casting Time" [(value)]="spell.castingTime.timeType">
-                    <mat-option *ngFor="let time of castingTimes" [value]="time">{{time}}</mat-option>
-                  </mat-select>
-                </mat-form-field>
+							<!-- Range -->
+							<div class="col-6 u-flex">
+								<mat-form-field class="u-padding-x-none col-6">
+									<mat-select placeholder="Range" [(value)]="spell.range.rangeType">
+										<mat-option *ngFor="let range of ranges" [value]="range">{{ range }}</mat-option>
+									</mat-select>
+								</mat-form-field>
 
-                <mat-form-field class="u-padding-x-none col-6" *ngIf="spell.castingTime.timeType !== 'Reaction'">
-                  <input matInput placeholder="Time" formControlName="timeAmount" type="text" [(ngModel)]="spell.castingTime.amount">
-                </mat-form-field>
-              </div>
+								<mat-form-field class="u-padding-x-none col-6" *ngIf="spell.range.rangeType !== 'Self' && spell.range.rangeType !== 'Touch'">
+									<input matInput placeholder="Distance" formControlName="rangeAmount" type="text" [(ngModel)]="spell.range.amount" />
+								</mat-form-field>
+							</div>
+						</div>
 
-              <!--Range-->
-              <div class="col-6 u-flex">
-                <mat-form-field class="u-padding-x-none col-6">
-                  <mat-select placeholder="Range" [(value)]="spell.range.rangeType">
-                    <mat-option *ngFor="let range of ranges" [value]="range">{{range}}</mat-option>
-                  </mat-select>
-                </mat-form-field>
+						<div class="u-margin-top u-flex">
+							<!-- Components -->
+							<div class="col-6">
+								<label>Components</label>
 
-                <mat-form-field class="u-padding-x-none col-6" *ngIf="spell.range.rangeType !== 'Self' && spell.range.rangeType !== 'Touch'">
-                  <input matInput placeholder="Distance" formControlName="rangeAmount" type="text" [(ngModel)]="spell.range.amount">
-                </mat-form-field>
-              </div>
-            </div>
+								<div class="u-flex u-flex__justify--space-between">
+									<mat-checkbox [checked]="spell.components.verbal" (change)="handleComponentChange('v')">Verbal</mat-checkbox>
+									<mat-checkbox [checked]="spell.components.somatic" (change)="handleComponentChange('s')">Somatic</mat-checkbox>
+									<mat-checkbox [checked]="!!spell.components.material" (change)="handleComponentChange('m')">Material</mat-checkbox>
+								</div>
 
-            <div class="u-margin-top u-flex">
-              <!--Components-->
-              <div class="col-6">
-                <label>Components</label>
+								<mat-form-field class="u-padding-none w-100" *ngIf="spell.components.material || spell.components.material === ''">
+									<input matInput placeholder="What Materials?" formControlName="materialComponent" type="text" [(ngModel)]="spell.components.material" />
+								</mat-form-field>
+							</div>
 
-                <div class="u-flex u-flex__justify--space-between">
-                  <mat-checkbox [checked]="spell.components.verbal" (change)="handleComponentChange('v')">Verbal</mat-checkbox>
-                  <mat-checkbox [checked]="spell.components.somatic" (change)="handleComponentChange('s')">Somatic</mat-checkbox>
-                  <mat-checkbox [checked]="!!spell.components.material" (change)="handleComponentChange('m')">Material</mat-checkbox>
-                </div>
+							<!-- Duration -->
+							<div class="col-6">
+								<div class="u-flex">
+									<mat-form-field class="u-padding-x-none col-6">
+										<mat-select placeholder="Duration" [(value)]="spell.duration.durationType">
+											<mat-option *ngFor="let duration of durations" [value]="duration">{{ duration }}</mat-option>
+										</mat-select>
+									</mat-form-field>
 
-                <mat-form-field class="u-padding-none" *ngIf="spell.components.material || spell.components.material === ''">
-                  <input matInput placeholder="What Materials?" formControlName="materialComponent" type="text"
-                    [(ngModel)]="spell.components.material">
-                </mat-form-field>
-              </div>
+									<mat-form-field class="u-padding-x-none col-6" *ngIf="spell.duration.durationType === 'round' || spell.duration.durationType === 'minute' || spell.duration.durationType === 'hour' || spell.duration.durationType === 'day' || spell.duration.durationType === 'year'">
+										<input matInput placeholder="Distance" formControlName="durationAmount" type="text" [(ngModel)]="spell.duration.length" />
+									</mat-form-field>
+								</div>
 
-              <!--Duration-->
-              <div class="col-6">
-                <div class="u-flex">
-                  <mat-form-field class="u-padding-x-none col-6">
-                    <mat-select placeholder="Duration" [(value)]="spell.duration.durationType">
-                      <mat-option *ngFor="let duration of durations" [value]="duration">{{duration}}</mat-option>
-                    </mat-select>
-                  </mat-form-field>
+								<mat-checkbox *ngIf="spell.duration.durationType === 'round' || spell.duration.durationType === 'minute' || spell.duration.durationType === 'hour' || spell.duration.durationType === 'day' || spell.duration.durationType === 'year'"
+								 [checked]="spell.duration.concentration" (change)="handleComponentChange('c')">
+									Concentration
+								</mat-checkbox>
+							</div>
+						</div>
+					</mat-expansion-panel>
 
-                  <mat-form-field class="u-padding-x-none col-6" *ngIf="spell.duration.durationType === 'round' || spell.duration.durationType === 'minute' || spell.duration.durationType === 'hour' || spell.duration.durationType === 'day' || spell.duration.durationType === 'year'">
-                    <input matInput placeholder="Distance" formControlName="rangeAmount" type="text" [(ngModel)]="spell.duration.length">
-                  </mat-form-field>
-                </div>
+					<mat-expansion-panel>
+						<mat-expansion-panel-header>
+							<mat-panel-title>Description</mat-panel-title>
+						</mat-expansion-panel-header>
 
-                <mat-checkbox *ngIf="spell.duration.durationType === 'round' || spell.duration.durationType === 'minute' || spell.duration.durationType === 'hour' || spell.duration.durationType === 'day' || spell.duration.durationType === 'year'"
-                  [checked]="spell.duration.concentration" (change)="handleComponentChange('c')">Concentration</mat-checkbox>
-              </div>
-            </div>
-          </mat-expansion-panel>
+						<!-- Description -->
+						<mat-form-field class="u-padding-x-none w-100">
+							<textarea matInput placeholder="Description" [(ngModel)]="spell.description" formControlName="description"></textarea>
+						</mat-form-field>
 
-          <mat-expansion-panel>
-            <mat-expansion-panel-header>
-              <mat-panel-title>
-                Spell Info
-              </mat-panel-title>
-            </mat-expansion-panel-header>
+						<!-- At Higher Levels -->
+						<mat-checkbox [checked]="spell.atHigherLevels || spell.atHigherLevels === ''" (change)="handleComponentChange('a')">
+							At Higher Levels?
+						</mat-checkbox>
+						<mat-form-field class="u-padding-x-none w-100" *ngIf="spell.atHigherLevels || spell.atHigherLevels === ''">
+							<textarea matInput placeholder="At Higher Levels" [(ngModel)]="spell.atHigherLevels" formControlName="atHigherLevels"></textarea>
+						</mat-form-field>
+					</mat-expansion-panel>
+				</mat-accordion>
 
+				<div class="u-flex u-flex__align-items--center" [class.u-flex__justify--space-between]="errorMessage || successMessage"
+				 [class.u-flex__justify--flex-end]="!errorMessage && !successMessage">
+					<p class="u-margin-left white u-flex u-flex__align-items--center text-danger" *ngIf="errorMessage">
+						<i class="fas fa-engine-warning fa-2x"></i>
+						<span class="u-margin-left-half">{{ errorMessage }}</span>
+					</p>
 
-            <!--Description-->
-            <mat-form-field class="u-padding-x-none w-100">
-              <textarea matInput placeholder="Description" [(ngModel)]="spell.description" formControlName="description"></textarea>
-            </mat-form-field>
+					<p class="u-margin-left white text-success" *ngIf="successMessage">
+						<i class="fas fa-check fa-2x"></i>
+						<span class="u-margin-left-half">{{ successMessage }}</span>
+					</p>
+					<div class="u-flex">
+						<button *ngIf="!isNew" title="delete" (click)="delete()" type="button" class="pull-right u-margin-all" mat-fab
+						 color="warn">
+							<i class="fa fa-trash"></i>
+						</button>
 
-            <!--At Higher Levels-->
-            <mat-checkbox [checked]="spell.atHigherLevels || spell.atHigherLevels === ''" (change)="handleComponentChange('a')">
-              At Higher Levels?
-            </mat-checkbox>
-            <mat-form-field class="u-padding-x-none w-100" *ngIf="spell.atHigherLevels || spell.atHigherLevels === ''">
-              <textarea matInput placeholder="At Higher Levels" [(ngModel)]="spell.atHigherLevels" formControlName="atHigherLevels"></textarea>
-            </mat-form-field>
-          </mat-expansion-panel>
-        </mat-accordion>
+						<button title="save" (click)="save()" type="button" class="pull-right u-margin-all" mat-fab color="primary">
+							<i class="fa fa-save"></i>
+						</button>
+					</div>
+				</div>
+			</form>
 
-        <div class="u-flex u-flex__align-items--center" [class.u-flex__justify--space-between]="errorMessage || successMessage"
-          [class.u-flex__justify--flex-end]="!errorMessage && !successMessage">
-          <p class="u-margin-left white u-flex u-flex__align-items--center text-danger" *ngIf="errorMessage">
-            <i class="fas fa-engine-warning fa-2x"></i>
-            <span class="u-margin-left-half">{{errorMessage}}</span>
-          </p>
-
-          <p class="u-margin-left white text-success" *ngIf="successMessage">
-            <i class="fas fa-check fa-2x"></i>
-            <span class="u-margin-left-half">{{successMessage}}</span>
-          </p>
-          <div class="u-flex">
-            <button *ngIf="!isNew" title="delete" (click)="delete()" type="button" class="pull-right u-margin-all"
-              mat-fab color="warn">
-              <i class="fa fa-trash"></i>
-            </button>
-
-            <button title="save" (click)="save()" type="button" class="pull-right u-margin-all" mat-fab color="primary">
-              <i class="fa fa-save"></i>
-            </button>
-          </div>
-        </div>
-      </form>
-
-      <gm-spell-card #card [spell]="spell" *ngIf="!isModal"></gm-spell-card>
-    </div>
-  </main>
+			<gm-spell-card #card [spell]="spell" *ngIf="!isModal"></gm-spell-card>
+		</div>
+	</main>
 </ng-template>

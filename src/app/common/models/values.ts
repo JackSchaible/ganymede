@@ -191,7 +191,7 @@ export default class values {
 	];
 }
 
-export enum playerClass {
+export enum PlayerClass {
 	barbarian,
 	bard,
 	cleric,

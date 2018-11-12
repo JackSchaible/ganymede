@@ -1,4 +1,4 @@
-import spell from "./spell";
+import Spell from "./spell";
 import classInstance from "../../classes/ClassInstance";
 
 export enum spellcastingType {
@@ -17,7 +17,7 @@ export class spells {
 }
 
 export class spellcasting extends spells {
-	constructor(public classInstance: classInstance, public spells: spell[]) {
+	constructor(public classInstance: classInstance, public spells: Spell[]) {
 		super();
 		this.type = spellcastingType.spellcasting;
 	}

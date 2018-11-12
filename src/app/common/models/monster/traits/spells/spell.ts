@@ -1,52 +1,52 @@
-import spellComponents from "./spellComponents";
-import { spellSchool } from "../../classes/SpellData";
-import { playerClass } from "../../../values";
-import castingTime from "./castingTime";
-import range from "./range";
-import spellDuration from "./spellDuration";
+import SpellComponents from "./spellComponents";
+import { SpellSchool } from "../../classes/SpellData";
+import { PlayerClass } from "../../../values";
+import CastingTime from "./castingTime";
+import Range from "./range";
+import SpellDuration from "./spellDuration";
 
-export default class spell {
+export default class Spell {
 	constructor(
-		public id: number,
+		public spellID: number,
 		public name: string,
 		public level: number,
-		public school: spellSchool,
-		public classes: playerClass[],
-		public castingTime: castingTime,
-		public range: range,
-		public components: spellComponents,
-		public duration: spellDuration,
+		public school: SpellSchool,
+		public classes: PlayerClass[],
+		public castingTime: CastingTime,
+		public range: Range,
+		public components: SpellComponents,
+		public duration: SpellDuration,
 		public description: string,
 		public atHigherLevels: string
-	) {}
+	) { }
 
 	public static makeDefault() {
-		return new spell(
+		return new Spell(
 			-1,
 			"Unknown Name",
 			0,
-			spellSchool.abjuration,
-			[playerClass.bard],
-			new castingTime("unknown", null),
-			new range("unknown", null),
-			new spellComponents(false, false, null),
-			new spellDuration("unknown", null),
+			SpellSchool.abjuration,
+			[PlayerClass.bard],
+			new CastingTime("unknown", "action"),
+			new Range("unknown", "feet"),
+			new SpellComponents(false, false, null),
+			new SpellDuration("unknown", "minute", false),
 			"<p></p>",
 			null
 		);
 	}
 
 	public static newSpell() {
-		return new spell(
+		return new Spell(
 			-1,
 			"",
 			0,
-			spellSchool.abjuration,
+			SpellSchool.abjuration,
 			[],
-			new castingTime("", null),
-			new range("", null),
-			new spellComponents(false, false, null),
-			new spellDuration("unknown", null),
+			new CastingTime("", null),
+			new Range("", null),
+			new SpellComponents(false, false, null),
+			new SpellDuration("unknown", null),
 			"<p></p>",
 			null
 		);

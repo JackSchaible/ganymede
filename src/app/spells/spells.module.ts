@@ -16,7 +16,8 @@ import {
 	MatInputModule,
 	MatCheckboxModule,
 	MatExpansionModule,
-	MatDialogModule
+	MatDialogModule,
+	MatSortModule
 } from "@angular/material";
 import { MatButtonModule } from "@angular/material/button";
 import { GmCommonModule } from "../common/gm-common.module";
@@ -40,7 +41,8 @@ import { ReactiveFormsModule } from "@angular/forms";
 		ReactiveFormsModule.withConfig({ warnOnNgModelWithFormControl: "never" }),
 		MatCheckboxModule,
 		MatExpansionModule,
-		MatDialogModule
+		MatDialogModule,
+		MatSortModule
 	],
 	declarations: [SpellsComponent, SpellsListComponent, SpellEditComponent]
 })
