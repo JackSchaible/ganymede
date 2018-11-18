@@ -54,7 +54,7 @@ export class SpellEditComponent implements OnInit, OnDestroy {
 	};
 	private successTimeout: number = 10000;
 	private deleteTimeout: number = 5000;
-	private timeoutId: NodeJS.Timer;
+	private timeoutId: any;
 
 	constructor(
 		protected formBuilder: FormBuilder,
