@@ -3,13 +3,13 @@
     <div class="u-flex">
       <gm-nav-item *ngFor="let item of items" [item]="item"></gm-nav-item>
     </div>
-    <div *isLoggedIn class="u-flex c-nav__logged-in">
-      <p class="text-white"><i class="fa fa-user-circle"></i> Welcome, {{user}}!</p>
+    <div *ngIf="isLoggedIn()" class="u-flex c-nav__logged-in">
+      <p class="text-white"><i class="fa fa-user-circle"></i> Welcome, {{getUsername()}}!</p>
 
       <button class="u-margin-x btn btn-danger" type="button" (click)="logout()"><i class="fa fa-sign-out"></i>
         Logout</button>
     </div>
-    <a *isLoggedOut routerLink="/login" class="text-white"><i class="fa fa-sign-in"></i> Login</a>
+    <a *ngIf="!isLoggedIn()" routerLink="/login" class="text-white"><i class="fa fa-sign-in"></i> Login</a>
   </nav>
 
   <ng-template #isMobile>
