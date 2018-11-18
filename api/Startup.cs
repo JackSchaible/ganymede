@@ -17,9 +17,12 @@ namespace api
 {
 	public class Startup
 	{
-		public Startup(IConfiguration configuration)
+		private IHostingEnvironment _env;
+
+		public Startup(IHostingEnvironment env, IConfiguration configuration)
 		{
 			Configuration = configuration;
+			_env = env;
 		}
 
 		public IConfiguration Configuration { get; }
@@ -53,24 +56,31 @@ namespace api
 					};
 				});
 
-		    services.AddAuthorization(o =>
-		        o.AddPolicy("ApiUser", p => p.RequireClaim("rol", "api_access")));
+			services.AddAuthorization(o =>
+				o.AddPolicy("ApiUser", p => p.RequireClaim("rol", "api_access")));
 
-			services.AddCors();
+			string domain = _env.IsDevelopment() ? "http://localhost:4200" : "http://dm.jackschaible.ca";
+
+			services.AddCors(o =>
+				o.AddPolicy("AllowOrigin",
+					b => b.WithOrigins(domain)
+						.AllowAnyHeader()
+						.AllowAnyMethod()));
 
 			services.AddScoped<IDbInitializer, DbInitializer>();
 
-		    services.AddAutoMapper();
+			services.AddAutoMapper();
+
 			services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 		}
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-		public void Configure(IApplicationBuilder app, IHostingEnvironment env, ApplicationDbContext context, IDbInitializer initializer)
+		public void Configure(IApplicationBuilder app, ApplicationDbContext context, IDbInitializer initializer)
 		{
-			if (env.IsDevelopment())
+			app.UseCors("AllowOrigin");
+
+			if (_env.IsDevelopment())
 			{
-				app.UseCors(b => b.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
-				//app.UseCors(b => b.WithOrigins("http://localhost/"));
 				app.UseDeveloperExceptionPage();
 			}
 			else
@@ -79,7 +89,7 @@ namespace api
 				app.UseHsts();
 			}
 
-		    app.UseAuthentication();
+			app.UseAuthentication();
 			app.UseHttpsRedirection();
 			app.UseMvc();
 
