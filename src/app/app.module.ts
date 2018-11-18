@@ -12,10 +12,6 @@ import { HttpClientModule } from "@angular/common/http";
 import { EncounterModule } from "./encounter/encounter.module";
 import { AuthModule } from "./auth/auth.module";
 import { FormsModule } from "./forms/forms.module";
-import {
-	IsLoggedInDirective,
-	IsLoggedOutDirective
-} from "./directives/is-logged-in.directive";
 import { MatToolbarModule, MatMenuModule } from "@angular/material";
 import { DeviceDetectorModule } from "ngx-device-detector";
 import { SpellsModule } from "./spells/spells.module";
@@ -28,8 +24,6 @@ import { NavItemComponent } from './main/nav-item/nav-item.component';
 		HomeComponent,
 		CrCalculatorComponent,
 		RouteNotFoundComponent,
-		IsLoggedInDirective,
-		IsLoggedOutDirective,
 		NavItemComponent
 	],
 	imports: [
@@ -48,4 +42,4 @@ import { NavItemComponent } from './main/nav-item/nav-item.component';
 	providers: [],
 	bootstrap: [AppComponent]
 })
-export class AppModule {}
+export class AppModule { }

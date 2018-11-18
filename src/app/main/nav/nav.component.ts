@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component } from "@angular/core";
 import { AuthService } from "../../services/auth.service";
 import { DeviceDetectorService } from "ngx-device-detector";
 import { Router } from "@angular/router";
@@ -9,7 +9,7 @@ import NavItem from "src/app/common/models/nav/navItem";
 	templateUrl: "./nav.component.html",
 	styleUrls: ["./nav.component.scss"]
 })
-export class NavComponent implements OnInit {
+export class NavComponent {
 	isMobile: boolean;
 	isTablet: boolean;
 	isDesktop: boolean;
@@ -38,12 +38,20 @@ export class NavComponent implements OnInit {
 		];
 	}
 
-	ngOnInit() {
+	getUsername(): string {
+		let user: string = null;
 		const u = this.authService.getUser();
-		if (u) this.user = u.user;
+		if (u) user = u.user;
+
+		return user;
 	}
 
 	logout() {
 		this.authService.logout();
+		this.router.navigateByUrl('/');
+	}
+
+	isLoggedIn(): boolean {
+		return this.authService.getUser();
 	}
 }
