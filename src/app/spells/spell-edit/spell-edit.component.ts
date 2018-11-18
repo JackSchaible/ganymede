@@ -114,9 +114,8 @@ export class SpellEditComponent implements OnInit, OnDestroy {
 		this.spellCard.onChange();
 	}
 
-	private removeClass(pcStr: string): void {
-		const pc = PlayerClass[pcStr];
-		let index = this.selectedClasses.indexOf(pc);
+	private removeClass(pc: PlayerClass): void {
+		let index = this.selectedClasses.indexOf(this.getClassName(pc));
 		if (index >= 0) this.selectedClasses.splice(index, 1);
 
 		index = this.spell.Classes.indexOf(pc);
@@ -189,7 +188,7 @@ export class SpellEditComponent implements OnInit, OnDestroy {
 			else this.spell.ID = id;
 			this.successMessage = `Your spell ${
 				this.spell.Name
-			} has been successfully ${this.isNew ? "created" : "updated"}!`;
+				} has been successfully ${this.isNew ? "created" : "updated"}!`;
 			this.isNew = false;
 
 			this.timeoutId = setTimeout(() => {
@@ -212,7 +211,7 @@ export class SpellEditComponent implements OnInit, OnDestroy {
 			else {
 				this.successMessage = `Your spell ${
 					this.spell.Name
-				} has been successfully deleted!`;
+					} has been successfully deleted!`;
 				this.timeoutId = setTimeout(() => {
 					this.successMessage = null;
 					this.router.navigateByUrl("/spells");
