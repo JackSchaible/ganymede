@@ -56,8 +56,8 @@ namespace api
 					};
 				});
 
-		    services.AddAuthorization(o =>
-		        o.AddPolicy("ApiUser", p => p.RequireClaim("rol", "api_access")));
+			services.AddAuthorization(o =>
+				o.AddPolicy("ApiUser", p => p.RequireClaim("rol", "api_access")));
 
 			string domain = _env.IsDevelopment() ? "http://localhost:4200" : "http://dm.jackschaible.ca";
 
@@ -69,7 +69,7 @@ namespace api
 
 			services.AddScoped<IDbInitializer, DbInitializer>();
 
-		    services.AddAutoMapper();
+			services.AddAutoMapper();
 
 			services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 		}
@@ -89,7 +89,7 @@ namespace api
 				app.UseHsts();
 			}
 
-		    app.UseAuthentication();
+			app.UseAuthentication();
 			app.UseHttpsRedirection();
 			app.UseMvc();
 
