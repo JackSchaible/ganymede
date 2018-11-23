@@ -65,8 +65,7 @@ namespace api
 				o.AddPolicy("AllowOrigin",
 					b => b.WithOrigins(domain)
 						.AllowAnyHeader()
-						.AllowAnyMethod()
-						.AllowCredentials()));
+						.AllowAnyMethod()));
 
 			services.AddScoped<IDbInitializer, DbInitializer>();
 
