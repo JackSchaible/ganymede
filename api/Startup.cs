@@ -59,7 +59,7 @@ namespace api
 			services.AddAuthorization(o =>
 				o.AddPolicy("ApiUser", p => p.RequireClaim("rol", "api_access")));
 
-			string domain = _env.IsDevelopment() ? "http://localhost:4200" : "http://dm.jackschaible.ca";
+			string domain = _env.IsDevelopment() ? "https://localhost:4200" : "http://dm.jackschaible.ca";
 
 			services.AddCors(o =>
 				o.AddPolicy("AllowOrigin",
@@ -77,6 +77,7 @@ namespace api
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
 		public void Configure(IApplicationBuilder app, ApplicationDbContext context, IDbInitializer initializer)
 		{
+			//app.UseOptions();
 			app.UseCors("AllowOrigin");
 
 			if (_env.IsDevelopment())
