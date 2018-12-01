@@ -1,7 +1,7 @@
 version: 0.0
 os: windows
 files:
-  - source: dist
+  - source: dist*
   - destination: c:\inetput\ganymede
 hooks:
   before-install:
