@@ -1,21 +1,8 @@
 version: 0.0
 os: windows
-phases:
-  install:
-    commands:
-      - echo Installing source NPM dependencies...
-      - npm install
-      - npm install -g @angular/cli
-  build:
-    commands:
-      - echo Build started on `date`
-      - ng build --prod
-  post_build:
-    commands:
-      - cp dist c:\inetpub\ganymede
-      - echo Build completed on `date`
-artifacts:
-  files:
-    - "**/*"
-  base-directory: "dist*"
-  discard-paths: yes
+files:
+  - source: dist/
+  - destination: c:\inetput\ganymede
+hooks:
+  before-install:
+    - location: build.bat
