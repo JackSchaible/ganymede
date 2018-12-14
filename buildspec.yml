@@ -4,7 +4,7 @@ phases:
   install:
     commands:
       - npm i
-      - npm i @angular/cli
+      - npm i -g @angular/cli
   build:
     commands:
       - ng build --prod
