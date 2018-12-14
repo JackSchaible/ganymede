@@ -3,7 +3,6 @@ version: 0.2
 phases:
   install:
     commands:
-      - sudo apt install nodejs
       - npm i @angular/cli
       - npm i
   build:
