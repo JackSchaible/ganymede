@@ -1,0 +1,13 @@
+version: 0.2
+
+phases:
+  install:
+    commands:
+      - echo "Installing Angular CLI"
+      - npm i @angular/cli
+      - echo "Running NPM Install"
+      - npm i
+  build:
+    commands:
+      - echo "Building"
+      - ng build --prod
