@@ -1,13 +1,9 @@
 version: 0.2
-environment_variables:
-  plaintext:
-    S3_BUCKET: "js-ganymede"
 phases:
   build:
     commands:
       - cd api
       - dotnet publish -o deploy
-  post_build:
-    commands:
-      - zip -r deploy.zip deploy
-      - aws s3 cp deploy.zip s3://${S3_BUCKET}/server
+artifacts:
+  files:
+    - deploy/*
