@@ -2,7 +2,7 @@ version: 0.0
 os: windows
 files:
   - source: api/deploy
-  - destination: C:\inetpub\wwwroot\dmapi
+    destination: C:\inetpub\wwwroot\dmapi
 hooks:
   ApplicationStop:
     - location: applicationStop.bat
