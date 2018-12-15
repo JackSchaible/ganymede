@@ -1,7 +1,7 @@
 version: 0.2
 environment_variables:
   plaintext:
-    S3_BUCKET: "js-ganymede"
+    S3_BUCKET: "dm.jackschaible.ca"
 phases:
   install:
     commands:
@@ -12,4 +12,4 @@ phases:
       - ng build --prod --aot
   post_build:
     commands:
-      - aws s3 cp dist s3://${S3_BUCKET}/BuildArti --recursive
+      - aws s3 cp dist s3://${S3_BUCKET}/ --recursive
