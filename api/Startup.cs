@@ -12,11 +12,13 @@ using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Text;
 using AutoMapper;
+using Microsoft.AspNetCore;
 
 namespace api
 {
 	public class Startup
 	{
+		public static IWebHostBuilder CreateWebHostBuilder(string[] args) => WebHost.CreateDefaultBuilder(args);
 		private IHostingEnvironment _env;
 
 		public Startup(IHostingEnvironment env, IConfiguration configuration)
@@ -72,6 +74,8 @@ namespace api
 			services.AddAutoMapper();
 
 			services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+
+			services.Configure<IISOptions>(o => { o.AutomaticAuthentication = false; });
 		}
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
