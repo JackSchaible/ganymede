@@ -3,33 +3,35 @@ import { Observable } from "rxjs";
 import { map } from "rxjs/operators";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import ApiError from "./http/apiError";
+import MasterService from "./master.service";
 
 @Injectable({
 	providedIn: "root"
 })
-export class AuthService {
+export class AuthService extends MasterService {
 	public isLoggedIn: boolean = false;
 	public redirectUrl: string;
 
-	// TODO: How to change in prod?
-	private apiUrl: string = "https://localhost:44377/api/Account";
 	private currentUserKey: string = "currentUser";
+	protected baseUrl: string = "";
 
-	constructor(private http: HttpClient) {}
+	constructor(http: HttpClient) {
+		super(http);
+	}
 
 	public login(username: string, password: string): Observable<boolean> {
-		var url = this.apiUrl + "/login";
+		const url = this.apiUrl + "/login";
 		return this.http.post(url, { email: username, password: password }).pipe(
 			map(r => {
 				if (r) {
-					let json = JSON.parse(JSON.stringify(r));
+					const json = JSON.parse(JSON.stringify(r));
 
 					if (json.token) {
 						this.isLoggedIn = true;
 
-						let user = {
+						const user = {
 							token: json.token,
-							expiry: new Date(new Date().getTime() + 1000 * 3600 * 24 * 30),
+							expiry: new Date(new Date().getTime() + 2592000000),
 							user: username
 						};
 
@@ -82,7 +84,7 @@ export class AuthService {
 	}
 
 	public getAuthHeader(): HttpHeaders {
-		var user = JSON.parse(localStorage.getItem(this.currentUserKey));
+		const user = JSON.parse(localStorage.getItem(this.currentUserKey));
 		return new HttpHeaders({
 			Authorization: `Bearer ${user.token}`
 		});
