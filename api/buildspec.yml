@@ -6,4 +6,4 @@ phases:
       - dotnet publish -o deploy
 artifacts:
   files:
-    - deploy/*
+    - api/deploy/*
