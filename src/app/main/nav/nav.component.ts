@@ -30,7 +30,7 @@ export class NavComponent {
 			new NavItem("", "fab fa-d-and-d", "DM Tools", true),
 			new NavItem("", "fa fa-home", "Home"),
 			new NavItem("CRCalculator", "fa fa-calculator", "CR Calculator"),
-			new NavItem("encounter", "fas fa-helmet-battle", "Encounters"),
+			// new NavItem("encounter", "fas fa-helmet-battle", "Encounters"),
 			new NavItem(null, "fas fa-wand-magic", "Spells", false, [
 				new NavItem("spells", "fas fa-clipboard-list", "My Spells"),
 				new NavItem("spells/add", "fa fa-plus-square", "New Spell")
@@ -48,7 +48,7 @@ export class NavComponent {
 
 	logout() {
 		this.authService.logout();
-		this.router.navigateByUrl('/');
+		this.router.navigateByUrl("/");
 	}
 
 	isLoggedIn(): boolean {
