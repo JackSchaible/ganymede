@@ -1,4 +1,4 @@
 export const environment = {
 	production: true,
-	apiUrl: "http://api.dm.jackschaible.ca/"
+	apiUrl: "http://api.dm.jackschaible.ca/api/"
 };

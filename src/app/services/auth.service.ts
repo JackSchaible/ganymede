@@ -13,14 +13,14 @@ export class AuthService extends MasterService {
 	public redirectUrl: string;
 
 	private currentUserKey: string = "currentUser";
-	protected baseUrl: string = "";
+	protected baseUrl: string = this.apiUrl + "Account/";
 
 	constructor(http: HttpClient) {
 		super(http);
 	}
 
 	public login(username: string, password: string): Observable<boolean> {
-		const url = this.apiUrl + "login";
+		const url = this.baseUrl + "login";
 		return this.http.post(url, { email: username, password: password }).pipe(
 			map(r => {
 				if (r) {
@@ -50,7 +50,7 @@ export class AuthService extends MasterService {
 		password: string
 	): Observable<boolean | ApiError[]> {
 		return this.http
-			.post(this.apiUrl + "register", {
+			.post(this.baseUrl + "register", {
 				email: username,
 				password: password
 			})
