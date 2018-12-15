@@ -5,6 +5,7 @@ environment_variables:
 phases:
   build:
     commands:
+      - cd api
       - dotnet publish -o deploy
   post_build:
     commands:
