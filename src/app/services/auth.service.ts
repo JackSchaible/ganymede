@@ -20,7 +20,7 @@ export class AuthService extends MasterService {
 	}
 
 	public login(username: string, password: string): Observable<boolean> {
-		const url = this.apiUrl + "/login";
+		const url = this.apiUrl + "login";
 		return this.http.post(url, { email: username, password: password }).pipe(
 			map(r => {
 				if (r) {
@@ -50,7 +50,7 @@ export class AuthService extends MasterService {
 		password: string
 	): Observable<boolean | ApiError[]> {
 		return this.http
-			.post(this.apiUrl + "/register", {
+			.post(this.apiUrl + "register", {
 				email: username,
 				password: password
 			})
