@@ -1,0 +1,10 @@
+version: 0.0
+os: windows
+files:
+  - source: *
+  - destination: C:\inetpub\wwwroot\dmapi
+hooks:
+  ApplicationStop:
+    - iisreset /stop
+  ApplicationStart:
+    - iisreset /start
