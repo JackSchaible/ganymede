@@ -10,4 +10,4 @@ phases:
   post_build:
     commands:
       - zip -r deploy.zip deploy
-      - aws s3 cp deploy.zip s3://${S3_BUCKET}/server --recursive
+      - aws s3 cp deploy.zip s3://${S3_BUCKET}/server
