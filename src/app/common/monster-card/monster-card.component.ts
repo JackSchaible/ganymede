@@ -22,17 +22,17 @@ export class MonsterCardComponent implements OnChanges, OnInit {
 	@Input()
 	monster: Monster;
 
-	private alignmentString: string;
+	public alignmentString: string;
 
-	private strMod: string;
-	private dexMod: string;
-	private conMod: string;
-	private intMod: string;
-	private wisMod: string;
-	private chaMod: string;
+	public strMod: string;
+	public dexMod: string;
+	public conMod: string;
+	public intMod: string;
+	public wisMod: string;
+	public chaMod: string;
 
-	private cr: string;
-	private xp: number;
+	public cr: string;
+	public xp: number;
 
 	constructor(
 		private calc: CalculatorService,
@@ -96,16 +96,16 @@ export class MonsterCardComponent implements OnChanges, OnInit {
 		this.change.detectChanges();
 	}
 
-	private getPP(): number {
+	public getPP(): number {
 		return this.calc.calcPP(this.monster.Stats);
 	}
 
-	private getST(savingThrow: Skill): string {
+	public getST(savingThrow: Skill): string {
 		let num = this.calc.calcSavingThrow(savingThrow, this.monster);
 		return (num >= 0 ? "+" : "-") + num;
 	}
 
-	private getSkill(skill: Skill): string {
+	public getSkill(skill: Skill): string {
 		let num = this.calc.calcSkill(skill, this.monster);
 
 		for (let i = 0; i < Values.Skills.length; i++) {
@@ -127,7 +127,7 @@ export class MonsterCardComponent implements OnChanges, OnInit {
 		}${num}`;
 	}
 
-	private getSpellsaveDC(): number {
+	public getSpellsaveDC(): number {
 		return (
 			8 +
 			this.monster.BasicInfo.ProficiencyModifier +
@@ -139,7 +139,7 @@ export class MonsterCardComponent implements OnChanges, OnInit {
 		);
 	}
 
-	private getSpellAttackMod(): string {
+	public getSpellAttackMod(): string {
 		const num =
 			this.monster.BasicInfo.ProficiencyModifier +
 			this.calc.getModifierByName(
@@ -151,7 +151,7 @@ export class MonsterCardComponent implements OnChanges, OnInit {
 		return (num >= 0 ? "+" : "-") + num;
 	}
 
-	private getSpellSlots(): any[] {
+	public getSpellSlots(): any[] {
 		const instance = (this.monster.Traits.Spells as Spellcasting).ClassInstance;
 		const base = instance.BaseClass as SpellcastingClass;
 

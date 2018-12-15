@@ -39,14 +39,14 @@ export class SpellEditComponent implements OnInit, OnDestroy {
 
 	private selectedClasses: string[];
 
-	private classes: string[];
+	public classes: string[];
 	private schools: SpellSchool[];
 	private castingTimes: string[] = SpellData.CastingTimes;
 	private ranges: string[] = SpellData.Ranges;
 	private durations: string[] = SpellData.Durations;
 
-	private processing: boolean;
-	private processingMessage: string;
+	public processing: boolean;
+	public processingMessage: string;
 	private errorMessage: string;
 	private successMessage: string;
 	private knownErrors: any = {

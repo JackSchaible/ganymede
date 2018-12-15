@@ -7,4 +7,4 @@ phases:
       - npm i -g @angular/cli
   build:
     commands:
-      - ng build --prod
+      - ng build --prod --aot

@@ -2,7 +2,6 @@ import {
 	Input,
 	Output,
 	ViewChild,
-	Component,
 	OnInit,
 	ChangeDetectorRef
 } from "@angular/core";
@@ -12,10 +11,7 @@ import { CalculatorService } from "../../services/calculator.service";
 import { FormBuilder, FormGroup } from "@angular/forms";
 import { MatSnackBar } from "@angular/material";
 
-@Component({
-	selector: "gm-monster-form"
-})
-export default abstract class MonsterForm implements OnInit {
+export abstract class MonsterFormComponent implements OnInit {
 	@Input()
 	@Output()
 	public monster: Monster;
@@ -27,7 +23,7 @@ export default abstract class MonsterForm implements OnInit {
 	@ViewChild(MonsterCardComponent)
 	protected card: MonsterCardComponent;
 
-	protected formGroup: FormGroup;
+	public formGroup: FormGroup;
 	protected abstract form: any;
 
 	constructor(

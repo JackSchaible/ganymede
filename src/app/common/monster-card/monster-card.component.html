@@ -121,7 +121,7 @@
     </div>
 
     <!--Traits-->
-    <div class="divider-thick" *ngIf="monster.Traits.Traits.length > 0 || monster.Traits.Spells.Type !== 'none'"></div>
+    <div class="divider-thick" *ngIf="monster.Traits.Traits.length > 0 || monster.Traits.Spells.Type !== 0"></div>
 
     <div class="info-list" *ngIf="monster.Traits.Traits.length > 0">
       <p *ngFor="let t of monster.Traits.Traits">

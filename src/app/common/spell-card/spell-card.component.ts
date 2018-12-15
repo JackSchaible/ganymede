@@ -19,8 +19,8 @@ export class SpellCardComponent implements OnInit, OnChanges {
 	@Input()
 	public spell: Spell;
 
-	private cardColor: string;
-	private spellLevel: string;
+	public cardColor: string;
+	public spellLevel: string;
 
 	constructor(private words: WordService) {}
 
@@ -67,7 +67,7 @@ export class SpellCardComponent implements OnInit, OnChanges {
 		else this.cardColor = "red";
 	}
 
-	private getClassName(pc: PlayerClass): string {
+	public getClassName(pc: PlayerClass): string {
 		return PlayerClass[pc];
 	}
 }

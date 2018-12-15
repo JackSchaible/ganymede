@@ -10,10 +10,10 @@ export class MonsterComponent {
 	@Input()
 	public monster: Monster;
 
-	private form1Complete: boolean;
-	private form2Complete: boolean;
-	private form3Complete: boolean;
-	private form4Complete: boolean;
+	public form1Complete: boolean;
+	public form2Complete: boolean;
+	public form3Complete: boolean;
+	public form4Complete: boolean;
 
 	constructor() {
 		if (!this.monster) this.monster = Monster.New();

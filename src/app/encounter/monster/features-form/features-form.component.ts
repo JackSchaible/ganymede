@@ -4,7 +4,7 @@ import Values from "../../../common/models/values";
 import Feature from "../../../common/models/monster/feature";
 import { MatCheckboxChange, MatSnackBar } from "@angular/material";
 import { CalculatorService } from "../../../services/calculator.service";
-import MonsterForm from "../monsterForm";
+import { MonsterFormComponent } from "../monsterFormComponent";
 import Skill, {
 	SkillGroup
 } from "src/app/common/models/monster/features/skill";
@@ -15,7 +15,7 @@ import Sense from "src/app/common/models/monster/features/sense";
 	templateUrl: "./features-form.component.html",
 	styleUrls: ["../monster.component.scss"]
 })
-export class FeaturesFormComponent extends MonsterForm {
+export class FeaturesFormComponent extends MonsterFormComponent {
 	protected form = {
 		sense_type: [],
 		sense_distance: [],
@@ -31,14 +31,14 @@ export class FeaturesFormComponent extends MonsterForm {
 		ef_desc: []
 	};
 
-	private senseTypes: string[] = Values.SenseTypes;
-	private skills: SkillGroup[] = Values.Skills;
-	private dblSkillProf: boolean;
-	private skillAbility: string;
-	private damageTypes: string[] = Values.DamageTypes;
-	private conditions: string[] = Values.Conditions;
-	private languages: string[] = Values.Languages;
-	private hasTelepathy: boolean = false;
+	public senseTypes: string[] = Values.SenseTypes;
+	public skills: SkillGroup[] = Values.Skills;
+	public dblSkillProf: boolean;
+	public skillAbility: string;
+	public damageTypes: string[] = Values.DamageTypes;
+	public conditions: string[] = Values.Conditions;
+	public languages: string[] = Values.Languages;
+	public hasTelepathy: boolean = false;
 
 	constructor(
 		calculator: CalculatorService,
@@ -55,7 +55,7 @@ export class FeaturesFormComponent extends MonsterForm {
 		return false;
 	}
 
-	private skillChanged(validateSkillAbility: boolean = false) {
+	public skillChanged(validateSkillAbility: boolean = false) {
 		if (
 			validateSkillAbility &&
 			this.formGroup.controls["skill_name"] &&
@@ -71,7 +71,7 @@ export class FeaturesFormComponent extends MonsterForm {
 		}
 	}
 
-	private triggerFeaturesForm(e: MatCheckboxChange) {
+	public triggerFeaturesForm(e: MatCheckboxChange) {
 		if (e && e.source) {
 			if (e.checked) {
 				if (e.source.name === "Strength")
@@ -122,11 +122,11 @@ export class FeaturesFormComponent extends MonsterForm {
 		this.triggerFormChange();
 	}
 
-	private getPP() {
+	public getPP() {
 		return this.calculator.calcPP(this.monster.Stats);
 	}
 
-	private addSense() {
+	public addSense() {
 		const typeInput = this.formGroup.controls["sense_type"];
 		const distanceInput = this.formGroup.controls["sense_distance"];
 
@@ -148,7 +148,7 @@ export class FeaturesFormComponent extends MonsterForm {
 		if (distanceInput) distanceInput.setValue("");
 	}
 
-	private removeSense(sense) {
+	public removeSense(sense) {
 		let index = -1;
 
 		for (let i = 0; i < this.monster.Features.ExtraSenses.length; i++)
@@ -157,7 +157,7 @@ export class FeaturesFormComponent extends MonsterForm {
 		if (index >= 0) this.monster.Features.ExtraSenses.splice(index, 1);
 	}
 
-	private addSkill() {
+	public addSkill() {
 		const nameInput = this.formGroup.controls["skill_name"];
 
 		let name = nameInput.value;
@@ -171,7 +171,7 @@ export class FeaturesFormComponent extends MonsterForm {
 
 			const skills = this.monster.Features.Skills;
 			for (let i = 0; i < skills.length; i++)
-				if (skills[i].Name == newSkill.Name) {
+				if (skills[i].Name === newSkill.Name) {
 					this.openSnackBar("That skill already exists!");
 					return;
 				}
@@ -185,7 +185,7 @@ export class FeaturesFormComponent extends MonsterForm {
 		if (this.dblSkillProf) this.dblSkillProf = false;
 	}
 
-	private removeSkill(skillName) {
+	public removeSkill(skillName) {
 		let index = -1;
 
 		for (let i = 0; i < this.monster.Features.Skills.length; i++)
@@ -194,7 +194,7 @@ export class FeaturesFormComponent extends MonsterForm {
 		if (index >= 0) this.monster.Features.Skills.splice(index, 1);
 	}
 
-	private addVulnerability() {
+	public addVulnerability() {
 		const input = this.formGroup.controls["vulnerability"];
 
 		let vulnerability = input.value;
@@ -213,7 +213,7 @@ export class FeaturesFormComponent extends MonsterForm {
 		if (input) input.setValue("");
 	}
 
-	private removeVulnerability(vulnerability) {
+	public removeVulnerability(vulnerability) {
 		const index = this.monster.Features.DamageVulnerabilities.indexOf(
 			vulnerability
 		);
@@ -221,7 +221,7 @@ export class FeaturesFormComponent extends MonsterForm {
 			this.monster.Features.DamageVulnerabilities.splice(index, 1);
 	}
 
-	private addResistance() {
+	public addResistance() {
 		const input = this.formGroup.controls["resistance"];
 		let resistance = input.value;
 
@@ -236,12 +236,12 @@ export class FeaturesFormComponent extends MonsterForm {
 		if (input) input.setValue("");
 	}
 
-	private removeResistance(resistance) {
+	public removeResistance(resistance) {
 		const index = this.monster.Features.DamageResistances.indexOf(resistance);
 		if (index >= 0) this.monster.Features.DamageResistances.splice(index, 1);
 	}
 
-	private addImmunity() {
+	public addImmunity() {
 		const input = this.formGroup.controls["immunity"];
 		let immunity = input.value;
 
@@ -256,12 +256,12 @@ export class FeaturesFormComponent extends MonsterForm {
 		if (input) input.setValue("");
 	}
 
-	private removeImmunity(immunity) {
+	public removeImmunity(immunity) {
 		const index = this.monster.Features.DamageImmunities.indexOf(immunity);
 		if (index >= 0) this.monster.Features.DamageImmunities.splice(index, 1);
 	}
 
-	private addCondition() {
+	public addCondition() {
 		const input = this.formGroup.controls["conditionImmunity"];
 		let condition = input.value;
 
@@ -276,12 +276,12 @@ export class FeaturesFormComponent extends MonsterForm {
 		if (input) input.setValue("");
 	}
 
-	private removeCondition(condition) {
+	public removeCondition(condition) {
 		const index = this.monster.Features.ConditionImmunities.indexOf(condition);
 		if (index >= 0) this.monster.Features.ConditionImmunities.splice(index, 1);
 	}
 
-	private addLanguage() {
+	public addLanguage() {
 		const input = this.formGroup.controls["language"];
 		let language = input.value;
 
@@ -296,12 +296,12 @@ export class FeaturesFormComponent extends MonsterForm {
 		if (input) input.setValue("");
 	}
 
-	private removeLanguage(language) {
+	public removeLanguage(language) {
 		const index = this.monster.Features.Languages.Languages.indexOf(language);
 		if (index >= 0) this.monster.Features.Languages.Languages.splice(index, 1);
 	}
 
-	private addFeature() {
+	public addFeature() {
 		const nameInput = this.formGroup.controls["ef_name"];
 		const descInput = this.formGroup.controls["ef_desc"];
 
@@ -329,7 +329,7 @@ export class FeaturesFormComponent extends MonsterForm {
 		if (descInput) descInput.setValue("");
 	}
 
-	private removeFeature(feature) {
+	public removeFeature(feature) {
 		let index = -1;
 
 		for (let i = 0; i < this.monster.Features.ExtraFeatures.length; i++)
@@ -343,7 +343,7 @@ export class FeaturesFormComponent extends MonsterForm {
 		if (descInput) descInput.setValue("");
 	}
 
-	private showFeature(feature: Feature) {
+	public showFeature(feature: Feature) {
 		this.formGroup.controls["ef_name"].setValue(feature.Name);
 		this.formGroup.controls["ef_desc"].setValue(feature.Description);
 	}

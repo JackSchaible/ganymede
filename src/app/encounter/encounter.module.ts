@@ -57,7 +57,7 @@ import { TraitsFormComponent } from "./monster/traits-form/traits-form.component
 		BasicInfoFormComponent,
 		StatsFormComponent,
 		FeaturesFormComponent,
-		TraitsFormComponent
+		TraitsFormComponent,
 	]
 })
-export class EncounterModule {}
+export class EncounterModule { }

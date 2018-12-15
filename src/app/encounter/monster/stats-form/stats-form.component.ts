@@ -2,7 +2,7 @@ import { Component, ChangeDetectorRef } from "@angular/core";
 import { FormBuilder } from "@angular/forms";
 import Values from "../../../common/models/values";
 import { CalculatorService } from "../../../services/calculator.service";
-import MonsterForm from "../monsterForm";
+import { MonsterFormComponent } from "../monsterFormComponent";
 import { MatSnackBar } from "@angular/material";
 import MovementType from "src/app/common/models/monster/stats/movementType";
 
@@ -11,7 +11,7 @@ import MovementType from "src/app/common/models/monster/stats/movementType";
 	templateUrl: "./stats-form.component.html",
 	styleUrls: ["../monster.component.scss"]
 })
-export class StatsFormComponent extends MonsterForm {
+export class StatsFormComponent extends MonsterFormComponent {
 	protected form = {
 		str: [],
 		dex: [],
@@ -29,9 +29,9 @@ export class StatsFormComponent extends MonsterForm {
 		speed_length: []
 	};
 
-	private abilities = ["STR", "DEX", "CON", "INT", "WIS", "CHA"];
-	private abilityMod: number;
-	private movementTypes: string[] = Values.MovementTypes;
+	public abilities = ["STR", "DEX", "CON", "INT", "WIS", "CHA"];
+	public abilityMod: number;
+	public movementTypes: string[] = Values.MovementTypes;
 
 	constructor(
 		calculator: CalculatorService,
@@ -42,7 +42,7 @@ export class StatsFormComponent extends MonsterForm {
 		super(calculator, formBuilder, changeDetector, snackBar);
 	}
 
-	onFormChanges(form: any): void {
+	public onFormChanges(): void {
 		this.abilityMod = this.getAcMod();
 		this.monster.Stats.HPRoll.Modifier = this.calculator.getModifierByName(
 			"Constitution",
@@ -54,7 +54,7 @@ export class StatsFormComponent extends MonsterForm {
 		return false;
 	}
 
-	private getAcMod(): number {
+	public getAcMod(): number {
 		let stat: number = 0;
 
 		const stats = this.monster.Stats;
@@ -82,12 +82,12 @@ export class StatsFormComponent extends MonsterForm {
 		return this.calculator.getModifierNumber(stat);
 	}
 
-	private randomStats() {
+	public randomStats() {
 		this.calculator.randomStats(this.monster.Stats);
 		this.changeDetector.detectChanges();
 	}
 
-	private addMovement(event) {
+	public addMovement(event) {
 		const typeInput = this.formGroup.controls["speed_type"];
 		const distanceInput = this.formGroup.controls["speed_length"];
 
@@ -109,7 +109,7 @@ export class StatsFormComponent extends MonsterForm {
 		if (distanceInput) distanceInput.setValue("");
 	}
 
-	private removeMovement(movement) {
+	public removeMovement(movement) {
 		let index = -1;
 
 		for (let i = 0; i < this.monster.Stats.ExtraMovementTypes.length; i++)

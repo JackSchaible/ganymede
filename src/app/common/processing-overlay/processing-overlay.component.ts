@@ -19,7 +19,7 @@ export class ProcessingOverlayComponent implements OnDestroy {
 		return this.active;
 	}
 
-	private active: boolean;
+	public active: boolean;
 
 	@Input()
 	public message: string;
@@ -27,7 +27,7 @@ export class ProcessingOverlayComponent implements OnDestroy {
 	private switchDelay: number = 2000;
 	private switchTimer;
 
-	constructor() {}
+	constructor() { }
 
 	ngOnDestroy(): void {
 		clearTimeout(this.switchTimer);

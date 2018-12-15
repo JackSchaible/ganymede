@@ -2,7 +2,7 @@ import { Component, ChangeDetectorRef } from "@angular/core";
 import { FormBuilder } from "@angular/forms";
 import { CalculatorService } from "../../../services/calculator.service";
 import { MatSnackBar } from "@angular/material";
-import MonsterForm from "../monsterForm";
+import { MonsterFormComponent } from "../monsterFormComponent";
 import Values from "../../../common/models/values";
 import Trait from "../../../common/models/monster/traits/trait";
 import {
@@ -29,7 +29,7 @@ import { WordService } from "src/app/services/word.service";
 	templateUrl: "./traits-form.component.html",
 	styleUrls: ["../monster.component.scss"]
 })
-export class TraitsFormComponent extends MonsterForm {
+export class TraitsFormComponent extends MonsterFormComponent {
 	protected form = {
 		trait_name: [],
 		trait_desc: [],
@@ -39,11 +39,11 @@ export class TraitsFormComponent extends MonsterForm {
 		spellName: []
 	};
 
-	private spellClasses = Values.SpellClasses;
+	public spellClasses = Values.SpellClasses;
 	private spellcastingType: string = "none";
 	private spellAllotment: any[] = [];
 	private spellLevels: any[] = [];
-	private spells;
+	public spells;
 
 	private words: WordService;
 
@@ -59,7 +59,7 @@ export class TraitsFormComponent extends MonsterForm {
 	}
 
 	onFormChanges(form: any): void {
-		let spellLevel = parseInt(this.formGroup.controls["spellLevel"].value);
+		let spellLevel = parseInt(this.formGroup.controls["spellLevel"].value, 10);
 		const spellClass = this.formGroup.controls["spellClass"].value;
 
 		if (spellLevel < 1) {
@@ -118,14 +118,13 @@ export class TraitsFormComponent extends MonsterForm {
 		}
 
 		this.spellAllotment = [];
-		//this.getSpellSlots();
 	}
 
 	isComplete(): boolean {
 		return false;
 	}
 
-	private addTrait() {
+	public addTrait() {
 		const nameInput = this.formGroup.controls["trait_name"];
 		const descInput = this.formGroup.controls["trait_desc"];
 
@@ -153,7 +152,7 @@ export class TraitsFormComponent extends MonsterForm {
 		if (descInput) descInput.setValue("");
 	}
 
-	private removeTrait(traitName: string) {
+	public removeTrait(traitName: string) {
 		let index = -1;
 
 		for (let i = 0; i < this.monster.Traits.Traits.length; i++)
@@ -167,12 +166,12 @@ export class TraitsFormComponent extends MonsterForm {
 		if (descInput) descInput.setValue("");
 	}
 
-	private showTrait(trait: Trait) {
+	public showTrait(trait: Trait) {
 		this.formGroup.controls["trait_name"].setValue(trait.Name);
 		this.formGroup.controls["trait_desc"].setValue(trait.Description);
 	}
 
-	private changeSpellcastingType(newType: number): void {
+	public changeSpellcastingType(newType: number): void {
 		switch (newType) {
 			case 0:
 				this.monster.Traits.Spells = new Spells();
@@ -195,7 +194,7 @@ export class TraitsFormComponent extends MonsterForm {
 		}
 	}
 
-	private getSpellSlots(): void {
+	public getSpellSlots(): void {
 		const instance = (this.monster.Traits.Spells as Spellcasting).ClassInstance;
 		const base = instance.BaseClass as SpellcastingClass;
 		const slotAllotment = base.SpellAdvancement[instance.Level - 1];

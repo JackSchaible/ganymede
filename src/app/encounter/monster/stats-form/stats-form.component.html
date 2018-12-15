@@ -75,7 +75,7 @@
               <p class="c-monster_form--ability-modifier">{{abilityMod}}</p>
 
               <mat-form-field>
-                <mat-select placeholder="Ability" [(value)]="monster.Stats.AC.AbilityModifier" (selectionChange)="statFormChange()">
+                <mat-select placeholder="Ability" [(value)]="monster.Stats.AC.AbilityModifier" (selectionChange)="onFormChanges()">
                   <mat-option *ngFor="let ability of abilities" [value]="ability">
                     {{ability}}
                   </mat-option>
@@ -125,7 +125,7 @@
             </div>
 
             <mat-form-field class="col-2">
-              <mat-select placeholder="Sides" [(value)]="monster.Stats.HPRoll.Sides" (selectionChange)="statFormChange()">
+              <mat-select placeholder="Sides" [(value)]="monster.Stats.HPRoll.Sides" (selectionChange)="onFormChanges()">
                 <mat-option *ngFor="let number of [4,6,8,10,12,20]" [value]="number">
                   {{number}}
                 </mat-option>
@@ -172,7 +172,7 @@
 
             <mat-form-field class="u-padding-x-none">
               <input matInput placeholder="Distance" formControlName="speed_length" type="number">
-              <button mat-button matSuffix mat-icon-button aria-label="Clear" (click)="addMovement()">
+              <button mat-button matSuffix mat-icon-button aria-label="Clear" (click)="addMovement($event)">
                 <i class="fa fa-plus"></i>
               </button>
             </mat-form-field>

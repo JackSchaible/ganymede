@@ -3,7 +3,7 @@ import { FormBuilder } from "@angular/forms";
 import Values, { ISize, IMonsterType } from "../../../common/models/values";
 import { ENTER, COMMA } from "@angular/cdk/keycodes";
 import { CalculatorService } from "../../../services/calculator.service";
-import MonsterForm from "../monsterForm";
+import { MonsterFormComponent } from "../monsterFormComponent";
 import { MatSnackBar } from "@angular/material";
 
 @Component({
@@ -11,7 +11,7 @@ import { MatSnackBar } from "@angular/material";
 	templateUrl: "./basic-info-form.component.html",
 	styleUrls: ["../monster.component.scss"]
 })
-export class BasicInfoFormComponent extends MonsterForm {
+export class BasicInfoFormComponent extends MonsterFormComponent {
 	protected form = {
 		name: [],
 		size: [],
@@ -19,10 +19,10 @@ export class BasicInfoFormComponent extends MonsterForm {
 		prof: []
 	};
 
-	private sizes: ISize[] = Values.Sizes;
-	private types: IMonsterType[] = Values.Types;
-	private selectedType: IMonsterType;
-	private separatorKeysCodes: number[] = [ENTER, COMMA];
+	public sizes: ISize[] = Values.Sizes;
+	public types: IMonsterType[] = Values.Types;
+	public selectedType: IMonsterType;
+	public separatorKeysCodes: number[] = [ENTER, COMMA];
 
 	constructor(
 		calculator: CalculatorService,
@@ -44,7 +44,7 @@ export class BasicInfoFormComponent extends MonsterForm {
 		return false;
 	}
 
-	private addTag(event) {
+	public addTag(event) {
 		const input = event.input;
 		let value = event.value;
 
@@ -59,12 +59,12 @@ export class BasicInfoFormComponent extends MonsterForm {
 		if (input) input.value = "";
 	}
 
-	private removeTag(tag: string) {
+	public removeTag(tag: string) {
 		const index = this.monster.BasicInfo.Tags.indexOf(tag);
 		if (index >= 0) this.monster.BasicInfo.Tags.splice(index, 1);
 	}
 
-	private alignmentChanged() {
+	public alignmentChanged() {
 		this.triggerFormChange();
 		this.card.CalculateValues();
 	}

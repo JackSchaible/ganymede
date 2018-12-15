@@ -17,7 +17,7 @@ export class AlignmentTableComponent implements OnInit {
 
 	ngOnInit() {}
 
-	private set(option: string): void {
+	public set(option: string): void {
 		switch (option) {
 			case "x":
 				this.alignment.chaoticGood = true;
