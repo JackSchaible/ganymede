@@ -1,0 +1,11 @@
+version: 0.2
+environment_variables:
+  plaintext:
+    S3_BUCKET: "js-ganymede"
+phases:
+  build:
+    commands:
+      - dotnet publish -o deploy
+  post_build:
+    commands:
+      - aws s3 cp deploy s3://${S3_BUCKET}/server --recursive
