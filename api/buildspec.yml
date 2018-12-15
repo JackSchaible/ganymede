@@ -6,4 +6,5 @@ phases:
       - dotnet publish -o deploy
 artifacts:
   files:
+    - appspec.yml
     - api/deploy/*
