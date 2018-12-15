@@ -6,5 +6,7 @@ phases:
       - dotnet publish -o deploy
 artifacts:
   files:
+    - applicationStop.bat
+    - applicationStart.bat
     - appspec.yml
     - api/deploy/*

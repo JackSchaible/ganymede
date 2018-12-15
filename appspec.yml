@@ -5,6 +5,6 @@ files:
   - destination: C:\inetpub\wwwroot\dmapi
 hooks:
   ApplicationStop:
-    - iisreset /stop
+    - location: applicationStop.bat
   ApplicationStart:
-    - iisreset /start
+    - location: applicationStart.bat
