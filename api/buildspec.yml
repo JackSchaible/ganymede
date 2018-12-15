@@ -9,4 +9,5 @@ phases:
       - dotnet publish -o deploy
   post_build:
     commands:
-      - aws s3 cp deploy s3://${S3_BUCKET}/server --recursive
+      - zip -r deploy.zip deploy
+      - aws s3 cp deploy.zip s3://${S3_BUCKET}/server --recursive
