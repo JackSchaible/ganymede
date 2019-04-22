@@ -16,6 +16,7 @@ import { MatToolbarModule, MatMenuModule } from "@angular/material";
 import { DeviceDetectorModule } from "ngx-device-detector";
 import { SpellsModule } from "./spells/spells.module";
 import { NavItemComponent } from './main/nav-item/nav-item.component';
+import { EncounterTrackerComponent } from './main/encounter-tracker/encounter-tracker.component';
 
 @NgModule({
 	declarations: [
@@ -24,7 +25,8 @@ import { NavItemComponent } from './main/nav-item/nav-item.component';
 		HomeComponent,
 		CrCalculatorComponent,
 		RouteNotFoundComponent,
-		NavItemComponent
+		NavItemComponent,
+		EncounterTrackerComponent
 	],
 	imports: [
 		BrowserModule,
