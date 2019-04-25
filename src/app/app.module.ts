@@ -15,8 +15,7 @@ import { FormsModule } from "./forms/forms.module";
 import { MatToolbarModule, MatMenuModule } from "@angular/material";
 import { DeviceDetectorModule } from "ngx-device-detector";
 import { SpellsModule } from "./spells/spells.module";
-import { NavItemComponent } from './main/nav-item/nav-item.component';
-import { EncounterTrackerComponent } from './main/encounter-tracker/encounter-tracker.component';
+import { NavItemComponent } from "./main/nav-item/nav-item.component";
 
 @NgModule({
 	declarations: [
@@ -25,8 +24,7 @@ import { EncounterTrackerComponent } from './main/encounter-tracker/encounter-tr
 		HomeComponent,
 		CrCalculatorComponent,
 		RouteNotFoundComponent,
-		NavItemComponent,
-		EncounterTrackerComponent
+		NavItemComponent
 	],
 	imports: [
 		BrowserModule,
@@ -44,4 +42,4 @@ import { EncounterTrackerComponent } from './main/encounter-tracker/encounter-tr
 	providers: [],
 	bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {}
