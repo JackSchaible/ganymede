@@ -1,10 +1,13 @@
-.mat-grid-tile {
-	.mat-card {
-		height: 100%;
-		width: 100%;
+table {
+	thead {
+		th {
+			&:first-child {
+				width: 152px;
+			}
 
-		.icon-container {
-			min-height: 50px;
+			&:nth-child(2) {
+				width: 80px;
+			}
 		}
 	}
 }

@@ -4,9 +4,20 @@ import { EncounterComponent } from "./encounter.component";
 import { EncounterRoutingModule } from "./encounter.routing";
 import { EncounterHomeComponent } from "./encounter-home/encounter-home.component";
 import { GmCommonModule } from "../common/gm-common.module";
+import { MatInputModule, MatButtonModule } from "@angular/material";
+import { FormsModule } from "@angular/forms";
+import { DragDropModule } from "@angular/cdk/drag-drop";
 
 @NgModule({
-	imports: [CommonModule, EncounterRoutingModule, GmCommonModule],
+	imports: [
+		CommonModule,
+		EncounterRoutingModule,
+		GmCommonModule,
+		MatInputModule,
+		MatButtonModule,
+		FormsModule,
+		DragDropModule
+	],
 	declarations: [EncounterComponent, EncounterHomeComponent]
 })
 export class EncounterModule {}

@@ -1,3 +1,71 @@
 <div class='u-text-center'>
-  <h1>Encounters</h1>
+  <h3>Encounters</h3>
+  <p>Use this to keep track of your encounters!</p>
+
+  <div *ngIf="showForm" class="u-margin-y-2x">
+    <div class="u-flex">
+      <mat-form-field>
+        <input #firstInput autofocus matInput [(ngModel)]="newActor.order" type="number" placeholder="Initiative" />
+      </mat-form-field>
+      <mat-form-field>
+        <input matInput [(ngModel)]="newActor.name" type="text" placeholder="Name" />
+      </mat-form-field>
+      <div class="u-flex">
+        <mat-form-field>
+          <input matInput type="number" [(ngModel)]="newActor.totalHP" placeholder="Total HP" (change)="totalHPChanged()" />
+        </mat-form-field>
+        (
+        <mat-form-field>
+          <input matInput type="number" [(ngModel)]="newActor.currentHP" placeholder="Current HP" />
+        </mat-form-field>
+        )
+      </div>
+      <mat-form-field>
+        <input matInput type="text" />
+      </mat-form-field>
+    </div>
+
+    <div class="u-flex u-flex__justify--center">
+      <button mat-button (click)="addActor(true)" title="Add and Add Another"><i class="fas fa-plus-square"></i></button>
+      <button mat-button (click)="addActor(false)" title="Add"><i class="fas fa-plus-hexagon"></i></button>
+      <button mat-button (click)="cancel()" title="Cancel"><i class="fas fa-ban"></i></button>
+    </div>
+  </div>
+
+  <div *ngIf="!showForm" class="u-margin-y-2x">
+    <button mat-button class="button primary" (click)="showForm = !showForm"><i class="fas fa-plus-square"></i></button>
+  </div>
+
+  <div *ngIf="error" class="u-margin-y">
+    <p><i class="fas fa-exclamation-triangle"></i> {{error}}</p>
+  </div>
+
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th></th>
+        <th title="Initiative Order">Init.</th>
+        <th>Name</th>
+        <th>HP</th>
+        <th>Notes</th>
+      </tr>
+    </thead>
+
+    <tbody cdkDropList (cdkDropListDropped)="onReorder($event)">
+      <tr cdkDrag *ngFor="let actor of actors" [class.table-danger]="actor.duplicateOrder">
+        <td>
+            <button mat-button (click)="copy(actor)" title="Clone"><i class="fas fa-copy"></i></button>
+            <button mat-button (click)="delete(actor)" title="Remove"><i class="fas fa-trash"></i></button>
+        </td>
+        <td>{{actor.order}}</td>
+        <td>{{actor.name}}</td>
+        <td>{{actor.currentHP}}/{{actor.totalHP}}</td>
+        <td>
+          <mat-form-field>
+            <textarea matInput>{{actor.notes}}</textarea>
+          </mat-form-field>
+        </td>
+      </tr>
+    </tbody>
+  </table>
 </div>
