@@ -1,19 +1,21 @@
-import { Component } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
 import { AuthService } from "../../services/auth.service";
 import { DeviceDetectorService } from "ngx-device-detector";
 import { Router } from "@angular/router";
 import NavItem from "../../models/nav/navItem";
+import { Md5 } from "ts-md5/dist/md5";
 
 @Component({
 	selector: "gm-nav",
 	templateUrl: "./nav.component.html",
 	styleUrls: ["./nav.component.scss"]
 })
-export class NavComponent {
+export class NavComponent implements OnInit {
 	isMobile: boolean;
 	isTablet: boolean;
 	isDesktop: boolean;
 	user: string;
+	userHash: string;
 
 	items: NavItem[];
 
@@ -32,6 +34,11 @@ export class NavComponent {
 			new NavItem("CRCalculator", "fa fa-calculator", "CR Calculator"),
 			new NavItem("encounter", "fas fa-helmet-battle", "Encounters")
 		];
+	}
+
+	ngOnInit(): void {
+		this.user = this.getUsername();
+		this.userHash = Md5.hashStr(this.user) as string;
 	}
 
 	getUsername(): string {
