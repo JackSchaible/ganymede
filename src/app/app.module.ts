@@ -14,8 +14,7 @@ import { AuthModule } from "./auth/auth.module";
 import { FormsModule } from "./forms/forms.module";
 import { MatToolbarModule, MatMenuModule } from "@angular/material";
 import { DeviceDetectorModule } from "ngx-device-detector";
-import { SpellsModule } from "./spells/spells.module";
-import { NavItemComponent } from './main/nav-item/nav-item.component';
+import { NavItemComponent } from "./main/nav-item/nav-item.component";
 
 @NgModule({
 	declarations: [
@@ -31,7 +30,6 @@ import { NavItemComponent } from './main/nav-item/nav-item.component';
 		ReactiveFormsModule,
 		HttpClientModule,
 		EncounterModule,
-		SpellsModule,
 		AuthModule,
 		AppRoutingModule,
 		FormsModule,
@@ -42,4 +40,4 @@ import { NavItemComponent } from './main/nav-item/nav-item.component';
 	providers: [],
 	bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {}

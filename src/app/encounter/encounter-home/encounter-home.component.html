@@ -1,36 +1,81 @@
 <div class='u-text-center'>
-  <h1>Encounters</h1>
+  <h3>Encounters</h3>
+  <p>Use this to keep track of your encounters!</p>
 
-  <mat-card>
-    <p>DM Tools Encounters allow you to efficienctly orchestrate combat encounters. Create your monsters then add them
-      to
-      an encounter. Give your encounter a name, XP value, and more. You can auto-roll initiative for all your monsters.
-      You can even save common monsters for use in other encounters. Organize your encounters into an
-      infinitely-nestible
-      grouping system, too!</p>
-  </mat-card>
+  <div *ngIf="showForm" class="u-margin-y-2x">
+    <div class="u-flex u-flex__wrap u-flex__justify--center">
+      <mat-form-field>
+        <input #firstInput autofocus matInput [(ngModel)]="newActor.order" type="number" placeholder="Initiative" />
+      </mat-form-field>
 
-  <mat-grid-list cols="2" class="col-lg-5 col-md-6 col-sm-8 col-12 u-center u-margin-top" gutterSize="1rem">
-    <mat-grid-tile>
-      <button mat-raised-button class="w-100 h-100" routerLink="/encounter/encounter-tracker">
-        <div class="h-100 u-flex u-flex__align-items--center u-flex__column u-flex__justify--space-evenly w-100">
-          <div class="icon-container">
-            <i class="fas fa-2x fa-paw-claws"></i><i class="fas fa-2x fa-paw-claws"></i><i class="fas fa-2x fa-paw-claws"></i>
-          </div>
-          <p>Encounters</p>
+      <mat-form-field>
+        <input matInput [(ngModel)]="newActor.name" type="text" placeholder="Name" />
+      </mat-form-field>
+      
+      <div class="u-flex u-flex__wrap u-flex__wrap u-flex__justify--center u-flex__align-items--center">
+        <mat-form-field>
+          <input matInput type="number" [(ngModel)]="newActor.totalHP" placeholder="Total HP" (change)="totalHPChanged()" />
+        </mat-form-field>
+
+        <div>
+          <span>(</span>
+          <mat-form-field>
+            <input matInput type="number" [(ngModel)]="newActor.currentHP" placeholder="Current HP" />
+          </mat-form-field>
+          <span>)</span>
         </div>
-      </button>
-    </mat-grid-tile>
+      </div>
 
-    <mat-grid-tile>
-      <button mat-raised-button class="w-100 h-100" routerLink="/encounter/monster">
-        <div class="h-100 u-flex u-flex__align-items--center u-flex__column u-flex__justify--space-evenly w-100">
-          <div>
-            <i class="far fa-3x fa-dragon"></i>
-          </div>
-          <p>Monsters</p>
-        </div>
-      </button>
-    </mat-grid-tile>
-  </mat-grid-list>
+      <mat-form-field>
+        <input matInput type="text" [(ngModel)]="newActor.notes" placeholder="Notes" />
+      </mat-form-field>
+    </div>
+
+    <div class="u-flex u-flex__justify--center">
+      <button mat-button (click)="addActor(true)" title="Add and Add Another"><i class="fas fa-plus-square"></i></button>
+      <button mat-button (click)="addActor(false)" title="Add"><i class="fas fa-plus-hexagon"></i></button>
+      <button mat-button (click)="cancel()" title="Cancel"><i class="fas fa-ban"></i></button>
+    </div>
+  </div>
+
+  <div *ngIf="!showForm" class="u-margin-y-2x">
+    <button mat-button class="button primary" (click)="showForm = !showForm"><i class="fas fa-plus-square"></i></button>
+  </div>
+
+  <div *ngIf="error" class="u-margin-y">
+    <p><i class="fas fa-exclamation-triangle"></i> {{error}}</p>
+  </div>
+
+  <div cdkDropList (cdkDropListDropped)="onReorder($event)">
+    <mat-expansion-panel cdkDrag *ngFor="let actor of actors" class="u-margin-bottom">
+      <mat-expansion-panel-header [class.text-muted]="actor.currentHP < 0">
+        {{ actor.order }} - {{ actor.name }} ({{ actor.currentHP }}/{{ actor.totalHP }})
+      </mat-expansion-panel-header>
+    
+      <mat-form-field class="u-padding-none">
+          <mat-label>Notes</mat-label>
+          <textarea matInput
+            [(ngModel)]="actor.notes"
+            cdkTextareaAutosize
+            #autosize="cdkTextareaAutosize"
+            cdkAutosizeMinRows="2"
+            cdkAutosizeMaxRows="5"></textarea>
+      </mat-form-field>
+    
+      <mat-action-row>
+        <mat-form-field class="u-padding-none u-padding-bottom-half">
+          <input type="number" matInput [(ngModel)]="actor.hpChange" />
+          <button mat-button matSuffix mat-icon-button (click)="setHealth(actor.id)">
+            <i class="fas fa-plus-square"></i>
+          </button>
+          <mat-hint align="start">
+            <strong>Add damage</strong>
+          </mat-hint>
+        </mat-form-field>
+
+        <button mat-button mat-icon-button (click)="copy(actor)" title="Clone"><i class="fas fa-copy"></i></button>
+        <button mat-button mat-icon-button (click)="delete(actor)" title="Remove"><i class="fas fa-trash"></i></button>
+      </mat-action-row>
+    </mat-expansion-panel>
+  </div>
 </div>
