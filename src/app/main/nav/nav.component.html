@@ -4,12 +4,23 @@
       <gm-nav-item *ngFor="let item of items" [item]="item"></gm-nav-item>
     </div>
     <div *ngIf="isLoggedIn()" class="u-flex c-nav__logged-in">
-      <p class="text-white"><i class="fa fa-user-circle"></i> Welcome, {{getUsername()}}!</p>
+      <div>
+        <img [src]="'https://www.gravatar.com/avatar/' + userHash + '?s=40'" />
+      </div>
 
-      <button class="u-margin-x btn btn-danger" type="button" (click)="logout()"><i class="fa fa-sign-out"></i>
-        Logout</button>
+      <div class="u-flex u-flex__align-items--center u-padding-x">
+        <p class="text-white">Welcome, {{ user }}!</p>
+      </div>
+
+      <div>
+        <button class="u-margin-x btn btn-danger" type="button" (click)="logout()">
+          <i class="fa fa-sign-out"></i> Logout
+        </button>
+      </div>
     </div>
-    <a *ngIf="!isLoggedIn()" routerLink="/login" class="text-white"><i class="fa fa-sign-in"></i> Login</a>
+    <a *ngIf="!isLoggedIn()" routerLink="/login" class="text-white">
+      <i class="fa fa-sign-in"></i> Login
+    </a>
   </nav>
 
   <ng-template #isMobile>
