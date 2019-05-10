@@ -8,6 +8,38 @@ table {
 			&:nth-child(2) {
 				width: 80px;
 			}
+
+			&:nth-child(4) {
+				width: 200px;
+			}
 		}
+	}
+
+	tbody {
+		td {
+			vertical-align: middle;
+
+			&:nth-child(4) {
+				mat-form-field {
+					width: 102px;
+				}
+			}
+
+			&:last-child {
+				mat-form-field {
+					width: 100%;
+				}
+			}
+		}
+	}
+}
+
+.mat-action-row {
+	justify-content: center;
+	align-items: center;
+	padding: 0;
+
+	mat-form-field {
+		width: 102px;
 	}
 }

@@ -3,25 +3,31 @@
   <p>Use this to keep track of your encounters!</p>
 
   <div *ngIf="showForm" class="u-margin-y-2x">
-    <div class="u-flex">
+    <div class="u-flex u-flex__wrap u-flex__justify--center">
       <mat-form-field>
         <input #firstInput autofocus matInput [(ngModel)]="newActor.order" type="number" placeholder="Initiative" />
       </mat-form-field>
+
       <mat-form-field>
         <input matInput [(ngModel)]="newActor.name" type="text" placeholder="Name" />
       </mat-form-field>
-      <div class="u-flex">
+      
+      <div class="u-flex u-flex__wrap u-flex__wrap u-flex__justify--center u-flex__align-items--center">
         <mat-form-field>
           <input matInput type="number" [(ngModel)]="newActor.totalHP" placeholder="Total HP" (change)="totalHPChanged()" />
         </mat-form-field>
-        (
-        <mat-form-field>
-          <input matInput type="number" [(ngModel)]="newActor.currentHP" placeholder="Current HP" />
-        </mat-form-field>
-        )
+
+        <div>
+          <span>(</span>
+          <mat-form-field>
+            <input matInput type="number" [(ngModel)]="newActor.currentHP" placeholder="Current HP" />
+          </mat-form-field>
+          <span>)</span>
+        </div>
       </div>
+
       <mat-form-field>
-        <input matInput type="text" />
+        <input matInput type="text" [(ngModel)]="newActor.notes" placeholder="Notes" />
       </mat-form-field>
     </div>
 
@@ -40,32 +46,36 @@
     <p><i class="fas fa-exclamation-triangle"></i> {{error}}</p>
   </div>
 
-  <table class="table table-striped">
-    <thead>
-      <tr>
-        <th></th>
-        <th title="Initiative Order">Init.</th>
-        <th>Name</th>
-        <th>HP</th>
-        <th>Notes</th>
-      </tr>
-    </thead>
+  <div cdkDropList (cdkDropListDropped)="onReorder($event)">
+    <mat-expansion-panel cdkDrag *ngFor="let actor of actors" class="u-margin-bottom">
+      <mat-expansion-panel-header [class.text-muted]="actor.currentHP < 0">
+        {{ actor.order }} - {{ actor.name }} ({{ actor.currentHP }}/{{ actor.totalHP }})
+      </mat-expansion-panel-header>
+    
+      <mat-form-field class="u-padding-none">
+          <mat-label>Notes</mat-label>
+          <textarea matInput
+            [(ngModel)]="actor.notes"
+            cdkTextareaAutosize
+            #autosize="cdkTextareaAutosize"
+            cdkAutosizeMinRows="2"
+            cdkAutosizeMaxRows="5"></textarea>
+      </mat-form-field>
+    
+      <mat-action-row>
+        <mat-form-field class="u-padding-none u-padding-bottom-half">
+          <input type="number" matInput [(ngModel)]="actor.hpChange" />
+          <button mat-button matSuffix mat-icon-button (click)="setHealth(actor.id)">
+            <i class="fas fa-plus-square"></i>
+          </button>
+          <mat-hint align="start">
+            <strong>Add damage</strong>
+          </mat-hint>
+        </mat-form-field>
 
-    <tbody cdkDropList (cdkDropListDropped)="onReorder($event)">
-      <tr cdkDrag *ngFor="let actor of actors" [class.table-danger]="actor.duplicateOrder">
-        <td>
-            <button mat-button (click)="copy(actor)" title="Clone"><i class="fas fa-copy"></i></button>
-            <button mat-button (click)="delete(actor)" title="Remove"><i class="fas fa-trash"></i></button>
-        </td>
-        <td>{{actor.order}}</td>
-        <td>{{actor.name}}</td>
-        <td>{{actor.currentHP}}/{{actor.totalHP}}</td>
-        <td>
-          <mat-form-field>
-            <textarea matInput>{{actor.notes}}</textarea>
-          </mat-form-field>
-        </td>
-      </tr>
-    </tbody>
-  </table>
+        <button mat-button mat-icon-button (click)="copy(actor)" title="Clone"><i class="fas fa-copy"></i></button>
+        <button mat-button mat-icon-button (click)="delete(actor)" title="Remove"><i class="fas fa-trash"></i></button>
+      </mat-action-row>
+    </mat-expansion-panel>
+  </div>
 </div>

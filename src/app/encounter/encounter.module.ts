@@ -4,9 +4,14 @@ import { EncounterComponent } from "./encounter.component";
 import { EncounterRoutingModule } from "./encounter.routing";
 import { EncounterHomeComponent } from "./encounter-home/encounter-home.component";
 import { GmCommonModule } from "../common/gm-common.module";
-import { MatInputModule, MatButtonModule } from "@angular/material";
+import {
+	MatInputModule,
+	MatButtonModule,
+	MatExpansionModule
+} from "@angular/material";
 import { FormsModule } from "@angular/forms";
 import { DragDropModule } from "@angular/cdk/drag-drop";
+import { DeviceDetectorModule } from "ngx-device-detector";
 
 @NgModule({
 	imports: [
@@ -16,7 +21,9 @@ import { DragDropModule } from "@angular/cdk/drag-drop";
 		MatInputModule,
 		MatButtonModule,
 		FormsModule,
-		DragDropModule
+		DragDropModule,
+		DeviceDetectorModule,
+		MatExpansionModule
 	],
 	declarations: [EncounterComponent, EncounterHomeComponent]
 })
