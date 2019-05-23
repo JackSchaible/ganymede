@@ -1,5 +1,5 @@
 using api.Entities;
-using api.Entities.Spells;
+using api.Entities.Rulesets;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
@@ -7,10 +7,20 @@ namespace Api.Entities
 {
 	public class ApplicationDbContext : IdentityDbContext<AppUser>
 	{
-		public DbSet<Spell> Spells { get; set; }
+		public DbSet<Campaign> Campaigns { get; set; }
+        public DbSet<Publisher> Publishers { get; set; }
+        public DbSet<Ruleset> Rulesets { get; set; }
 
-		protected override void OnModelCreating(ModelBuilder builder)
+        protected override void OnModelCreating(ModelBuilder builder)
 		{
+            builder.Entity<Publisher>()
+                .HasIndex(p => p.Name)
+                .IsUnique();
+
+            builder.Entity<Ruleset>()
+                .HasIndex(r => r.Abbrevation)
+                .IsUnique();
+
 			base.OnModelCreating(builder);
 		}
 
@@ -19,7 +29,6 @@ namespace Api.Entities
 			optionsBuilder
 				.UseSqlServer(@"Server=.;Database=Ganymede;Trusted_Connection=True;",
 					opts => opts.EnableRetryOnFailure(3));
-			//optionsBuilder.UseMySql(GetConnectionString());
 		}
 
 		private static string GetConnectionString()
