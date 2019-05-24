@@ -1,0 +1,28 @@
+<gm-processing-overlay [isActive]="processing"></gm-processing-overlay>
+
+<mat-card *ngIf="campaign">
+  <mat-card-header>
+    {{ !!campaign?.Id ? 'Add a new' : 'Edit Your' }} Campaign
+  </mat-card-header>
+
+  <mat-card-content class="u-flex">
+    <mat-form-field class="col-6">
+      <input matInput placeholder="Name" [(ngModel)]="campaign.name">
+    </mat-form-field>
+  
+    <mat-form-field class="col-6">
+        <mat-label>Ruleset</mat-label>
+        <mat-select [(value)]="campaign.ruleset.id">
+          <mat-option *ngFor="let ruleset of rulesets" [value]="ruleset.id">{{ ruleset.name }} ({{ ruleset.publisher.name }})</mat-option>
+        </mat-select>
+    </mat-form-field>
+
+    <mat-form-field class="col-12">
+      <textarea rows="5" matInput placeholder="Description" [(ngModel)]="campaign.description"></textarea>
+    </mat-form-field>
+  </mat-card-content>
+
+  <mat-card-actions class="u-flex u-flex__justify--flex-end">
+      <button title="Edit" mat-mini-fab color="primary" (click)="edit(campaign?.id)" class="mr-3"><i class="fas fa-save"></i></button>
+  </mat-card-actions> 
+</mat-card>

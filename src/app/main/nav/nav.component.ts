@@ -32,13 +32,15 @@ export class NavComponent implements OnInit {
 			new NavItem("", "fab fa-d-and-d", "DM Tools", true),
 			new NavItem("", "fa fa-home", "Home"),
 			new NavItem("CRCalculator", "fa fa-calculator", "CR Calculator"),
-			new NavItem("encounter", "fas fa-helmet-battle", "Encounters")
+			new NavItem("encounter", "fas fa-helmet-battle", "Encounters"),
+			new NavItem("campaigns", "fas fa-scroll", "Campaigns")
 		];
 	}
 
 	ngOnInit(): void {
 		this.user = this.getUsername();
-		this.userHash = Md5.hashStr(this.user) as string;
+
+		if (this.user) this.userHash = Md5.hashStr(this.user) as string;
 	}
 
 	getUsername(): string {
@@ -55,6 +57,6 @@ export class NavComponent implements OnInit {
 	}
 
 	isLoggedIn(): boolean {
-		return this.authService.getUser();
+		return !!this.authService.getUser();
 	}
 }

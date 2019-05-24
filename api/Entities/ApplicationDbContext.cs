@@ -3,7 +3,7 @@ using api.Entities.Rulesets;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
-namespace Api.Entities
+namespace api.Entities
 {
 	public class ApplicationDbContext : IdentityDbContext<AppUser>
 	{

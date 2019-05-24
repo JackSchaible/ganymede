@@ -1,5 +1,4 @@
 ﻿using api.Entities.Rulesets;
-using Api.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore.Internal;
 using System;
@@ -115,14 +114,14 @@ namespace api.Entities
                 new Campaign
                 {
                     AppUserId = userId,
-                    Description = null,
+                    Description = "Called by the Elder Elemental Eye to serve, four corrupt prophets have risen from the depths of anonymity to claim mighty weapons with direct links to the power of the elemental princes. Each of these prophets has assembled a cadre of cultists and creatures to serve them in the construction of four elemental temples of lethal design. It is up to adventurers from heroic factions such as the Emerald Enclave and the Order of the Gauntlet to discover where the true power of each prophet lay, and dismantle it before it comes boiling up to obliterate the Realms.",
                     Name = "Princes of the Apocalypse",
                     RulesetID = fifth.ID
                 },
                 new Campaign
                 {
                     AppUserId = userId,
-                    Description = null,
+                    Description = "From the idyllically peaceful coastal town of Sandpoint to an ancient lost city at the top of the world, Rise of the Runelords takes a party of adventurers from 1st to over 18th level and delves into the mysteries of Varisia's ancient past. Millennia ago, the powerful empire of Thassilon ruled the land, dominated by despotic runelords who maintained their power through harnessing the power of rune magic. Thought gone forever, the workings of Thassilon are not so far beneath the surface and one of the runelords plans a return to power. Only the brave adventurers stand in his way.",
                     Name = "Rise of the Runelords",
                     RulesetID = pf.ID
                 }

@@ -1,13 +1,13 @@
 <span *ngIf="item.subItems">
   <button [matMenuTriggerFor]="menu" mat-button class="mat-link">
     <i *ngIf="item.icon" [class]="item.icon"></i>
-    <span class="u-margin-left-quarter">{{item.label}}</span>
+    <span class="ml-2">{{item.label}}</span>
   </button>
 
   <mat-menu #menu>
     <button *ngFor="let subItem of item.subItems" mat-menu-item (click)="navigate(subItem.url)" class="mat-link">
       <i *ngIf="subItem.icon" [class]="subItem.icon"></i>
-      <span class="u-margin-left-quarter">{{subItem.label}}</span>
+      <span class="ml-2">{{subItem.label}}</span>
     </button>
   </mat-menu>
 </span>
@@ -19,6 +19,6 @@
 
   <ng-template #btn>
     <i *ngIf="item.icon" [class]="item.icon"></i>
-    <span class="u-margin-left-quarter">{{item.label}}</span>
+    <span class="ml-2">{{item.label}}</span>
   </ng-template>
 </button>

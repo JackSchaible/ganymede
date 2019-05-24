@@ -7,7 +7,7 @@ export class WordService {
 	public getSuffix(i: number): string {
 		if (!i) return null;
 
-		var result = "th";
+		let result = "th";
 
 		const str = i.toString();
 		const lastChar = str[str.length - 1];
