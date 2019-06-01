@@ -4,6 +4,9 @@ import { Observable } from "rxjs";
 import { Campaign } from "./models/campaign";
 import MasterService from "../services/master.service";
 import { CampaignEditModel } from "./models/campaignEdit.model";
+import ApiError from "../services/http/apiError";
+import { map } from "rxjs/operators";
+import { ApiResponse } from "../services/http/apiResponse";
 
 @Injectable({
 	providedIn: "root"
@@ -21,5 +24,9 @@ export class CampaignService extends MasterService {
 
 	public GetCampaign(id: number): Observable<CampaignEditModel> {
 		return this.client.get<CampaignEditModel>(`${this.baseUrl}/${id}`);
+	}
+
+	public SaveCampaign(campaign: Campaign): Observable<ApiResponse> {
+		return this.client.put<ApiResponse>(`${this.baseUrl}`, campaign);
 	}
 }

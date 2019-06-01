@@ -1,4 +1,3 @@
-using api.Entities;
 using api.Entities.Rulesets;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;

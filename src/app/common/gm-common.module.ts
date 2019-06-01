@@ -6,6 +6,7 @@ import {
 	MatProgressSpinnerModule
 } from "@angular/material";
 import { ProcessingOverlayComponent } from "./processing-overlay/processing-overlay.component";
+import { SnackbarComponent } from './snackbar/snackbar.component';
 
 @NgModule({
 	imports: [
@@ -14,7 +15,8 @@ import { ProcessingOverlayComponent } from "./processing-overlay/processing-over
 		MatButtonModule,
 		MatProgressSpinnerModule
 	],
-	declarations: [ProcessingOverlayComponent],
-	exports: [ProcessingOverlayComponent]
+	declarations: [ProcessingOverlayComponent, SnackbarComponent],
+	exports: [ProcessingOverlayComponent, SnackbarComponent],
+	entryComponents: [SnackbarComponent]
 })
 export class GmCommonModule {}

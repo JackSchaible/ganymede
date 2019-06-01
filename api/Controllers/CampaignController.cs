@@ -1,8 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using api.Entities;
-using api.Errors;
+using api.ViewModels.Models.Api;
 using api.ViewModels.Models.Campaigns;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -16,9 +16,16 @@ namespace api.Controllers
     [ApiController]
     public class CampaignController : ControllerBase
     {
-        private Dictionary<string, ApiError> _errors = new Dictionary<string, ApiError>
+        private Dictionary<string, ApiError> _errors = new Dictionary<string, ApiError>()
         {
-            { "NotOwner", new ApiError("Owner", "NOT_OWNER")},
+            {
+                "NotOwner",
+                new ApiError
+                {
+                    Field = "Owner",
+                    ErrorCode = "NOT_OWNER"
+                }
+            }
         };
 
         private readonly ApplicationDbContext _ctx;
@@ -57,23 +64,52 @@ namespace api.Controllers
 
         // POST: api/Campaign
         [HttpPost]
-        public void Post(Campaign value)
+        public ApiResponse Post(Campaign value)
         {
-            var user = _userManager.GetUserId(HttpContext.User);
-            value.AppUserId = user;
+            try
+            {
+                var user = _userManager.GetUserId(HttpContext.User);
+                value.AppUserId = user;
 
-            _ctx.Campaigns.Add(value);
-            _ctx.SaveChanges();
+                _ctx.Campaigns.Add(value);
+                _ctx.SaveChanges();
+
+                return new ApiResponse
+                {
+                    StatusCode = ApiCodes.Ok
+                };
+            }
+            catch (Exception e)
+            {
+                return new ApiResponse
+                {
+                    StatusCode = ApiCodes.Error
+                };
+            }
         }
 
         // PUT: api/Campaign/5
         [HttpPut]
-        public void Put(Campaign value)
+        public ApiResponse Put(Campaign value)
         {
-            var user = _userManager.GetUserId(HttpContext.User);
-            Campaign old = _ctx.Campaigns.Where(c => c.AppUserId == user).Single(c => c.ID == value.ID);
-            old = value;
-            _ctx.SaveChanges();
+            try
+            {
+                var user = _userManager.GetUserId(HttpContext.User);
+                Campaign old = _ctx.Campaigns.Where(c => c.AppUserId == user).Single(c => c.ID == value.ID);
+                old = value;
+                _ctx.SaveChanges();
+                return new ApiResponse
+                {
+                    StatusCode = ApiCodes.Ok
+                };
+            }
+            catch (Exception e)
+            {
+                return new ApiResponse
+                {
+                    StatusCode = ApiCodes.Error
+                };
+            }
         }
 
         // DELETE: api/ApiWithActions/5

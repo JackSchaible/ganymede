@@ -2,8 +2,13 @@ import { Component, OnInit } from "@angular/core";
 import { CampaignService } from "../campaign.service";
 import { ActivatedRoute } from "@angular/router";
 import { Campaign } from "../models/campaign";
-import { FormControl, FormGroup } from "@angular/forms";
+import { FormGroup } from "@angular/forms";
 import { Ruleset } from "../models/ruleset";
+import { ApiResponse } from "../../services/http/apiResponse";
+import ApiCodes from "../../services/http/apiCodes";
+import { MatSnackBar } from "@angular/material";
+import { SnackbarComponent } from "../../common/snackbar/snackbar.component";
+import SnackbarModel from "../../common/models/snackbarModel";
 
 @Component({
 	selector: "gm-campaign-edit",
@@ -19,7 +24,8 @@ export class CampaignEditComponent implements OnInit {
 
 	constructor(
 		private service: CampaignService,
-		private route: ActivatedRoute
+		private route: ActivatedRoute,
+		private snackBar: MatSnackBar
 	) {}
 
 	ngOnInit() {
@@ -38,5 +44,50 @@ export class CampaignEditComponent implements OnInit {
 				}
 			);
 		else this.processing = false;
+	}
+
+	public save(): void {
+		this.processing = true;
+
+		this.service.SaveCampaign(this.campaign).subscribe((response: ApiResponse)=> {
+			this.processing = false;
+
+			if (response) {
+				if (response.statusCode === ApiCodes.Ok )
+					this.openSnackbar('check-square', `${ this.campaign.name } was successfully saved!`);
+				else
+					this.openSnackbar('exclamation-triangle', `An error occurred while saving ${ this.campaign.name }!`);
+			} else
+				this.openSnackbar('exclamation-triangle', `An error occurred while saving ${ this.campaign.name }!`);
+		},
+		() => {	
+			this.processing = false;
+			this.openSnackbar('exclamation-triangle', `An error occurred while saving ${ this.campaign.name }!`);
+		});
+	}
+
+	private openSnackbar(icon: string, message: string): void {
+		let textClass = 'text-info';
+
+		switch(icon) {
+			case 'check-square':
+				textClass='text-success';
+				break;
+
+			case 'exclamation-triangle':
+				textClass = 'text-danger';
+				break;
+		}
+
+		const options: SnackbarModel = {
+			icon: icon,
+			message: message,
+			textClass: textClass
+		};
+
+		this.snackBar.openFromComponent(SnackbarComponent, {
+			data: options,
+			duration: 5000
+		});
 	}
 }

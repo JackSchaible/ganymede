@@ -8,7 +8,8 @@ import {
 	MatButtonModule,
 	MatCardModule,
 	MatInputModule,
-	MatSelectModule
+	MatSelectModule,
+	MatSnackBarModule
 } from "@angular/material";
 import { CampaignEditComponent } from "./campaign-edit/campaign-edit.component";
 import { GmCommonModule } from "../common/gm-common.module";
@@ -24,7 +25,8 @@ import { FormsModule } from "@angular/forms";
 		MatCardModule,
 		MatInputModule,
 		MatSelectModule,
-		FormsModule
+		FormsModule,
+		MatSnackBarModule
 	],
 	declarations: [CampaignListComponent, CampaignEditComponent]
 })
