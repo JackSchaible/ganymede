@@ -16,90 +16,90 @@ using Microsoft.AspNetCore;
 
 namespace api
 {
-	public class Startup
-	{
-		public static IWebHostBuilder CreateWebHostBuilder(string[] args) => WebHost.CreateDefaultBuilder(args);
-		private IHostingEnvironment _env;
+    public class Startup
+    {
+        public static IWebHostBuilder CreateWebHostBuilder(string[] args) => WebHost.CreateDefaultBuilder(args);
+        private IHostingEnvironment _env;
 
-		public Startup(IHostingEnvironment env, IConfiguration configuration)
-		{
-			Configuration = configuration;
-			_env = env;
-		}
+        public Startup(IHostingEnvironment env, IConfiguration configuration)
+        {
+            Configuration = configuration;
+            _env = env;
+        }
 
-		public IConfiguration Configuration { get; }
+        public IConfiguration Configuration { get; }
 
-		// This method gets called by the runtime. Use this method to add services to the container.
-		public void ConfigureServices(IServiceCollection services)
-		{
-			services.AddDbContext<ApplicationDbContext>();
-			services.AddIdentity<AppUser, IdentityRole>()
-				.AddEntityFrameworkStores<ApplicationDbContext>()
-				.AddDefaultTokenProviders();
+        // This method gets called by the runtime. Use this method to add services to the container.
+        public void ConfigureServices(IServiceCollection services)
+        {
+            services.AddDbContext<ApplicationDbContext>();
+            services.AddIdentity<AppUser, IdentityRole>()
+                .AddEntityFrameworkStores<ApplicationDbContext>()
+                .AddDefaultTokenProviders();
 
-			JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
-			services
-				.AddAuthentication(o =>
-				{
-					o.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-					o.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-					o.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-				})
-				.AddJwtBearer(cfg =>
-				{
-					cfg.RequireHttpsMetadata = false;
-					cfg.SaveToken = true;
-					cfg.TokenValidationParameters = new TokenValidationParameters
-					{
-						ValidIssuer = Configuration["JwtIssuer"],
-						ValidAudience = Configuration["JwtIssuer"],
-						IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JwtKey"])),
-						ClockSkew = TimeSpan.Zero
-					};
-				});
+            JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
+            services
+                .AddAuthentication(o =>
+                {
+                    o.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                    o.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+                    o.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                })
+                .AddJwtBearer(cfg =>
+                {
+                    cfg.RequireHttpsMetadata = false;
+                    cfg.SaveToken = true;
+                    cfg.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidIssuer = Configuration["JwtIssuer"],
+                        ValidAudience = Configuration["JwtIssuer"],
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JwtKey"])),
+                        ClockSkew = TimeSpan.Zero
+                    };
+                });
 
-			services.AddAuthorization(o =>
-				o.AddPolicy("ApiUser", p => p.RequireClaim("rol", "api_access")));
+            services.AddAuthorization(o =>
+                o.AddPolicy("ApiUser", p => p.RequireClaim("rol", "api_access")));
 
-			string domain = _env.IsDevelopment() ? "https://localhost:4200" : "http://dm.jackschaible.ca";
+            string domain = _env.IsDevelopment() ? "https://localhost:4200" : "http://dm.jackschaible.ca";
 
-			services.AddCors(o =>
-				o.AddPolicy("AllowOrigin",
-					b => b.WithOrigins(domain)
-						.AllowAnyHeader()
-						.AllowAnyMethod()));
+            services.AddCors(o =>
+                o.AddPolicy("AllowOrigin",
+                    b => b.WithOrigins(domain)
+                        .AllowAnyHeader()
+                        .AllowAnyMethod()));
 
-			services.AddScoped<IDbInitializer, DbInitializer>();
+            services.AddScoped<IDbInitializer, DbInitializer>();
 
-			services.AddAutoMapper();
+            services.AddAutoMapper();
 
-			services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
-			services.Configure<IISOptions>(o => { o.AutomaticAuthentication = false; });
-		}
+            services.Configure<IISOptions>(o => { o.AutomaticAuthentication = false; });
+        }
 
-		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-		public void Configure(IApplicationBuilder app, ApplicationDbContext context, IDbInitializer initializer)
-		{
-			//app.UseOptions();
-			app.UseCors("AllowOrigin");
+        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+        public void Configure(IApplicationBuilder app, ApplicationDbContext context, IDbInitializer initializer)
+        {
+            //app.UseOptions();
+            app.UseCors("AllowOrigin");
 
-			if (_env.IsDevelopment())
-			{
-				app.UseDeveloperExceptionPage();
-			}
-			else
-			{
-				app.UseCors(b => b.WithOrigins("http://dm.jackschaible.ca/"));
-				app.UseHsts();
-			}
+            if (_env.IsDevelopment())
+            {
+                app.UseDeveloperExceptionPage();
+            }
+            else
+            {
+                app.UseCors(b => b.WithOrigins("http://dm.jackschaible.ca/"));
+                app.UseHsts();
+            }
 
-			app.UseAuthentication();
-			app.UseHttpsRedirection();
-			app.UseMvc();
+            app.UseAuthentication();
+            app.UseHttpsRedirection();
+            app.UseMvc();
 
-			context.Database.EnsureCreated();
-			initializer.Initialize().Wait();
-		}
-	}
+            context.Database.EnsureCreated();
+            initializer.Initialize().Wait();
+        }
+    }
 }
