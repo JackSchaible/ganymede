@@ -1,4 +1,4 @@
-﻿namespace api.Entities.Rulesets
+﻿namespace Ganymede.Api.Data.Rulesets
 {
     public class Publisher
     {

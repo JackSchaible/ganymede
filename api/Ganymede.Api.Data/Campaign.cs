@@ -1,7 +1,7 @@
-﻿using api.Entities.Rulesets;
+﻿using Ganymede.Api.Data.Rulesets;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace api.Entities
+namespace Ganymede.Api.Data
 {
     public class Campaign
     {

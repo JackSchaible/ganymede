@@ -1,23 +1,21 @@
+﻿using Ganymede.Api.Data;
+using Ganymede.Api.Models.Api;
+using Ganymede.Api.Models.Auth;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
-using api.Entities;
-using api.ViewModels.Models.Api;
 
-namespace api.Controllers
+namespace Ganymede.Api.BLL.Services.Impl
 {
-    [Route("api/[controller]/[action]")]
-    [ApiController]
-    public class AccountController : Controller
+    public class AuthService: IAuthService
     {
         private Dictionary<string, ApiError> _errors = new Dictionary<string, ApiError>
         {
@@ -31,56 +29,63 @@ namespace api.Controllers
         private readonly SignInManager<AppUser> _signinManager;
         private readonly UserManager<AppUser> _userManager;
         private readonly IConfiguration _configuration;
+        private readonly ILogger<AuthService> _logger;
 
-        public AccountController(SignInManager<AppUser> signinManager, UserManager<AppUser> userManager, IConfiguration configuration)
+        public AuthService(SignInManager<AppUser> signinManager, UserManager<AppUser> userManager, IConfiguration configuration, ILogger<AuthService> logger)
         {
             _signinManager = signinManager;
             _userManager = userManager;
             _configuration = configuration;
+            _logger = logger;
         }
 
-        [HttpPost]
-        public async Task<object> Login([FromBody] LoginData model)
+        public async Task<LoginResult> Login(LoginData model)
         {
-            var result = await _signinManager.PasswordSignInAsync(model.Email, model.Password, false, false);
+            var result = new LoginResult();
+            var signinResult = await _signinManager.PasswordSignInAsync(model.Email, model.Password, false, false);
 
-            if (result.Succeeded)
+            if (signinResult.Succeeded)
             {
                 var appUser = _userManager.Users.SingleOrDefault(r => r.Email == model.Email);
-                return Json(new { token = GenerateJwtToken(model.Email, appUser) });
+                result.Token = GenerateJwtToken(model.Email, appUser);
+            }
+            else if (!signinResult.IsLockedOut && !signinResult.RequiresTwoFactor && !signinResult.IsNotAllowed)
+            {
+                result.Error = new ApiError
+                {
+                    Field = _errors["InvalidPassword"].Field,
+                    ErrorCode = _errors["InvalidPassword"].ErrorCode
+                };
             }
             else
-            {
-                if (!result.IsLockedOut && !result.RequiresTwoFactor && !result.IsNotAllowed)
-                {
-                    return Json(new { error = _errors["InvalidPassword"] });
-                }
-            }
+                throw new ApplicationException("INVALID_LOGIN_ATTEMPT");
 
-            throw new ApplicationException("INVALID_LOGIN_ATTEMPT");
+            return result;
         }
 
-        [HttpPost]
-        public async Task<object> Register([FromBody] RegisterData model)
+        public async Task<RegisterResult> Register(RegisterData model)
         {
+            var result = new RegisterResult();
+
             var user = new AppUser
             {
                 UserName = model.Email,
                 Email = model.Email
             };
 
-            var result = await _userManager.CreateAsync(user, model.Password);
+            var createResult = await _userManager.CreateAsync(user, model.Password);
 
-            if (result.Succeeded)
+            if (createResult.Succeeded)
             {
                 await _signinManager.SignInAsync(user, false);
-                return Json(new { token = GenerateJwtToken(model.Email, user) });
+                result.Token = GenerateJwtToken(model.Email, user);
+                return result;
             }
             else
             {
                 List<ApiError> knownErrors = new List<ApiError>();
 
-                foreach (var err in result.Errors)
+                foreach (var err in createResult.Errors)
                 {
                     if (_errors.ContainsKey(err.Code))
                     {
@@ -90,14 +95,16 @@ namespace api.Controllers
 
                 if (knownErrors.Count > 0)
                 {
-                    return Json(new { errors = knownErrors });
+                    result.Errors = knownErrors;
+                    return result;
                 }
             }
 
+            _logger.LogError("Unknown error(s)", result.Errors);
             throw new ApplicationException("UNKNOWN_ERROR");
         }
 
-        private object GenerateJwtToken(string email, IdentityUser user)
+        private string GenerateJwtToken(string email, IdentityUser user)
         {
             var claims = new List<Claim>
             {
@@ -119,25 +126,6 @@ namespace api.Controllers
             );
 
             return new JwtSecurityTokenHandler().WriteToken(token);
-        }
-
-        public class LoginData
-        {
-            [Required]
-            public string Email { get; set; }
-
-            [Required]
-            public string Password { get; set; }
-        }
-
-        public class RegisterData
-        {
-            [Required]
-            public string Email { get; set; }
-
-            [Required]
-            [StringLength(128, ErrorMessage = "PWD_MIN_LEN", MinimumLength = 6)]
-            public string Password { get; set; }
         }
     }
 }

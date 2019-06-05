@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace api.ViewModels.Models.Api
+namespace Ganymede.Api.Models.Api
 {
     public class ApiResponse
     {

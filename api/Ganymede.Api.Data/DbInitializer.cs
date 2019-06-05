@@ -1,4 +1,4 @@
-﻿using api.Entities.Rulesets;
+﻿using Ganymede.Api.Data.Rulesets;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore.Internal;
 using System;
@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace api.Entities
+namespace Ganymede.Api.Data
 {
 	public class DbInitializer : IDbInitializer
 	{

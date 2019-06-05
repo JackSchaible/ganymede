@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Identity;
 using System.Collections.Generic;
 
-namespace api.Entities
+namespace Ganymede.Api.Data
 {
   public class AppUser : IdentityUser
   {

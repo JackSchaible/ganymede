@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace api.Entities.Rulesets
+namespace Ganymede.Api.Data.Rulesets
 {
     public class Ruleset
     {

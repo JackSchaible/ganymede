@@ -1,8 +1,8 @@
-using api.Entities.Rulesets;
+using Ganymede.Api.Data.Rulesets;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
-namespace api.Entities
+namespace Ganymede.Api.Data
 {
 	public class ApplicationDbContext : IdentityDbContext<AppUser>
 	{

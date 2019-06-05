@@ -1,8 +1,8 @@
-﻿using api.Entities;
-using api.Entities.Rulesets;
+﻿using Ganymede.Api.Data;
+using Ganymede.Api.Data.Rulesets;
 using System.Collections.Generic;
 
-namespace api.ViewModels.Models.Campaigns
+namespace Ganymede.Api.Models.Campaigns
 {
     public class CampaignEditViewModel
     {

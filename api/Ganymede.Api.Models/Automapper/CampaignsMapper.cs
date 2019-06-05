@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 
-namespace api.ViewModels.Automapper
+namespace Ganymede.Api.Models.Automapper
 {
     public class CampaignsMapper : Profile
     {

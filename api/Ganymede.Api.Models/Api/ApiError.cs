@@ -1,4 +1,4 @@
-﻿namespace api.ViewModels.Models.Api
+﻿namespace Ganymede.Api.Models.Api
 {
     public class ApiError
     {
