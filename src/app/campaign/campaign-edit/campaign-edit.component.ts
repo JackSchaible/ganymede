@@ -19,6 +19,7 @@ export class CampaignEditComponent implements OnInit {
 	public processing: boolean;
 	public campaign: Campaign;
 	public rulesets: Ruleset[];
+	public isNew: boolean;
 
 	public group: FormGroup;
 
@@ -32,50 +33,70 @@ export class CampaignEditComponent implements OnInit {
 		this.processing = true;
 		const id: number = parseInt(this.route.snapshot.paramMap.get("id"), 10);
 
-		if (id)
-			this.service.GetCampaign(id).subscribe(
+		if (id) {
+			this.isNew = id === -1;
+			this.service.getCampaign(id).subscribe(
 				campaignModel => {
 					this.campaign = campaignModel.campaign;
 					this.rulesets = campaignModel.rulesets;
-				},
-				() => {},
-				() => {
 					this.processing = false;
-				}
+				},
+				() => (this.processing = false)
 			);
-		else this.processing = false;
+		} else this.processing = false;
 	}
 
 	public save(): void {
 		this.processing = true;
 
-		this.service.SaveCampaign(this.campaign).subscribe((response: ApiResponse)=> {
-			this.processing = false;
+		if (this.isNew) this.campaign.id = -1;
 
-			if (response) {
-				if (response.statusCode === ApiCodes.Ok )
-					this.openSnackbar('check-square', `${ this.campaign.name } was successfully saved!`);
-				else
-					this.openSnackbar('exclamation-triangle', `An error occurred while saving ${ this.campaign.name }!`);
-			} else
-				this.openSnackbar('exclamation-triangle', `An error occurred while saving ${ this.campaign.name }!`);
-		},
-		() => {	
-			this.processing = false;
-			this.openSnackbar('exclamation-triangle', `An error occurred while saving ${ this.campaign.name }!`);
-		});
+		this.service.saveCampaign(this.campaign).subscribe(
+			(response: ApiResponse) => {
+				this.processing = false;
+
+				if (response) {
+					if (response.statusCode === ApiCodes.Ok) {
+						this.openSnackbar(
+							"check-square",
+							`${this.campaign.name} was successfully saved!`
+						);
+
+						if (this.isNew) {
+							this.isNew = false;
+							this.campaign.id = response.insertedID;
+						}
+					} else
+						this.openSnackbar(
+							"exclamation-triangle",
+							`An error occurred while saving ${this.campaign.name}!`
+						);
+				} else
+					this.openSnackbar(
+						"exclamation-triangle",
+						`An error occurred while saving ${this.campaign.name}!`
+					);
+			},
+			() => {
+				this.processing = false;
+				this.openSnackbar(
+					"exclamation-triangle",
+					`An error occurred while saving ${this.campaign.name}!`
+				);
+			}
+		);
 	}
 
 	private openSnackbar(icon: string, message: string): void {
-		let textClass = 'text-info';
+		let textClass = "text-info";
 
-		switch(icon) {
-			case 'check-square':
-				textClass='text-success';
+		switch (icon) {
+			case "check-square":
+				textClass = "text-success";
 				break;
 
-			case 'exclamation-triangle':
-				textClass = 'text-danger';
+			case "exclamation-triangle":
+				textClass = "text-danger";
 				break;
 		}
 
