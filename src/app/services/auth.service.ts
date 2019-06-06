@@ -4,6 +4,7 @@ import { map } from "rxjs/operators";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import ApiError from "./http/apiError";
 import MasterService from "./master.service";
+import { User } from "../auth/models/user";
 
 @Injectable({
 	providedIn: "root"
@@ -29,7 +30,7 @@ export class AuthService extends MasterService {
 					if (json.token) {
 						this.isLoggedIn = true;
 
-						const user = {
+						const user: User = {
 							token: json.token,
 							expiry: new Date(new Date().getTime() + 2592000000),
 							user: username
@@ -62,7 +63,7 @@ export class AuthService extends MasterService {
 						if (json.token) {
 							this.isLoggedIn = true;
 
-							const user = {
+							const user: User = {
 								token: json.token,
 								expiry: new Date(new Date().getTime() + 1000 * 3600 * 24 * 30),
 								user: username
@@ -90,7 +91,7 @@ export class AuthService extends MasterService {
 		});
 	}
 
-	public getUser() {
+	public getUser(): User {
 		if (!localStorage) return;
 
 		if (localStorage.getItem(this.currentUserKey))

@@ -1,0 +1,12 @@
+<h1 mat-dialog-title>{{model.title}}</h1>
+<div mat-dialog-content [innerHtml]="model.content"></div>
+<div mat-dialog-actions>
+  <ng-container *ngFor="let btn of model.buttons">
+    <ng-container *ngTemplateOutlet="button; context: { $implicit: btn }"></ng-container>
+  </ng-container>
+  <ng-container *ngTemplateOutlet="button; context: { $implicit: model.closeButton, close: true }"></ng-container>
+</div>
+
+<ng-template #button let-button let-close="close">
+  <button mat-mini-fab [mat-dialog-close]="close" [title]="button.titleText" [color]="button.color" (click)="button.onClick()" class="mr-3"><i [class]="'fas fa-' + (button.icon ? button.icon : 'times-circle')"></i></button>
+</ng-template>
