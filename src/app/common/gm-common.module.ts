@@ -3,20 +3,23 @@ import { CommonModule } from "@angular/common";
 import {
 	MatGridListModule,
 	MatButtonModule,
-	MatProgressSpinnerModule
+	MatProgressSpinnerModule,
+	MatDialogModule
 } from "@angular/material";
 import { ProcessingOverlayComponent } from "./processing-overlay/processing-overlay.component";
-import { SnackbarComponent } from './snackbar/snackbar.component';
+import { SnackbarComponent } from "./snackbar/snackbar.component";
+import { ModalComponent } from "./modal/modal.component";
 
 @NgModule({
 	imports: [
 		CommonModule,
 		MatGridListModule,
 		MatButtonModule,
-		MatProgressSpinnerModule
+		MatProgressSpinnerModule,
+		MatDialogModule
 	],
-	declarations: [ProcessingOverlayComponent, SnackbarComponent],
-	exports: [ProcessingOverlayComponent, SnackbarComponent],
-	entryComponents: [SnackbarComponent]
+	declarations: [ProcessingOverlayComponent, SnackbarComponent, ModalComponent],
+	exports: [ProcessingOverlayComponent, SnackbarComponent, ModalComponent],
+	entryComponents: [SnackbarComponent, ModalComponent]
 })
 export class GmCommonModule {}
