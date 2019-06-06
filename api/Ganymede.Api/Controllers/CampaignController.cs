@@ -10,7 +10,7 @@ using Ganymede.Api.BLL.Services;
 namespace api.Controllers
 {
     [Authorize]
-    [Route("api/[controller]")]
+    [Route("api/[controller]/[action]")]
     [ApiController]
     public class CampaignController : ControllerBase
     {
@@ -25,10 +25,10 @@ namespace api.Controllers
 
         // GET: api/Campaign
         [HttpGet]
-        public IEnumerable<Campaign> Get()
+        public IEnumerable<CampaignListViewModel> List()
         {
             var user = _userManager.GetUserId(HttpContext.User);
-            return _service.GetByUser(user);
+            return _service.ListByUser(user);
         }
 
         // GET: api/Campaign/5
@@ -39,25 +39,33 @@ namespace api.Controllers
             return _service.GetByUserAndId(id, user);
         }
 
-        // POST: api/Campaign
-        [HttpPost]
-        public ApiResponse Post(Campaign value)
+        // GET: api/Campaign/Clone/5
+        [HttpGet("{id}", Name = "Clone")]
+        public CampaignListViewModel Clone(int id)
         {
             var user = _userManager.GetUserId(HttpContext.User);
-            return _service.Add(value, user);
+            return _service.Clone(id, user);
         }
 
         // PUT: api/Campaign/5
         [HttpPut]
-        public ApiResponse Put(Campaign value)
+        public ApiResponse Save(CampaignEditModel value)
         {
             var user = _userManager.GetUserId(HttpContext.User);
-            return _service.Update(value, user);
+
+            ApiResponse response;
+
+            if (value.ID == -1)
+                response = _service.Add(value, user);
+            else
+                response = _service.Update(value, user);
+
+            return response;
         }
 
-        // DELETE: api/ApiWithActions/5
+        // DELETE: api/Campaign/5
         [HttpDelete("{id}")]
-        public ApiResponse DeleteAsync(int id)
+        public ApiResponse Delete(int id)
         {
             var user = _userManager.GetUserId(HttpContext.User);
             return _service.Delete(id, user);

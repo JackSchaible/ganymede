@@ -6,5 +6,6 @@ namespace Ganymede.Api.Models.Api
     {
         public string StatusCode { get; set; }
         public List<ApiError> ApiErrors { get; set; }
+        public int InsertedID { get; set; }
     }
 }

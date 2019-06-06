@@ -14,6 +14,8 @@ using Microsoft.AspNetCore;
 using Ganymede.Api.Data;
 using Ganymede.Api.BLL.Services;
 using Ganymede.Api.BLL.Services.Impl;
+using System.Linq;
+using System.Reflection;
 
 namespace api
 {
@@ -30,10 +32,48 @@ namespace api
 
         public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            ConfigureDb(services);
+            ConfigureAuth(services);
+            ConfigureCors(services);
+            ConfigureAutomapper(services);
+            ConfigureBllServices(services);
+
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            services.Configure<IISOptions>(o => { o.AutomaticAuthentication = false; });
+        }
+
+        public void Configure(IApplicationBuilder app, ApplicationDbContext context, IDbInitializer initializer, IMapper autoMapper)
+        {
+            app.UseCors("AllowOrigin");
+
+            if (_env.IsDevelopment())
+            {
+                app.UseDeveloperExceptionPage();
+            }
+            else
+            {
+                app.UseCors(b => b.WithOrigins("http://dm.jackschaible.ca/"));
+                app.UseHsts();
+            }
+
+            app.UseAuthentication();
+            app.UseHttpsRedirection();
+            app.UseMvc();
+
+            context.Database.EnsureCreated();
+            initializer.Initialize().Wait();
+            autoMapper.ConfigurationProvider.AssertConfigurationIsValid();
+        }
+
+        private void ConfigureDb(IServiceCollection services)
+        {
             services.AddDbContext<ApplicationDbContext>();
+            services.AddScoped<IDbInitializer, DbInitializer>();
+        }
+        private void ConfigureAuth(IServiceCollection services)
+        {
             services.AddIdentity<AppUser, IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
@@ -61,7 +101,9 @@ namespace api
 
             services.AddAuthorization(o =>
                 o.AddPolicy("ApiUser", p => p.RequireClaim("rol", "api_access")));
-
+        }
+        private void ConfigureCors(IServiceCollection services)
+        {
             string domain = _env.IsDevelopment() ? "https://localhost:4200" : "http://dm.jackschaible.ca";
 
             services.AddCors(o =>
@@ -69,41 +111,20 @@ namespace api
                     b => b.WithOrigins(domain)
                         .AllowAnyHeader()
                         .AllowAnyMethod()));
+        }
+        private void ConfigureAutomapper(IServiceCollection services)
+        {
+            Assembly thisAssembly = AppDomain.CurrentDomain.GetAssemblies().Single(a => a.GetName().Name == "Ganymede.Api");
+            AssemblyName[] assemblies = thisAssembly.GetReferencedAssemblies();
+            AssemblyName name = assemblies.Single(a => a.Name == "Ganymede.Api.Models");
+            Assembly modelsAssembly = Assembly.Load(name);
 
-            services.AddScoped<IDbInitializer, DbInitializer>();
-
+            services.AddAutoMapper(modelsAssembly);
+        }
+        private void ConfigureBllServices(IServiceCollection services)
+        {
             services.AddTransient<ICampaignService, CampaignService>();
             services.AddTransient<IAuthService, AuthService>();
-
-            //services.AddAutoMapper();
-
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
-
-            services.Configure<IISOptions>(o => { o.AutomaticAuthentication = false; });
-        }
-
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, ApplicationDbContext context, IDbInitializer initializer)
-        {
-            //app.UseOptions();
-            app.UseCors("AllowOrigin");
-
-            if (_env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
-            else
-            {
-                app.UseCors(b => b.WithOrigins("http://dm.jackschaible.ca/"));
-                app.UseHsts();
-            }
-
-            app.UseAuthentication();
-            app.UseHttpsRedirection();
-            app.UseMvc();
-
-            context.Database.EnsureCreated();
-            initializer.Initialize().Wait();
         }
     }
 }

@@ -17,6 +17,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Ganymede.Api.BLL\Ganymede.Api.BLL.csproj" />
+    <ProjectReference Include="..\Ganymede.Api.Data\Ganymede.Api.Data.csproj" />
     <ProjectReference Include="..\Ganymede.Api.Models\Ganymede.Api.Models.csproj" />
   </ItemGroup>
 
