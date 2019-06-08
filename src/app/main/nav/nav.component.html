@@ -1,7 +1,7 @@
 <mat-toolbar>
   <nav *ngIf="isDesktop; else isMobile" class="u-flex u-flex__justify--space-between w-100">
     <div class="u-flex">
-      <gm-nav-item *ngFor="let item of items" [item]="item"></gm-nav-item>
+      <gm-nav-item *ngFor="let item of currentItems" [item]="item"></gm-nav-item>
     </div>
     <div *ngIf="isLoggedIn()" class="u-flex c-nav__logged-in">
       <div>
@@ -26,7 +26,7 @@
   <ng-template #isMobile>
     <nav class="u-flex w-100">
       <mat-menu #appMenu="matMenu">
-        <button *ngFor="let item of items" mat-menu-item [routerLink]="item.url" [class.isBrand]="item.isBrand">
+        <button *ngFor="let item of currentItems" mat-menu-item [routerLink]="item.url" [class.isBrand]="item.isBrand">
           <strong *ngIf=" item.isBrand; else
               btn">
             <ng-container *ngTemplateOutlet="btn; context: {$implicit: item}"></ng-container>
