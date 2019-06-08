@@ -1,4 +1,6 @@
-﻿using Ganymede.Api.Data.Rulesets;
+﻿using Ganymede.Api.Data.Monsters;
+using Ganymede.Api.Data.Rulesets;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Ganymede.Api.Data
@@ -17,5 +19,7 @@ namespace Ganymede.Api.Data
         public string AppUserId { get; set; }
         [ForeignKey("AppUserId")]
         public AppUser User { get; set; }
+
+        public ICollection<Monster> Monsters { get; set; }
     }
 }

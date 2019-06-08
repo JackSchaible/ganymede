@@ -2,9 +2,9 @@ import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
 import { map } from "rxjs/operators";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
-import ApiError from "./http/apiError";
-import MasterService from "./master.service";
-import { User } from "../auth/models/user";
+import ApiError from "../services/http/apiError";
+import MasterService from "../services/master.service";
+import { User } from "./models/user";
 
 @Injectable({
 	providedIn: "root"

@@ -1,6 +1,6 @@
 import { Component, Input } from "@angular/core";
 import { Router } from "@angular/router";
-import NavItem from "../../models/nav/navItem";
+import NavItem from "../models/navItem";
 
 @Component({
 	selector: "gm-nav-item",

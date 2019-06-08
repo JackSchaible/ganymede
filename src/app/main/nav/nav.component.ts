@@ -1,10 +1,10 @@
 import { Component, OnInit } from "@angular/core";
-import { AuthService } from "../../services/auth.service";
+import { AuthService } from "../../auth/auth.service";
 import { DeviceDetectorService } from "ngx-device-detector";
 import { Router, NavigationEnd, RouterEvent } from "@angular/router";
-import NavItem from "../../models/nav/navItem";
 import { Md5 } from "ts-md5/dist/md5";
 import { filter } from "rxjs/operators";
+import NavItem from "../models/navItem";
 
 @Component({
 	selector: "gm-nav",

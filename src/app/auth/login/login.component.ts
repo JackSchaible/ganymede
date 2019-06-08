@@ -1,7 +1,10 @@
 import { Component, OnInit } from "@angular/core";
-import { AuthService } from "../../services/auth.service";
+import { AuthService } from "../auth.service";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
 import { Router } from "@angular/router";
+import { Store } from "@ngrx/store";
+import { AppUser } from "src/app/models/core/AppUser";
+import { login } from "../auth.actions";
 
 @Component({
 	selector: "gm-login",
@@ -27,7 +30,11 @@ export class LoginComponent implements OnInit {
 		password: this.password
 	});
 
-	constructor(private authService: AuthService, private router: Router) {}
+	constructor(
+		private authService: AuthService,
+		private router: Router,
+		private store: Store<AppUser>
+	) {}
 
 	ngOnInit() {
 		this.loginForm.valueChanges.subscribe(() => {
@@ -41,6 +48,8 @@ export class LoginComponent implements OnInit {
 				.login(this.email.value, this.password.value)
 				.subscribe((e: boolean) => {
 					if (e) {
+						this.store.dispatch(login());
+
 						const rUrl = this.authService.redirectUrl
 							? this.authService.redirectUrl
 							: "/";
