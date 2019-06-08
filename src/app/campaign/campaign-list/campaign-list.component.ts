@@ -35,9 +35,13 @@ export class CampaignListComponent implements OnInit {
 		);
 	}
 
+	public select(campaignId: number): void {
+		this.router.navigateByUrl(`campaign/${campaignId}`);
+	}
+
 	public edit(campaignId: number): void {
 		this.processing = true;
-		this.router.navigateByUrl(`/campaign/${campaignId}`);
+		this.router.navigateByUrl(`/campaign/edit/${campaignId}`);
 	}
 
 	public clone(campaign: Campaign): void {

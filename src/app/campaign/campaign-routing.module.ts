@@ -3,6 +3,8 @@ import { Routes, RouterModule } from "@angular/router";
 import { CampaignListComponent } from "./campaign-list/campaign-list.component";
 import { AuthGuard } from "../guards/auth.guard";
 import { CampaignEditComponent } from "./campaign-edit/campaign-edit.component";
+import { CampaignComponent } from "./campaign/campaign.component";
+import { MonsterModule } from "./monster/monster.module";
 
 const routes: Routes = [
 	{
@@ -12,10 +14,20 @@ const routes: Routes = [
 		canActivate: [AuthGuard]
 	},
 	{
-		path: "campaign/:id",
+		path: "campaign/edit/:id",
 		component: CampaignEditComponent,
 		data: { animation: "campaigns" },
 		canActivate: [AuthGuard]
+	},
+	{
+		path: "campaign/:id",
+		component: CampaignComponent,
+		data: { animation: "campaigns" },
+		canActivate: [AuthGuard]
+	},
+	{
+		path: "campaign/:id/monsters",
+		loadChildren: () => MonsterModule
 	}
 ];
 

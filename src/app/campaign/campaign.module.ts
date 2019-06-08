@@ -14,6 +14,7 @@ import {
 import { CampaignEditComponent } from "./campaign-edit/campaign-edit.component";
 import { GmCommonModule } from "../common/gm-common.module";
 import { FormsModule } from "@angular/forms";
+import { CampaignComponent } from "./campaign/campaign.component";
 
 @NgModule({
 	imports: [
@@ -28,6 +29,10 @@ import { FormsModule } from "@angular/forms";
 		FormsModule,
 		MatSnackBarModule
 	],
-	declarations: [CampaignListComponent, CampaignEditComponent]
+	declarations: [
+		CampaignListComponent,
+		CampaignEditComponent,
+		CampaignComponent
+	]
 })
 export class CampaignModule {}
