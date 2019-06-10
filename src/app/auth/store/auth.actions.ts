@@ -1,5 +1,5 @@
 import { Action } from "@ngrx/store";
-import { AppUser } from "../models/core/AppUser";
+import { AppUser } from "../../models/core/AppUser";
 
 export const LOGGED_IN = "LOGGED_IN";
 

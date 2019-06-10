@@ -19,13 +19,22 @@ export class ErrorInterceptor implements HttpInterceptor {
 	): Observable<HttpEvent<any>> {
 		return next.handle(request).pipe(
 			catchError(err => {
-				if (err.status === 401) {
+				console.log(request.url);
+				if (
+					err.status === 401 &&
+					// Exclude the getuserdata route, otherwise it causes an infinite redirect
+					!request.url
+						.toLowerCase()
+						.endsWith("Account/GetUserData".toLowerCase())
+				) {
 					this.authenticationService.logout();
 					location.reload(true);
 				}
 
-				const error = err.error.message || err.statusText;
-				return throwError(error);
+				if (err.status !== 401) {
+					const error = err.error.message || err.statusText;
+					return throwError(error);
+				}
 			})
 		);
 	}

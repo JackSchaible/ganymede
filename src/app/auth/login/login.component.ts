@@ -4,7 +4,8 @@ import { FormGroup, FormControl, Validators } from "@angular/forms";
 import { Router } from "@angular/router";
 import { Store } from "@ngrx/store";
 import { AppUser } from "src/app/models/core/AppUser";
-import { login } from "../auth.actions";
+import { loggedIn } from "../store/auth.actions";
+import { LoginResponse } from "../models/loginResponse";
 
 @Component({
 	selector: "gm-login",
@@ -44,11 +45,10 @@ export class LoginComponent implements OnInit {
 
 	submit() {
 		if (this.loginForm.valid) {
-			this.authService
-				.login(this.email.value, this.password.value)
-				.subscribe((e: boolean) => {
+			this.authService.login(this.email.value, this.password.value).subscribe(
+				(e: LoginResponse) => {
 					if (e) {
-						this.store.dispatch(login());
+						this.store.dispatch(loggedIn(e.user));
 
 						const rUrl = this.authService.redirectUrl
 							? this.authService.redirectUrl
@@ -58,7 +58,11 @@ export class LoginComponent implements OnInit {
 					} else {
 						this.authError = true;
 					}
-				});
+				},
+				() => {
+					this.authError = true;
+				}
+			);
 		}
 	}
 }

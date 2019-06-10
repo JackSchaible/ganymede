@@ -7,6 +7,10 @@ import { ModalComponent } from "src/app/common/modal/modal.component";
 import { ModalModel } from "src/app/common/models/modalModel";
 import SnackbarModel from "src/app/common/models/snackbarModel";
 import { SnackbarComponent } from "src/app/common/snackbar/snackbar.component";
+import { Store } from "@ngrx/store";
+import { AppUser } from "src/app/models/core/AppUser";
+import { Observable } from "rxjs";
+import { listCampaignsSelector } from "../store/campaign.selectors";
 
 @Component({
 	selector: "gm-campaign-list",
@@ -14,25 +18,20 @@ import { SnackbarComponent } from "src/app/common/snackbar/snackbar.component";
 	styleUrls: ["./campaign-list.component.scss"]
 })
 export class CampaignListComponent implements OnInit {
-	public campaigns: Campaign[];
+	public campaigns$: Observable<Campaign[]>;
 	public processing: boolean;
 
 	constructor(
 		private service: CampaignService,
 		private router: Router,
 		private dialog: MatDialog,
-		private snackBar: MatSnackBar
+		private snackBar: MatSnackBar,
+		private store: Store<AppUser>
 	) {}
 
 	ngOnInit() {
 		this.processing = true;
-		this.service.listCampaigns().subscribe(
-			campaigns => {
-				this.campaigns = campaigns;
-				this.processing = false;
-			},
-			() => (this.processing = false)
-		);
+		this.campaigns$ = this.store.select(listCampaignsSelector);
 	}
 
 	public select(campaignId: number): void {
@@ -48,7 +47,7 @@ export class CampaignListComponent implements OnInit {
 		this.processing = true;
 		this.service.cloneCampaign(campaign.id).subscribe(
 			(newCampaign: Campaign) => {
-				this.campaigns.push(newCampaign);
+				//this.campaigns.push(newCampaign);
 				this.processing = false;
 				this.router.navigateByUrl(`/campaign/${newCampaign.id}`);
 			},
@@ -93,8 +92,8 @@ export class CampaignListComponent implements OnInit {
 		this.processing = true;
 		this.service.deleteCampaign(campaign.id).subscribe(
 			() => {
-				const index = this.campaigns.findIndex(c => c.id === campaign.id);
-				this.campaigns.splice(index, 1);
+				//const index = this.campaigns.findIndex(c => c.id === campaign.id);
+				//this.campaigns.splice(index, 1);
 				this.processing = false;
 			},
 			() => {

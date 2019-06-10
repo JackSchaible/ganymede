@@ -2,6 +2,7 @@
 using Ganymede.Api.Models.Api;
 using Ganymede.Api.Models.Auth;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
@@ -30,24 +31,29 @@ namespace Ganymede.Api.BLL.Services.Impl
         private readonly UserManager<AppUser> _userManager;
         private readonly IConfiguration _configuration;
         private readonly ILogger<AuthService> _logger;
+        private readonly ApplicationDbContext _context;
 
-        public AuthService(SignInManager<AppUser> signinManager, UserManager<AppUser> userManager, IConfiguration configuration, ILogger<AuthService> logger)
+        public AuthService(SignInManager<AppUser> signinManager, UserManager<AppUser> userManager, IConfiguration configuration, ILogger<AuthService> logger, ApplicationDbContext context)
         {
             _signinManager = signinManager;
             _userManager = userManager;
             _configuration = configuration;
             _logger = logger;
+            _context = context;
         }
 
-        public async Task<LoginResult> Login(LoginData model)
+        public LoginResult Login(LoginData model)
         {
             var result = new LoginResult();
-            var signinResult = await _signinManager.PasswordSignInAsync(model.Email, model.Password, false, false);
+            var signinResult = _signinManager.PasswordSignInAsync(model.Email, model.Password, false, false).Result;
 
             if (signinResult.Succeeded)
             {
                 var appUser = _userManager.Users.SingleOrDefault(r => r.Email == model.Email);
+
                 result.Token = GenerateJwtToken(model.Email, appUser);
+                result.Success = true;
+                result.User = GetUserData(appUser.Id);
             }
             else if (!signinResult.IsLockedOut && !signinResult.RequiresTwoFactor && !signinResult.IsNotAllowed)
             {
@@ -61,6 +67,13 @@ namespace Ganymede.Api.BLL.Services.Impl
                 throw new ApplicationException("INVALID_LOGIN_ATTEMPT");
 
             return result;
+        }
+
+        public AppUser GetUserData(string userId)
+        {
+            return _context.Users
+                .Include(u => u.Campaigns)
+                .Single(u => u.Id == userId);
         }
 
         public async Task<RegisterResult> Register(RegisterData model)
@@ -127,5 +140,6 @@ namespace Ganymede.Api.BLL.Services.Impl
 
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
+
     }
 }

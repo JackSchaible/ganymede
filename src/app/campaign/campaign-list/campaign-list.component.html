@@ -7,7 +7,7 @@
 </div>
 
 <mat-accordion>
-  <mat-expansion-panel *ngFor="let campaign of campaigns">
+  <mat-expansion-panel *ngFor="let campaign of campaigns$ | async">
     <mat-expansion-panel-header>
       <mat-panel-title>{{ campaign.name }}</mat-panel-title>
       <mat-panel-description>

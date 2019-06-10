@@ -40,7 +40,11 @@ namespace api
             ConfigureAutomapper(services);
             ConfigureBllServices(services);
 
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            services.AddMvc()
+                .SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
+                .AddJsonOptions(
+                    options => options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+                );
             services.Configure<IISOptions>(o => { o.AutomaticAuthentication = false; });
         }
 
@@ -64,7 +68,7 @@ namespace api
 
             context.Database.EnsureCreated();
             initializer.Initialize().Wait();
-            autoMapper.ConfigurationProvider.AssertConfigurationIsValid();
+            //autoMapper.ConfigurationProvider.AssertConfigurationIsValid();
         }
 
         private void ConfigureDb(IServiceCollection services)

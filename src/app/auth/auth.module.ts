@@ -6,14 +6,16 @@ import { ReactiveFormsModule } from "@angular/forms";
 import { FormsModule } from "../forms/forms.module";
 import { RegisterComponent } from "./register/register.component";
 import { StoreModule } from "@ngrx/store";
-import { userReducer } from "./auth.reducers";
+import { reducers } from "./store/auth.reducers";
 
 @NgModule({
-	imports: [CommonModule, ReactiveFormsModule, AuthRoutingModule, FormsModule],
-	declarations: [
-		LoginComponent,
-		RegisterComponent,
-		StoreModule.forFeature("auth", userReducer)
-	]
+	imports: [
+		CommonModule,
+		ReactiveFormsModule,
+		AuthRoutingModule,
+		FormsModule,
+		StoreModule.forFeature("auth", reducers)
+	],
+	declarations: [LoginComponent, RegisterComponent]
 })
 export class AuthModule {}
