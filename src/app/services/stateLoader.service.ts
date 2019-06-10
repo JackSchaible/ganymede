@@ -1,30 +1,24 @@
 import { AppUser } from "../models/core/AppUser";
 import { StorageKeys } from "../storage/localStorageKeys";
 import { Injectable } from "@angular/core";
-import { AuthService } from "../auth/auth.service";
-import { Observable, of } from "rxjs";
+import { IAppState } from "../models/core/IAppState";
 
 @Injectable({
 	providedIn: "root"
 })
 export class StateLoaderService {
-	constructor(private auth: AuthService) {}
+	constructor() {}
 
-	public loadState(): Observable<AppUser> {
-		try {
-			const serializedState = localStorage.getItem(StorageKeys.state.state);
+	public loadState(): IAppState {
+		const serializedState = localStorage.getItem(StorageKeys.state.state);
 
-			let state: Observable<AppUser>;
-			if (serializedState === null) state = this.auth.getUserData();
-			else state = of(JSON.parse(serializedState));
+		let state: IAppState;
+		if (serializedState === null) state = { user: new AppUser() };
 
-			return state;
-		} catch (err) {
-			return this.auth.getUserData();
-		}
+		return state;
 	}
 
-	public saveState(state: AppUser) {
+	public saveState(state: IAppState) {
 		try {
 			const serializedState = JSON.stringify(state);
 			localStorage.setItem(StorageKeys.state.state, serializedState);

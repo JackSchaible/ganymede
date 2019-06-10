@@ -19,35 +19,16 @@ import { CampaignModule } from "./campaign/campaign.module";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { JwtInterceptor } from "./helpers/jwt.interceptor";
 import { ErrorInterceptor } from "./helpers/error.interceptor";
-import { StoreModule, ActionReducerMap } from "@ngrx/store";
-import { StoreDevtoolsModule } from "@ngrx/store-devtools";
-import { environment } from "src/environments/environment";
 import { StateLoaderService } from "./services/stateLoader.service";
 
-const reducers: ActionReducerMap<any> = {};
-
-const baseImports = [
-	BrowserAnimationsModule,
-	BrowserModule,
-	ReactiveFormsModule,
-	HttpClientModule,
-	FormsModule,
-	MatToolbarModule,
-	MatMenuModule,
-
-	EncounterModule,
-	AuthModule,
-	CampaignModule,
-
-	AppRoutingModule,
-	DeviceDetectorModule.forRoot(),
-	StoreModule.forRoot(reducers)
-];
-
-const devImports = [
-	...baseImports,
-	StoreDevtoolsModule.instrument({ maxAge: 10 })
-];
+import { NgRedux, DevToolsExtension } from "@angular-redux/store";
+import {
+	composeReducers,
+	defaultFormReducer,
+	provideReduxForms
+} from "@angular-redux/form";
+import { compose, combineReducers, Middleware } from "redux";
+import { IAppState } from "./models/core/IAppState";
 
 @NgModule({
 	declarations: [
@@ -58,7 +39,22 @@ const devImports = [
 		RouteNotFoundComponent,
 		NavItemComponent
 	],
-	imports: environment.production ? baseImports : devImports,
+	imports: [
+		BrowserAnimationsModule,
+		BrowserModule,
+		ReactiveFormsModule,
+		HttpClientModule,
+		FormsModule,
+		MatToolbarModule,
+		MatMenuModule,
+
+		EncounterModule,
+		AuthModule,
+		CampaignModule,
+
+		AppRoutingModule,
+		DeviceDetectorModule.forRoot()
+	],
 	providers: [
 		{ provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
 		{ provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
@@ -66,4 +62,47 @@ const devImports = [
 	],
 	bootstrap: [AppComponent]
 })
-export class AppModule {}
+export class AppModule {
+	constructor(
+		public store: NgRedux<IAppState>,
+		private devTools: DevToolsExtension,
+		private stateService: StateLoaderService
+	) {
+		const reducers = composeReducers<IAppState>(
+			defaultFormReducer(),
+			combineReducers({
+				// replace with real reducers, when needed
+				user: (appState, action) => {
+					return { ...appState };
+				}
+			})
+		);
+
+		const initialState: IAppState = this.stateService.loadState();
+		const middleware: Middleware[] = [];
+
+		const enhancers: any = [];
+		if (devTools.isEnabled()) {
+			enhancers.push(
+				devTools.enhancer({
+					latency: 1000,
+					maxAge: 10
+				})
+			);
+		}
+
+		store.configureStore(reducers, initialState, middleware, [
+			compose(...enhancers)
+		]);
+
+		store.subscribe(() => {
+			const state = store.getState();
+
+			this.stateService.saveState({
+				user: state.user
+			});
+		});
+
+		provideReduxForms(store);
+	}
+}

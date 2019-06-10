@@ -1,6 +1,5 @@
 import { Component } from "@angular/core";
 import { StateLoaderService } from "./services/stateLoader.service";
-import { AppUser } from "./models/core/AppUser";
 
 @Component({
 	selector: "app-root",
@@ -10,8 +9,5 @@ import { AppUser } from "./models/core/AppUser";
 export class AppComponent {
 	title = "ganymede";
 
-	constructor(private stateLoader: StateLoaderService) {
-		//TODO next: shove this data into the store
-		stateLoader.loadState().subscribe((user: AppUser) => {});
-	}
+	constructor(private stateLoader: StateLoaderService) {}
 }

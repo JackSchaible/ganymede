@@ -7,10 +7,7 @@ import { ModalComponent } from "src/app/common/modal/modal.component";
 import { ModalModel } from "src/app/common/models/modalModel";
 import SnackbarModel from "src/app/common/models/snackbarModel";
 import { SnackbarComponent } from "src/app/common/snackbar/snackbar.component";
-import { Store } from "@ngrx/store";
-import { AppUser } from "src/app/models/core/AppUser";
 import { Observable } from "rxjs";
-import { listCampaignsSelector } from "../store/campaign.selectors";
 
 @Component({
 	selector: "gm-campaign-list",
@@ -25,13 +22,12 @@ export class CampaignListComponent implements OnInit {
 		private service: CampaignService,
 		private router: Router,
 		private dialog: MatDialog,
-		private snackBar: MatSnackBar,
-		private store: Store<AppUser>
+		private snackBar: MatSnackBar
 	) {}
 
 	ngOnInit() {
 		this.processing = true;
-		this.campaigns$ = this.store.select(listCampaignsSelector);
+		//this.campaigns$ = this.store.select(listCampaignsSelector);
 	}
 
 	public select(campaignId: number): void {
