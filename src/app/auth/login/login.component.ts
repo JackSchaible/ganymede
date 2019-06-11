@@ -1,7 +1,11 @@
 import { Component, OnInit } from "@angular/core";
-import { AuthService } from "../../services/auth.service";
+import { AuthService } from "../auth.service";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
 import { Router } from "@angular/router";
+import { LoginResponse } from "../models/loginResponse";
+import { AuthActions } from "../store/actions";
+import { IAppState } from "src/app/models/core/IAppState";
+import { NgRedux } from "@angular-redux/store";
 
 @Component({
 	selector: "gm-login",
@@ -27,7 +31,12 @@ export class LoginComponent implements OnInit {
 		password: this.password
 	});
 
-	constructor(private authService: AuthService, private router: Router) {}
+	constructor(
+		private authService: AuthService,
+		private router: Router,
+		private ngRedux: NgRedux<IAppState>,
+		private actions: AuthActions
+	) {}
 
 	ngOnInit() {
 		this.loginForm.valueChanges.subscribe(() => {
@@ -37,10 +46,11 @@ export class LoginComponent implements OnInit {
 
 	submit() {
 		if (this.loginForm.valid) {
-			this.authService
-				.login(this.email.value, this.password.value)
-				.subscribe((e: boolean) => {
-					if (e) {
+			this.authService.login(this.email.value, this.password.value).subscribe(
+				(loginResponse: LoginResponse) => {
+					if (loginResponse) {
+						this.ngRedux.dispatch(this.actions.loggedIn(loginResponse.user));
+
 						const rUrl = this.authService.redirectUrl
 							? this.authService.redirectUrl
 							: "/";
@@ -49,7 +59,11 @@ export class LoginComponent implements OnInit {
 					} else {
 						this.authError = true;
 					}
-				});
+				},
+				() => {
+					this.authError = true;
+				}
+			);
 		}
 	}
 }

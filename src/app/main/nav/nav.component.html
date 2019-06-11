@@ -1,15 +1,15 @@
 <mat-toolbar>
   <nav *ngIf="isDesktop; else isMobile" class="u-flex u-flex__justify--space-between w-100">
     <div class="u-flex">
-      <gm-nav-item *ngFor="let item of items" [item]="item"></gm-nav-item>
+      <gm-nav-item *ngFor="let item of currentItems" [item]="item"></gm-nav-item>
     </div>
-    <div *ngIf="isLoggedIn()" class="u-flex c-nav__logged-in">
+    <div *ngIf="loggedIn" class="u-flex c-nav__logged-in">
       <div>
         <img [src]="'https://www.gravatar.com/avatar/' + userHash + '?s=40'" />
       </div>
 
       <div class="u-flex u-flex__align-items--center u-padding-x">
-        <p class="text-white">Welcome, {{ user }}!</p>
+        <p class="text-white">Welcome, {{ (user$ | async)?.email }}!</p>
       </div>
 
       <div>
@@ -18,7 +18,7 @@
         </button>
       </div>
     </div>
-    <a *ngIf="!isLoggedIn()" routerLink="/login" class="text-white">
+    <a *ngIf="!loggedIn" routerLink="/login" class="text-white">
       <i class="fa fa-sign-in"></i> Login
     </a>
   </nav>
@@ -26,7 +26,7 @@
   <ng-template #isMobile>
     <nav class="u-flex w-100">
       <mat-menu #appMenu="matMenu">
-        <button *ngFor="let item of items" mat-menu-item [routerLink]="item.url" [class.isBrand]="item.isBrand">
+        <button *ngFor="let item of currentItems" mat-menu-item [routerLink]="item.url" [class.isBrand]="item.isBrand">
           <strong *ngIf=" item.isBrand; else
               btn">
             <ng-container *ngTemplateOutlet="btn; context: {$implicit: item}"></ng-container>

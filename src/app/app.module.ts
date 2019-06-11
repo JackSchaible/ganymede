@@ -19,6 +19,21 @@ import { CampaignModule } from "./campaign/campaign.module";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { JwtInterceptor } from "./helpers/jwt.interceptor";
 import { ErrorInterceptor } from "./helpers/error.interceptor";
+import { StateLoaderService } from "./services/stateLoader.service";
+
+import {
+	NgRedux,
+	DevToolsExtension,
+	NgReduxModule
+} from "@angular-redux/store";
+import {
+	composeReducers,
+	defaultFormReducer,
+	provideReduxForms
+} from "@angular-redux/form";
+import { compose, combineReducers, Middleware } from "redux";
+import { IAppState } from "./models/core/IAppState";
+import { reduce } from "./store/rootReducer";
 
 @NgModule({
 	declarations: [
@@ -42,13 +57,51 @@ import { ErrorInterceptor } from "./helpers/error.interceptor";
 		AuthModule,
 		CampaignModule,
 
+		NgReduxModule,
+
 		AppRoutingModule,
 		DeviceDetectorModule.forRoot()
 	],
 	providers: [
 		{ provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
-		{ provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true }
+		{ provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
+		StateLoaderService
 	],
 	bootstrap: [AppComponent]
 })
-export class AppModule {}
+export class AppModule {
+	constructor(
+		public store: NgRedux<IAppState>,
+		private devTools: DevToolsExtension,
+		private stateService: StateLoaderService
+	) {
+		const reducers = composeReducers<IAppState>(defaultFormReducer(), reduce);
+
+		const initialState: IAppState = this.stateService.loadState();
+		const middleware: Middleware[] = [];
+
+		const enhancers: any = [];
+		if (devTools.isEnabled()) {
+			enhancers.push(
+				devTools.enhancer({
+					latency: 1000,
+					maxAge: 10
+				})
+			);
+		}
+
+		store.configureStore(reducers, initialState, middleware, [
+			compose(...enhancers)
+		]);
+
+		store.subscribe(() => {
+			const state = store.getState();
+
+			this.stateService.saveState({
+				user: state.user
+			});
+		});
+
+		provideReduxForms(store);
+	}
+}

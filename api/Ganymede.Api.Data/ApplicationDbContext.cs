@@ -1,3 +1,4 @@
+using Ganymede.Api.Data.Monsters;
 using Ganymede.Api.Data.Rulesets;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -9,6 +10,8 @@ namespace Ganymede.Api.Data
 		public DbSet<Campaign> Campaigns { get; set; }
         public DbSet<Publisher> Publishers { get; set; }
         public DbSet<Ruleset> Rulesets { get; set; }
+        public DbSet<BasicStats> BasicStats { get; set; }
+        public DbSet<Monster> Monsters { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
 		{
@@ -28,19 +31,6 @@ namespace Ganymede.Api.Data
 			optionsBuilder
 				.UseSqlServer(@"Server=.;Database=Ganymede;Trusted_Connection=True;",
 					opts => opts.EnableRetryOnFailure(3));
-		}
-
-		private static string GetConnectionString()
-		{
-			const string databaseName = "ganymede";
-			const string databaseUser = "root";
-			const string databasePass = "";
-
-			return $"Server=localhost;" +
-				   $"database={databaseName};" +
-				   $"uid={databaseUser};" +
-				   $"pwd={databasePass};" +
-				   $"pooling=true;";
 		}
 	}
 }

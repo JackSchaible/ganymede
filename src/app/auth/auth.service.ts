@@ -2,9 +2,12 @@ import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
 import { map } from "rxjs/operators";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
-import ApiError from "./http/apiError";
-import MasterService from "./master.service";
-import { User } from "../auth/models/user";
+import ApiError from "../services/http/apiError";
+import MasterService from "../services/master.service";
+import { User } from "./models/user";
+import { LoginResponse } from "./models/loginResponse";
+import { StorageKeys } from "../storage/localStorageKeys";
+import { AppUser } from "../models/core/AppUser";
 
 @Injectable({
 	providedIn: "root"
@@ -13,35 +16,28 @@ export class AuthService extends MasterService {
 	public isLoggedIn: boolean = false;
 	public redirectUrl: string;
 
-	private currentUserKey: string = "currentUser";
 	protected baseUrl: string = this.apiUrl + "Account/";
 
 	constructor(http: HttpClient) {
 		super(http);
 	}
 
-	public login(username: string, password: string): Observable<boolean> {
+	public login(username: string, password: string): Observable<LoginResponse> {
 		const url = this.baseUrl + "login";
 		return this.http.post(url, { email: username, password: password }).pipe(
-			map(r => {
-				if (r) {
-					const json = JSON.parse(JSON.stringify(r));
+			map((response: LoginResponse) => {
+				if (response.success) {
+					this.isLoggedIn = true;
+					const user: User = {
+						token: response.token,
+						expiry: new Date(new Date().getTime() + 2592000000),
+						user: username
+					};
 
-					if (json.token) {
-						this.isLoggedIn = true;
+					localStorage.setItem(StorageKeys.auth.user, JSON.stringify(user));
+				}
 
-						const user: User = {
-							token: json.token,
-							expiry: new Date(new Date().getTime() + 2592000000),
-							user: username
-						};
-
-						localStorage.setItem(this.currentUserKey, JSON.stringify(user));
-						return true;
-					} else if (json.error) {
-						return false;
-					}
-				} else return false;
+				return response;
 			})
 		);
 	}
@@ -69,7 +65,7 @@ export class AuthService extends MasterService {
 								user: username
 							};
 
-							localStorage.setItem(this.currentUserKey, JSON.stringify(user));
+							localStorage.setItem(StorageKeys.auth.user, JSON.stringify(user));
 							return true;
 						} else if (json.errors) {
 							return json.errors;
@@ -79,13 +75,17 @@ export class AuthService extends MasterService {
 			);
 	}
 
+	public getUserData(): Observable<AppUser> {
+		return this.http.get<AppUser>(`${this.baseUrl}GetUserData`);
+	}
+
 	public logout(): void {
-		localStorage.removeItem(this.currentUserKey);
+		localStorage.removeItem(StorageKeys.auth.user);
 		this.isLoggedIn = false;
 	}
 
 	public getAuthHeader(): HttpHeaders {
-		const user = JSON.parse(localStorage.getItem(this.currentUserKey));
+		const user = JSON.parse(localStorage.getItem(StorageKeys.auth.user));
 		return new HttpHeaders({
 			Authorization: `Bearer ${user.token}`
 		});
@@ -94,7 +94,7 @@ export class AuthService extends MasterService {
 	public getUser(): User {
 		if (!localStorage) return;
 
-		if (localStorage.getItem(this.currentUserKey))
-			return JSON.parse(localStorage.getItem(this.currentUserKey));
+		if (localStorage.getItem(StorageKeys.auth.user))
+			return JSON.parse(localStorage.getItem(StorageKeys.auth.user));
 	}
 }
