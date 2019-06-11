@@ -21,7 +21,11 @@ import { JwtInterceptor } from "./helpers/jwt.interceptor";
 import { ErrorInterceptor } from "./helpers/error.interceptor";
 import { StateLoaderService } from "./services/stateLoader.service";
 
-import { NgRedux, DevToolsExtension } from "@angular-redux/store";
+import {
+	NgRedux,
+	DevToolsExtension,
+	NgReduxModule
+} from "@angular-redux/store";
 import {
 	composeReducers,
 	defaultFormReducer,
@@ -29,6 +33,7 @@ import {
 } from "@angular-redux/form";
 import { compose, combineReducers, Middleware } from "redux";
 import { IAppState } from "./models/core/IAppState";
+import { reduce } from "./store/rootReducer";
 
 @NgModule({
 	declarations: [
@@ -52,6 +57,8 @@ import { IAppState } from "./models/core/IAppState";
 		AuthModule,
 		CampaignModule,
 
+		NgReduxModule,
+
 		AppRoutingModule,
 		DeviceDetectorModule.forRoot()
 	],
@@ -68,15 +75,7 @@ export class AppModule {
 		private devTools: DevToolsExtension,
 		private stateService: StateLoaderService
 	) {
-		const reducers = composeReducers<IAppState>(
-			defaultFormReducer(),
-			combineReducers({
-				// replace with real reducers, when needed
-				user: (appState, action) => {
-					return { ...appState };
-				}
-			})
-		);
+		const reducers = composeReducers<IAppState>(defaultFormReducer(), reduce);
 
 		const initialState: IAppState = this.stateService.loadState();
 		const middleware: Middleware[] = [];

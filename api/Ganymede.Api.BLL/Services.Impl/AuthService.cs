@@ -53,7 +53,12 @@ namespace Ganymede.Api.BLL.Services.Impl
 
                 result.Token = GenerateJwtToken(model.Email, appUser);
                 result.Success = true;
-                result.User = GetUserData(appUser.Id);
+                AppUser user = GetUserData(appUser.Id);
+                result.User = new User
+                {
+                    Email = user.Email,
+                    Campaigns = user.Campaigns
+                };
             }
             else if (!signinResult.IsLockedOut && !signinResult.RequiresTwoFactor && !signinResult.IsNotAllowed)
             {

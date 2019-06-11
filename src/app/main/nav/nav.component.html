@@ -3,13 +3,13 @@
     <div class="u-flex">
       <gm-nav-item *ngFor="let item of currentItems" [item]="item"></gm-nav-item>
     </div>
-    <div *ngIf="isLoggedIn()" class="u-flex c-nav__logged-in">
+    <div *ngIf="loggedIn" class="u-flex c-nav__logged-in">
       <div>
         <img [src]="'https://www.gravatar.com/avatar/' + userHash + '?s=40'" />
       </div>
 
       <div class="u-flex u-flex__align-items--center u-padding-x">
-        <p class="text-white">Welcome, {{ user }}!</p>
+        <p class="text-white">Welcome, {{ (user$ | async)?.email }}!</p>
       </div>
 
       <div>
@@ -18,7 +18,7 @@
         </button>
       </div>
     </div>
-    <a *ngIf="!isLoggedIn()" routerLink="/login" class="text-white">
+    <a *ngIf="!loggedIn" routerLink="/login" class="text-white">
       <i class="fa fa-sign-in"></i> Login
     </a>
   </nav>

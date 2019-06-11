@@ -7,7 +7,7 @@ namespace Ganymede.Api.Models.Auth
     {
         public bool Success { get; set; }
         public string Token { get; set; }
-        public AppUser User { get; set; }
+        public User User { get; set; }
         public ApiError Error { get; set; }
     }
 }

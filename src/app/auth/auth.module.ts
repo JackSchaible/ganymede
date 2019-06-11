@@ -5,9 +5,18 @@ import { AuthRoutingModule } from "./auth.router";
 import { ReactiveFormsModule } from "@angular/forms";
 import { FormsModule } from "../forms/forms.module";
 import { RegisterComponent } from "./register/register.component";
+import { AuthActions } from "./store/actions";
+import { NgReduxModule } from "@angular-redux/store";
 
 @NgModule({
-	imports: [CommonModule, ReactiveFormsModule, AuthRoutingModule, FormsModule],
-	declarations: [LoginComponent, RegisterComponent]
+	imports: [
+		CommonModule,
+		ReactiveFormsModule,
+		AuthRoutingModule,
+		FormsModule,
+		NgReduxModule
+	],
+	declarations: [LoginComponent, RegisterComponent],
+	providers: [AuthActions]
 })
 export class AuthModule {}

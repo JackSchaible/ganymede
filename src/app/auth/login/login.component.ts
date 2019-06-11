@@ -3,8 +3,9 @@ import { AuthService } from "../auth.service";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
 import { Router } from "@angular/router";
 import { LoginResponse } from "../models/loginResponse";
-import { Store } from "redux";
-import { AppUser } from "src/app/models/core/AppUser";
+import { AuthActions } from "../store/actions";
+import { IAppState } from "src/app/models/core/IAppState";
+import { NgRedux } from "@angular-redux/store";
 
 @Component({
 	selector: "gm-login",
@@ -33,7 +34,8 @@ export class LoginComponent implements OnInit {
 	constructor(
 		private authService: AuthService,
 		private router: Router,
-		private store: Store<AppUser>
+		private ngRedux: NgRedux<IAppState>,
+		private actions: AuthActions
 	) {}
 
 	ngOnInit() {
@@ -45,12 +47,9 @@ export class LoginComponent implements OnInit {
 	submit() {
 		if (this.loginForm.valid) {
 			this.authService.login(this.email.value, this.password.value).subscribe(
-				(e: LoginResponse) => {
-					if (e) {
-						this.store.dispatch({
-							type: "",
-							userState: e.user
-						});
+				(loginResponse: LoginResponse) => {
+					if (loginResponse) {
+						this.ngRedux.dispatch(this.actions.loggedIn(loginResponse.user));
 
 						const rUrl = this.authService.redirectUrl
 							? this.authService.redirectUrl

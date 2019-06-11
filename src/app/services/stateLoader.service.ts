@@ -14,6 +14,7 @@ export class StateLoaderService {
 
 		let state: IAppState;
 		if (serializedState === null) state = { user: new AppUser() };
+		else state = JSON.parse(serializedState);
 
 		return state;
 	}

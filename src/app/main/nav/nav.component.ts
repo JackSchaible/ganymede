@@ -5,6 +5,11 @@ import { Router, NavigationEnd, RouterEvent } from "@angular/router";
 import { Md5 } from "ts-md5/dist/md5";
 import { filter } from "rxjs/operators";
 import NavItem from "../models/navItem";
+import { Observable } from "rxjs";
+import { NgRedux, select } from "@angular-redux/store";
+import { IAppState } from "src/app/models/core/IAppState";
+import { AppUser } from "src/app/models/core/AppUser";
+import { AuthAction, AuthActions } from "src/app/auth/store/actions";
 
 @Component({
 	selector: "gm-nav",
@@ -15,8 +20,11 @@ export class NavComponent implements OnInit {
 	isMobile: boolean;
 	isTablet: boolean;
 	isDesktop: boolean;
-	user: string;
-	userHash: string;
+
+	@select() public user$: Observable<AppUser>;
+
+	public userHash: string;
+	public loggedIn: boolean;
 
 	items: NavItem[];
 	campaignItems: NavItem[];
@@ -26,7 +34,9 @@ export class NavComponent implements OnInit {
 	constructor(
 		private authService: AuthService,
 		private deviceService: DeviceDetectorService,
-		private router: Router
+		private router: Router,
+		private redux: NgRedux<IAppState>,
+		private actions: AuthActions
 	) {
 		this.isMobile = this.deviceService.isMobile();
 		this.isTablet = this.deviceService.isTablet();
@@ -39,12 +49,16 @@ export class NavComponent implements OnInit {
 			new NavItem("encounter", "fas fa-helmet-battle", "Encounters"),
 			new NavItem("campaigns", "fas fa-scroll", "Campaigns")
 		];
+
+		this.user$.subscribe((user: AppUser) => {
+			this.loggedIn = !!user;
+			if (!user) return;
+
+			this.userHash = Md5.hashStr(user.email) as string;
+		});
 	}
 
 	ngOnInit(): void {
-		this.user = this.getUsername();
-		if (this.user) this.userHash = Md5.hashStr(this.user) as string;
-
 		this.router.events
 			.pipe(filter((event: RouterEvent) => event instanceof NavigationEnd))
 			.subscribe((event: NavigationEnd) =>
@@ -52,21 +66,10 @@ export class NavComponent implements OnInit {
 			);
 	}
 
-	getUsername(): string {
-		let user: string = null;
-		const u = this.authService.getUser();
-		if (u) user = u.user;
-
-		return user;
-	}
-
 	logout() {
 		this.authService.logout();
 		this.router.navigateByUrl("/");
-	}
-
-	isLoggedIn(): boolean {
-		return !!this.authService.getUser();
+		this.redux.dispatch(this.actions.loggedOut());
 	}
 
 	private configureItems(url: string) {
