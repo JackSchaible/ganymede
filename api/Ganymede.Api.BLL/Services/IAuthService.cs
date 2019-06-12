@@ -7,7 +7,7 @@ namespace Ganymede.Api.BLL.Services
     public interface IAuthService
     {
         LoginResult Login(LoginData model);
-        Task<RegisterResult> Register(RegisterData model);
+        Task<LoginResult> Register(RegisterData model);
         AppUser GetUserData(string userId);
     }
 }

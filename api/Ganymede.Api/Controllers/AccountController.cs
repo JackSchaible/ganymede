@@ -37,7 +37,7 @@ namespace api.Controllers
         }
 
         [HttpPost]
-        public async Task<RegisterResult> Register([FromBody] RegisterData data)
+        public async Task<LoginResult> Register([FromBody] RegisterData data)
         {
             var model = await _service.Register(data);
             return model;
