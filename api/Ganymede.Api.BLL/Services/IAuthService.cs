@@ -1,5 +1,4 @@
-﻿using Ganymede.Api.Data;
-using Ganymede.Api.Models.Auth;
+﻿using Ganymede.Api.Models.Auth;
 using System.Threading.Tasks;
 
 namespace Ganymede.Api.BLL.Services
@@ -8,6 +7,5 @@ namespace Ganymede.Api.BLL.Services
     {
         LoginResult Login(LoginData model);
         Task<LoginResult> Register(RegisterData model);
-        AppUser GetUserData(string userId);
     }
 }

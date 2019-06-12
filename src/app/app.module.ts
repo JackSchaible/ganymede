@@ -78,7 +78,7 @@ export class AppModule {
 		const reducers = composeReducers<IAppState>(defaultFormReducer(), reduce);
 
 		const initialState: IAppState = this.stateService.loadState();
-		const middleware: Middleware[] = [];
+		const middleware: Middleware[] = [this.stateService.middleware];
 
 		const enhancers: any = [];
 		if (devTools.isEnabled()) {

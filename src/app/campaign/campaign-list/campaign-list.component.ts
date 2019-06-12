@@ -8,6 +8,9 @@ import { ModalModel } from "src/app/common/models/modalModel";
 import SnackbarModel from "src/app/common/models/snackbarModel";
 import { SnackbarComponent } from "src/app/common/snackbar/snackbar.component";
 import { Observable } from "rxjs";
+import { NgRedux, select } from "@angular-redux/store";
+import { IAppState } from "src/app/models/core/IAppState";
+import { CampaignActions } from "../store/actions";
 
 @Component({
 	selector: "gm-campaign-list",
@@ -15,6 +18,7 @@ import { Observable } from "rxjs";
 	styleUrls: ["./campaign-list.component.scss"]
 })
 export class CampaignListComponent implements OnInit {
+	@select(["user", "campaigns"])
 	public campaigns$: Observable<Campaign[]>;
 	public processing: boolean;
 
@@ -22,13 +26,12 @@ export class CampaignListComponent implements OnInit {
 		private service: CampaignService,
 		private router: Router,
 		private dialog: MatDialog,
-		private snackBar: MatSnackBar
+		private snackBar: MatSnackBar,
+		private redux: NgRedux<IAppState>,
+		private actions: CampaignActions
 	) {}
 
-	ngOnInit() {
-		this.processing = true;
-		//this.campaigns$ = this.store.select(listCampaignsSelector);
-	}
+	ngOnInit() {}
 
 	public select(campaignId: number): void {
 		this.router.navigateByUrl(`campaign/${campaignId}`);

@@ -9,6 +9,9 @@ import ApiCodes from "../../services/http/apiCodes";
 import { MatSnackBar } from "@angular/material";
 import { SnackbarComponent } from "../../common/snackbar/snackbar.component";
 import SnackbarModel from "../../common/models/snackbarModel";
+import { NgRedux } from "@angular-redux/store";
+import { IAppState } from "src/app/models/core/IAppState";
+import { CampaignActions } from "../store/actions";
 
 @Component({
 	selector: "gm-campaign-edit",
@@ -26,7 +29,9 @@ export class CampaignEditComponent implements OnInit {
 	constructor(
 		private service: CampaignService,
 		private route: ActivatedRoute,
-		private snackBar: MatSnackBar
+		private snackBar: MatSnackBar,
+		private redux: NgRedux<IAppState>,
+		private actions: CampaignActions
 	) {}
 
 	ngOnInit() {

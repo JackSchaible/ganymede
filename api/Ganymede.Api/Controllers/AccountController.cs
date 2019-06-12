@@ -28,14 +28,6 @@ namespace api.Controllers
             return Json(model);
         }
 
-        [HttpGet]
-        [Authorize]
-        public IActionResult GetUserData()
-        {
-            var user = _user.GetUserId(HttpContext.User);
-            return Json(_service.GetUserData(user));
-        }
-
         [HttpPost]
         public async Task<LoginResult> Register([FromBody] RegisterData data)
         {

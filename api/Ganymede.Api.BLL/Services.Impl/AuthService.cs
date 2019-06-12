@@ -77,13 +77,6 @@ namespace Ganymede.Api.BLL.Services.Impl
             return result;
         }
 
-        public AppUser GetUserData(string userId)
-        {
-            return _context.Users
-                .Include(u => u.Campaigns)
-                .Single(u => u.Id == userId);
-        }
-
         public async Task<LoginResult> Register(RegisterData model)
         {
             var result = new LoginResult();
@@ -101,7 +94,9 @@ namespace Ganymede.Api.BLL.Services.Impl
             {
                 await _signinManager.SignInAsync(user, false);
                 result.Token = GenerateJwtToken(model.Email, user);
+
                 var appUser = _userManager.Users.SingleOrDefault(r => r.Email == model.Email);
+                appUser = GetUserData(appUser.Id);
 
                 result.User = new User
                 {
@@ -153,5 +148,13 @@ namespace Ganymede.Api.BLL.Services.Impl
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
 
+        private AppUser GetUserData(string userId)
+        {
+            return _context.Users
+                .Include(u => u.Campaigns)
+                    .ThenInclude(c => c.Ruleset)
+                        .ThenInclude(r => r.Publisher)
+                .Single(u => u.Id == userId);
+        }
     }
 }
