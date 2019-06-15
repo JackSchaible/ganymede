@@ -25,11 +25,4 @@ export class StateLoaderService {
 			localStorage.setItem(StorageKeys.state.state, serializedState);
 		} catch (err) {}
 	}
-
-	public middleware = store => next => action => {
-		//todo: how to get post-reducer state?
-		console.log(store.getState());
-		this.saveState(store);
-		return next(action);
-	};
 }
