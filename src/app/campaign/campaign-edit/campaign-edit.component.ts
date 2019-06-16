@@ -1,9 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import { CampaignService } from "../campaign.service";
 import { ActivatedRoute } from "@angular/router";
-import { Campaign } from "../models/campaign";
 import { FormGroup } from "@angular/forms";
-import { Ruleset } from "../models/ruleset";
 import { ApiResponse } from "../../services/http/apiResponse";
 import ApiCodes from "../../services/http/apiCodes";
 import { MatSnackBar } from "@angular/material";
@@ -12,6 +10,8 @@ import SnackbarModel from "../../common/models/snackbarModel";
 import { NgRedux } from "@angular-redux/store";
 import { IAppState } from "src/app/models/core/IAppState";
 import { CampaignActions } from "../store/actions";
+import { Campaign } from "src/app/models/core/campaign";
+import { Ruleset } from "src/app/models/core/Rulesets/Ruleset";
 
 @Component({
 	selector: "gm-campaign-edit",
@@ -40,14 +40,16 @@ export class CampaignEditComponent implements OnInit {
 
 		if (id) {
 			this.isNew = id === -1;
-			this.service.getCampaign(id).subscribe(
-				campaignModel => {
-					this.campaign = campaignModel.campaign;
-					this.rulesets = campaignModel.rulesets;
-					this.processing = false;
-				},
-				() => (this.processing = false)
-			);
+			// todo: get campaign from store
+
+			// this.service.getCampaign(id).subscribe(
+			// 	campaignModel => {
+			// 		this.campaign = campaignModel.campaign;
+			// 		this.rulesets = campaignModel.rulesets;
+			// 		this.processing = false;
+			// 	},
+			// 	() => (this.processing = false)
+			// );
 		} else this.processing = false;
 	}
 

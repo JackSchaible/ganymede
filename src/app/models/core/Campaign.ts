@@ -1,4 +1,4 @@
-import { Ruleset } from "src/app/campaign/models/ruleset";
+import { Ruleset } from "./Rulesets/Ruleset";
 
 export class Campaign {
 	public id: number;

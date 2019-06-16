@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Ganymede.Api.BLL.Services;
 
-namespace api.Controllers
+namespace Ganymede.api.Controllers
 {
     [Authorize]
     [Route("api/[controller]/[action]")]

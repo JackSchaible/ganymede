@@ -1,5 +1,4 @@
 import { Component, OnInit } from "@angular/core";
-import { Campaign } from "../models/campaign";
 import { CampaignService } from "../campaign.service";
 import { Router } from "@angular/router";
 import { MatDialog, MatSnackBar } from "@angular/material";
@@ -11,6 +10,7 @@ import { Observable } from "rxjs";
 import { NgRedux, select } from "@angular-redux/store";
 import { IAppState } from "src/app/models/core/IAppState";
 import { CampaignActions } from "../store/actions";
+import { Campaign } from "src/app/models/core/campaign";
 
 @Component({
 	selector: "gm-campaign-list",
@@ -38,7 +38,6 @@ export class CampaignListComponent implements OnInit {
 	}
 
 	public edit(campaignId: number): void {
-		this.processing = true;
 		this.router.navigateByUrl(`/campaign/edit/${campaignId}`);
 	}
 

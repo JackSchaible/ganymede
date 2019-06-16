@@ -9,11 +9,11 @@ export function authReducer(state: IAppState, action: AnyAction): IAppState {
 	if (authAction) {
 		switch (authAction.argument) {
 			case AuthActionTypes.LOGGED_IN:
-				result = loginChanged(action.state);
+				result = loginChanged(state, action.state);
 				break;
 
 			case AuthActionTypes.LOGGED_OUT:
-				result = loginChanged(action.state);
+				result = loginChanged(state, action.state);
 				break;
 		}
 	}
@@ -21,6 +21,6 @@ export function authReducer(state: IAppState, action: AnyAction): IAppState {
 	return result;
 }
 
-function loginChanged(state: IAppState): IAppState {
-	return { user: state.user };
+function loginChanged(oldState: IAppState, newState: IAppState): IAppState {
+	return { user: newState.user, app: oldState.app };
 }

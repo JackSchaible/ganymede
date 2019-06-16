@@ -34,6 +34,8 @@ import {
 import { compose, combineReducers, Middleware } from "redux";
 import { IAppState } from "./models/core/IAppState";
 import { reduce } from "./store/rootReducer";
+import { AppUser } from "./models/core/AppUser";
+import { App } from "./models/core/App/app";
 
 @NgModule({
 	declarations: [
@@ -77,8 +79,7 @@ export class AppModule {
 	) {
 		const reducers = composeReducers<IAppState>(defaultFormReducer(), reduce);
 
-		const initialState: IAppState = this.stateService.loadState();
-		const middleware: Middleware[] = [this.stateService.middleware];
+		const middleware: Middleware[] = [];
 
 		const enhancers: any = [];
 		if (devTools.isEnabled()) {
@@ -90,18 +91,24 @@ export class AppModule {
 			);
 		}
 
-		store.configureStore(reducers, initialState, middleware, [
-			compose(...enhancers)
-		]);
+		const state: IAppState = {
+			user: AppUser.getDefault(),
+			app: App.getDefault()
+		};
+
+		store.configureStore(reducers, state, middleware, [compose(...enhancers)]);
 
 		store.subscribe(() => {
 			const state = store.getState();
 
 			this.stateService.saveState({
-				user: state.user
+				user: state.user,
+				app: state.app
 			});
 		});
 
 		provideReduxForms(store);
+
+		stateService.loadState(store);
 	}
 }

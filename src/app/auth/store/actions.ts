@@ -20,17 +20,17 @@ export class AuthActions {
 	constructor(private stateService: StateLoaderService) {}
 
 	public loggedIn(user: AppUser): AnyAction {
-		this.stateService.saveState({ user: user });
 		const state: IAppState = {
-			user: user
+			user: user,
+			app: null
 		};
 		return { type: new AuthAction(AuthActionTypes.LOGGED_IN), state: state };
 	}
 
 	public loggedOut(): AnyAction {
-		this.stateService.saveState({ user: null });
 		const state: IAppState = {
-			user: null
+			user: null,
+			app: null
 		};
 		return { type: new AuthAction(AuthActionTypes.LOGGED_OUT), state: state };
 	}

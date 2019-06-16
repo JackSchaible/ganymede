@@ -1,4 +1,4 @@
-import { Publisher } from "src/app/campaign/models/publisher";
+import { Publisher } from "./Publisher";
 
 export class Ruleset {
 	public id: number;

@@ -4,9 +4,8 @@ using Ganymede.Api.BLL.Services;
 using Ganymede.Api.Models.Auth;
 using Microsoft.AspNetCore.Identity;
 using Ganymede.Api.Data;
-using Microsoft.AspNetCore.Authorization;
 
-namespace api.Controllers
+namespace Ganymede.api.Controllers
 {
     [Route("api/[controller]/[action]")]
     [ApiController]
