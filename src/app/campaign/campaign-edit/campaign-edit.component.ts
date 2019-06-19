@@ -26,6 +26,7 @@ export class CampaignEditComponent implements OnInit {
 
 	public processing: boolean;
 	public rulesetId: number;
+	public isNew: boolean;
 
 	constructor(
 		private service: CampaignService,
@@ -38,45 +39,51 @@ export class CampaignEditComponent implements OnInit {
 	ngOnInit() {
 		this.campaign$.subscribe((c: Campaign) => {
 			this.rulesetId = c.rulesetID;
+			this.isNew = c.id === -1;
 		});
 	}
 
 	public save(): void {
-		// TODO: Send the campaignForm state to the server
-		// this.processing = true;
-		// if (this.isNew) this.campaign.id = -1;
-		// this.service.saveCampaign(this.campaign).subscribe(
-		// 	(response: ApiResponse) => {
-		// 		this.processing = false;
-		// 		if (response) {
-		// 			if (response.statusCode === ApiCodes.Ok) {
-		// 				this.openSnackbar(
-		// 					"check-square",
-		// 					`${this.campaign.name} was successfully saved!`
-		// 				);
-		// 				if (this.isNew) {
-		// 					this.isNew = false;
-		// 					this.campaign.id = response.insertedID;
-		// 				}
-		// 			} else
-		// 				this.openSnackbar(
-		// 					"exclamation-triangle",
-		// 					`An error occurred while saving ${this.campaign.name}!`
-		// 				);
-		// 		} else
-		// 			this.openSnackbar(
-		// 				"exclamation-triangle",
-		// 				`An error occurred while saving ${this.campaign.name}!`
-		// 			);
-		// 	},
-		// 	() => {
-		// 		this.processing = false;
-		// 		this.openSnackbar(
-		// 			"exclamation-triangle",
-		// 			`An error occurred while saving ${this.campaign.name}!`
-		// 		);
-		// 	}
-		// );
+		this.processing = true;
+
+		const campaign = this.store.getState().app.forms.campaignForm;
+		this.service.saveCampaign(campaign).subscribe(
+			(response: ApiResponse) => {
+				this.processing = false;
+				if (response) {
+					if (response.statusCode === ApiCodes.Ok) {
+						this.openSnackbar(
+							"check-square",
+							`${campaign.name} was successfully saved!`
+						);
+
+						const wasNew = this.isNew;
+
+						if (this.isNew) {
+							this.isNew = false;
+							campaign.id = response.insertedID;
+						}
+
+						this.store.dispatch(this.actions.saveCampaign(campaign, wasNew));
+					} else
+						this.openSnackbar(
+							"exclamation-triangle",
+							`An error occurred while saving ${campaign.name}!`
+						);
+				} else
+					this.openSnackbar(
+						"exclamation-triangle",
+						`An error occurred while saving ${campaign.name}!`
+					);
+			},
+			() => {
+				this.processing = false;
+				this.openSnackbar(
+					"exclamation-triangle",
+					`An error occurred while saving ${campaign.name}!`
+				);
+			}
+		);
 	}
 
 	public rulesetChanged(): void {

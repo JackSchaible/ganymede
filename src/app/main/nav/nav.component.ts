@@ -51,7 +51,7 @@ export class NavComponent implements OnInit {
 		];
 
 		this.user$.subscribe((user: AppUser) => {
-			this.loggedIn = !!user.email;
+			this.loggedIn = user && !!user.email;
 			if (!this.loggedIn) return;
 
 			this.userHash = Md5.hashStr(user.email) as string;

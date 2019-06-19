@@ -9,6 +9,9 @@ export class CampaignActionTypes {
 	public static CAMPAIGN_EDIT: string = "CAMPAIGN_EDIT";
 	public static CAMPAIGN_EDIT_RULESET_CHANGED: string =
 		"CAMPAIGN_EDIT_RULESET_CHANGED";
+	public static NEW_CAMPAIGN_SAVED: string = "NEW_CAMPAIGN_SAVED";
+	public static CAMPAIGN_SAVED: string = "CAMPAIGN_SAVED";
+	public static CAMPAIGN_DELETED: string = "CAMPAIGN_DELETED";
 }
 
 export class CampaignAction {
@@ -19,13 +22,17 @@ export class CampaignAction {
 	providedIn: "root"
 })
 export class CampaignActions {
-	public loadCampaign(campaign: Campaign): AnyAction {
+	public selectCampaign(campaignId: number): AnyAction {
+		const campaign: Campaign = Campaign.getDefault();
+		campaign.id = campaignId;
+
 		const state: IAppState = {
-			user: {
-				email: null,
-				campaigns: [campaign]
-			},
-			app: null
+			user: undefined,
+			app: {
+				campaign: campaign,
+				forms: undefined,
+				rulesets: undefined
+			}
 		};
 		return {
 			type: new CampaignAction(CampaignActionTypes.CAMPAIGN_SELECTED),
@@ -43,7 +50,8 @@ export class CampaignActions {
 				rulesets: null,
 				forms: {
 					campaignForm: campaignForm
-				}
+				},
+				campaign: undefined
 			}
 		};
 		return {
@@ -63,13 +71,60 @@ export class CampaignActions {
 				rulesets: undefined,
 				forms: {
 					campaignForm: campaignForm
-				}
+				},
+				campaign: undefined
 			}
 		};
 		return {
 			type: new CampaignAction(
 				CampaignActionTypes.CAMPAIGN_EDIT_RULESET_CHANGED
 			),
+			state: state
+		};
+	}
+
+	public saveCampaign(campaign: Campaign, isNew: boolean): AnyAction {
+		const state: IAppState = {
+			user: {
+				campaigns: [campaign],
+				email: undefined
+			},
+			app: {
+				rulesets: undefined,
+				forms: {
+					campaignForm: campaign
+				},
+				campaign: undefined
+			}
+		};
+
+		let actionType: string = CampaignActionTypes.CAMPAIGN_SAVED;
+
+		if (isNew) actionType = CampaignActionTypes.NEW_CAMPAIGN_SAVED;
+
+		return {
+			type: new CampaignAction(actionType),
+			state: state
+		};
+	}
+
+	public deleteCampaign(id: number): AnyAction {
+		const campaign: Campaign = Campaign.getDefault();
+		campaign.id = id;
+
+		const state: IAppState = {
+			user: undefined,
+			app: {
+				rulesets: undefined,
+				forms: {
+					campaignForm: campaign
+				},
+				campaign: undefined
+			}
+		};
+
+		return {
+			type: new CampaignAction(CampaignActionTypes.CAMPAIGN_DELETED),
 			state: state
 		};
 	}

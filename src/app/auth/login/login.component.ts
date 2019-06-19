@@ -1,7 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import { AuthService } from "../auth.service";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
-import { Router } from "@angular/router";
+import { Router, ActivatedRoute, Params } from "@angular/router";
 import { LoginResponse } from "../models/loginResponse";
 import { AuthActions } from "../store/actions";
 import { IAppState } from "src/app/models/core/iAppState";
@@ -35,7 +35,8 @@ export class LoginComponent implements OnInit {
 		private authService: AuthService,
 		private router: Router,
 		private ngRedux: NgRedux<IAppState>,
-		private actions: AuthActions
+		private actions: AuthActions,
+		private route: ActivatedRoute
 	) {}
 
 	ngOnInit() {
@@ -51,11 +52,10 @@ export class LoginComponent implements OnInit {
 					if (loginResponse) {
 						this.ngRedux.dispatch(this.actions.loggedIn(loginResponse.user));
 
-						const rUrl = this.authService.redirectUrl
-							? this.authService.redirectUrl
-							: "/";
-
-						this.router.navigate([rUrl]);
+						this.route.queryParams.subscribe((params: Params) => {
+							const rUrl = params["returnUrl"] ? params["returnUrl"] : "/";
+							this.router.navigateByUrl(rUrl);
+						});
 					} else {
 						this.authError = true;
 					}

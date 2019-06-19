@@ -34,6 +34,7 @@ export class CampaignListComponent implements OnInit {
 	ngOnInit() {}
 
 	public select(campaignId: number): void {
+		this.store.dispatch(this.actions.selectCampaign(campaignId));
 		this.router.navigateByUrl(`campaign/${campaignId}`);
 	}
 
@@ -90,8 +91,7 @@ export class CampaignListComponent implements OnInit {
 		this.processing = true;
 		this.service.deleteCampaign(campaign.id).subscribe(
 			() => {
-				//const index = this.campaigns.findIndex(c => c.id === campaign.id);
-				//this.campaigns.splice(index, 1);
+				this.store.dispatch(this.actions.deleteCampaign(campaign.id));
 				this.processing = false;
 			},
 			() => {
