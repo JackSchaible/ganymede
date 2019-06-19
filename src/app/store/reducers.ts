@@ -1,4 +1,4 @@
-import { IAppState } from "../models/core/IAppState";
+import { IAppState } from "../models/core/iAppState";
 import { AnyAction } from "redux";
 import { StateLoaderAction, StateLoaderActionTypes } from "./actions";
 

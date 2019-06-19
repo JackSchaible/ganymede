@@ -15,6 +15,7 @@ import { CampaignEditComponent } from "./campaign-edit/campaign-edit.component";
 import { GmCommonModule } from "../common/gm-common.module";
 import { FormsModule } from "@angular/forms";
 import { CampaignComponent } from "./campaign/campaign.component";
+import { NgReduxFormModule } from "@angular-redux/form";
 
 @NgModule({
 	imports: [
@@ -27,7 +28,8 @@ import { CampaignComponent } from "./campaign/campaign.component";
 		MatInputModule,
 		MatSelectModule,
 		FormsModule,
-		MatSnackBarModule
+		MatSnackBarModule,
+		NgReduxFormModule
 	],
 	declarations: [
 		CampaignListComponent,

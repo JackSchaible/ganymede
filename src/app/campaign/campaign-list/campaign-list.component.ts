@@ -8,7 +8,7 @@ import SnackbarModel from "src/app/common/models/snackbarModel";
 import { SnackbarComponent } from "src/app/common/snackbar/snackbar.component";
 import { Observable } from "rxjs";
 import { NgRedux, select } from "@angular-redux/store";
-import { IAppState } from "src/app/models/core/IAppState";
+import { IAppState } from "src/app/models/core/iAppState";
 import { CampaignActions } from "../store/actions";
 import { Campaign } from "src/app/models/core/campaign";
 
@@ -27,7 +27,7 @@ export class CampaignListComponent implements OnInit {
 		private router: Router,
 		private dialog: MatDialog,
 		private snackBar: MatSnackBar,
-		private redux: NgRedux<IAppState>,
+		private store: NgRedux<IAppState>,
 		private actions: CampaignActions
 	) {}
 
@@ -38,6 +38,7 @@ export class CampaignListComponent implements OnInit {
 	}
 
 	public edit(campaignId: number): void {
+		this.store.dispatch(this.actions.editCampaign(campaignId));
 		this.router.navigateByUrl(`/campaign/edit/${campaignId}`);
 	}
 
@@ -45,7 +46,6 @@ export class CampaignListComponent implements OnInit {
 		this.processing = true;
 		this.service.cloneCampaign(campaign.id).subscribe(
 			(newCampaign: Campaign) => {
-				//this.campaigns.push(newCampaign);
 				this.processing = false;
 				this.router.navigateByUrl(`/campaign/${newCampaign.id}`);
 			},

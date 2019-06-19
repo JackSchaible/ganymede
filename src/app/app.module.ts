@@ -32,10 +32,10 @@ import {
 	provideReduxForms
 } from "@angular-redux/form";
 import { compose, combineReducers, Middleware } from "redux";
-import { IAppState } from "./models/core/IAppState";
+import { IAppState } from "./models/core/iAppState";
 import { reduce } from "./store/rootReducer";
-import { AppUser } from "./models/core/AppUser";
-import { App } from "./models/core/App/app";
+import { AppUser } from "./models/core/appUser";
+import { App } from "./models/core/app/app";
 
 @NgModule({
 	declarations: [

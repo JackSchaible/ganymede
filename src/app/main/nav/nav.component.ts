@@ -7,8 +7,8 @@ import { filter } from "rxjs/operators";
 import NavItem from "../models/navItem";
 import { Observable } from "rxjs";
 import { NgRedux, select } from "@angular-redux/store";
-import { IAppState } from "src/app/models/core/IAppState";
-import { AppUser } from "src/app/models/core/AppUser";
+import { IAppState } from "src/app/models/core/iAppState";
+import { AppUser } from "src/app/models/core/appUser";
 import { AuthAction, AuthActions } from "src/app/auth/store/actions";
 
 @Component({

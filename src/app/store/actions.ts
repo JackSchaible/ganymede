@@ -1,8 +1,8 @@
 import { AnyAction } from "redux";
-import { AppUser } from "../models/core/AppUser";
+import { AppUser } from "../models/core/appUser";
 import { Injectable } from "@angular/core";
-import { App } from "../models/core/App/app";
-import { IAppState } from "../models/core/IAppState";
+import { App } from "../models/core/app/app";
+import { IAppState } from "../models/core/iAppState";
 
 export class StateLoaderActionTypes {
 	public static APP_LOADED: string = "APP_LOADED";

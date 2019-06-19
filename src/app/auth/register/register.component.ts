@@ -12,7 +12,7 @@ import { Router } from "@angular/router";
 import { ErrorStateMatcher } from "@angular/material/core";
 import ApiError from "../../services/http/apiError";
 import { NgRedux } from "@angular-redux/store";
-import { IAppState } from "src/app/models/core/IAppState";
+import { IAppState } from "src/app/models/core/iAppState";
 import { AuthActions } from "../store/actions";
 import { LoginResponse } from "../models/loginResponse";
 

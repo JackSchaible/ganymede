@@ -1,6 +1,6 @@
 import { AuthActionTypes, AuthAction } from "./actions";
 import { AnyAction } from "redux";
-import { IAppState } from "src/app/models/core/IAppState";
+import { IAppState } from "src/app/models/core/iAppState";
 
 export function authReducer(state: IAppState, action: AnyAction): IAppState {
 	let result = { ...state };

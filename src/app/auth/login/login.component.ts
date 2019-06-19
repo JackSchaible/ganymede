@@ -4,7 +4,7 @@ import { FormGroup, FormControl, Validators } from "@angular/forms";
 import { Router } from "@angular/router";
 import { LoginResponse } from "../models/loginResponse";
 import { AuthActions } from "../store/actions";
-import { IAppState } from "src/app/models/core/IAppState";
+import { IAppState } from "src/app/models/core/iAppState";
 import { NgRedux } from "@angular-redux/store";
 
 @Component({

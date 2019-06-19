@@ -1,17 +1,17 @@
 import { Component, OnInit } from "@angular/core";
 import { CampaignService } from "../campaign.service";
 import { ActivatedRoute } from "@angular/router";
-import { FormGroup } from "@angular/forms";
 import { ApiResponse } from "../../services/http/apiResponse";
 import ApiCodes from "../../services/http/apiCodes";
-import { MatSnackBar } from "@angular/material";
+import { MatSnackBar, MatSelectChange } from "@angular/material";
 import { SnackbarComponent } from "../../common/snackbar/snackbar.component";
 import SnackbarModel from "../../common/models/snackbarModel";
-import { NgRedux } from "@angular-redux/store";
-import { IAppState } from "src/app/models/core/IAppState";
+import { NgRedux, select } from "@angular-redux/store";
+import { IAppState } from "src/app/models/core/iAppState";
 import { CampaignActions } from "../store/actions";
 import { Campaign } from "src/app/models/core/campaign";
-import { Ruleset } from "src/app/models/core/Rulesets/Ruleset";
+import { Ruleset } from "src/app/models/core/rulesets/ruleset";
+import { Observable } from "rxjs";
 
 @Component({
 	selector: "gm-campaign-edit",
@@ -19,79 +19,68 @@ import { Ruleset } from "src/app/models/core/Rulesets/Ruleset";
 	styleUrls: ["./campaign-edit.component.scss"]
 })
 export class CampaignEditComponent implements OnInit {
-	public processing: boolean;
-	public campaign: Campaign;
-	public rulesets: Ruleset[];
-	public isNew: boolean;
+	@select(["app", "forms", "campaignForm"])
+	public campaign$: Observable<Campaign>;
+	@select(["app", "rulesets"])
+	public rulesets$: Observable<Ruleset[]>;
 
-	public group: FormGroup;
+	public processing: boolean;
+	public rulesetId: number;
 
 	constructor(
 		private service: CampaignService,
 		private route: ActivatedRoute,
 		private snackBar: MatSnackBar,
-		private redux: NgRedux<IAppState>,
+		private store: NgRedux<IAppState>,
 		private actions: CampaignActions
 	) {}
 
 	ngOnInit() {
-		this.processing = true;
-		const id: number = parseInt(this.route.snapshot.paramMap.get("id"), 10);
-
-		if (id) {
-			this.isNew = id === -1;
-			// todo: get campaign from store
-
-			// this.service.getCampaign(id).subscribe(
-			// 	campaignModel => {
-			// 		this.campaign = campaignModel.campaign;
-			// 		this.rulesets = campaignModel.rulesets;
-			// 		this.processing = false;
-			// 	},
-			// 	() => (this.processing = false)
-			// );
-		} else this.processing = false;
+		this.campaign$.subscribe((c: Campaign) => {
+			this.rulesetId = c.rulesetID;
+		});
 	}
 
 	public save(): void {
-		this.processing = true;
+		// TODO: Send the campaignForm state to the server
+		// this.processing = true;
+		// if (this.isNew) this.campaign.id = -1;
+		// this.service.saveCampaign(this.campaign).subscribe(
+		// 	(response: ApiResponse) => {
+		// 		this.processing = false;
+		// 		if (response) {
+		// 			if (response.statusCode === ApiCodes.Ok) {
+		// 				this.openSnackbar(
+		// 					"check-square",
+		// 					`${this.campaign.name} was successfully saved!`
+		// 				);
+		// 				if (this.isNew) {
+		// 					this.isNew = false;
+		// 					this.campaign.id = response.insertedID;
+		// 				}
+		// 			} else
+		// 				this.openSnackbar(
+		// 					"exclamation-triangle",
+		// 					`An error occurred while saving ${this.campaign.name}!`
+		// 				);
+		// 		} else
+		// 			this.openSnackbar(
+		// 				"exclamation-triangle",
+		// 				`An error occurred while saving ${this.campaign.name}!`
+		// 			);
+		// 	},
+		// 	() => {
+		// 		this.processing = false;
+		// 		this.openSnackbar(
+		// 			"exclamation-triangle",
+		// 			`An error occurred while saving ${this.campaign.name}!`
+		// 		);
+		// 	}
+		// );
+	}
 
-		if (this.isNew) this.campaign.id = -1;
-
-		this.service.saveCampaign(this.campaign).subscribe(
-			(response: ApiResponse) => {
-				this.processing = false;
-
-				if (response) {
-					if (response.statusCode === ApiCodes.Ok) {
-						this.openSnackbar(
-							"check-square",
-							`${this.campaign.name} was successfully saved!`
-						);
-
-						if (this.isNew) {
-							this.isNew = false;
-							this.campaign.id = response.insertedID;
-						}
-					} else
-						this.openSnackbar(
-							"exclamation-triangle",
-							`An error occurred while saving ${this.campaign.name}!`
-						);
-				} else
-					this.openSnackbar(
-						"exclamation-triangle",
-						`An error occurred while saving ${this.campaign.name}!`
-					);
-			},
-			() => {
-				this.processing = false;
-				this.openSnackbar(
-					"exclamation-triangle",
-					`An error occurred while saving ${this.campaign.name}!`
-				);
-			}
-		);
+	public rulesetChanged(): void {
+		this.store.dispatch(this.actions.editCampaignSetRuleset(this.rulesetId));
 	}
 
 	private openSnackbar(icon: string, message: string): void {

@@ -1,11 +1,12 @@
 import { StorageKeys } from "../storage/localStorageKeys";
 import { Injectable } from "@angular/core";
-import { IAppState } from "../models/core/IAppState";
+import { IAppState } from "../models/core/iAppState";
 import MasterService from "./master.service";
 import { HttpClient } from "@angular/common/http";
-import { App } from "../models/core/App/app";
+import { App } from "../models/core/app/app";
 import { NgRedux } from "@angular-redux/store";
 import { StateLoaderActions } from "../store/actions";
+import { Forms } from "../models/core/app/forms";
 
 @Injectable({
 	providedIn: "root"
@@ -22,6 +23,7 @@ export class StateLoaderService extends MasterService {
 
 		if (serializedState === null) {
 			this.http.get<App>(`${this.baseUrl}`).subscribe((app: App) => {
+				app.forms = Forms.getDefault();
 				const appLoadAction = this.actions.loadApp(app);
 				store.dispatch(appLoadAction);
 			});

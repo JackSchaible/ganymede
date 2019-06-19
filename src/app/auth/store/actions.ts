@@ -1,8 +1,8 @@
-import { AppUser } from "src/app/models/core/AppUser";
+import { AppUser } from "src/app/models/core/appUser";
 import { Injectable } from "@angular/core";
 import { StateLoaderService } from "src/app/services/stateLoader.service";
 import { AnyAction } from "redux";
-import { IAppState } from "src/app/models/core/IAppState";
+import { IAppState } from "src/app/models/core/iAppState";
 
 export class AuthActionTypes {
 	public static LOGGED_IN: string = "LOGGED_IN";
@@ -17,8 +17,6 @@ export class AuthAction {
 	providedIn: "root"
 })
 export class AuthActions {
-	constructor(private stateService: StateLoaderService) {}
-
 	public loggedIn(user: AppUser): AnyAction {
 		const state: IAppState = {
 			user: user,
