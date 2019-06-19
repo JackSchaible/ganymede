@@ -1,14 +1,17 @@
 import { Component, OnInit } from "@angular/core";
 import { CampaignService } from "../campaign.service";
 import { ActivatedRoute } from "@angular/router";
-import { Campaign } from "../models/campaign";
-import { FormGroup } from "@angular/forms";
-import { Ruleset } from "../models/ruleset";
 import { ApiResponse } from "../../services/http/apiResponse";
 import ApiCodes from "../../services/http/apiCodes";
-import { MatSnackBar } from "@angular/material";
+import { MatSnackBar, MatSelectChange } from "@angular/material";
 import { SnackbarComponent } from "../../common/snackbar/snackbar.component";
 import SnackbarModel from "../../common/models/snackbarModel";
+import { NgRedux, select } from "@angular-redux/store";
+import { IAppState } from "src/app/models/core/iAppState";
+import { CampaignActions } from "../store/actions";
+import { Campaign } from "src/app/models/core/campaign";
+import { Ruleset } from "src/app/models/core/rulesets/ruleset";
+import { Observable } from "rxjs";
 
 @Component({
 	selector: "gm-campaign-edit",
@@ -16,75 +19,75 @@ import SnackbarModel from "../../common/models/snackbarModel";
 	styleUrls: ["./campaign-edit.component.scss"]
 })
 export class CampaignEditComponent implements OnInit {
-	public processing: boolean;
-	public campaign: Campaign;
-	public rulesets: Ruleset[];
-	public isNew: boolean;
+	@select(["app", "forms", "campaignForm"])
+	public campaign$: Observable<Campaign>;
+	@select(["app", "rulesets"])
+	public rulesets$: Observable<Ruleset[]>;
 
-	public group: FormGroup;
+	public processing: boolean;
+	public rulesetId: number;
+	public isNew: boolean;
 
 	constructor(
 		private service: CampaignService,
 		private route: ActivatedRoute,
-		private snackBar: MatSnackBar
+		private snackBar: MatSnackBar,
+		private store: NgRedux<IAppState>,
+		private actions: CampaignActions
 	) {}
 
 	ngOnInit() {
-		this.processing = true;
-		const id: number = parseInt(this.route.snapshot.paramMap.get("id"), 10);
-
-		if (id) {
-			this.isNew = id === -1;
-			this.service.getCampaign(id).subscribe(
-				campaignModel => {
-					this.campaign = campaignModel.campaign;
-					this.rulesets = campaignModel.rulesets;
-					this.processing = false;
-				},
-				() => (this.processing = false)
-			);
-		} else this.processing = false;
+		this.campaign$.subscribe((c: Campaign) => {
+			this.rulesetId = c.rulesetID;
+			this.isNew = c.id === -1;
+		});
 	}
 
 	public save(): void {
 		this.processing = true;
 
-		if (this.isNew) this.campaign.id = -1;
-
-		this.service.saveCampaign(this.campaign).subscribe(
+		const campaign = this.store.getState().app.forms.campaignForm;
+		this.service.saveCampaign(campaign).subscribe(
 			(response: ApiResponse) => {
 				this.processing = false;
-
 				if (response) {
 					if (response.statusCode === ApiCodes.Ok) {
 						this.openSnackbar(
 							"check-square",
-							`${this.campaign.name} was successfully saved!`
+							`${campaign.name} was successfully saved!`
 						);
+
+						const wasNew = this.isNew;
 
 						if (this.isNew) {
 							this.isNew = false;
-							this.campaign.id = response.insertedID;
+							campaign.id = response.insertedID;
 						}
+
+						this.store.dispatch(this.actions.saveCampaign(campaign, wasNew));
 					} else
 						this.openSnackbar(
 							"exclamation-triangle",
-							`An error occurred while saving ${this.campaign.name}!`
+							`An error occurred while saving ${campaign.name}!`
 						);
 				} else
 					this.openSnackbar(
 						"exclamation-triangle",
-						`An error occurred while saving ${this.campaign.name}!`
+						`An error occurred while saving ${campaign.name}!`
 					);
 			},
 			() => {
 				this.processing = false;
 				this.openSnackbar(
 					"exclamation-triangle",
-					`An error occurred while saving ${this.campaign.name}!`
+					`An error occurred while saving ${campaign.name}!`
 				);
 			}
 		);
+	}
+
+	public rulesetChanged(): void {
+		this.store.dispatch(this.actions.editCampaignSetRuleset(this.rulesetId));
 	}
 
 	private openSnackbar(icon: string, message: string): void {

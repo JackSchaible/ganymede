@@ -27,7 +27,7 @@ namespace Ganymede.Api.Data
 
 			if (!_ctx.Users.Any())
 			{
-				var usrResult = await _usrMgr.CreateAsync(new AppUser { Email = email, UserName = email }, "Testing!23");
+				await _usrMgr.CreateAsync(new AppUser { Email = email, UserName = email }, "Testing!23");
 				var usr = await _usrMgr.FindByEmailAsync(email);
 				userId = usr.Id;
 			}

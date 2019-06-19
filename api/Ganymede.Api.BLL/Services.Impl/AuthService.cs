@@ -16,7 +16,7 @@ using System.Threading.Tasks;
 
 namespace Ganymede.Api.BLL.Services.Impl
 {
-    public class AuthService: IAuthService
+    public class AuthService : IAuthService
     {
         private Dictionary<string, ApiError> _errors = new Dictionary<string, ApiError>
         {
@@ -62,10 +62,13 @@ namespace Ganymede.Api.BLL.Services.Impl
             }
             else if (!signinResult.IsLockedOut && !signinResult.RequiresTwoFactor && !signinResult.IsNotAllowed)
             {
-                result.Error = new ApiError
+                result.Errors = new[] 
                 {
-                    Field = _errors["InvalidPassword"].Field,
-                    ErrorCode = _errors["InvalidPassword"].ErrorCode
+                    new ApiError
+                    {
+                        Field = _errors["InvalidPassword"].Field,
+                        ErrorCode = _errors["InvalidPassword"].ErrorCode
+                    }
                 };
             }
             else
@@ -74,16 +77,9 @@ namespace Ganymede.Api.BLL.Services.Impl
             return result;
         }
 
-        public AppUser GetUserData(string userId)
+        public async Task<LoginResult> Register(RegisterData model)
         {
-            return _context.Users
-                .Include(u => u.Campaigns)
-                .Single(u => u.Id == userId);
-        }
-
-        public async Task<RegisterResult> Register(RegisterData model)
-        {
-            var result = new RegisterResult();
+            var result = new LoginResult();
 
             var user = new AppUser
             {
@@ -92,11 +88,21 @@ namespace Ganymede.Api.BLL.Services.Impl
             };
 
             var createResult = await _userManager.CreateAsync(user, model.Password);
+            result.Success = createResult.Succeeded;
 
             if (createResult.Succeeded)
             {
                 await _signinManager.SignInAsync(user, false);
                 result.Token = GenerateJwtToken(model.Email, user);
+
+                var appUser = _userManager.Users.SingleOrDefault(r => r.Email == model.Email);
+                appUser = GetUserData(appUser.Id);
+
+                result.User = new User
+                {
+                    Email = appUser.Email,
+                    Campaigns = appUser.Campaigns
+                };
                 return result;
             }
             else
@@ -104,16 +110,12 @@ namespace Ganymede.Api.BLL.Services.Impl
                 List<ApiError> knownErrors = new List<ApiError>();
 
                 foreach (var err in createResult.Errors)
-                {
                     if (_errors.ContainsKey(err.Code))
-                    {
                         knownErrors.Add(_errors[err.Code]);
-                    }
-                }
 
                 if (knownErrors.Count > 0)
                 {
-                    result.Errors = knownErrors;
+                    result.Errors = knownErrors.ToArray();
                     return result;
                 }
             }
@@ -146,5 +148,13 @@ namespace Ganymede.Api.BLL.Services.Impl
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
 
+        private AppUser GetUserData(string userId)
+        {
+            return _context.Users
+                .Include(u => u.Campaigns)
+                    .ThenInclude(c => c.Ruleset)
+                        .ThenInclude(r => r.Publisher)
+                .Single(u => u.Id == userId);
+        }
     }
 }

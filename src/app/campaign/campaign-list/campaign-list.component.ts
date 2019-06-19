@@ -1,5 +1,4 @@
 import { Component, OnInit } from "@angular/core";
-import { Campaign } from "../models/campaign";
 import { CampaignService } from "../campaign.service";
 import { Router } from "@angular/router";
 import { MatDialog, MatSnackBar } from "@angular/material";
@@ -8,6 +7,10 @@ import { ModalModel } from "src/app/common/models/modalModel";
 import SnackbarModel from "src/app/common/models/snackbarModel";
 import { SnackbarComponent } from "src/app/common/snackbar/snackbar.component";
 import { Observable } from "rxjs";
+import { NgRedux, select } from "@angular-redux/store";
+import { IAppState } from "src/app/models/core/iAppState";
+import { CampaignActions } from "../store/actions";
+import { Campaign } from "src/app/models/core/campaign";
 
 @Component({
 	selector: "gm-campaign-list",
@@ -15,6 +18,7 @@ import { Observable } from "rxjs";
 	styleUrls: ["./campaign-list.component.scss"]
 })
 export class CampaignListComponent implements OnInit {
+	@select(["user", "campaigns"])
 	public campaigns$: Observable<Campaign[]>;
 	public processing: boolean;
 
@@ -22,20 +26,20 @@ export class CampaignListComponent implements OnInit {
 		private service: CampaignService,
 		private router: Router,
 		private dialog: MatDialog,
-		private snackBar: MatSnackBar
+		private snackBar: MatSnackBar,
+		private store: NgRedux<IAppState>,
+		private actions: CampaignActions
 	) {}
 
-	ngOnInit() {
-		this.processing = true;
-		//this.campaigns$ = this.store.select(listCampaignsSelector);
-	}
+	ngOnInit() {}
 
 	public select(campaignId: number): void {
+		this.store.dispatch(this.actions.selectCampaign(campaignId));
 		this.router.navigateByUrl(`campaign/${campaignId}`);
 	}
 
 	public edit(campaignId: number): void {
-		this.processing = true;
+		this.store.dispatch(this.actions.editCampaign(campaignId));
 		this.router.navigateByUrl(`/campaign/edit/${campaignId}`);
 	}
 
@@ -43,7 +47,6 @@ export class CampaignListComponent implements OnInit {
 		this.processing = true;
 		this.service.cloneCampaign(campaign.id).subscribe(
 			(newCampaign: Campaign) => {
-				//this.campaigns.push(newCampaign);
 				this.processing = false;
 				this.router.navigateByUrl(`/campaign/${newCampaign.id}`);
 			},
@@ -88,8 +91,7 @@ export class CampaignListComponent implements OnInit {
 		this.processing = true;
 		this.service.deleteCampaign(campaign.id).subscribe(
 			() => {
-				//const index = this.campaigns.findIndex(c => c.id === campaign.id);
-				//this.campaigns.splice(index, 1);
+				this.store.dispatch(this.actions.deleteCampaign(campaign.id));
 				this.processing = false;
 			},
 			() => {

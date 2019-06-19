@@ -1,10 +1,10 @@
-import { AppUser } from "src/app/models/core/AppUser";
+import { AppUser } from "src/app/models/core/appUser";
 import { Injectable } from "@angular/core";
 import { StateLoaderService } from "src/app/services/stateLoader.service";
 import { AnyAction } from "redux";
-import { IAppState } from "src/app/models/core/IAppState";
+import { IAppState } from "src/app/models/core/iAppState";
 
-export class ActionTypes {
+export class AuthActionTypes {
 	public static LOGGED_IN: string = "LOGGED_IN";
 	public static LOGGED_OUT: string = "LOGGED_OUT";
 }
@@ -17,21 +17,19 @@ export class AuthAction {
 	providedIn: "root"
 })
 export class AuthActions {
-	constructor(private stateService: StateLoaderService) {}
-
 	public loggedIn(user: AppUser): AnyAction {
-		this.stateService.saveState({ user: user });
 		const state: IAppState = {
-			user: user
+			user: user,
+			app: null
 		};
-		return { type: new AuthAction(ActionTypes.LOGGED_IN), state: state };
+		return { type: new AuthAction(AuthActionTypes.LOGGED_IN), state: state };
 	}
 
 	public loggedOut(): AnyAction {
-		this.stateService.saveState({ user: null });
 		const state: IAppState = {
-			user: null
+			user: null,
+			app: null
 		};
-		return { type: new AuthAction(ActionTypes.LOGGED_OUT), state: state };
+		return { type: new AuthAction(AuthActionTypes.LOGGED_OUT), state: state };
 	}
 }

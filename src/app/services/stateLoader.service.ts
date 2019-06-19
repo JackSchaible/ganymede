@@ -1,22 +1,37 @@
-import { AppUser } from "../models/core/AppUser";
 import { StorageKeys } from "../storage/localStorageKeys";
 import { Injectable } from "@angular/core";
-import { IAppState } from "../models/core/IAppState";
+import { IAppState } from "../models/core/iAppState";
+import MasterService from "./master.service";
+import { HttpClient } from "@angular/common/http";
+import { App } from "../models/core/app/app";
+import { NgRedux } from "@angular-redux/store";
+import { StateLoaderActions } from "../store/actions";
+import { Forms } from "../models/core/app/forms";
 
 @Injectable({
 	providedIn: "root"
 })
-export class StateLoaderService {
-	constructor() {}
+export class StateLoaderService extends MasterService {
+	protected baseUrl: string = this.apiUrl + "AppData";
 
-	public loadState(): IAppState {
+	constructor(private client: HttpClient, private actions: StateLoaderActions) {
+		super(client);
+	}
+
+	public loadState(store: NgRedux<IAppState>): void {
 		const serializedState = localStorage.getItem(StorageKeys.state.state);
 
-		let state: IAppState;
-		if (serializedState === null) state = { user: new AppUser() };
-		else state = JSON.parse(serializedState);
-
-		return state;
+		if (serializedState === null) {
+			this.http.get<App>(`${this.baseUrl}`).subscribe((app: App) => {
+				app.forms = Forms.getDefault();
+				const appLoadAction = this.actions.loadApp(app);
+				store.dispatch(appLoadAction);
+			});
+		} else {
+			const state: IAppState = JSON.parse(serializedState);
+			const stateLoadAction = this.actions.loadState(state);
+			store.dispatch(stateLoadAction);
+		}
 	}
 
 	public saveState(state: IAppState) {

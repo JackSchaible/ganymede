@@ -127,6 +127,7 @@ namespace api
         }
         private void ConfigureBllServices(IServiceCollection services)
         {
+            services.AddTransient<IAppService, AppService>();
             services.AddTransient<ICampaignService, CampaignService>();
             services.AddTransient<IAuthService, AuthService>();
         }

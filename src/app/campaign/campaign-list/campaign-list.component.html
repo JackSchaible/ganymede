@@ -9,17 +9,17 @@
 <mat-accordion>
   <mat-expansion-panel *ngFor="let campaign of campaigns$ | async">
     <mat-expansion-panel-header>
-      <mat-panel-title>{{ campaign.name }}</mat-panel-title>
+      <mat-panel-title>{{ campaign?.name }}</mat-panel-title>
       <mat-panel-description>
-        <em>{{ campaign.ruleset.name }} ({{ campaign.ruleset.publisher.name }})</em>
+        <em>{{ campaign?.ruleset.name }} ({{ campaign?.ruleset.publisher.name }})</em>
       </mat-panel-description>
     </mat-expansion-panel-header>
 
-    <p *ngIf="campaign.description">{{ campaign.description }}</p>
+    <p *ngIf="campaign.description">{{ campaign?.description }}</p>
 
     <mat-action-row>
-        <button title="Select" mat-mini-fab color="accent" (click)="select(campaign.id)" class="mr-3"><i class="fas fa-play"></i></button>
-      <button title="Edit" mat-mini-fab color="primary" (click)="edit(campaign.id)" class="mr-3"><i class="fas fa-pencil"></i></button>
+      <button title="Select" mat-mini-fab color="accent" (click)="select(campaign?.id)" class="mr-3"><i class="fas fa-play"></i></button>
+      <button title="Edit" mat-mini-fab color="primary" (click)="edit(campaign?.id)" class="mr-3"><i class="fas fa-pencil"></i></button>
       <button title="Copy" mat-mini-fab color="primary" (click)="clone(campaign)" class="mr-3"><i class="fas fa-copy"></i></button>
       <button title="Delete" mat-mini-fab color="warn" (click)="delete(campaign)"><i class="fas fa-trash"></i></button>
     </mat-action-row>

@@ -1,6 +1,6 @@
-import { ActionTypes, AuthAction } from "./actions";
+import { AuthActionTypes, AuthAction } from "./actions";
 import { AnyAction } from "redux";
-import { IAppState } from "src/app/models/core/IAppState";
+import { IAppState } from "src/app/models/core/iAppState";
 
 export function authReducer(state: IAppState, action: AnyAction): IAppState {
 	let result = { ...state };
@@ -8,12 +8,12 @@ export function authReducer(state: IAppState, action: AnyAction): IAppState {
 
 	if (authAction) {
 		switch (authAction.argument) {
-			case ActionTypes.LOGGED_IN:
-				result = loginChanged(action.state);
+			case AuthActionTypes.LOGGED_IN:
+				result = loginChanged(state, action.state);
 				break;
 
-			case ActionTypes.LOGGED_OUT:
-				result = loginChanged(action.state);
+			case AuthActionTypes.LOGGED_OUT:
+				result = loginChanged(state, action.state);
 				break;
 		}
 	}
@@ -21,6 +21,6 @@ export function authReducer(state: IAppState, action: AnyAction): IAppState {
 	return result;
 }
 
-function loginChanged(state: IAppState): IAppState {
-	return { user: state.user };
+function loginChanged(oldState: IAppState, newState: IAppState): IAppState {
+	return { user: newState.user, app: oldState.app };
 }
