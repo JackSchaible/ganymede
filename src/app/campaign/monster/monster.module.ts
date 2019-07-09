@@ -3,7 +3,8 @@ import { CommonModule } from "@angular/common";
 import { MonstersHomeComponent } from "./monsters-home/monsters-home.component";
 import { MonsterRoutingModule } from "./monster-routing.module";
 import { GmCommonModule } from "src/app/common/gm-common.module";
-import { MatButtonModule, MatExpansionModule } from "@angular/material";
+import { MatButtonModule } from "@angular/material/button";
+import { MatExpansionModule } from "@angular/material/expansion";
 
 @NgModule({
 	declarations: [MonstersHomeComponent],

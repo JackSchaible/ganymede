@@ -1,6 +1,6 @@
 import { Component, Inject } from "@angular/core";
 import { ModalModel } from "../models/modalModel";
-import { MAT_DIALOG_DATA } from "@angular/material";
+import { MAT_DIALOG_DATA } from "@angular/material/dialog";
 
 @Component({
 	selector: "gm-modal",

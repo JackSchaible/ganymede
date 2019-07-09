@@ -28,7 +28,7 @@ class Actor {
 	styleUrls: ["./encounter-home.component.scss"]
 })
 export class EncounterHomeComponent implements OnInit {
-	@ViewChild("firstInput")
+	@ViewChild("firstInput", { static: true })
 	public firstInput: ElementRef;
 
 	public actors: Array<Actor>;

@@ -1,7 +1,8 @@
 import { Component, OnInit } from "@angular/core";
 import { CampaignService } from "../campaign.service";
 import { Router } from "@angular/router";
-import { MatDialog, MatSnackBar } from "@angular/material";
+import { MatDialog } from "@angular/material/dialog";
+import { MatSnackBar } from "@angular/material/snack-bar";
 import { ModalComponent } from "src/app/common/modal/modal.component";
 import { ModalModel } from "src/app/common/models/modalModel";
 import SnackbarModel from "src/app/common/models/snackbarModel";
