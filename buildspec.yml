@@ -4,6 +4,8 @@ environment_variables:
     S3_BUCKET: "dm.jackschaible.ca"
 phases:
   install:
+    runtime-versions:
+      nodejs: 10
     commands:
       - npm i
       - npm i -g @angular/cli
