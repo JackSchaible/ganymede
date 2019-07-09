@@ -30,4 +30,8 @@ export class MonstersHomeComponent implements OnInit {
 			}
 		);
 	}
+
+	public edit(id: number): void {}
+	public clone(monster: Monster): void {}
+	public delete(monster: Monster): void {}
 }
