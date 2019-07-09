@@ -13,7 +13,6 @@ import { EncounterModule } from "./encounter/encounter.module";
 import { AuthModule } from "./auth/auth.module";
 import { FormsModule } from "./forms/forms.module";
 import { MatToolbarModule, MatMenuModule } from "@angular/material";
-import { DeviceDetectorModule } from "ngx-device-detector";
 import { NavItemComponent } from "./main/nav-item/nav-item.component";
 import { CampaignModule } from "./campaign/campaign.module";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
@@ -31,11 +30,12 @@ import {
 	defaultFormReducer,
 	provideReduxForms
 } from "@angular-redux/form";
-import { compose, combineReducers, Middleware } from "redux";
+import { compose, Middleware } from "redux";
 import { IAppState } from "./models/core/iAppState";
 import { reduce } from "./store/rootReducer";
 import { AppUser } from "./models/core/appUser";
 import { App } from "./models/core/app/app";
+import { LayoutModule } from "@angular/cdk/layout";
 
 @NgModule({
 	declarations: [
@@ -62,7 +62,7 @@ import { App } from "./models/core/app/app";
 		NgReduxModule,
 
 		AppRoutingModule,
-		DeviceDetectorModule.forRoot()
+		LayoutModule
 	],
 	providers: [
 		{ provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
