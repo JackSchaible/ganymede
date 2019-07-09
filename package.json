@@ -39,8 +39,6 @@
     "@angular/cli": "^8.1.0",
     "@angular/compiler-cli": "^8.1.0",
     "@angular/language-service": "^8.1.0",
-    "@types/jasmine": "~2.8.8",
-    "@types/jasminewd2": "~2.0.3",
     "@types/node": "~8.9.4",
     "codelyzer": "^5.0.1",
     "protractor": "~5.4.0",
