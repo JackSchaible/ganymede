@@ -28,7 +28,6 @@
 		"core-js": "^2.5.4",
 		"hammerjs": "^2.0.8",
 		"ng-click-outside": "^4.0.0",
-		"ngx-device-detector": "^1.3.3",
 		"npm": "^6.9.0",
 		"redux": "^4.0.1",
 		"redux-devtools-extension": "^2.13.8",

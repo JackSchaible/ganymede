@@ -6,7 +6,11 @@ import {
 	OnInit
 } from "@angular/core";
 import { CdkDragDrop, moveItemInArray } from "@angular/cdk/drag-drop";
-import { DeviceDetectorService } from "ngx-device-detector";
+import {
+	BreakpointObserver,
+	Breakpoints,
+	BreakpointState
+} from "@angular/cdk/layout";
 
 class Actor {
 	public id: number;
@@ -39,14 +43,18 @@ export class EncounterHomeComponent implements OnInit {
 
 	private oldId: number = 0;
 
-	constructor(private device: DeviceDetectorService) {
+	constructor(private breakpointObserver: BreakpointObserver) {
 		this.actors = new Array<Actor>();
 		this.showForm = true;
 		this.newActor = new Actor();
 	}
 
 	public ngOnInit() {
-		this.showTable = this.device.isDesktop();
+		this.breakpointObserver
+			.observe([Breakpoints.Large, Breakpoints.XLarge])
+			.subscribe((result: BreakpointState) => {
+				this.showTable = result.matches;
+			});
 	}
 
 	public addActor(addAnother: boolean) {
@@ -56,11 +64,6 @@ export class EncounterHomeComponent implements OnInit {
 			!this.newActor.totalHP
 		)
 			return;
-
-		this.actors.forEach(actor => {
-			if (actor.order === this.newActor.order) {
-			}
-		});
 
 		this.actors.push({
 			id: this.oldId,

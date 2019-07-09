@@ -11,7 +11,7 @@ import {
 } from "@angular/material";
 import { FormsModule } from "@angular/forms";
 import { DragDropModule } from "@angular/cdk/drag-drop";
-import { DeviceDetectorModule } from "ngx-device-detector";
+import { LayoutModule } from "@angular/cdk/layout";
 
 @NgModule({
 	imports: [
@@ -22,7 +22,7 @@ import { DeviceDetectorModule } from "ngx-device-detector";
 		MatButtonModule,
 		FormsModule,
 		DragDropModule,
-		DeviceDetectorModule,
+		LayoutModule,
 		MatExpansionModule
 	],
 	declarations: [EncounterComponent, EncounterHomeComponent]

@@ -1,6 +1,5 @@
 import { Component, OnInit } from "@angular/core";
 import { AuthService } from "../../auth/auth.service";
-import { DeviceDetectorService } from "ngx-device-detector";
 import { Router, NavigationEnd, RouterEvent } from "@angular/router";
 import { Md5 } from "ts-md5/dist/md5";
 import { filter } from "rxjs/operators";
@@ -9,7 +8,12 @@ import { Observable } from "rxjs";
 import { NgRedux, select } from "@angular-redux/store";
 import { IAppState } from "src/app/models/core/iAppState";
 import { AppUser } from "src/app/models/core/appUser";
-import { AuthAction, AuthActions } from "src/app/auth/store/actions";
+import { AuthActions } from "src/app/auth/store/actions";
+import {
+	BreakpointObserver,
+	BreakpointState,
+	Breakpoints
+} from "@angular/cdk/layout";
 
 @Component({
 	selector: "gm-nav",
@@ -33,14 +37,28 @@ export class NavComponent implements OnInit {
 
 	constructor(
 		private authService: AuthService,
-		private deviceService: DeviceDetectorService,
+		private breakpointObserver: BreakpointObserver,
 		private router: Router,
 		private redux: NgRedux<IAppState>,
 		private actions: AuthActions
 	) {
-		this.isMobile = this.deviceService.isMobile();
-		this.isTablet = this.deviceService.isTablet();
-		this.isDesktop = this.deviceService.isDesktop();
+		breakpointObserver
+			.observe([Breakpoints.Handset])
+			.subscribe((result: BreakpointState) => {
+				this.isMobile = result.matches;
+			});
+
+		breakpointObserver
+			.observe([Breakpoints.Tablet])
+			.subscribe((result: BreakpointState) => {
+				this.isTablet = result.matches;
+			});
+
+		breakpointObserver
+			.observe([Breakpoints.Large, Breakpoints.XLarge])
+			.subscribe((result: BreakpointState) => {
+				this.isDesktop = result.matches;
+			});
 
 		this.items = [
 			new NavItem("", "fab fa-d-and-d", "DM Tools", true),
