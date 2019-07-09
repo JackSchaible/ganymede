@@ -3,14 +3,12 @@ import { CommonModule } from "@angular/common";
 
 import { CampaignRoutingModule } from "./campaign-routing.module";
 import { CampaignListComponent } from "./campaign-list/campaign-list.component";
-import {
-	MatExpansionModule,
-	MatButtonModule,
-	MatCardModule,
-	MatInputModule,
-	MatSelectModule,
-	MatSnackBarModule
-} from "@angular/material";
+import { MatButtonModule } from "@angular/material/button";
+import { MatCardModule } from "@angular/material/card";
+import { MatExpansionModule } from "@angular/material/expansion";
+import { MatInputModule } from "@angular/material/input";
+import { MatSelectModule } from "@angular/material/select";
+import { MatSnackBarModule } from "@angular/material/snack-bar";
 import { CampaignEditComponent } from "./campaign-edit/campaign-edit.component";
 import { GmCommonModule } from "../common/gm-common.module";
 import { FormsModule } from "@angular/forms";
