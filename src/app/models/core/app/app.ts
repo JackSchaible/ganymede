@@ -1,5 +1,5 @@
 import { Forms } from "./forms";
-import { Ruleset } from "../Rulesets/ruleset";
+import { Ruleset } from "../rulesets/ruleset";
 import { Campaign } from "../campaign";
 
 export class App {
