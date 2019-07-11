@@ -5,11 +5,11 @@ phases:
       dotnet: 2.2
   build:
     commands:
-      - cd api
+      - cd api/Ganymede.Api
       - dotnet publish -o deploy
 artifacts:
   files:
     - applicationStop.bat
     - applicationStart.bat
     - appspec.yml
-    - api/deploy/*
+    - api/Ganymede.Api/deploy/*
