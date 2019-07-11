@@ -1,8 +1,8 @@
 import { Component, OnInit } from "@angular/core";
 import { NgRedux, select } from "@angular-redux/store";
-import { IAppState } from "src/app/models/core/IAppState";
+import { IAppState } from "src/app/models/core/iAppState";
 import { Observable } from "rxjs";
-import { Campaign } from "src/app/models/core/Campaign";
+import { Campaign } from "src/app/models/core/campaign";
 
 @Component({
 	selector: "gm-campaign",
