@@ -1,4 +1,4 @@
-import { AppUser } from "src/app/models/core/appUser";
+import AppUser from "src/app/models/core/appUser";
 import { Injectable } from "@angular/core";
 import { StateLoaderService } from "src/app/services/stateLoader.service";
 import { AnyAction } from "redux";

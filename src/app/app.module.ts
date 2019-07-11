@@ -34,7 +34,7 @@ import {
 import { compose, Middleware } from "redux";
 import { IAppState } from "./models/core/iAppState";
 import { reduce } from "./store/rootReducer";
-import { AppUser } from "./models/core/appUser";
+import AppUser from "./models/core/appUser";
 import { App } from "./models/core/app/app";
 import { LayoutModule } from "@angular/cdk/layout";
 

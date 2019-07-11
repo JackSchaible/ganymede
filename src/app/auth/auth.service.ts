@@ -6,7 +6,7 @@ import MasterService from "../services/master.service";
 import { User } from "./models/user";
 import { LoginResponse } from "./models/loginResponse";
 import { StorageKeys } from "../storage/localStorageKeys";
-import { AppUser } from "../models/core/appUser";
+import AppUser from "../models/core/appUser";
 
 @Injectable({
 	providedIn: "root"

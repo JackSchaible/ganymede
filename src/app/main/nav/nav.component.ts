@@ -7,7 +7,7 @@ import NavItem from "../models/navItem";
 import { Observable } from "rxjs";
 import { NgRedux, select } from "@angular-redux/store";
 import { IAppState } from "src/app/models/core/iAppState";
-import { AppUser } from "src/app/models/core/appUser";
+import AppUser from "src/app/models/core/appUser";
 import { AuthActions } from "src/app/auth/store/actions";
 import {
 	BreakpointObserver,

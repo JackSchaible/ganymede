@@ -1,4 +1,4 @@
-import { AppUser } from "./appUser";
+import AppUser from "./appUser";
 import { App } from "./app/app";
 
 export interface IAppState {
