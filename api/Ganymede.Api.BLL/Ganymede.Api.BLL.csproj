@@ -6,6 +6,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.All" Version="2.2.0" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Ganymede.Api.Data\Ganymede.Api.Data.csproj" />
     <ProjectReference Include="..\Ganymede.Api.Models\Ganymede.Api.Models.csproj" />
   </ItemGroup>
