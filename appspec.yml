@@ -1,7 +1,7 @@
 version: 0.0
 os: windows
 files:
-  - source: api/deploy
+  - source: api/Ganymede.Api/deploy
     destination: C:\inetpub\wwwroot\dmapi
 hooks:
   ApplicationStop:
