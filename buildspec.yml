@@ -4,7 +4,7 @@ environment_variables:
     S3_BUCKET: "dm.jackschaible.ca"
 phases:
   install:
-    runtiwfme-versions:
+    runtime-versions:
       nodejs: 10
     commands:
       - npm i
