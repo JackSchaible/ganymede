@@ -15,19 +15,19 @@ const routes: Routes = [
 		canActivate: [AuthGuard]
 	},
 	{
-		path: "campaign/edit/:id",
+		path: "campaigns/edit/:id",
 		component: CampaignEditComponent,
 		data: { animation: "campaigns" },
 		canActivate: [AuthGuard]
 	},
 	{
-		path: "campaign/:id",
+		path: "campaigns/:id",
 		component: CampaignComponent,
 		data: { animation: "campaigns" },
 		canActivate: [AuthGuard]
 	},
 	{
-		path: "campaign/:id/monsters",
+		path: "campaigns/:id/monsters",
 		loadChildren: () => MonsterModule,
 		canActivate: [AuthGuard]
 	},

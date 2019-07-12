@@ -23,28 +23,12 @@ namespace Ganymede.api.Controllers
             _service = service;
         }
 
-        // GET: api/Campaign
-        [HttpGet]
-        public IEnumerable<CampaignListViewModel> List()
-        {
-            var user = _userManager.GetUserId(HttpContext.User);
-            return _service.ListByUser(user);
-        }
-
         // GET: api/Campaign/5
         [HttpGet("{id}", Name = "Get")]
-        public CampaignEditViewModel Get(int id)
+        public Campaign Get(int id)
         {
             var user = _userManager.GetUserId(HttpContext.User);
             return _service.GetByUserAndId(id, user);
-        }
-
-        // GET: api/Campaign/Clone/5
-        [HttpGet("{id}", Name = "Clone")]
-        public CampaignListViewModel Clone(int id)
-        {
-            var user = _userManager.GetUserId(HttpContext.User);
-            return _service.Clone(id, user);
         }
 
         // PUT: api/Campaign/5

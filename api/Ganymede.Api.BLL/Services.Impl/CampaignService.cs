@@ -1,10 +1,8 @@
 ﻿using AutoMapper;
 using Ganymede.Api.Data;
-using Ganymede.Api.Data.Rulesets;
+using Ganymede.Api.Data.Extensions;
 using Ganymede.Api.Models.Api;
 using Ganymede.Api.Models.Campaigns;
-using Ganymede.Api.Models.Rulesets;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -37,35 +35,18 @@ namespace Ganymede.Api.BLL.Services.Impl
             _mapper = mapper;
         }
 
-        public IEnumerable<CampaignListViewModel> ListByUser(string userId)
+        public Campaign GetByUserAndId(int id, string userId)
         {
-            IQueryable<Campaign> campaignPocos = _ctx.Campaigns
-                .Include(c => c.Ruleset)
-                .Include(c => c.Ruleset.Publisher)
-                .Where(c => c.AppUserId == userId);
-
-            IEnumerable<CampaignListViewModel> campaigns = _mapper.Map<IEnumerable<CampaignListViewModel>>(campaignPocos);
-            return campaigns;
-        }
-
-        public CampaignEditViewModel GetByUserAndId(int id, string userId)
-        {
-            Campaign campaignPoco;
+            Campaign campaign;
 
             if (id == -1)
-                campaignPoco = new Campaign();
+                campaign = new Campaign();
             else
-                campaignPoco = _ctx.Campaigns.Where(c => c.AppUserId == userId).Single(c => c.ID == id);
+                campaign = _ctx.Campaigns
+                    .IncludeCampaignData()
+                    .Single(c => c.AppUserId == userId && c.ID == id);
 
-            IQueryable<Ruleset> rulesetPocos = _ctx.Rulesets.Include(r => r.Publisher);
-
-            CampaignEditViewModel model = new CampaignEditViewModel
-            {
-                Campaign = _mapper.Map<CampaignEditModel>(campaignPoco),
-                Rulesets = _mapper.Map<List<RulesetViewModel>>(rulesetPocos)
-            };
-
-            return model;
+            return campaign;
         }
 
         public ApiResponse Add(CampaignEditModel campaignModel, string userId)
@@ -116,29 +97,6 @@ namespace Ganymede.Api.BLL.Services.Impl
                 {
                     StatusCode = ApiCodes.Error
                 };
-            }
-        }
-
-        public CampaignListViewModel Clone(int campaignId, string userId)
-        {
-            try
-            {
-                Campaign old = _ctx.Campaigns.Where(c => c.AppUserId == userId).Single(c => c.ID == campaignId);
-
-                Campaign newCampaign = (Campaign)_ctx.Entry(old).CurrentValues.ToObject();
-                newCampaign.ID = default;
-                newCampaign.Name = newCampaign.Name + " (Copy)";
-
-                _ctx.Campaigns.Add(newCampaign);
-                _ctx.SaveChanges();
-
-                var model = _mapper.Map<CampaignListViewModel>(newCampaign);
-                return model;
-            }
-            catch(Exception e)
-            {
-                _logger.LogError(e.Message);
-                return new CampaignListViewModel();
             }
         }
 

@@ -1,6 +1,6 @@
 import { Campaign } from "./campaign";
 
-export default class AppUser {
+export class AppUser {
 	public email: string;
 	public campaigns: Campaign[];
 

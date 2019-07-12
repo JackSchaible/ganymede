@@ -1,6 +1,8 @@
 <gm-processing-overlay [isActive]="processing"></gm-processing-overlay>
 <h1>Campaigns</h1>
-<p>All your data is organized into campaigns. All of your encounters, monsters, spells, and everything else are tied to specific campaigns. Deleting a campaign will also delete all related data (including spells, monsters, encounters, etc.). Campaigns can be copied, which will also copy all associated data.</p>
+<p>All your data is organized into campaigns. All of your encounters, monsters, spells, and everything else are tied to
+  specific campaigns. Deleting a campaign will also delete all related data (including spells, monsters, encounters,
+  etc.). Campaigns can be copied, which will also copy all associated data.</p>
 
 <div class="u-flex u-flex__justify--flex-end">
   <button mat-raised-button color="accent" (click)="edit(-1)" class="mb-2"><i class="fas fa-plus mr-2"></i> Add</button>
@@ -18,9 +20,10 @@
     <p *ngIf="campaign.description">{{ campaign?.description }}</p>
 
     <mat-action-row>
-      <button title="Select" mat-mini-fab color="accent" (click)="select(campaign?.id)" class="mr-3"><i class="fas fa-play"></i></button>
-      <button title="Edit" mat-mini-fab color="primary" (click)="edit(campaign?.id)" class="mr-3"><i class="fas fa-pencil"></i></button>
-      <button title="Copy" mat-mini-fab color="primary" (click)="clone(campaign)" class="mr-3"><i class="fas fa-copy"></i></button>
+      <button title="Select" mat-mini-fab color="accent" (click)="select(campaign?.id)" class="mr-3"><i
+          class="fas fa-play"></i></button>
+      <button title="Edit" mat-mini-fab color="primary" (click)="edit(campaign?.id)" class="mr-3"><i
+          class="fas fa-pencil"></i></button>
       <button title="Delete" mat-mini-fab color="warn" (click)="delete(campaign)"><i class="fas fa-trash"></i></button>
     </mat-action-row>
   </mat-expansion-panel>

@@ -35,30 +35,27 @@ export class CampaignListComponent implements OnInit {
 	ngOnInit() {}
 
 	public select(campaignId: number): void {
-		this.store.dispatch(this.actions.selectCampaign(campaignId));
-		this.router.navigateByUrl(`campaign/${campaignId}`);
-	}
-
-	public edit(campaignId: number): void {
-		this.store.dispatch(this.actions.editCampaign(campaignId));
-		this.router.navigateByUrl(`/campaign/edit/${campaignId}`);
-	}
-
-	public clone(campaign: Campaign): void {
 		this.processing = true;
-		this.service.cloneCampaign(campaign.id).subscribe(
-			(newCampaign: Campaign) => {
+
+		this.service.getCampaign(campaignId).subscribe(
+			(campaign: Campaign) => {
 				this.processing = false;
-				this.router.navigateByUrl(`/campaign/${newCampaign.id}`);
+				this.store.dispatch(this.actions.selectCampaign(campaign));
+				this.router.navigateByUrl(`campaigns/${campaignId}`);
 			},
 			() => {
 				this.processing = false;
 				this.openSnackbar(
 					"exclamation-triangle",
-					`An error occurred while cloning ${campaign.name}!`
+					"An error occurred while opening your campaign!"
 				);
 			}
 		);
+	}
+
+	public edit(campaignId: number): void {
+		this.store.dispatch(this.actions.editCampaign(campaignId));
+		this.router.navigateByUrl(`/campaigns/edit/${campaignId}`);
 	}
 
 	public delete(campaign: Campaign): void {

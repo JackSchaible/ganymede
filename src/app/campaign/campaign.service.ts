@@ -19,16 +19,12 @@ export class CampaignService extends MasterService {
 		return this.client.get<Campaign[]>(`${this.baseUrl}/list`);
 	}
 
-	// public getCampaign(id: number): Observable<CampaignEditModel> {
-	// 	return this.client.get<CampaignEditModel>(`${this.baseUrl}/get/${id}`);
-	// }
+	public getCampaign(id: number): Observable<Campaign> {
+		return this.client.get<Campaign>(`${this.baseUrl}/get/${id}`);
+	}
 
 	public saveCampaign(campaign: Campaign): Observable<ApiResponse> {
 		return this.client.put<ApiResponse>(`${this.baseUrl}/save`, campaign);
-	}
-
-	public cloneCampaign(id: number): Observable<Campaign> {
-		return this.client.get<Campaign>(`${this.baseUrl}/clone/${id}`);
 	}
 
 	public deleteCampaign(id: number): Observable<ApiResponse> {

@@ -17,6 +17,10 @@ export function campaignReducer(
 				result = campaignSelectedReducer(state, action.state);
 				break;
 
+			case CampaignActionTypes.CAMPAIGN_DESELECTED:
+				result = campaignDeselectedReducer(state, action.state);
+				break;
+
 			case CampaignActionTypes.CAMPAIGN_EDIT:
 				result = campaignEditReducer(state, action.state);
 				break;
@@ -47,11 +51,23 @@ function campaignSelectedReducer(
 	newState: IAppState
 ): IAppState {
 	const state = { ...oldState };
-	const campaign = state.user.campaigns.find((c: Campaign) => {
+	const index = state.user.campaigns.findIndex((c: Campaign) => {
 		return c.id === newState.app.campaign.id;
 	});
 
-	state.app.campaign = campaign;
+	state.user.campaigns[index] = newState.app.campaign;
+	state.app.campaign = newState.app.campaign;
+
+	return state;
+}
+
+function campaignDeselectedReducer(
+	oldState: IAppState,
+	newState: IAppState
+): IAppState {
+	const state = { ...oldState };
+
+	state.app.campaign = null;
 
 	return state;
 }

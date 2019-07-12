@@ -6,6 +6,7 @@ import { Ruleset } from "src/app/models/core/rulesets/ruleset";
 
 export class CampaignActionTypes {
 	public static CAMPAIGN_SELECTED: string = "CAMPAIGN_SELECTED";
+	public static CAMPAIGN_DESELECTED: string = "CAMPAIGN_DESELECTED";
 	public static CAMPAIGN_EDIT: string = "CAMPAIGN_EDIT";
 	public static CAMPAIGN_EDIT_RULESET_CHANGED: string =
 		"CAMPAIGN_EDIT_RULESET_CHANGED";
@@ -22,10 +23,7 @@ export class CampaignAction {
 	providedIn: "root"
 })
 export class CampaignActions {
-	public selectCampaign(campaignId: number): AnyAction {
-		const campaign: Campaign = Campaign.getDefault();
-		campaign.id = campaignId;
-
+	public selectCampaign(campaign: Campaign): AnyAction {
 		const state: IAppState = {
 			user: undefined,
 			app: {
@@ -37,6 +35,12 @@ export class CampaignActions {
 		return {
 			type: new CampaignAction(CampaignActionTypes.CAMPAIGN_SELECTED),
 			state: state
+		};
+	}
+
+	public deselectCampaign(): AnyAction {
+		return {
+			type: new CampaignAction(CampaignActionTypes.CAMPAIGN_DESELECTED)
 		};
 	}
 

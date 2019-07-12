@@ -20,6 +20,7 @@ import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { JwtInterceptor } from "./helpers/jwt.interceptor";
 import { ErrorInterceptor } from "./helpers/error.interceptor";
 import { StateLoaderService } from "./services/stateLoader.service";
+import { LayoutModule } from "@angular/cdk/layout";
 
 import {
 	NgRedux,
@@ -32,11 +33,11 @@ import {
 	provideReduxForms
 } from "@angular-redux/form";
 import { compose, Middleware } from "redux";
-import { IAppState } from "./models/core/iAppState";
 import { reduce } from "./store/rootReducer";
-import AppUser from "./models/core/appUser";
+
+import { IAppState } from "./models/core/iAppState";
+import { AppUser } from "./models/core/appUser";
 import { App } from "./models/core/app/app";
-import { LayoutModule } from "@angular/cdk/layout";
 
 @NgModule({
 	declarations: [
@@ -78,7 +79,10 @@ export class AppModule {
 		private devTools: DevToolsExtension,
 		private stateService: StateLoaderService
 	) {
-		const reducers = composeReducers<IAppState>(defaultFormReducer(), reduce);
+		const reducers = composeReducers<IAppState>(
+			defaultFormReducer(),
+			reduce
+		);
 
 		const middleware: Middleware[] = [];
 
@@ -97,7 +101,9 @@ export class AppModule {
 			app: App.getDefault()
 		};
 
-		store.configureStore(reducers, state, middleware, [compose(...enhancers)]);
+		store.configureStore(reducers, state, middleware, [
+			compose(...enhancers)
+		]);
 
 		store.subscribe(() => {
 			const state = store.getState();
