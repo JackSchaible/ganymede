@@ -1,0 +1,48 @@
+<gm-processing-overlay [isActive]="processing"></gm-processing-overlay>
+<h1>Spells</h1>
+<p>Manage the spells your monsters have access to.</p>
+
+<div class="u-flex u-flex__justify--flex-end">
+    <button mat-raised-button color="accent" (click)="edit(-1)" class="mb-2"><i class="fas fa-plus mr-2"></i>
+        Add</button>
+</div>
+
+<mat-accordion>
+    <mat-expansion-panel *ngFor="let spell of spells$ | async">
+        <mat-expansion-panel-header>
+            <mat-panel-title>{{ spell?.name }}</mat-panel-title>
+            <mat-panel-description>
+                <em>{{ spell?.level }}{{ words.getSuffix(spell?.level) }}-level {{spell?.spellSchool?.name}}</em>
+            </mat-panel-description>
+        </mat-expansion-panel-header>
+
+        <div class="u-flex u-flex__wrap">
+            <div class="col-6 mt-3">
+                <gm-casting-time [castingTime]="spell?.castingTime"></gm-casting-time>
+            </div>
+
+            <div class="col-6 mt-3">
+                <gm-spell-range [range]="spell?.spellRange"></gm-spell-range>
+            </div>
+
+            <div class="col-6 mt-2">
+                <gm-spell-components [components]="spell?.spellComponents"></gm-spell-components>
+            </div>
+
+            <div class="col-6 mt-2">
+                <gm-spell-duration [duration]="spell?.spellDuration"></gm-spell-duration>
+            </div>
+        </div>
+
+        <p class="mt-3" *ngIf="spell.description" [innerHTML]="spell?.description"></p>
+
+        <p>Monsters with this Spell: {{ spell?.monsterSpells?.length }}</p>
+
+        <mat-action-row>
+            <button title="Edit" mat-mini-fab color="primary" (click)="edit(spell?.id)" class="mr-3"><i
+                    class="fas fa-pencil"></i></button>
+            <button title="Delete" mat-mini-fab color="warn" (click)="delete(spell)"><i
+                    class="fas fa-trash"></i></button>
+        </mat-action-row>
+    </mat-expansion-panel>
+</mat-accordion>

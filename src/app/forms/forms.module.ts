@@ -5,7 +5,6 @@ import { MatButtonModule } from "@angular/material/button";
 import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatIconModule } from "@angular/material/icon";
 import { MatInputModule } from "@angular/material/input";
-import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 
 @NgModule({
 	imports: [
@@ -13,7 +12,6 @@ import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 		MatFormFieldModule,
 		MatIconModule,
 		MatInputModule,
-		BrowserAnimationsModule,
 		MatButtonModule
 	],
 	declarations: [ValidationMessageComponent],
@@ -22,7 +20,6 @@ import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 		MatFormFieldModule,
 		MatIconModule,
 		MatInputModule,
-		BrowserAnimationsModule,
 		MatButtonModule
 	]
 })

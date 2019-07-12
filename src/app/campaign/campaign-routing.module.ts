@@ -5,6 +5,7 @@ import { AuthGuard } from "../guards/auth.guard";
 import { CampaignEditComponent } from "./campaign-edit/campaign-edit.component";
 import { CampaignComponent } from "./campaign/campaign.component";
 import { MonsterModule } from "./monster/monster.module";
+import { SpellModule } from "./spell/spell.module";
 
 const routes: Routes = [
 	{
@@ -27,7 +28,13 @@ const routes: Routes = [
 	},
 	{
 		path: "campaign/:id/monsters",
-		loadChildren: () => MonsterModule
+		loadChildren: () => MonsterModule,
+		canActivate: [AuthGuard]
+	},
+	{
+		path: "campaigns/:id/spells",
+		loadChildren: () => SpellModule,
+		canActivate: [AuthGuard]
 	}
 ];
 

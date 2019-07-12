@@ -1,0 +1,16 @@
+<p class="u-flex">
+    <strong class="u-flex__shrink--no">Duration:</strong>
+    <span class="u-margin-left">
+        <ng-container *ngIf="duration.instantaneous">Instantaneous</ng-container>
+        <ng-container *ngIf="duration.special">Special</ng-container>
+        <ng-container *ngIf="!duration.instantaneous && !duration.special">
+            <ng-container *ngIf="duration.concentration">
+                Concentration, up to
+            </ng-container>
+            <ng-container *ngIf="duration.upTo">
+                Up to
+            </ng-container>
+            {{duration.amount}} {{duration.unit}}
+        </ng-container>
+    </span>
+</p>

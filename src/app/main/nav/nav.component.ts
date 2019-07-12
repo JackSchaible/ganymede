@@ -78,7 +78,9 @@ export class NavComponent implements OnInit {
 
 	ngOnInit(): void {
 		this.router.events
-			.pipe(filter((event: RouterEvent) => event instanceof NavigationEnd))
+			.pipe(
+				filter((event: RouterEvent) => event instanceof NavigationEnd)
+			)
 			.subscribe((event: NavigationEnd) =>
 				this.configureItems(event.urlAfterRedirects)
 			);
@@ -109,9 +111,24 @@ export class NavComponent implements OnInit {
 						"fas fa-scroll",
 						"The Campaign",
 						false,
-						[new NavItem(`campaign/edit/${id}`, "fas fa-pencil", "Edit")]
+						[
+							new NavItem(
+								`campaign/edit/${id}`,
+								"fas fa-pencil",
+								"Edit"
+							)
+						]
 					),
-					new NavItem(`campaign/${id}/monsters`, "fas fa-paw-claws", "Monsters")
+					new NavItem(
+						`campaign/${id}/monsters`,
+						"fas fa-paw-claws",
+						"Monsters"
+					),
+					new NavItem(
+						`campaigns/${id}/spells`,
+						"fas fa-book-spells",
+						"Spells"
+					)
 				];
 
 				this.currentItems = this.campaignItems;
