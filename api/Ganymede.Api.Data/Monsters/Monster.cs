@@ -1,4 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using Ganymede.Api.Data.Spells;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Ganymede.Api.Data.Monsters
 {
@@ -13,5 +15,7 @@ namespace Ganymede.Api.Data.Monsters
         public int CampaignID { get; set; }
         [ForeignKey("CampaignID")]
         public Campaign Campaign { get; set; }
+
+        public ICollection<MonsterSpell> MonsterSpells { get; set; }
     }
 }

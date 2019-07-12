@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace Ganymede.Api.Data
+namespace Ganymede.Api.Data.Initializers
 {
 	public interface IDbInitializer
 	{

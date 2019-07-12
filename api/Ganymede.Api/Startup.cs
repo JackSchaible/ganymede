@@ -16,6 +16,7 @@ using Ganymede.Api.BLL.Services;
 using Ganymede.Api.BLL.Services.Impl;
 using System.Linq;
 using System.Reflection;
+using Ganymede.Api.Data.Initializers;
 
 namespace api
 {
