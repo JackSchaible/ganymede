@@ -27,6 +27,7 @@ namespace Ganymede.Api.Data.Initializers
             int
                 abjuration = schools.Single(s => s.Name == "Abjuration").ID,
                 conjuration = schools.Single(s => s.Name == "Conjuration").ID,
+                divination = schools.Single(s => s.Name == "Divination").ID,
                 enchantment = schools.Single(s => s.Name == "Enchantment").ID,
                 evocation = schools.Single(s => s.Name == "Evocation").ID,
                 illusion = schools.Single(s => s.Name == "Illusion").ID,
@@ -338,6 +339,34 @@ namespace Ganymede.Api.Data.Initializers
                     },
                     SpellDurationID = d1hour,
                     SpellSchoolID = enchantment
+                },
+                new Spell
+                {
+                    CampaignID = campaignID,
+                    CastingTimeID = t1Action,
+                    Description = "<p>For the Duration, you sense the presence of magic within 30 feet of you. If you sense magic in this way, you can use your action to see a faint aura around any visible creature or object in the area that bears magic, and you learn its school of magic, if any.</p><p>The spell can penetrate most barriers, but is blocked by 1 foot of stone, 1 inch of Common metal, a thin sheet of lead, or 3 feet of wood or dirt.</p>",
+                    Level = 1,
+                    Name = "Detect Magic",
+                    Ritual = true,
+                    SpellComponents = new SpellComponents
+                    {
+                        Verbal = true,
+                        Somatic = true
+                    },
+                    SpellDuration = new SpellDuration
+                    {
+                        Amount = 10,
+                        Concentration = true,
+                        Unit = "minutes"
+                    },
+                    SpellRange = new SpellRange
+                        {
+                            Amount = 30,
+                            Self = true,
+                            Shape = "sphere",
+                            Unit = "foot"
+                        },
+                    SpellSchoolID = divination,
                 },
                 new Spell
                 {

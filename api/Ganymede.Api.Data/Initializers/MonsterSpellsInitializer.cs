@@ -9,8 +9,10 @@ namespace Ganymede.Api.Data.Initializers
     {
         public void Initialize(ApplicationDbContext ctx, IEnumerable<Spell> dAndDSpells, Monster aerisi)
         {
+            IEnumerable<Spell> except = dAndDSpells.Where(s => s.Name == "Detect Magic");
+
             if (!ctx.MonsterSpells.Any())
-                ctx.MonsterSpells.AddRange(dAndDSpells.Select(s => new MonsterSpell
+                ctx.MonsterSpells.AddRange(dAndDSpells.Except(except).Select(s => new MonsterSpell
                 {
                     MonsterID = aerisi.ID,
                     SpellID = s.ID

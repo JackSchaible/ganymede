@@ -9,7 +9,7 @@ import { select } from "@angular-redux/store";
 	styleUrls: ["./spell-edit.component.scss"]
 })
 export class SpellEditComponent implements OnInit {
-	@select(["app", "forms", "spell"])
+	@select(["app", "forms", "spellForm"])
 	public spell$: Observable<Spell>;
 
 	constructor() {}

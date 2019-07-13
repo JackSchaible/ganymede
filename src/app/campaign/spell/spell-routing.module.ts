@@ -15,7 +15,7 @@ import { SpellEditComponent } from "./spell-edit/spell-edit.component";
 				canActivate: [AuthGuard]
 			},
 			{
-				path: ":spellid",
+				path: "edit/:spellid",
 				component: SpellEditComponent,
 				canActivate: [AuthGuard]
 			}

@@ -13,9 +13,10 @@ import { GmCommonModule } from "src/app/common/gm-common.module";
 import { MatCardModule } from "@angular/material/card";
 import { MatInputModule } from "@angular/material/input";
 import { MatSelectModule } from "@angular/material/select";
-import { FormsModule } from "src/app/forms/forms.module";
 import { MatSnackBarModule } from "@angular/material/snack-bar";
 import { NgReduxFormModule } from "@angular-redux/form";
+import { FormsModule } from "@angular/forms";
+import { SpellDisplayComponent } from './spell-display/spell-display.component';
 
 @NgModule({
 	declarations: [
@@ -24,7 +25,8 @@ import { NgReduxFormModule } from "@angular-redux/form";
 		SpellDurationComponent,
 		SpellRangeComponent,
 		SpellListComponent,
-		SpellEditComponent
+		SpellEditComponent,
+		SpellDisplayComponent
 	],
 	imports: [
 		CommonModule,

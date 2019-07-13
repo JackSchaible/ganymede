@@ -5,7 +5,7 @@ import { Injectable } from "@angular/core";
 })
 export class WordService {
 	public getSuffix(i: number): string {
-		if (!i) return null;
+		if (!i && i !== 0) return null;
 
 		let result = "th";
 

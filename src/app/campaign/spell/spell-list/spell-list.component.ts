@@ -6,6 +6,7 @@ import { WordService } from "src/app/services/word.service";
 import { IAppState } from "src/app/models/core/iAppState";
 import { Router } from "@angular/router";
 import { tap } from "rxjs/operators";
+import { SpellActions } from "../store/actions";
 
 @Component({
 	selector: "gm-spell-list",
@@ -22,7 +23,8 @@ export class SpellListComponent implements OnInit {
 	constructor(
 		public words: WordService,
 		private store: NgRedux<IAppState>,
-		private router: Router
+		private router: Router,
+		private actions: SpellActions
 	) {}
 
 	ngOnInit() {
@@ -43,7 +45,11 @@ export class SpellListComponent implements OnInit {
 	}
 
 	public edit(spellId: number): void {
+		this.store.dispatch(this.actions.editSpell(spellId));
+
 		const campaignId = this.store.getState().app.campaign.id;
-		this.router.navigateByUrl(`campaigns/${campaignId}/spells/${spellId}`);
+		this.router.navigateByUrl(
+			`campaigns/${campaignId}/spells/edit/${spellId}`
+		);
 	}
 }

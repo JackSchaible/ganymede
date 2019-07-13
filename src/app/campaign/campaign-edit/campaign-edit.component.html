@@ -12,12 +12,13 @@
       <mat-form-field class="col-6">
         <input matInput placeholder="Name" name="name" ngControl ngModel>
       </mat-form-field>
-    
+
       <mat-form-field class="col-6">
-          <mat-label>Ruleset</mat-label>
-          <mat-select [(value)]="rulesetId" (selectionChange)="rulesetChanged()">
-            <mat-option *ngFor="let ruleset of rulesets$ | async" [value]="ruleset.id">{{ ruleset.name }} ({{ ruleset.publisher.name }})</mat-option>
-          </mat-select>
+        <mat-label>Ruleset</mat-label>
+        <mat-select [(value)]="rulesetId" (selectionChange)="rulesetChanged()">
+          <mat-option *ngFor="let ruleset of rulesets$ | async" [value]="ruleset.id">{{ ruleset.name }}
+            ({{ ruleset.publisher.name }})</mat-option>
+        </mat-select>
       </mat-form-field>
 
       <mat-form-field class="col-12">
@@ -26,7 +27,8 @@
     </mat-card-content>
 
     <mat-card-actions class="u-flex u-flex__justify--flex-end">
-        <button title="Save" mat-mini-fab color="primary" (click)="save()" class="mr-3"><i class="fas fa-save"></i></button>
-    </mat-card-actions> 
+      <button title="Save" mat-mini-fab color="primary" (click)="save()" class="mr-3"><i
+          class="fas fa-save"></i></button>
+    </mat-card-actions>
   </mat-card>
 </form>

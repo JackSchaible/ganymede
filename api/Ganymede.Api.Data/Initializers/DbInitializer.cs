@@ -2,10 +2,7 @@
 using Ganymede.Api.Data.Rulesets;
 using Ganymede.Api.Data.Spells;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore.Internal;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace Ganymede.Api.Data.Initializers

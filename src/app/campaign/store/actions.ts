@@ -3,6 +3,8 @@ import { AnyAction } from "redux";
 import { IAppState } from "src/app/models/core/iAppState";
 import { Campaign } from "src/app/models/core/campaign";
 import { Ruleset } from "src/app/models/core/rulesets/ruleset";
+import { App } from "src/app/models/core/app/app";
+import { AppUser } from "src/app/models/core/appUser";
 
 export class CampaignActionTypes {
 	public static CAMPAIGN_SELECTED: string = "CAMPAIGN_SELECTED";
@@ -24,13 +26,12 @@ export class CampaignAction {
 })
 export class CampaignActions {
 	public selectCampaign(campaign: Campaign): AnyAction {
+		const app = App.getDefault();
+		app.campaign = campaign;
+
 		const state: IAppState = {
 			user: undefined,
-			app: {
-				campaign: campaign,
-				forms: undefined,
-				rulesets: undefined
-			}
+			app: app
 		};
 		return {
 			type: new CampaignAction(CampaignActionTypes.CAMPAIGN_SELECTED),
@@ -48,15 +49,12 @@ export class CampaignActions {
 		const campaignForm: Campaign = Campaign.getDefault();
 		campaignForm.id = campaignId;
 
+		const app = App.getDefault();
+		app.forms.campaignForm = campaignForm;
+
 		const state: IAppState = {
 			user: null,
-			app: {
-				rulesets: null,
-				forms: {
-					campaignForm: campaignForm
-				},
-				campaign: undefined
-			}
+			app: app
 		};
 		return {
 			type: new CampaignAction(CampaignActionTypes.CAMPAIGN_EDIT),
@@ -69,15 +67,12 @@ export class CampaignActions {
 		campaignForm.ruleset = Ruleset.getDefault();
 		campaignForm.ruleset.id = rulesetId;
 
+		const app = App.getDefault();
+		app.forms.campaignForm = campaignForm;
+
 		const state: IAppState = {
 			user: undefined,
-			app: {
-				rulesets: undefined,
-				forms: {
-					campaignForm: campaignForm
-				},
-				campaign: undefined
-			}
+			app: app
 		};
 		return {
 			type: new CampaignAction(
@@ -88,18 +83,15 @@ export class CampaignActions {
 	}
 
 	public saveCampaign(campaign: Campaign, isNew: boolean): AnyAction {
+		const user = AppUser.getDefault();
+		user.campaigns = [campaign];
+
+		const app = App.getDefault();
+		app.forms.campaignForm = campaign;
+
 		const state: IAppState = {
-			user: {
-				campaigns: [campaign],
-				email: undefined
-			},
-			app: {
-				rulesets: undefined,
-				forms: {
-					campaignForm: campaign
-				},
-				campaign: undefined
-			}
+			user: user,
+			app: app
 		};
 
 		let actionType: string = CampaignActionTypes.CAMPAIGN_SAVED;
@@ -113,18 +105,14 @@ export class CampaignActions {
 	}
 
 	public deleteCampaign(id: number): AnyAction {
-		const campaign: Campaign = Campaign.getDefault();
+		const app = App.getDefault();
+		const campaign = Campaign.getDefault();
 		campaign.id = id;
+		app.forms.campaignForm = campaign;
 
 		const state: IAppState = {
 			user: undefined,
-			app: {
-				rulesets: undefined,
-				forms: {
-					campaignForm: campaign
-				},
-				campaign: undefined
-			}
+			app: app
 		};
 
 		return {
