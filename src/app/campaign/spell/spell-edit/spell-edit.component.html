@@ -1,1 +1,12 @@
-<p>spell-edit works!</p>
+<gm-processing-overlay [isActive]="processing"></gm-processing-overlay>
+
+<form [connect]="['app', 'forms', 'spellForm']">
+    <h1>{{ (spell$ | async)?.name }}</h1>
+
+    <mat-card class="mt-3">
+        <mat-card-header>
+            {{ isNew ? 'Add a new' : 'Edit Your' }} Spell
+        </mat-card-header>
+
+    </mat-card>
+</form>

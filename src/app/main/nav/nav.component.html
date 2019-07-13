@@ -24,30 +24,44 @@
   </nav>
 
   <ng-template #isMobile>
-    <nav class="u-flex w-100">
-      <mat-menu #appMenu="matMenu">
-        <button *ngFor="let item of currentItems" mat-menu-item [routerLink]="item.url" [class.isBrand]="item.isBrand">
-          <strong *ngIf=" item.isBrand; else
-              btn">
-            <ng-container *ngTemplateOutlet="btn; context: {$implicit: item}"></ng-container>
-          </strong>
+    <mat-menu #appMenu="matMenu">
+      <button *ngFor="let item of currentItems" mat-menu-item [routerLink]="item.url" [class.isBrand]="item.isBrand">
+        <strong *ngIf=" item.isBrand; else
+            btn">
+          <ng-container *ngTemplateOutlet="btn; context: {$implicit: item}"></ng-container>
+        </strong>
 
-          <ng-template #btn>
-            <i *ngIf="item.icon" [class]="item.icon"></i>
-            <span class="u-margin-left-quarter">{{item.label}}</span>
-          </ng-template>
-        </button>
-      </mat-menu>
+        <ng-template #btn>
+          <i *ngIf="item.icon" [class]="item.icon"></i>
+          <span class="u-margin-left-quarter">{{item.label}}</span>
+        </ng-template>
+      </button>
+    </mat-menu>
+    <nav class="u-flex u-flex__justify--space-between w-100">
+      
 
       <button mat-button [matMenuTriggerFor]="appMenu">
         <i class="fa fa-2x fa-bars"></i>
       </button>
 
-      <div *isLoggedIn class="u-flex c-nav__logged-in">
-        <button mat-button class="u-padding-x-half"><i class="fa fa-2x fa-user-circle"></i></button>
-        <button mat-button (click)="authService.logout()" class="u-padding-x-half"><i class="fa fa-2x fa-sign-out"></i></button>
+      <div *ngIf="loggedIn" class="u-flex c-nav__logged-in">
+        <div>
+          <img [src]="'https://www.gravatar.com/avatar/' + userHash + '?s=40'" />
+        </div>
+  
+        <div class="u-flex u-flex__align-items--center u-padding-x">
+          <p class="text-white">Welcome, {{ (user$ | async)?.email }}!</p>
+        </div>
+  
+        <div>
+          <button class="u-margin-x btn btn-danger" type="button" (click)="logout()">
+            <i class="fa fa-sign-out"></i> Logout
+          </button>
+        </div>
       </div>
-      <a *isLoggedOut routerLink="/login" class="text-white"><i class="fa fa-sign-in"></i></a>
+      <a *ngIf="!loggedIn" routerLink="/login" class="text-white">
+        <i class="fa fa-sign-in"></i> Login
+      </a>
     </nav>
   </ng-template>
 </mat-toolbar>
