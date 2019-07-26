@@ -10,4 +10,14 @@ export class SpellComponents {
 
 		return c;
 	}
+
+	public static isEqual(a: SpellComponents, b: SpellComponents): boolean {
+		return (
+			a === b ||
+			(a.id === b.id &&
+				a.verbal === b.verbal &&
+				a.somatic === b.somatic &&
+				a.material === b.material)
+		);
+	}
 }

@@ -12,7 +12,13 @@
         <mat-expansion-panel-header>
             <mat-panel-title>{{ spell?.name }}</mat-panel-title>
             <mat-panel-description>
-                <em>{{ spell?.level }}{{ words.getSuffix(spell?.level) }}-level {{spell?.spellSchool?.name}}</em>
+                <em>
+                    <ng-container *ngIf="spell?.level > 0">
+                        {{ spell?.level }}{{ words.getSuffix(spell?.level) }}-level
+                    </ng-container>
+                    {{spell?.spellSchool?.name}}
+                    <ng-container *ngIf="spell?.level === 0">cantrip</ng-container>
+                </em>
             </mat-panel-description>
         </mat-expansion-panel-header>
 

@@ -1,7 +1,7 @@
 <gm-processing-overlay [isActive]="processing"></gm-processing-overlay>
 
 <section class="u-flex u-flex__wrap">
-    <form class="col-12 col-md-6" [connect]="['app', 'forms', 'spellForm']">
+    <form class="col-12 col-md-6" [formGroup]="spellFormGroup">
         <h1>{{ (spell$ | async)?.name }}</h1>
 
         <mat-card class="mt-3">
@@ -9,13 +9,117 @@
                 {{ isNew ? 'Add a new' : 'Edit Your' }} Spell
             </mat-card-header>
 
-            <mat-card-content class="u-flex">
-                <mat-form-field class="col-6">
-                    <input matInput placeholder="Name" name="name" ngControl ngModel>
-                </mat-form-field>
+            <mat-card-content class="mt-2">
+                <div class="u-flex u-flex__wrap">
+
+                    <!-- Name -->
+                    <mat-form-field class="col-6">
+                        <input type="text" matInput placeholder="Name" formControlName="name" required>
+                        <mat-error *ngIf="this.spellFormGroup.controls['name'].invalid">Name is required</mat-error>
+                    </mat-form-field>
+
+                    <div class="col-6 u-flex">
+                        <!-- Level -->
+                        <mat-form-field class="number-input">
+                            <input type="number" matInput placeholder="Level" formControlName="level" required>
+                            <mat-error *ngIf="this.spellFormGroup.controls['level'].invalid">Level is required
+                            </mat-error>
+                        </mat-form-field>
+
+                        <!-- School -->
+                        <mat-form-field class="u-flex__grow">
+                            <mat-label>School</mat-label>
+                            <mat-select [value]="spellSchoolId" (selectionChange)="schoolChanged($event)" required>
+                                <mat-option *ngFor="let school of schools" [value]="school.id">
+                                    {{ school.name }}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+
+                    <!-- Casting Time-->
+                    <div class="col-6 mt-2" formGroupName="castingTime">
+                        <mat-label>Casting Time</mat-label>
+
+                        <div class="u-flex">
+                            <!-- Amount -->
+                            <mat-form-field class="number-input">
+                                <input type="number" matInput placeholder="Amount" nformControlNameame="amount"
+                                    required />
+                            </mat-form-field>
+
+                            <!-- Unit -->
+                            <mat-form-field class="u-flex__grow">
+                                <input type="text" [matAutocomplete]="castingTimeUnitAC" matInput placeholder="Unit"
+                                    formControlName="unit" required />
+
+                                <mat-autocomplete #castingTimeUnitAC="matAutocomplete">
+                                    <mat-option *ngFor="let unit of castingTimeUnits" [value]="unit">
+                                        {{unit}}
+                                    </mat-option>
+                                </mat-autocomplete>
+                            </mat-form-field>
+                        </div>
+
+                        <!-- Reaction Condition -->
+                        <mat-form-field
+                            [ngStyle]="{'display': (spell$ | async)?.castingTime.unit === 'reaction' ? 'block' : 'none'}">
+                            <input type="text" matInput placeholder="Reaction Condition" name="reactionCondition" />
+                        </mat-form-field>
+                    </div>
+                    <!-- /Casting Time -->
+
+                    <!-- Range -->
+                    <div class="col-12 mt-2">
+                        <mat-label>Range</mat-label>
+
+                        <div class="u-margin-top">
+                            <!-- Range Type -->
+                            <mat-radio-group (change)="rangeTypeChanged($event)" [value]="rangeType">
+                                <mat-radio-button class="u-padding-x" *ngFor="let range of rangeTypes" [value]="range">
+                                    {{range}}
+                                </mat-radio-button>
+                            </mat-radio-group>
+
+                            <!-- Ranged || Self -->
+                            <div class="u-flex" [class.hide]="rangeType === 'touch'">
+                                <!-- Amount -->
+                                <mat-form-field class="number-input">
+                                    <input type="number" matInput placeholder="Amount" name="amount" />
+                                </mat-form-field>
+
+                                <!-- Unit -->
+                                <mat-form-field class="u-flex__grow">
+                                    <input type="text" [matAutocomplete]="rangeUnitAC" matInput placeholder="Unit"
+                                        name="unit" />
+
+                                    <mat-autocomplete #rangeUnitAC="matAutocomplete">
+                                        <mat-option *ngFor="let unit of rangeUnits" [value]="unit">
+                                            {{unit}}
+                                        </mat-option>
+                                    </mat-autocomplete>
+                                </mat-form-field>
+
+                                <!-- Shape -->
+                                <mat-form-field class="u-flex__grow" [class.hide]="rangeType !== 'self'">
+                                    <input type="text" [matAutocomplete]="rangeShapeAC" matInput placeholder="Shape"
+                                        name="shape" />
+
+                                    <mat-autocomplete #rangeShapeAC="matAutocomplete">
+                                        <mat-option *ngFor="let shape of rangeShapes" [value]="shape">
+                                            {{shape}}
+                                        </mat-option>
+                                    </mat-autocomplete>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /Range -->
+                </div>
             </mat-card-content>
         </mat-card>
     </form>
 
-    <gm-spell-display [spell$]="spell$" [autoOpen]="true" class="col-12 col-md-6"></gm-spell-display>
+    <gm-spell-display [spell$]="spell$" [autoOpen]="true" class="col-12 col-md-6">
+    </gm-spell-display>
 </section>

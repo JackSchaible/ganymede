@@ -10,4 +10,14 @@ export class CastingTime {
 
 		return time;
 	}
+
+	public static isEqual(a: CastingTime, b: CastingTime): boolean {
+		return (
+			a === b ||
+			(a.id === b.id &&
+				a.amount === b.amount &&
+				a.unit === b.unit &&
+				a.reactionCondition === b.reactionCondition)
+		);
+	}
 }

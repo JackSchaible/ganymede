@@ -1,0 +1,11 @@
+::ng-deep {
+    .mat-form-field-flex {
+        .mat-form-field-infix {
+            width: 100%;
+        }
+    }
+}
+
+.number-input {
+    max-width: 100px;
+}

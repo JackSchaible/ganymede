@@ -1,8 +1,8 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using AutoMapper;
 using Ganymede.Api.Data;
 using Ganymede.Api.Models.App;
+using Ganymede.Api.Models.App.FormData;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
@@ -25,7 +25,18 @@ namespace Ganymede.Api.BLL.Services.Impl
         {
             App app = new App
             {
-                Rulesets = _ctx.Rulesets.Include(r => r.Publisher).ToList()
+                Forms = new Forms
+                {
+                    CampaignFormData = new CampaignFormData
+                    {
+                        Rulesets = _ctx.Rulesets.Include(r => r.Publisher).ToList()
+                    },
+                    SpellFormData = new SpellFormData
+                    {
+                        Schools = _ctx.SpellSchools.ToList(),
+                        CastingTimeUnits = _ctx.Spells.Select(s => s.CastingTime.Unit).Distinct().ToList()
+                    }
+                }
             };
 
             return app;

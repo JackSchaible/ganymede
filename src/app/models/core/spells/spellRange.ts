@@ -12,4 +12,16 @@ export class SpellRange {
 
 		return range;
 	}
+
+	public static isEqual(a: SpellRange, b: SpellRange): boolean {
+		return (
+			a === b ||
+			(a.amount === b.amount &&
+				a.id === b.id &&
+				a.self === b.self &&
+				a.shape === b.shape &&
+				a.touch === b.touch &&
+				a.unit === b.unit)
+		);
+	}
 }

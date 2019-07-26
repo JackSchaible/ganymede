@@ -3,12 +3,13 @@ import { AnyAction } from "redux";
 import { CampaignAction, CampaignActionTypes } from "./actions";
 import { Campaign } from "src/app/models/core/campaign";
 import { Ruleset } from "src/app/models/core/rulesets/ruleset";
+import * as _ from "lodash";
 
 export function campaignReducer(
 	state: IAppState,
 	action: AnyAction
 ): IAppState {
-	let result = { ...state };
+	let result = _.cloneDeep(state);
 	const campaignAction = action.type as CampaignAction;
 
 	if (campaignAction) {
@@ -50,7 +51,7 @@ function campaignSelectedReducer(
 	oldState: IAppState,
 	newState: IAppState
 ): IAppState {
-	const state = { ...oldState };
+	const state = _.cloneDeep(oldState);
 	const index = state.user.campaigns.findIndex((c: Campaign) => {
 		return c.id === newState.app.campaign.id;
 	});
@@ -65,7 +66,7 @@ function campaignDeselectedReducer(
 	oldState: IAppState,
 	newState: IAppState
 ): IAppState {
-	const state = { ...oldState };
+	const state = _.cloneDeep(oldState);
 
 	state.app.campaign = null;
 
@@ -76,7 +77,7 @@ function campaignEditReducer(
 	oldState: IAppState,
 	newState: IAppState
 ): IAppState {
-	const state = { ...oldState };
+	const state = _.cloneDeep(oldState);
 	const campaignId = newState.app.forms.campaignForm.id;
 
 	let campaign: Campaign;
@@ -93,14 +94,16 @@ function campaignEditRulesetChangedReducer(
 	oldState: IAppState,
 	newState: IAppState
 ): IAppState {
-	const state = { ...oldState };
+	const state = _.cloneDeep(oldState);
 	const rulesetID: number = newState.app.forms.campaignForm.ruleset.id;
-	const ruleset: Ruleset = oldState.app.rulesets.find((r: Ruleset) => {
-		return r.id === rulesetID;
-	});
+	const ruleset: Ruleset = oldState.app.forms.campaignFormData.rulesets.find(
+		(r: Ruleset) => {
+			return r.id === rulesetID;
+		}
+	);
 
 	state.app.forms.campaignForm.rulesetID = rulesetID;
-	state.app.forms.campaignForm.ruleset = { ...ruleset };
+	state.app.forms.campaignForm.ruleset = _.cloneDeep(ruleset);
 
 	return state;
 }
@@ -110,7 +113,7 @@ function campaignSaved(
 	newState: IAppState,
 	isNew: boolean
 ): IAppState {
-	const state = { ...oldState };
+	const state = _.cloneDeep(oldState);
 
 	const newCampaign = newState.user.campaigns[0];
 	state.app.forms.campaignForm = newState.app.forms.campaignForm;
@@ -128,7 +131,7 @@ function campaignSaved(
 }
 
 function campaignDeleted(oldState: IAppState, newState: IAppState): IAppState {
-	const state = { ...oldState };
+	const state = _.cloneDeep(oldState);
 
 	const id = newState.app.forms.campaignForm.id;
 	const index = state.user.campaigns.findIndex((campaign: Campaign) => {

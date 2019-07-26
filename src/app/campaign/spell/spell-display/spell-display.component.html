@@ -9,7 +9,9 @@
             <!--Content-->
             <p>
                 <em>
-                    {{ level }}-level {{ (spell$ | async)?.spellSchool?.name }}
+                    <ng-container *ngIf="(spell$ | async).level > 0">{{ level }}-level</ng-container>
+                    {{ (spell$ | async)?.spellSchool?.name }}
+                    <ng-container *ngIf="(spell$ | async).level === 0">cantrip</ng-container>
                     <span *ngIf="(spell$ | async).ritual">&nbsp;(ritual)</span>
                 </em>
             </p>

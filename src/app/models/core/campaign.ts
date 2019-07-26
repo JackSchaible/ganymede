@@ -16,10 +16,20 @@ export class Campaign {
 	public monsters: any[];
 	public spells: Spell[];
 
-	static getDefault(): Campaign {
+	public static getDefault(): Campaign {
 		const campaign = new Campaign();
 		campaign.id = -1;
 
 		return campaign;
+	}
+
+	public static isEqual(a: Campaign, b: Campaign): boolean {
+		return (
+			a.id === b.id &&
+			a.name === b.name &&
+			a.description === b.description &&
+			a.rulesetID === b.rulesetID &&
+			a.appUserID === b.appUserID
+		);
 	}
 }

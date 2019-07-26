@@ -13,4 +13,17 @@ export class SpellDuration {
 
 		return duration;
 	}
+
+	public static isEqual(a: SpellDuration, b: SpellDuration): boolean {
+		return (
+			a === b ||
+			(a.amount === b.amount &&
+				a.concentration === b.concentration &&
+				a.id === b.id &&
+				a.instantaneous === b.instantaneous &&
+				a.special === b.special &&
+				a.unit === b.unit &&
+				a.upTo === b.upTo)
+		);
+	}
 }

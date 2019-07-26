@@ -6,7 +6,6 @@ import { HttpClient } from "@angular/common/http";
 import { App } from "../models/core/app/app";
 import { NgRedux } from "@angular-redux/store";
 import { StateLoaderActions } from "../store/actions";
-import { Forms } from "../models/core/app/forms";
 
 @Injectable({
 	providedIn: "root"
@@ -14,7 +13,10 @@ import { Forms } from "../models/core/app/forms";
 export class StateLoaderService extends MasterService {
 	protected baseUrl: string = this.apiUrl + "AppData";
 
-	constructor(private client: HttpClient, private actions: StateLoaderActions) {
+	constructor(
+		private client: HttpClient,
+		private actions: StateLoaderActions
+	) {
 		super(client);
 	}
 
@@ -23,7 +25,6 @@ export class StateLoaderService extends MasterService {
 
 		if (serializedState === null) {
 			this.http.get<App>(`${this.baseUrl}`).subscribe((app: App) => {
-				app.forms = Forms.getDefault();
 				const appLoadAction = this.actions.loadApp(app);
 				store.dispatch(appLoadAction);
 			});

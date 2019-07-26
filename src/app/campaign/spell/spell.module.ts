@@ -15,8 +15,10 @@ import { MatInputModule } from "@angular/material/input";
 import { MatSelectModule } from "@angular/material/select";
 import { MatSnackBarModule } from "@angular/material/snack-bar";
 import { NgReduxFormModule } from "@angular-redux/form";
-import { FormsModule } from "@angular/forms";
-import { SpellDisplayComponent } from './spell-display/spell-display.component';
+import { FormsModule, ReactiveFormsModule } from "@angular/forms";
+import { SpellDisplayComponent } from "./spell-display/spell-display.component";
+import { MatAutocompleteModule } from "@angular/material/autocomplete";
+import { MatRadioModule } from "@angular/material/radio";
 
 @NgModule({
 	declarations: [
@@ -33,13 +35,15 @@ import { SpellDisplayComponent } from './spell-display/spell-display.component';
 		SpellRoutingModule,
 		MatExpansionModule,
 		MatButtonModule,
+		MatAutocompleteModule,
+		MatRadioModule,
 		GmCommonModule,
 		MatCardModule,
 		MatInputModule,
 		MatSelectModule,
-		FormsModule,
 		MatSnackBarModule,
-		NgReduxFormModule
+		ReactiveFormsModule,
+		FormsModule
 	]
 })
 export class SpellModule {}

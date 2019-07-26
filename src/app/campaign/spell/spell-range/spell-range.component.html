@@ -3,8 +3,9 @@
     <span class="u-margin-left">
         <ng-container *ngIf="range.touch; else standard">Touch</ng-container>
         <ng-template #standard>
-            <ng-container *ngIf="range.self">Self (</ng-container>{{ range.amount }} {{ range.unit }} <ng-container
-                *ngIf="range.self">{{ range.shape }}</ng-container>
+            <ng-container *ngIf="range.self">Self (</ng-container>{{ range.amount }}
+            {{ range.self ? (range.unit === 'feet' ? 'foot' : range.unit) : range.unit }}
+            <ng-container *ngIf="range.self"> {{ range.shape === 'sphere' ? 'radius' : range.shape }}</ng-container>
             <ng-container *ngIf="range.self">)</ng-container>
         </ng-template>
     </span>

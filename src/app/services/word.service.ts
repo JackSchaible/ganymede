@@ -15,6 +15,7 @@ export class WordService {
 		if (i < 10 || i > 19)
 			if (lastChar === "1") result = "st";
 			else if (lastChar === "2") result = "nd";
+			else if (lastChar === "3") result = "rd";
 
 		return result;
 	}
