@@ -1,16 +1,16 @@
 import { Component, OnInit, OnDestroy } from "@angular/core";
-import { Observable, Subscription, of } from "rxjs";
+import { Subscription, Observable } from "rxjs";
 import { Spell } from "src/app/models/core/spells/spell";
-import { select, NgRedux } from "@angular-redux/store";
+import { NgRedux, select } from "@angular-redux/store";
 import { SpellSchool } from "src/app/models/core/spells/spellSchool";
 import { MatSelectChange } from "@angular/material/select";
 import { SpellActions } from "../store/actions";
 import { IAppState } from "src/app/models/core/iAppState";
-import { SpellFormData } from "src/app/models/core/app/forms/formData/spellFormData";
 import { MatRadioChange } from "@angular/material/radio";
 import { SpellRange } from "src/app/models/core/spells/spellRange";
 import { FormGroup, FormControl } from "@angular/forms";
 import { debounceTime, distinctUntilChanged } from "rxjs/operators";
+import { SpellFormData } from "src/app/models/core/app/forms/formData/spellFormData";
 
 @Component({
 	selector: "gm-spell-edit",
@@ -18,26 +18,14 @@ import { debounceTime, distinctUntilChanged } from "rxjs/operators";
 	styleUrls: ["./spell-edit.component.scss"]
 })
 export class SpellEditComponent implements OnInit, OnDestroy {
-	private formStoreSubscription: Subscription;
-	private formValueChangesSubscription: Subscription;
+	@select(["app", "forms", "spellForm"])
+	public spell$: Observable<Spell>;
 
 	@select(["app", "forms", "spellFormData"])
 	public formData$: Observable<SpellFormData>;
 
-	@select(["app", "forms", "spellForm"])
-	public spell$: Observable<Spell>;
-
-	public castingTimeUnits: string[];
-
-	public rangeTypes: string[] = ["ranged", "self", "touch"];
-	public rangeUnits: string[] = ["feet"];
-	public rangeShapes: string[] = [
-		"line",
-		"cone",
-		"cube",
-		"sphere",
-		"cylinder"
-	];
+	private formStoreSubscription: Subscription;
+	private formValueChangesSubscription: Subscription;
 
 	public spellSchoolId: number;
 	public rangeType: string;
@@ -59,13 +47,8 @@ export class SpellEditComponent implements OnInit, OnDestroy {
 	) {}
 
 	ngOnInit() {
-		this.formData$.subscribe((formData: SpellFormData) => {
-			this.schools = formData.schools;
-			this.castingTimeUnits = formData.castingTimeUnits;
-		});
-
 		this.syncFromStore();
-		this.syncToStore();
+		console.log(this.formData$);
 	}
 
 	ngOnDestroy(): void {

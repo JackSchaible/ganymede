@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using Ganymede.Api.BLL.Services;
+﻿using Ganymede.Api.BLL.Services;
 using Ganymede.Api.Models.App;
 using Microsoft.AspNetCore.Mvc;
 
@@ -15,7 +14,7 @@ namespace Ganymede.Api.Controllers
             _service = service;
         }
 
-        // GET: api/<controller>
+        // GET: api/AppData
         [HttpGet]
         public App Get()
         {

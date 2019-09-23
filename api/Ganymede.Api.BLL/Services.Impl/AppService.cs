@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using AutoMapper;
 using Ganymede.Api.Data;
 using Ganymede.Api.Models.App;
@@ -34,7 +35,10 @@ namespace Ganymede.Api.BLL.Services.Impl
                     SpellFormData = new SpellFormData
                     {
                         Schools = _ctx.SpellSchools.ToList(),
-                        CastingTimeUnits = _ctx.Spells.Select(s => s.CastingTime.Unit).Distinct().ToList()
+                        CastingTimeUnits = _ctx.Spells.Select(s => s.CastingTime.Unit).Distinct().ToList(),
+                        RangeShapes = _ctx.Spells.Select(s => s.SpellRange.Shape).Distinct().ToList(),
+                        RangeUnits = _ctx.Spells.Select(s => s.SpellRange.Unit).Distinct().ToList(),
+                        RangeTypes = new List<string> { "ranged", "self", "touch" }
                     }
                 }
             };
