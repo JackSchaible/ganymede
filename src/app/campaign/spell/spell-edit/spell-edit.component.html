@@ -18,6 +18,7 @@
 						<mat-error *ngIf="this.spellFormGroup.controls['name'].invalid">Name is required</mat-error>
 					</mat-form-field>
 
+					<!--Level & School-->
 					<div class="col-6 u-flex">
 						<!-- Level -->
 						<mat-form-field class="number-input">
@@ -30,7 +31,7 @@
 						<mat-form-field class="u-flex__grow">
 							<mat-label>School</mat-label>
 							<mat-select [(value)]="spellSchoolId" (selectionChange)="schoolChanged($event)" required>
-								<mat-option *ngFor="let school of formData$ | async" [value]="school.id">
+								<mat-option *ngFor="let school of (formData$ | async)?.schools" [value]="school.id">
 									{{ school.name }}
 								</mat-option>
 							</mat-select>
@@ -44,8 +45,7 @@
 						<div class="u-flex">
 							<!-- Amount -->
 							<mat-form-field class="number-input">
-								<input type="number" matInput placeholder="Amount" nformControlNameame="amount"
-									required />
+								<input type="number" matInput placeholder="Amount" formControlName="amount" required />
 							</mat-form-field>
 
 							<!-- Unit -->
