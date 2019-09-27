@@ -2,15 +2,13 @@ import { Component, OnInit, OnDestroy } from "@angular/core";
 import { Subscription, Observable } from "rxjs";
 import { Spell } from "src/app/models/core/spells/spell";
 import { NgRedux, select } from "@angular-redux/store";
-import { SpellSchool } from "src/app/models/core/spells/spellSchool";
-import { MatSelectChange } from "@angular/material/select";
 import { SpellActions } from "../store/actions";
 import { IAppState } from "src/app/models/core/iAppState";
-import { MatRadioChange } from "@angular/material/radio";
 import { SpellRange } from "src/app/models/core/spells/spellRange";
 import { FormGroup, FormControl } from "@angular/forms";
 import { debounceTime, distinctUntilChanged } from "rxjs/operators";
 import { SpellFormData } from "src/app/models/core/app/forms/formData/spellFormData";
+import { has } from "immutable";
 
 @Component({
 	selector: "gm-spell-edit",
@@ -29,6 +27,7 @@ export class SpellEditComponent implements OnInit, OnDestroy {
 
 	public spellSchoolId: number;
 	public rangeType: string;
+	public hasMaterial: boolean;
 
 	public spellFormGroup: FormGroup = new FormGroup({
 		name: new FormControl(""),
@@ -36,10 +35,20 @@ export class SpellEditComponent implements OnInit, OnDestroy {
 		castingTime: new FormGroup({
 			amount: new FormControl(""),
 			unit: new FormControl("")
+		}),
+		spellRange: new FormGroup({
+			amount: new FormControl(""),
+			unit: new FormControl(""),
+			type: new FormControl(""),
+			shape: new FormControl("")
+		}),
+		spellComponents: new FormGroup({
+			verbal: new FormControl(""),
+			somatic: new FormControl(""),
+			material: new FormControl(""),
+			materials: new FormGroup({})
 		})
 	});
-
-	private schools: SpellSchool[];
 
 	constructor(
 		private store: NgRedux<IAppState>,
@@ -48,12 +57,15 @@ export class SpellEditComponent implements OnInit, OnDestroy {
 
 	ngOnInit() {
 		this.syncFromStore();
-		console.log(this.formData$);
+		this.syncToStore();
 	}
 
 	ngOnDestroy(): void {
-		this.formStoreSubscription.unsubscribe();
-		this.formValueChangesSubscription.unsubscribe();
+		if (this.formStoreSubscription)
+			this.formStoreSubscription.unsubscribe();
+
+		if (this.formStoreSubscription)
+			this.formValueChangesSubscription.unsubscribe();
 	}
 
 	private syncFromStore() {
@@ -62,15 +74,39 @@ export class SpellEditComponent implements OnInit, OnDestroy {
 		this.formStoreSubscription = this.store
 			.select(["app", "forms", "spellForm"])
 			.subscribe((spell: Spell) => {
-				console.log("store subscribe");
 				this.spellFormGroup.patchValue(spell);
 
 				if (spell.spellSchool)
 					this.spellSchoolId = spell.spellSchool.id;
 
-				if (spell.spellRange) this.setRangeType(spell.spellRange);
+				if (spell.spellRange) {
+					const rangeTypeValue = this.getRangeType(spell.spellRange);
+					(<FormGroup>(
+						this.spellFormGroup.controls["spellRange"]
+					)).controls["type"].patchValue(rangeTypeValue);
+					this.rangeType = rangeTypeValue;
+				}
 
-				console.log(spell);
+				if (spell.spellComponents) {
+					this.hasMaterial =
+						spell.spellComponents.material &&
+						spell.spellComponents.material.length > 0;
+
+					// Dynamically create the form controls for material components
+					if (this.hasMaterial)
+						for (
+							let i = 0;
+							i < spell.spellComponents.material.length;
+							i++
+						)
+							(<FormGroup>(
+								(<FormGroup>(
+									this.spellFormGroup.controls[
+										"spellComponents"
+									]
+								)).controls["materials"]
+							)).controls[`material-${i}`] = new FormControl("");
+				}
 			});
 	}
 
@@ -84,26 +120,66 @@ export class SpellEditComponent implements OnInit, OnDestroy {
 					Spell.isEqual(a, b)
 				)
 			)
-			.subscribe(values => {
-				console.log(values);
-				this.store.dispatch(this.actions.spellEditFormChange(values));
+			.subscribe((spell: Spell) => {
+				const rangeTypeValue = (<FormGroup>(
+					this.spellFormGroup.controls["spellRange"]
+				)).controls["type"].value;
+				spell.spellRange = this.setRangeType(
+					rangeTypeValue,
+					spell.spellRange
+				);
+				this.rangeType = rangeTypeValue;
+
+				this.hasMaterial = !!spell.spellComponents.material;
+				// TODO: rebind from dynamic materials components
+				// spell.spellComponents.material = this.materialComponents;
+
+				// TODO: Reenable once all form fields are hooked up, causes errors in the preview component
+				// this.store.dispatch(this.actions.spellEditFormChange(spell));
 			});
 	}
 
-	public schoolChanged(event: MatSelectChange): void {
-		const school = this.schools.find((value: SpellSchool) => {
-			return value.id === event.value;
-		});
-		this.store.dispatch(this.actions.spellSchoolChanged(school));
+	private getRangeType(range: SpellRange): string {
+		let rangeType: string;
+
+		if (range.self) rangeType = "self";
+		else if (range.touch) rangeType = "touch";
+		else rangeType = "ranged";
+
+		return rangeType;
 	}
 
-	public rangeTypeChanged(event: MatRadioChange): void {
-		this.store.dispatch(this.actions.spellRangeTypeChanged(event.value));
+	private setRangeType(type: string, range: SpellRange): SpellRange {
+		switch (type) {
+			case "ranged":
+				range.self = false;
+				range.touch = false;
+				break;
+
+			case "touch":
+				range.touch = true;
+				range.self = false;
+				range.amount = 0;
+				break;
+
+			case "self":
+				range.self = true;
+				range.touch = false;
+				range.amount = 0;
+				break;
+		}
+
+		return range;
 	}
 
-	private setRangeType(range: SpellRange): void {
-		if (range.self) this.rangeType = "self";
-		else if (range.touch) this.rangeType = "touch";
-		else this.rangeType = "ranged";
+	public addMaterial(): void {
+		// this.materialComponents.unshift("");
+	}
+
+	public removeMaterial(index: number): void {
+		// (<FormGroup>(
+		// 	(<FormGroup>this.spellFormGroup.controls["spellComponents"])
+		// 		.controls["materials"]
+		// )).controls;
 	}
 }

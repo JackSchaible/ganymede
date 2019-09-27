@@ -10,73 +10,90 @@
 			</mat-card-header>
 
 			<mat-card-content class="mt-2">
-				<div class="u-flex u-flex__wrap">
+				<mat-accordion>
+					<!-- Name, Level, & School -->
+					<mat-expansion-panel>
+						<mat-expansion-panel-header>
+							<mat-panel-title>Basic Info</mat-panel-title>
+						</mat-expansion-panel-header>
 
-					<!-- Name -->
-					<mat-form-field class="col-6">
-						<input type="text" matInput placeholder="Name" formControlName="name" required>
-						<mat-error *ngIf="this.spellFormGroup.controls['name'].invalid">Name is required</mat-error>
-					</mat-form-field>
-
-					<!--Level & School-->
-					<div class="col-6 u-flex">
-						<!-- Level -->
-						<mat-form-field class="number-input">
-							<input type="number" matInput placeholder="Level" formControlName="level" required>
-							<mat-error *ngIf="this.spellFormGroup.controls['level'].invalid">Level is required
-							</mat-error>
+						<!-- Name -->
+						<mat-form-field>
+							<input type="text" matInput placeholder="Name" formControlName="name" required>
+							<mat-error *ngIf="this.spellFormGroup.controls['name'].invalid">Name is required</mat-error>
 						</mat-form-field>
 
-						<!-- School -->
-						<mat-form-field class="u-flex__grow">
-							<mat-label>School</mat-label>
-							<mat-select [(value)]="spellSchoolId" (selectionChange)="schoolChanged($event)" required>
-								<mat-option *ngFor="let school of (formData$ | async)?.schools" [value]="school.id">
-									{{ school.name }}
-								</mat-option>
-							</mat-select>
-						</mat-form-field>
-					</div>
-
-					<!-- Casting Time-->
-					<div class="col-6 mt-2" formGroupName="castingTime">
-						<mat-label>Casting Time</mat-label>
-
+						<!--Level & School-->
 						<div class="u-flex">
-							<!-- Amount -->
+							<!-- Level -->
 							<mat-form-field class="number-input">
-								<input type="number" matInput placeholder="Amount" formControlName="amount" required />
+								<input type="number" matInput placeholder="Level" formControlName="level" required>
+								<mat-error *ngIf="this.spellFormGroup.controls['level'].invalid">Level is required
+								</mat-error>
 							</mat-form-field>
 
-							<!-- Unit -->
+							<!-- School -->
 							<mat-form-field class="u-flex__grow">
-								<input type="text" [matAutocomplete]="castingTimeUnitAC" matInput placeholder="Unit"
-									formControlName="unit" required />
-
-								<mat-autocomplete #castingTimeUnitAC="matAutocomplete">
-									<mat-option *ngFor="let unit of castingTimeUnits" [value]="unit">
-										{{unit}}
+								<mat-label>School</mat-label>
+								<mat-select [(value)]="spellSchoolId" (selectionChange)="schoolChanged($event)"
+									required>
+									<mat-option *ngFor="let school of (formData$ | async)?.schools" [value]="school.id">
+										{{ school.name }}
 									</mat-option>
-								</mat-autocomplete>
+								</mat-select>
 							</mat-form-field>
 						</div>
+					</mat-expansion-panel>
+					<!-- /Name, Level, & School -->
 
-						<!-- Reaction Condition -->
-						<mat-form-field
-							[ngStyle]="{'display': (spell$ | async)?.castingTime.unit === 'reaction' ? 'block' : 'none'}">
-							<input type="text" matInput placeholder="Reaction Condition" name="reactionCondition" />
-						</mat-form-field>
-					</div>
+					<!-- Casting Time-->
+					<mat-expansion-panel>
+						<mat-expansion-panel-header>
+							<mat-panel-title>Casting Time</mat-panel-title>
+						</mat-expansion-panel-header>
+
+						<div formGroupName="castingTime">
+							<div class="u-flex">
+								<!-- Amount -->
+								<mat-form-field class="number-input">
+									<input type="number" matInput placeholder="Amount" formControlName="amount"
+										required />
+								</mat-form-field>
+
+								<!-- Unit -->
+								<mat-form-field class="u-flex__grow">
+									<input type="text" [matAutocomplete]="castingTimeUnitAC" matInput placeholder="Unit"
+										formControlName="unit" required />
+
+									<mat-autocomplete #castingTimeUnitAC="matAutocomplete">
+										<mat-option *ngFor="let unit of (formData$ | async)?.castingTimeUnits"
+											[value]="unit">
+											{{unit}}
+										</mat-option>
+									</mat-autocomplete>
+								</mat-form-field>
+							</div>
+
+							<!-- Reaction Condition -->
+							<mat-form-field
+								[ngStyle]="{'display': (spell$ | async)?.castingTime.unit === 'reaction' ? 'block' : 'none'}">
+								<input type="text" matInput placeholder="Reaction Condition" name="reactionCondition" />
+							</mat-form-field>
+						</div>
+					</mat-expansion-panel>
 					<!-- /Casting Time -->
 
 					<!-- Range -->
-					<div class="col-12 mt-2">
-						<mat-label>Range</mat-label>
+					<mat-expansion-panel>
+						<mat-expansion-panel-header>
+							<mat-panel-title>Range</mat-panel-title>
+						</mat-expansion-panel-header>
 
-						<div class="u-margin-top">
+						<div formGroupName="spellRange">
 							<!-- Range Type -->
-							<mat-radio-group (change)="rangeTypeChanged($event)" [value]="rangeType">
-								<mat-radio-button class="u-padding-x" *ngFor="let range of rangeTypes" [value]="range">
+							<mat-radio-group formControlName="type">
+								<mat-radio-button class="u-padding-x"
+									*ngFor="let range of (formData$ | async)?.rangeTypes" [value]="range">
 									{{range}}
 								</mat-radio-button>
 							</mat-radio-group>
@@ -85,16 +102,17 @@
 							<div class="u-flex" [class.hide]="rangeType === 'touch'">
 								<!-- Amount -->
 								<mat-form-field class="number-input">
-									<input type="number" matInput placeholder="Amount" name="amount" />
+									<input type="number" matInput placeholder="Amount" name="amount"
+										formControlName="amount" />
 								</mat-form-field>
 
 								<!-- Unit -->
 								<mat-form-field class="u-flex__grow">
 									<input type="text" [matAutocomplete]="rangeUnitAC" matInput placeholder="Unit"
-										name="unit" />
+										name="unit" formControlName="unit" />
 
 									<mat-autocomplete #rangeUnitAC="matAutocomplete">
-										<mat-option *ngFor="let unit of rangeUnits" [value]="unit">
+										<mat-option *ngFor="let unit of (formData$ | async)?.rangeUnits" [value]="unit">
 											{{unit}}
 										</mat-option>
 									</mat-autocomplete>
@@ -103,23 +121,60 @@
 								<!-- Shape -->
 								<mat-form-field class="u-flex__grow" [class.hide]="rangeType !== 'self'">
 									<input type="text" [matAutocomplete]="rangeShapeAC" matInput placeholder="Shape"
-										name="shape" />
+										name="shape" formControlName="shape" />
 
 									<mat-autocomplete #rangeShapeAC="matAutocomplete">
-										<mat-option *ngFor="let shape of rangeShapes" [value]="shape">
+										<mat-option *ngFor="let shape of (formData$ | async)?.rangeShapes"
+											[value]="shape">
 											{{shape}}
 										</mat-option>
 									</mat-autocomplete>
 								</mat-form-field>
 							</div>
 						</div>
-					</div>
+					</mat-expansion-panel>
 					<!-- /Range -->
-				</div>
+
+					<!-- Components -->
+					<mat-expansion-panel>
+						<mat-expansion-panel-header>
+							<mat-panel-title>Components</mat-panel-title>
+						</mat-expansion-panel-header>
+
+						<div formGroupName="spellComponents">
+							<div class="u-flex u-flex__justify--space-between">
+								<mat-checkbox class="flex-shrink" formControlName="verbal">Verbal</mat-checkbox>
+								<mat-checkbox class="flex-shrink" formControlName="somatic">Somatic</mat-checkbox>
+								<mat-checkbox class="flex-shrink" formControlName="material">Material</mat-checkbox>
+							</div>
+							<ng-container *ngIf="hasMaterial">
+								<div class="u-flex u-flex__justify--end">
+									<button mat-raised-button title="Add a New Material" color="primary"
+										(click)="addMaterial()">
+										Add Material <i class="ml-1 far fa-plus-square"></i>
+									</button>
+								</div>
+								<mat-form-field class="col-12"
+									*ngFor="let material of this.spellFormGroup.controls['spellComponents'].controls['materials']; let i = index">
+									<input type="text" matInput placeholder="Material Component(s)"
+										[formControlName]="'material=' + i" required>
+									<button mat-icon-button matSuffix (click)="removeMaterial(i)"
+										title="Remove Material">
+										<i class="text-danger fas fa-times-circle"></i>
+									</button>
+								</mat-form-field>
+							</ng-container>
+						</div>
+					</mat-expansion-panel>
+					<!-- /Components -->
+				</mat-accordion>
 			</mat-card-content>
 		</mat-card>
 	</form>
 
-	<gm-spell-display [spell$]="spell$" [autoOpen]="true" class="col-12 col-md-6">
-	</gm-spell-display>
+	<section class="col-12 col-md-6">
+		<p><em>Preview</em></p>
+		<gm-spell-display [spell$]="spell$" [autoOpen]="true">
+		</gm-spell-display>
+	</section>
 </section>

@@ -17,14 +17,6 @@ export function spellReducer(state: IAppState, action: AnyAction): IAppState {
 			case SpellActionTypes.SPELL_EDIT_FORM_CHANGE:
 				result = spellEditFormChangeReducer(state, action.state);
 				break;
-
-			case SpellActionTypes.SPELL_EDIT_SCHOOL_CHANGE:
-				result = spellEditSchoolChangeReducer(state, action.state);
-				break;
-
-			case SpellActionTypes.SPELL_EDIT_RANGE_TYPE_CHANGE:
-				result = spellEditRangeTypeChangeReducer(state, action.state);
-				break;
 		}
 	}
 
@@ -51,39 +43,8 @@ function spellEditFormChangeReducer(
 ): IAppState {
 	const state = _.cloneDeep(oldState);
 
+	// TODO: Handle the special case of range types
 	state.app.forms.spellForm = newState.app.forms.spellForm;
-
-	return state;
-}
-
-function spellEditSchoolChangeReducer(
-	oldState: IAppState,
-	newState: IAppState
-): IAppState {
-	const state = _.cloneDeep(oldState);
-	state.app.forms.spellForm.spellSchoolID =
-		newState.app.forms.spellForm.spellSchool.id;
-	state.app.forms.spellForm.spellSchool =
-		newState.app.forms.spellForm.spellSchool;
-
-	return state;
-}
-
-function spellEditRangeTypeChangeReducer(
-	oldState: IAppState,
-	newState: IAppState
-): IAppState {
-	const state = _.cloneDeep(oldState);
-
-	if (!newState.app.forms.spellForm.spellRange.touch)
-		state.app.forms.spellForm.spellRange.touch = false;
-	else if (newState.app.forms.spellForm.spellRange.touch === true)
-		state.app.forms.spellForm.spellRange.touch = true;
-
-	if (!newState.app.forms.spellForm.spellRange.self)
-		state.app.forms.spellForm.spellRange.self = false;
-	else if (newState.app.forms.spellForm.spellRange.self === true)
-		state.app.forms.spellForm.spellRange.self = true;
 
 	return state;
 }

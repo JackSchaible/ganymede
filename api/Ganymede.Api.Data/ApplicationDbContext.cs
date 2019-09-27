@@ -26,8 +26,8 @@ namespace Ganymede.Api.Data
         protected override void OnModelCreating(ModelBuilder builder)
 		{
             var stringToArrayConverter = new ValueConverter<string[], string>(
-                v => string.Join(",", v),
-                v => v.Split(",", StringSplitOptions.RemoveEmptyEntries)
+                v => string.Join("%2C", v),
+                v => v.Split("%2C", StringSplitOptions.RemoveEmptyEntries)
             );
 
             builder.Entity<Publisher>()
