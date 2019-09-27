@@ -5,10 +5,9 @@ import { NgRedux, select } from "@angular-redux/store";
 import { SpellActions } from "../store/actions";
 import { IAppState } from "src/app/models/core/iAppState";
 import { SpellRange } from "src/app/models/core/spells/spellRange";
-import { FormGroup, FormControl } from "@angular/forms";
+import { FormGroup, FormControl, FormArray } from "@angular/forms";
 import { debounceTime, distinctUntilChanged } from "rxjs/operators";
 import { SpellFormData } from "src/app/models/core/app/forms/formData/spellFormData";
-import { has } from "immutable";
 
 @Component({
 	selector: "gm-spell-edit",
@@ -46,8 +45,18 @@ export class SpellEditComponent implements OnInit, OnDestroy {
 			verbal: new FormControl(""),
 			somatic: new FormControl(""),
 			material: new FormControl(""),
-			materials: new FormGroup({})
-		})
+			materials: new FormArray([])
+		}),
+		spellDuration: new FormGroup({
+			amount: new FormControl(""),
+			unit: new FormControl(""),
+			concentration: new FormControl(""),
+			special: new FormControl(""),
+			upTo: new FormControl(""),
+			instantaneous: new FormControl("")
+		}),
+		description: new FormControl(""),
+		atHigherLevels: new FormControl("")
 	});
 
 	constructor(
@@ -94,22 +103,12 @@ export class SpellEditComponent implements OnInit, OnDestroy {
 
 					// Dynamically create the form controls for material components
 					if (this.hasMaterial)
-						for (
-							let i = 0;
-							i < spell.spellComponents.material.length;
-							i++
-						)
-							(<FormGroup>(
-								(<FormGroup>(
-									this.spellFormGroup.controls[
-										"spellComponents"
-									]
-								)).controls["materials"]
-							)).controls[`material-${i}`] = new FormControl("");
+						this.getMaterialComponents(
+							spell.spellComponents.material
+						);
 				}
 			});
 	}
-
 	private syncToStore() {
 		if (this.formValueChangesSubscription !== undefined) return;
 
@@ -131,14 +130,12 @@ export class SpellEditComponent implements OnInit, OnDestroy {
 				this.rangeType = rangeTypeValue;
 
 				this.hasMaterial = !!spell.spellComponents.material;
-				// TODO: rebind from dynamic materials components
-				// spell.spellComponents.material = this.materialComponents;
+				spell.spellComponents.material = this.setMaterialComponents();
 
 				// TODO: Reenable once all form fields are hooked up, causes errors in the preview component
 				// this.store.dispatch(this.actions.spellEditFormChange(spell));
 			});
 	}
-
 	private getRangeType(range: SpellRange): string {
 		let rangeType: string;
 
@@ -148,7 +145,6 @@ export class SpellEditComponent implements OnInit, OnDestroy {
 
 		return rangeType;
 	}
-
 	private setRangeType(type: string, range: SpellRange): SpellRange {
 		switch (type) {
 			case "ranged":
@@ -171,15 +167,46 @@ export class SpellEditComponent implements OnInit, OnDestroy {
 
 		return range;
 	}
+	private getMaterialComponents(materials: string[]): void {
+		for (let i = 0; i < materials.length; i++)
+			((this.spellFormGroup.get("spellComponents") as FormGroup).get(
+				"materials"
+			) as FormArray).push(
+				new FormGroup({
+					name: new FormControl(materials[i])
+				})
+			);
+	}
+	private setMaterialComponents(): string[] {
+		const materials = [];
+
+		const controls = ((this.spellFormGroup.get(
+			"spellComponents"
+		) as FormGroup).get("materials") as FormArray).controls;
+
+		for (let i = 0; i < controls.length; i++)
+			materials.push(controls[i].value);
+
+		return materials;
+	}
 
 	public addMaterial(): void {
-		// this.materialComponents.unshift("");
+		((this.spellFormGroup.get("spellComponents") as FormGroup).get(
+			"materials"
+		) as FormArray).push(
+			new FormGroup({
+				name: new FormControl("")
+			})
+		);
 	}
 
 	public removeMaterial(index: number): void {
-		// (<FormGroup>(
-		// 	(<FormGroup>this.spellFormGroup.controls["spellComponents"])
-		// 		.controls["materials"]
-		// )).controls;
+		((this.spellFormGroup.get("spellComponents") as FormGroup).get(
+			"materials"
+		) as FormArray).removeAt(index);
 	}
+
+	public cancel(): void {}
+
+	public save(): void {}
 }

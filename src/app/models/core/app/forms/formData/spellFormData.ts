@@ -6,6 +6,7 @@ export class SpellFormData {
 	public rangeTypes: string[];
 	public rangeUnits: string[];
 	public rangeShapes: string[];
+	public durations: string[];
 
 	static getDefault(): SpellFormData {
 		return {
@@ -13,7 +14,8 @@ export class SpellFormData {
 			castingTimeUnits: [],
 			rangeTypes: [],
 			rangeUnits: [],
-			rangeShapes: []
+			rangeShapes: [],
+			durations: []
 		};
 	}
 }

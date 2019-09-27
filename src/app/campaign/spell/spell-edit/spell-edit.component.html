@@ -147,27 +147,110 @@
 								<mat-checkbox class="flex-shrink" formControlName="somatic">Somatic</mat-checkbox>
 								<mat-checkbox class="flex-shrink" formControlName="material">Material</mat-checkbox>
 							</div>
+
 							<ng-container *ngIf="hasMaterial">
+								<mat-form-field class="col-12" formArrayName="materials"
+									*ngFor="let material of this.spellFormGroup.get('spellComponents').get('materials').controls; let i = index">
+									<div [formGroupName]="i">
+										<input type="text" matInput placeholder="Material"
+											formControlName="name" required>
+										<button mat-icon-button matSuffix (click)="removeMaterial(i)"
+											title="Remove Material">
+											<i class="text-danger fas fa-times-circle"></i>
+										</button>
+									</div>
+								</mat-form-field>
+
 								<div class="u-flex u-flex__justify--end">
 									<button mat-raised-button title="Add a New Material" color="primary"
 										(click)="addMaterial()">
 										Add Material <i class="ml-1 far fa-plus-square"></i>
 									</button>
 								</div>
-								<mat-form-field class="col-12"
-									*ngFor="let material of this.spellFormGroup.controls['spellComponents'].controls['materials']; let i = index">
-									<input type="text" matInput placeholder="Material Component(s)"
-										[formControlName]="'material=' + i" required>
-									<button mat-icon-button matSuffix (click)="removeMaterial(i)"
-										title="Remove Material">
-										<i class="text-danger fas fa-times-circle"></i>
-									</button>
-								</mat-form-field>
 							</ng-container>
 						</div>
 					</mat-expansion-panel>
 					<!-- /Components -->
+
+					<!-- Duration -->
+					<mat-expansion-panel>
+						<mat-expansion-panel-header>
+							<mat-panel-title>Duration</mat-panel-title>
+						</mat-expansion-panel-header>
+
+						<ng-container formGroupName="spellDuration">
+							<div class="u-flex u-flex__justify--space-between">
+								<mat-checkbox *ngIf="!this.spellFormGroup.get('spellDuration').get('instantaneous').value" class="flex-shrink"
+									formControlName="special">Special (See Description)</mat-checkbox>
+								<mat-checkbox *ngIf="!this.spellFormGroup.get('spellDuration').get('special').value" class="flex-shrink"
+									formControlName="instantaneous">Instantaneous</mat-checkbox>
+							</div>
+
+							<div class="u-flex"
+								*ngIf="!this.spellFormGroup.get('spellDuration').get('instantaneous').value && !this.spellFormGroup.get('spellDuration').get('special').value">
+
+								<!-- Amount -->
+								<mat-form-field class="u-flex__grow">
+									<mat-checkbox matPrefix class="mr-2" [class.mr-3]="this.spellFormGroup.get('spellDuration').get('concentration').value"
+										formControlName="concentration">Concentration</mat-checkbox>
+									<mat-checkbox matPrefix class="mr-2" formControlName="upTo">
+										Up To
+									</mat-checkbox>
+
+									<input type="number" matInput placeholder="Amount" formControlName="amount"
+										required />
+								</mat-form-field>
+
+								<!-- Unit -->
+								<mat-form-field class="u-flex__shrink">
+									<input type="text" [matAutocomplete]="durationUnitAC" matInput placeholder="Unit"
+										formControlName="unit" required />
+
+									<mat-autocomplete #durationUnitAC="matAutocomplete">
+										<mat-option *ngFor="let unit of (formData$ | async)?.durationUnits"
+											[value]="unit">
+											{{unit}}
+										</mat-option>
+									</mat-autocomplete>
+								</mat-form-field>
+							</div>
+						</ng-container>
+					</mat-expansion-panel>
+					<!-- /Duration -->
+
+					<!-- Description -->
+					<mat-expansion-panel>
+						<mat-expansion-panel-header>
+							<mat-panel-title>Description</mat-panel-title>
+						</mat-expansion-panel-header>
+
+						<p class="ml-3"><small><em>HTML-Formatted</em></small></p>
+
+						<mat-form-field class="col-12">
+							<textarea matInput rows="6" formControlName="description" required></textarea>
+						</mat-form-field>
+					</mat-expansion-panel>
+					<!-- /Description -->
+
+					<!-- At Higher Levels -->
+					<mat-expansion-panel>
+						<mat-expansion-panel-header>
+							<mat-panel-title>At Higher Levels</mat-panel-title>
+						</mat-expansion-panel-header>
+
+						<p class="ml-3"><small><em>HTML-Formatted</em></small></p>
+
+						<mat-form-field class="col-12">
+							<textarea matInput rows="6" formControlName="atHigherLevels" required></textarea>
+						</mat-form-field>
+					</mat-expansion-panel>
+					<!-- /At Higher Levels -->
 				</mat-accordion>
+
+				<div class="u-flex u-flex__justify--end mt-3">
+					<button (click)="cancel()" class="mr-3" mat-raised-button color="danger"><i class="fas fa-times-square mr-2"></i> Cancel</button>
+					<button (click)="save()" mat-raised-button color="primary"><i class="fas fa-save mr-2"></i> Save</button>
+				</div>
 			</mat-card-content>
 		</mat-card>
 	</form>

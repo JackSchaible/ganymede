@@ -38,7 +38,8 @@ namespace Ganymede.Api.BLL.Services.Impl
                         CastingTimeUnits = _ctx.Spells.Where(s => s.CastingTime.Unit != null).Select(s => s.CastingTime.Unit).Distinct().ToList(),
                         RangeShapes = _ctx.Spells.Where(s => s.SpellRange.Shape != null).Select(s => s.SpellRange.Shape).Distinct().ToList(),
                         RangeUnits = _ctx.Spells.Where(s => s.SpellRange.Unit != null).Select(s => s.SpellRange.Unit).Distinct().ToList(),
-                        RangeTypes = new List<string> { "ranged", "self", "touch" }
+                        RangeTypes = new List<string> { "ranged", "self", "touch" },
+                        Durations = _ctx.Spells.Where(s => s.SpellDuration.Unit != null).Select(s => s.SpellDuration.Unit).Distinct().ToList()
                     }
                 }
             };
