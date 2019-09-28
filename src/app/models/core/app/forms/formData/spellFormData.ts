@@ -1,4 +1,4 @@
-import { SpellSchool } from "../../../spells/spellSchool";
+import { SpellSchool } from "../../../../../campaign/modules/spell/models/spellSchool";
 
 export class SpellFormData {
 	public schools: SpellSchool[];

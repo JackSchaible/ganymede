@@ -1,7 +1,7 @@
 import { IAppState } from "src/app/models/core/iAppState";
 import { AnyAction } from "redux";
 import { CampaignAction, CampaignActionTypes } from "./actions";
-import { Campaign } from "src/app/models/core/campaign";
+import { Campaign } from "src/app/campaign/models/campaign";
 import { Ruleset } from "src/app/models/core/rulesets/ruleset";
 import * as _ from "lodash";
 

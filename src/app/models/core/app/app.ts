@@ -1,5 +1,5 @@
 import { Forms } from "./forms/forms";
-import { Campaign } from "../campaign";
+import { Campaign } from "../../../campaign/models/campaign";
 
 export class App {
 	public forms: Forms;

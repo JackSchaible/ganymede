@@ -1,5 +1,5 @@
-import { Campaign } from "../../campaign";
-import { Spell } from "../../spells/spell";
+import { Campaign } from "../../../../campaign/models/campaign";
+import { Spell } from "../../../../campaign/modules/spell/models/spell";
 import { CampaignFormData } from "./formData/campaignFormData";
 import { SpellFormData } from "./formData/spellFormData";
 

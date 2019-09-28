@@ -6,8 +6,8 @@ import { StateLoaderAction } from "./actions";
 import { stateReducer } from "./reducers";
 import { CampaignAction } from "../campaign/store/actions";
 import { campaignReducer } from "../campaign/store/reducers";
-import { SpellAction } from "../campaign/spell/store/actions";
-import { spellReducer } from "../campaign/spell/store/reducers";
+import { SpellAction } from "../campaign/modules/spell/store/actions";
+import { spellReducer } from "../campaign/modules/spell/store/reducers";
 
 export function reduce(appState: IAppState, action: AnyAction): IAppState {
 	let state = { ...appState };

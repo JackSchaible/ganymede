@@ -3,7 +3,7 @@ import { HttpClient } from "@angular/common/http";
 import { Observable } from "rxjs";
 import MasterService from "../services/master.service";
 import { ApiResponse } from "../services/http/apiResponse";
-import { Campaign } from "../models/core/campaign";
+import { Campaign } from "./models/campaign";
 
 @Injectable({
 	providedIn: "root"
