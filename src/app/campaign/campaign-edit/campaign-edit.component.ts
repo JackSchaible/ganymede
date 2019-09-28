@@ -3,7 +3,6 @@ import { CampaignService } from "../campaign.service";
 import { ActivatedRoute } from "@angular/router";
 import { ApiResponse } from "../../services/http/apiResponse";
 import ApiCodes from "../../services/http/apiCodes";
-import { MatSelectChange } from "@angular/material/select";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { SnackbarComponent } from "../../common/snackbar/snackbar.component";
 import SnackbarModel from "../../common/models/snackbarModel";
@@ -65,7 +64,9 @@ export class CampaignEditComponent implements OnInit {
 							campaign.id = response.insertedID;
 						}
 
-						this.store.dispatch(this.actions.saveCampaign(campaign, wasNew));
+						this.store.dispatch(
+							this.actions.saveCampaign(campaign, wasNew)
+						);
 					} else
 						this.openSnackbar(
 							"exclamation-triangle",
@@ -88,7 +89,9 @@ export class CampaignEditComponent implements OnInit {
 	}
 
 	public rulesetChanged(): void {
-		this.store.dispatch(this.actions.editCampaignSetRuleset(this.rulesetId));
+		this.store.dispatch(
+			this.actions.editCampaignSetRuleset(this.rulesetId)
+		);
 	}
 
 	private openSnackbar(icon: string, message: string): void {

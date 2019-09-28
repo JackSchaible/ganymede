@@ -31,6 +31,7 @@ namespace Ganymede.Api.Data.Initializers
                 enchantment = schools.Single(s => s.Name == "Enchantment").ID,
                 evocation = schools.Single(s => s.Name == "Evocation").ID,
                 illusion = schools.Single(s => s.Name == "Illusion").ID,
+                necromancy = schools.Single(s => s.Name == "Necromancy").ID,
                 transmutation = schools.Single(s => s.Name == "Transmutation").ID;
 
             var times = CreateDandDCastingTimes(ctx);
@@ -38,11 +39,12 @@ namespace Ganymede.Api.Data.Initializers
 
             var ranges = CreateDandDRanges(ctx);
             int
-                r30f = ranges[0].ID,
-                r60f = ranges[1].ID,
-                r120f = ranges[2].ID,
-                r150f = ranges[3].ID,
-                rtouch = ranges[4].ID;
+                r10f = ranges[0].ID,
+                r30f = ranges[1].ID,
+                r60f = ranges[2].ID,
+                r120f = ranges[3].ID,
+                r150f = ranges[4].ID,
+                rtouch = ranges[5].ID;
 
             var durations = CreateDandDDurations(ctx);
             int
@@ -59,6 +61,82 @@ namespace Ganymede.Api.Data.Initializers
 
             return new List<Spell>
             {
+                #region Level 9
+
+                new Spell
+                {
+                    CampaignID = campaignID,
+                    CastingTime = new CastingTime
+                    {
+                        Amount = 1,
+                        Unit = "Hour"
+                    },
+                    Description = "<p>You and up to eight willing creatures within range project your astral bodies into the Astral Plane (the spell fails and the casting is wasted if you are already on that plane). The material body you leave behind is unconscious and in a state of suspended animation; it doesn’t need food or air and doesn’t age.</p><p>Your astral body resembles your mortal form in almost every way, replicating your game statistics and possessions. The principal difference is the addition of a silvery cord that extends from between your shoulder blades and trails behind you, fading to invisibility after 1 foot. This cord is your tether to your material body. As long as the tether remains intact, you can find your way home. If the cord is cut—something that can happen only when an effect specifically states that it does—your soul and body are separated, killing you instantly.</p><p>Your astral form can freely travel through the Astral Plane and can pass through portals there leading to any other plane. If you enter a new plane or return to the plane you were on when casting this spell, your body and possessions are transported along the silver cord, allowing you to re - enter your body as you enter the new plane.Your astral form is a separate incarnation.Any damage or other effects that apply to it have no effect on your physical body, nor do they persist when you return to it.</p><p>The spell ends for you and your companions when you use your action to dismiss it.When the spell ends, the affected creature returns to its physical body, and it awakens.</p><p>The spell might also end early for you or one of your companions.A successful dispel magic spell used against an astral or physical body ends the spell for that creature. If a creature’s original body or its astral form drops to 0 hit points, the spell ends for that creature. If the spell ends and the silver cord is intact, the cord pulls the creature’s astral form back to its body, ending its state of suspended animation.</p><p>If you are returned to your body prematurely, your companions remain in their astral forms and must find their own way back to their bodies, usually by dropping to 0 hit points.</p>",
+                    Level = 9,
+                    Name = "Astral Projection",
+                    SpellDuration = new SpellDuration
+                    {
+                        Special = true
+                    },
+                    SpellComponents = new SpellComponents
+                    {
+                        Material = new string[]
+                        {
+                            "For each creature you affect with this spell, you must provide one jacinth worth at least 1,000 gp and one ornately carved bar of silver worth at least 100 gp, all of which the spell consumes"
+                        },
+                        Somatic = true,
+                        Verbal = true
+                    },
+                    SpellRangeID = r10f,
+                    SpellSchoolID = necromancy
+                },
+                //TODO Next: Add spells with unlimited & special ranges, spells with any other unused special conditions, finish client-side validators
+                new Spell
+                {
+                    CampaignID = campaignID,
+                    CastingTimeID = t1Action,
+                    Description = "<p>A churning storm cloud forms, centered on a point you can see and spreading to a radius of 360 feet. Lightning flashes in the area, thunder booms, and strong winds roar. Each creature under the cloud (no more than 5,000 feet beneath the cloud) when it appears must make a Constitution saving throw. On a failed save, a creature takes 2d6 thunder damage and becomes deafened for 5 minutes.</p><p>Each round you maintain concentration on this spell, the storm produces additional effects on your turn.</p><p>Round 2. Acidic rain falls from the cloud. Each creature and object under the cloud takes 1d6 acid damage.</p><p>Round 3. You call six bolts of lightning from the cloud to strike six creatures or objects of your choice beneath the cloud. A given creature or object can’t be struck by more than one bolt. A struck creature must make a Dexterity saving throw. The creature takes 10d6 lightning damage on a failed save, or half as much damage on a successful one.</p><p>Round 4. Hailstones rain down from the cloud. Each creature under the cloud takes 2d6 bludgeoning damage.</p><p>Round 5–10. Gusts and freezing rain assail the area under the cloud. The area becomes difficult terrain and is heavily obscured. Each creature there takes 1d6 cold damage. Ranged weapon attacks in the area are impossible. The wind and rain count as a severe distraction for the purposes of maintaining concentration on spells.Finally, gusts of strong wind(ranging from 20 to 50 miles per hour) automatically disperse fog, mists, and similar phenomena in the area, whether mundane or magical.</p>",
+                    Level = 9,
+                    Name = "Storm of Vengeance",
+                    SpellComponents = new 
+                }
+
+                #endregion
+
+                #region Level 7
+
+                new Spell
+                {
+                    CampaignID = campaignID,
+                    CastingTime = new CastingTime
+                    {
+                        Amount = 12,
+                        Unit = "Hours"
+                    },
+                    Description = "<p>You shape an illusory duplicate of one beast or humanoid that is within range for the entire casting time of the spell. The duplicate is a creature, partially real and formed from ice or snow, and it can take actions and otherwise be affected as a normal creature. It appears to be the same as the original, but it has half the creature’s hit point maximum and is formed without any equipment. Otherwise, the illusion uses all the statistics of the creature it duplicates.</p><p>The simulacrum is friendly to you and creatures you designate. It obeys your spoken commands, moving and acting in accordance with your wishes and acting on your turn in combat. The simulacrum lacks the ability to learn or become more powerful, so it never increases its level or other abilities, nor can it regain expended spell slots.</p><p>If the simulacrum is damaged, you can repair it in an alchemical laboratory, using rare herbs and minerals worth 100 gp per hit point it regains. The simulacrum lasts until it drops to 0 hit points, at which point it reverts to snow and melts instantly.</p><p>If you cast this spell again, any currently active duplicates you created with this spell are instantly destroyed.</p>",
+                    Level = 7,
+                    Name = "Simulacrum",
+                    SpellComponents = new SpellComponents
+                    {
+                        Material = new string[]
+                        {
+                            "Snow or ice in quantities sufficient to made a life-size copy of the duplicated creature",
+                            "Some hair, fingernail clippings, or other piece of that creature’s body placed inside the snow or ice",
+                            "Powdered ruby worth 1,500 gp, sprinkled over the duplicate and consumed by the spell"
+                        },
+                        Somatic = true,
+                        Verbal = true
+                    },
+                    SpellDuration = new SpellDuration
+                    {
+                        UnitDispelled = true
+                    },
+                    SpellRangeID = rtouch,
+                    SpellSchoolID = illusion
+                },
+
+                #endregion
+                
                 #region Level 6
 
                 new Spell
@@ -174,6 +252,31 @@ namespace Ganymede.Api.Data.Initializers
                 #endregion
 
                 #region Level 3
+
+                new Spell
+                {
+                    AtHigherLevels = "<p>When you cast this spell using a spell slot of 4th level or higher, the damage of an explosive runes glyph increases by 1d8 for each slot level above 3rd. If you create a spell glyph, you can store any spell of up to the same level as the slot you use for the glyph of warding.</p>",
+                    CampaignID = campaignID,
+                    Description = "<p>When you cast this spell, you inscribe a glyph that harms other creatures, either upon a surface (such as a table or a section of floor or wall) or within an object that can be closed (such as a book, a scroll, or a treasure chest) to conceal the glyph. If you choose a surface, the glyph can cover an area of the surface no larger than 10 feet in diameter. If you choose an object, that object must remain in its place; if the object is moved more than 10 feet from where you cast this spell, the glyph is broken, and the spell ends without being triggered. The glyph is nearly invisible and requires a successful Intelligence (Investigation) check against your spell save DC to be found. You decide what triggers the glyph when you cast the spell. For glyphs inscribed on a surface, the most typical triggers include touching or standing on the glyph, removing another object covering the glyph, approaching within a certain distance of the glyph, or manipulating the object on which the glyph is inscribed. For glyphs inscribed within an object, the most common triggers include opening that object, approaching within a certain distance of the object, or seeing or reading the glyph. Once a glyph is triggered, this spell ends. You can further refine the trigger so the spell activates only under certain circumstances or according to physical characteristics (such as height or weight), creature kind (for example, the ward could be set to affect aberrations or drow), or alignment. You can also set conditions for creatures that don’t trigger the glyph, such as those who say a certain password. When you inscribe the glyph, choose explosive runes or a spell glyph. Explosive Runes. When triggered, the glyph erupts with magical energy in a 20-foot-radius sphere centered on the glyph. The sphere spreads around corners. Each creature in the area must make a Dexterity saving throw. A creature takes 5d8 acid, cold, fire, lightning, or thunder damage on a failed saving throw (your choice when you create the glyph), or half as much damage on a successful one. Spell Glyph. You can store a prepared spell of 3rd level or lower in the glyph by casting it as part of creating the glyph. The spell must target a single creature or an area. The spell being stored has no immediate effect when cast in this way. When the glyph is triggered, the stored spell is cast. If the spell has a target, it targets the creature that triggered the glyph. If the spell affects an area, the area is centered on that creature. If the spell summons hostile creatures or creates harmful objects or traps, they appear as close as possible to the intruder and attack it. If the spell requires concentration, it lasts until the end of its full duration.</p>",
+                    Level = 3,
+                    Name = "Glyph of Warding",
+                    SpellComponents = new SpellComponents
+                    {
+                        Material = new string[]
+                        {
+                            "Incense and powdered diamond worth at least 200 gp, which the spell consumes"
+                        },
+                        Somatic = true,
+                        Verbal = true
+                    },
+                    SpellDuration = new SpellDuration
+                    {
+                        UnitDispelled = true,
+                        UntilTriggered = true
+                    },
+                    SpellRangeID = rtouch,
+                    SpellSchoolID = abjuration,
+                },
 
                 new Spell
                 {
@@ -499,11 +602,7 @@ namespace Ganymede.Api.Data.Initializers
                     Description = "<p>This spell is a minor magical trick that novice spellcasters use for practice. You create one of the following magical Effects within range.</p><ul><li>You create an Instantaneous, harmless sensory effect, such as a shower of sparks, a puff of wind, faint musical notes, or an odd odor.</li><li>You instantaneously light or snuff out a Candle, a torch, or a small campfire.</li><li>You instantaneously clean or soil an object no larger than 1 cubic foot.</li><li>You chill, warm, or flavor up to 1 cubic foot of nonliving material for 1 hour.</li><li>You make a color, a small mark, or a Symbol appear on an object or a surface for 1 hour.</li><li>You create a nonmagical trinket or an illusory image that can fit in your hand and that lasts until the end of your next turn.</li></ul><p>If you cast this spell multiple times, you can have up to three of its non-instantaneous Effects active at a time, and you can dismiss such an effect as an action.</p>",
                     Level = 0,
                     Name = "Prestidigitation",
-                    SpellRange = new SpellRange
-                    {
-                        Amount = 10,
-                        Unit = "feet"
-                    },
+                    SpellRangeID = r10f,
                     SpellComponents = new SpellComponents
                     {
                         Verbal = true,
@@ -575,6 +674,11 @@ namespace Ganymede.Api.Data.Initializers
         {
             List<SpellRange> ranges = new List<SpellRange>
             {
+                new SpellRange
+                {
+                    Amount = 10,
+                    Unit = "feet"
+                },
                 new SpellRange
                 {
                     Amount = 30,

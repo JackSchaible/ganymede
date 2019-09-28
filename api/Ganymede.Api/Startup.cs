@@ -131,6 +131,7 @@ namespace api
             services.AddTransient<IAppService, AppService>();
             services.AddTransient<ICampaignService, CampaignService>();
             services.AddTransient<IAuthService, AuthService>();
+            services.AddTransient<ISpellService, SpellService>();
         }
     }
 }

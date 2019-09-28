@@ -35,8 +35,7 @@
 							<!-- School -->
 							<mat-form-field class="u-flex__grow">
 								<mat-label>School</mat-label>
-								<mat-select [(value)]="spellSchoolId" (selectionChange)="schoolChanged($event)"
-									required>
+								<mat-select formControlName="spellSchoolId" required>
 									<mat-option *ngFor="let school of (formData$ | async)?.schools" [value]="school.id">
 										{{ school.name }}
 									</mat-option>
@@ -75,10 +74,12 @@
 							</div>
 
 							<!-- Reaction Condition -->
-							<mat-form-field
-								[ngStyle]="{'display': (spell$ | async)?.castingTime.unit === 'reaction' ? 'block' : 'none'}">
-								<input type="text" matInput placeholder="Reaction Condition" name="reactionCondition" />
-							</mat-form-field>
+							<ng-container *ngIf="(spell$ | async)?.castingTime.unit === 'reaction'">
+								<mat-form-field>
+									<input type="text" matInput placeholder="Reaction Condition"
+										name="reactionCondition" />
+								</mat-form-field>
+							</ng-container>
 						</div>
 					</mat-expansion-panel>
 					<!-- /Casting Time -->
@@ -152,8 +153,8 @@
 								<mat-form-field class="col-12" formArrayName="materials"
 									*ngFor="let material of this.spellFormGroup.get('spellComponents').get('materials').controls; let i = index">
 									<div [formGroupName]="i">
-										<input type="text" matInput placeholder="Material"
-											formControlName="name" required>
+										<input type="text" matInput placeholder="Material" formControlName="name"
+											required>
 										<button mat-icon-button matSuffix (click)="removeMaterial(i)"
 											title="Remove Material">
 											<i class="text-danger fas fa-times-circle"></i>
@@ -180,10 +181,12 @@
 
 						<ng-container formGroupName="spellDuration">
 							<div class="u-flex u-flex__justify--space-between">
-								<mat-checkbox *ngIf="!this.spellFormGroup.get('spellDuration').get('instantaneous').value" class="flex-shrink"
-									formControlName="special">Special (See Description)</mat-checkbox>
-								<mat-checkbox *ngIf="!this.spellFormGroup.get('spellDuration').get('special').value" class="flex-shrink"
-									formControlName="instantaneous">Instantaneous</mat-checkbox>
+								<mat-checkbox
+									*ngIf="!this.spellFormGroup.get('spellDuration').get('instantaneous').value"
+									class="flex-shrink" formControlName="special">Special (See Description)
+								</mat-checkbox>
+								<mat-checkbox *ngIf="!this.spellFormGroup.get('spellDuration').get('special').value"
+									class="flex-shrink" formControlName="instantaneous">Instantaneous</mat-checkbox>
 							</div>
 
 							<div class="u-flex"
@@ -191,7 +194,8 @@
 
 								<!-- Amount -->
 								<mat-form-field class="u-flex__grow">
-									<mat-checkbox matPrefix class="mr-2" [class.mr-3]="this.spellFormGroup.get('spellDuration').get('concentration').value"
+									<mat-checkbox matPrefix class="mr-2"
+										[class.mr-3]="this.spellFormGroup.get('spellDuration').get('concentration').value"
 										formControlName="concentration">Concentration</mat-checkbox>
 									<mat-checkbox matPrefix class="mr-2" formControlName="upTo">
 										Up To
@@ -248,8 +252,10 @@
 				</mat-accordion>
 
 				<div class="u-flex u-flex__justify--end mt-3">
-					<button (click)="cancel()" class="mr-3" mat-raised-button color="danger"><i class="fas fa-times-square mr-2"></i> Cancel</button>
-					<button (click)="save()" mat-raised-button color="primary"><i class="fas fa-save mr-2"></i> Save</button>
+					<button (click)="cancel()" class="mr-3" mat-raised-button color="danger"><i
+							class="fas fa-times-square mr-2"></i> Cancel</button>
+					<button (click)="save()" mat-raised-button color="primary"><i class="fas fa-save mr-2"></i>
+						Save</button>
 				</div>
 			</mat-card-content>
 		</mat-card>

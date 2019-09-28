@@ -8,5 +8,8 @@
         public bool Self { get; set; }
         public string Shape { get; set; }
         public bool Touch { get; set; }
+        public bool Sight { get; set; }
+        public bool Unlimited { get; set; }
+        public bool Special { get; set; }
     }
 }

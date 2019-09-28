@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using Ganymede.Api.Models.Api;
+﻿using Ganymede.Api.Models.Api;
 using Ganymede.Api.Models.Campaigns;
 using Ganymede.Api.Data;
 using Microsoft.AspNetCore.Authorization;

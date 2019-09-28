@@ -69,16 +69,16 @@ export class NavComponent implements OnInit {
 			new NavItem("encounter", "fas fa-helmet-battle", "Encounters"),
 			new NavItem("campaigns", "fas fa-scroll", "Campaigns")
 		];
+	}
 
+	ngOnInit(): void {
 		this.user$.subscribe((user: AppUser) => {
 			this.loggedIn = user && !!user.email;
 			if (!this.loggedIn) return;
 
 			this.userHash = Md5.hashStr(user.email) as string;
 		});
-	}
 
-	ngOnInit(): void {
 		this.router.events
 			.pipe(
 				filter((event: RouterEvent) => event instanceof NavigationEnd)

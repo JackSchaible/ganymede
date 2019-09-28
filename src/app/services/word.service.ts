@@ -19,4 +19,8 @@ export class WordService {
 
 		return result;
 	}
+
+	public isEmptyOrSpaces(str: string): boolean {
+		return str === null || str.match(/^ *$/) !== null;
+	}
 }

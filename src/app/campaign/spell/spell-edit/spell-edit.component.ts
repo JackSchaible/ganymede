@@ -5,9 +5,17 @@ import { NgRedux, select } from "@angular-redux/store";
 import { SpellActions } from "../store/actions";
 import { IAppState } from "src/app/models/core/iAppState";
 import { SpellRange } from "src/app/models/core/spells/spellRange";
-import { FormGroup, FormControl, FormArray } from "@angular/forms";
+import { FormGroup, FormControl, FormArray, Validators } from "@angular/forms";
 import { debounceTime, distinctUntilChanged } from "rxjs/operators";
 import { SpellFormData } from "src/app/models/core/app/forms/formData/spellFormData";
+import * as _ from "lodash";
+import { Location } from "@angular/common";
+import { SpellService } from "../spell.service";
+import { ApiResponse } from "src/app/services/http/apiResponse";
+import { MatSnackBar } from "@angular/material/snack-bar";
+import ApiCodes from "src/app/services/http/apiCodes";
+import { WordService } from "src/app/services/word.service";
+import { SpellFormValidators } from "../spell.validators";
 
 @Component({
 	selector: "gm-spell-edit",
@@ -29,24 +37,42 @@ export class SpellEditComponent implements OnInit, OnDestroy {
 	public hasMaterial: boolean;
 
 	public spellFormGroup: FormGroup = new FormGroup({
-		name: new FormControl(""),
-		level: new FormControl("", {}),
-		castingTime: new FormGroup({
-			amount: new FormControl(""),
-			unit: new FormControl("")
-		}),
-		spellRange: new FormGroup({
-			amount: new FormControl(""),
-			unit: new FormControl(""),
-			type: new FormControl(""),
-			shape: new FormControl("")
-		}),
-		spellComponents: new FormGroup({
-			verbal: new FormControl(""),
-			somatic: new FormControl(""),
-			material: new FormControl(""),
-			materials: new FormArray([])
-		}),
+		name: new FormControl("", [Validators.required]),
+		level: new FormControl("", [
+			Validators.required,
+			Validators.min(0),
+			Validators.max(9)
+		]),
+		spellSchoolId: new FormControl("", [Validators.required]),
+		castingTime: new FormGroup(
+			{
+				amount: new FormControl("", [
+					Validators.required,
+					Validators.min(1)
+				]),
+				unit: new FormControl("", [Validators.required]),
+				reactionCondition: new FormControl("")
+			},
+			[SpellFormValidators.validateCastingTime(this.words)]
+		),
+		spellRange: new FormGroup(
+			{
+				amount: new FormControl(""),
+				unit: new FormControl(""),
+				type: new FormControl(""),
+				shape: new FormControl("")
+			},
+			[SpellFormValidators.validateRange]
+		),
+		spellComponents: new FormGroup(
+			{
+				verbal: new FormControl(""),
+				somatic: new FormControl(""),
+				material: new FormControl(""),
+				materials: new FormArray([])
+			},
+			SpellFormValidators.validateComponents(this.words)
+		),
 		spellDuration: new FormGroup({
 			amount: new FormControl(""),
 			unit: new FormControl(""),
@@ -59,9 +85,16 @@ export class SpellEditComponent implements OnInit, OnDestroy {
 		atHigherLevels: new FormControl("")
 	});
 
+	public processing: boolean;
+	public isNew: boolean;
+
 	constructor(
 		private store: NgRedux<IAppState>,
-		private actions: SpellActions
+		private actions: SpellActions,
+		private location: Location,
+		private service: SpellService,
+		private snackBar: MatSnackBar,
+		private words: WordService
 	) {}
 
 	ngOnInit() {
@@ -132,8 +165,9 @@ export class SpellEditComponent implements OnInit, OnDestroy {
 				this.hasMaterial = !!spell.spellComponents.material;
 				spell.spellComponents.material = this.setMaterialComponents();
 
-				// TODO: Reenable once all form fields are hooked up, causes errors in the preview component
-				// this.store.dispatch(this.actions.spellEditFormChange(spell));
+				this.store.dispatch(
+					this.actions.spellEditFormChange(spell, spell.id === -1)
+				);
 			});
 	}
 	private getRangeType(range: SpellRange): string {
@@ -178,7 +212,7 @@ export class SpellEditComponent implements OnInit, OnDestroy {
 			);
 	}
 	private setMaterialComponents(): string[] {
-		const materials = [];
+		let materials = Array<string>();
 
 		const controls = ((this.spellFormGroup.get(
 			"spellComponents"
@@ -187,8 +221,11 @@ export class SpellEditComponent implements OnInit, OnDestroy {
 		for (let i = 0; i < controls.length; i++)
 			materials.push(controls[i].value);
 
+		if (materials.length === 0) materials = null;
+
 		return materials;
 	}
+	private openSnackbar(icon: string, message: string): void {}
 
 	public addMaterial(): void {
 		((this.spellFormGroup.get("spellComponents") as FormGroup).get(
@@ -206,7 +243,57 @@ export class SpellEditComponent implements OnInit, OnDestroy {
 		) as FormArray).removeAt(index);
 	}
 
-	public cancel(): void {}
+	public cancel(): void {
+		this.actions.spellEditFormChange(null, false);
+		this.location.back();
+	}
 
-	public save(): void {}
+	public save(): void {
+		const spell = this.store.getState().app.forms.spellForm;
+
+		// TODO: Call server backend, validate
+		if (this.spellFormGroup.valid) {
+			this.processing = true;
+
+			this.service.save(spell).subscribe(
+				(response: ApiResponse) => {
+					this.processing = false;
+					if (response) {
+						if (response.statusCode === ApiCodes.Ok) {
+							this.openSnackbar(
+								"check-square",
+								`${spell.name} was successfully saved!`
+							);
+
+							const wasNew = this.isNew;
+
+							if (this.isNew) {
+								this.isNew = false;
+								spell.id = response.insertedID;
+							}
+
+							this.store.dispatch(
+								this.actions.spellEditFormChange(spell, wasNew)
+							);
+						} else
+							this.openSnackbar(
+								"exclamation-triangle",
+								`An error occurred while saving ${spell.name}!`
+							);
+					} else
+						this.openSnackbar(
+							"exclamation-triangle",
+							`An error occurred while saving ${spell.name}!`
+						);
+				},
+				() => {
+					this.processing = false;
+					this.openSnackbar(
+						"exclamation-triangle",
+						`An error occurred while saving ${spell.name}!`
+					);
+				}
+			);
+		}
+	}
 }
