@@ -9,7 +9,7 @@
         public bool Special { get; set; }
         public bool Instantaneous { get; set; }
         public bool UpTo { get; set; }
-        public bool UnitDispelled { get; set; }
+        public bool UntilDispelled { get; set; }
         public bool UntilTriggered { get; set; }
     }
 }

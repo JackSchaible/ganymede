@@ -5,6 +5,9 @@ export class SpellRange {
 	public self: boolean;
 	public shape: string;
 	public touch: boolean;
+	public sight: boolean;
+	public unlimited: boolean;
+	public special: boolean;
 
 	public static getDefault(): SpellRange {
 		const range = new SpellRange();

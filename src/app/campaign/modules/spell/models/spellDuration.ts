@@ -6,6 +6,8 @@ export class SpellDuration {
 	public special: boolean;
 	public instantaneous: boolean;
 	public upTo: boolean;
+	public untilDispelled: boolean;
+	public untilTriggered: boolean;
 
 	public static getDefault(): SpellDuration {
 		const duration = new SpellDuration();

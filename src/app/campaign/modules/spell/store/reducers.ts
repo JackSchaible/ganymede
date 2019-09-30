@@ -15,6 +15,10 @@ export function spellReducer(state: IAppState, action: AnyAction): IAppState {
 				result = spellEditReducer(state, action.state);
 				break;
 
+			case SpellActionTypes.SPELL_FORM_EDITED:
+				result = spellEditedReducer(state, action.state);
+				break;
+
 			case SpellActionTypes.NEW_SPELL_SAVED:
 				result = spellSaved(state, action.state, true);
 				break;
@@ -42,6 +46,17 @@ function spellEditReducer(oldState: IAppState, newState: IAppState): IAppState {
 	else spell = Spell.getDefault();
 
 	state.app.forms.spellForm = spell;
+
+	return state;
+}
+
+function spellEditedReducer(
+	oldState: IAppState,
+	newState: IAppState
+): IAppState {
+	const state = _.cloneDeep(oldState);
+
+	state.app.forms.spellForm = newState.app.forms.spellForm;
 
 	return state;
 }

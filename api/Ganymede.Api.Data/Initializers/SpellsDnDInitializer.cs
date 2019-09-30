@@ -341,7 +341,7 @@ namespace Ganymede.Api.Data.Initializers
                     },
                     SpellDuration = new SpellDuration
                     {
-                        UnitDispelled = true
+                        UntilDispelled = true
                     },
                     SpellRangeID = rtouch,
                     SpellSchoolID = illusion
@@ -488,7 +488,7 @@ namespace Ganymede.Api.Data.Initializers
                     },
                     SpellDuration = new SpellDuration
                     {
-                        UnitDispelled = true,
+                        UntilDispelled = true,
                         UntilTriggered = true
                     },
                     SpellRangeID = rtouch,

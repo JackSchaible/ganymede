@@ -29,7 +29,7 @@ export class SpellFormValidators {
 	}
 
 	public static validateRange(control: AbstractControl): ValidationErrors {
-		const errors: any = null;
+		const errors: any = {};
 		const range = control as FormGroup;
 		const type = range.controls["type"].value;
 
@@ -58,7 +58,7 @@ export class SpellFormValidators {
 
 	public static validateComponents(words: WordService): ValidatorFn {
 		return (control: AbstractControl): ValidationErrors => {
-			const errors: any = null;
+			const errors: any = {};
 			const components = control as FormGroup;
 
 			const hasMaterial = components.controls["material"].value;
@@ -73,7 +73,7 @@ export class SpellFormValidators {
 						"Which material components are required to cast this spell?";
 				else
 					for (let i = 0; i < materials.length; i++)
-						if (words.isEmptyOrSpaces(materials[i].value))
+						if (words.isEmptyOrSpaces(materials[i].value.name))
 							errors[`materials.${i}`] =
 								"Material must have a value.";
 			}
@@ -83,7 +83,7 @@ export class SpellFormValidators {
 	}
 
 	public static validateDuration(control: AbstractControl): ValidationErrors {
-		const errors: any = null;
+		const errors: any = {};
 
 		return errors;
 	}

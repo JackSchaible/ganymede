@@ -91,47 +91,57 @@
 						</mat-expansion-panel-header>
 
 						<div formGroupName="spellRange">
-							<!-- Range Type -->
-							<mat-radio-group formControlName="type">
-								<mat-radio-button class="u-padding-x"
-									*ngFor="let range of (formData$ | async)?.rangeTypes" [value]="range">
-									{{range}}
-								</mat-radio-button>
-							</mat-radio-group>
-
-							<!-- Ranged || Self -->
-							<div class="u-flex" [class.hide]="rangeType === 'touch'">
-								<!-- Amount -->
-								<mat-form-field class="number-input">
-									<input type="number" matInput placeholder="Amount" name="amount"
-										formControlName="amount" />
-								</mat-form-field>
-
-								<!-- Unit -->
-								<mat-form-field class="u-flex__grow">
-									<input type="text" [matAutocomplete]="rangeUnitAC" matInput placeholder="Unit"
-										name="unit" formControlName="unit" />
-
-									<mat-autocomplete #rangeUnitAC="matAutocomplete">
-										<mat-option *ngFor="let unit of (formData$ | async)?.rangeUnits" [value]="unit">
-											{{unit}}
-										</mat-option>
-									</mat-autocomplete>
-								</mat-form-field>
-
-								<!-- Shape -->
-								<mat-form-field class="u-flex__grow" [class.hide]="rangeType !== 'self'">
-									<input type="text" [matAutocomplete]="rangeShapeAC" matInput placeholder="Shape"
-										name="shape" formControlName="shape" />
-
-									<mat-autocomplete #rangeShapeAC="matAutocomplete">
-										<mat-option *ngFor="let shape of (formData$ | async)?.rangeShapes"
-											[value]="shape">
-											{{shape}}
-										</mat-option>
-									</mat-autocomplete>
-								</mat-form-field>
+							<div class="u-flex u-flex__justify--space-between">
+								<mat-checkbox class="flex-shrink" formControlName="sight">Sight</mat-checkbox>
+								<mat-checkbox class="flex-shrink" formControlName="unlimited">Unlimited</mat-checkbox>
+								<mat-checkbox class="flex-shrink" formControlName="special">Special</mat-checkbox>
 							</div>
+
+							<ng-container
+								*ngIf="!this.spellFormGroup.get('spellRange').get('sight').value && !this.spellFormGroup.get('spellRange').get('unlimited').value && !this.spellFormGroup.get('spellRange').get('special').value">
+								<!-- Range Type -->
+								<mat-radio-group formControlName="type">
+									<mat-radio-button class="u-padding-x"
+										*ngFor="let range of (formData$ | async)?.rangeTypes" [value]="range">
+										{{range}}
+									</mat-radio-button>
+								</mat-radio-group>
+
+								<!-- Ranged || Self -->
+								<div class="u-flex" [class.hide]="rangeType === 'touch'">
+									<!-- Amount -->
+									<mat-form-field class="number-input">
+										<input type="number" matInput placeholder="Amount" name="amount"
+											formControlName="amount" />
+									</mat-form-field>
+
+									<!-- Unit -->
+									<mat-form-field class="u-flex__grow">
+										<input type="text" [matAutocomplete]="rangeUnitAC" matInput placeholder="Unit"
+											name="unit" formControlName="unit" />
+
+										<mat-autocomplete #rangeUnitAC="matAutocomplete">
+											<mat-option *ngFor="let unit of (formData$ | async)?.rangeUnits"
+												[value]="unit">
+												{{unit}}
+											</mat-option>
+										</mat-autocomplete>
+									</mat-form-field>
+
+									<!-- Shape -->
+									<mat-form-field class="u-flex__grow" [class.hide]="rangeType !== 'self'">
+										<input type="text" [matAutocomplete]="rangeShapeAC" matInput placeholder="Shape"
+											name="shape" formControlName="shape" />
+
+										<mat-autocomplete #rangeShapeAC="matAutocomplete">
+											<mat-option *ngFor="let shape of (formData$ | async)?.rangeShapes"
+												[value]="shape">
+												{{shape}}
+											</mat-option>
+										</mat-autocomplete>
+									</mat-form-field>
+								</div>
+							</ng-container>
 						</div>
 					</mat-expansion-panel>
 					<!-- /Range -->

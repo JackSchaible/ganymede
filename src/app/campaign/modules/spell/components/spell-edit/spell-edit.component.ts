@@ -60,7 +60,10 @@ export class SpellEditComponent implements OnInit, OnDestroy {
 				amount: new FormControl(""),
 				unit: new FormControl(""),
 				type: new FormControl(""),
-				shape: new FormControl("")
+				shape: new FormControl(""),
+				sight: new FormControl(""),
+				unlimited: new FormControl(""),
+				special: new FormControl("")
 			},
 			[SpellFormValidators.validateRange]
 		),
@@ -163,11 +166,13 @@ export class SpellEditComponent implements OnInit, OnDestroy {
 				this.rangeType = rangeTypeValue;
 
 				this.hasMaterial = !!spell.spellComponents.material;
-				spell.spellComponents.material = this.setMaterialComponents();
+				if (this.hasMaterial) {
+					spell.spellComponents.material = this.setMaterialComponents();
+					if (spell.spellComponents.material.length === 0)
+						this.addMaterial();
+				} else this.removeAllMaterials();
 
-				this.store.dispatch(
-					this.actions.spellEditFormChange(spell, spell.id === -1)
-				);
+				this.store.dispatch(this.actions.spellEditFormChange(spell));
 			});
 	}
 	private getRangeType(range: SpellRange): string {
@@ -212,16 +217,13 @@ export class SpellEditComponent implements OnInit, OnDestroy {
 			);
 	}
 	private setMaterialComponents(): string[] {
-		let materials = Array<string>();
-
+		const materials = Array<string>();
 		const controls = ((this.spellFormGroup.get(
 			"spellComponents"
 		) as FormGroup).get("materials") as FormArray).controls;
 
 		for (let i = 0; i < controls.length; i++)
 			materials.push(controls[i].value);
-
-		if (materials.length === 0) materials = null;
 
 		return materials;
 	}
@@ -243,8 +245,14 @@ export class SpellEditComponent implements OnInit, OnDestroy {
 		) as FormArray).removeAt(index);
 	}
 
+	private removeAllMaterials(): void {
+		((this.spellFormGroup.get("spellComponents") as FormGroup).get(
+			"materials"
+		) as FormArray).clear();
+	}
+
 	public cancel(): void {
-		this.actions.spellEditFormChange(null, false);
+		this.actions.spellEditFormChange(null);
 		this.location.back();
 	}
 
@@ -273,7 +281,7 @@ export class SpellEditComponent implements OnInit, OnDestroy {
 							}
 
 							this.store.dispatch(
-								this.actions.spellEditFormChange(spell, wasNew)
+								this.actions.spellSaved(spell, wasNew)
 							);
 						} else
 							this.openSnackbar(

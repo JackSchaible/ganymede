@@ -3,7 +3,15 @@
     <span class="u-margin-left">
         <ng-container *ngIf="duration.instantaneous">Instantaneous</ng-container>
         <ng-container *ngIf="duration.special">Special</ng-container>
-        <ng-container *ngIf="!duration.instantaneous && !duration.special">
+        <ng-container *ngIf="duration.untilDispelled || duration.untilTriggered">
+            <ng-container *ngIf="duration.untilDispelled && !duration.untilTriggered">Until dispelled</ng-container>
+            <ng-container *ngIf="duration.untilTriggered && !duration.untilDispelled">Until triggered</ng-container>
+            <ng-container *ngIf="duration.untilTriggered && duration.untilDispelled">
+                Until disppelled or triggered
+            </ng-container>
+        </ng-container>
+        <ng-container
+            *ngIf="!duration.instantaneous && !duration.special && !duration.untilDispelled && !duration.untilTriggered">
             <ng-container *ngIf="duration.concentration">
                 Concentration, Up to
             </ng-container>
