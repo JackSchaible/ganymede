@@ -6,7 +6,7 @@ import { SpellActions } from "../../store/actions";
 import { IAppState } from "src/app/models/core/iAppState";
 import { SpellRange } from "src/app/campaign/modules/spell/models/spellRange";
 import { FormGroup, FormControl, FormArray, Validators } from "@angular/forms";
-import { debounceTime, distinctUntilChanged } from "rxjs/operators";
+import { debounceTime, distinctUntilChanged, map } from "rxjs/operators";
 import { SpellFormData } from "src/app/models/core/app/forms/formData/spellFormData";
 import * as _ from "lodash";
 import { Location } from "@angular/common";
@@ -16,6 +16,8 @@ import { MatSnackBar } from "@angular/material/snack-bar";
 import ApiCodes from "src/app/services/http/apiCodes";
 import { WordService } from "src/app/services/word.service";
 import { SpellFormValidators } from "../../spell.validators";
+import { SpellSchool } from "../../models/spellSchool";
+import { MatCheckboxChange } from "@angular/material/checkbox";
 
 @Component({
 	selector: "gm-spell-edit",
@@ -28,11 +30,11 @@ export class SpellEditComponent implements OnInit, OnDestroy {
 
 	@select(["app", "forms", "spellFormData"])
 	public formData$: Observable<SpellFormData>;
+	public schools$: Observable<SpellSchool[]>;
 
 	private formStoreSubscription: Subscription;
 	private formValueChangesSubscription: Subscription;
 
-	public spellSchoolId: number;
 	public rangeType: string;
 	public hasMaterial: boolean;
 
@@ -43,7 +45,7 @@ export class SpellEditComponent implements OnInit, OnDestroy {
 			Validators.min(0),
 			Validators.max(9)
 		]),
-		spellSchoolId: new FormControl("", [Validators.required]),
+		spellSchoolID: new FormControl("", [Validators.required]),
 		castingTime: new FormGroup(
 			{
 				amount: new FormControl("", [
@@ -103,14 +105,16 @@ export class SpellEditComponent implements OnInit, OnDestroy {
 	ngOnInit() {
 		this.syncFromStore();
 		this.syncToStore();
-	}
 
-	ngOnDestroy(): void {
-		if (this.formStoreSubscription)
-			this.formStoreSubscription.unsubscribe();
-
-		if (this.formStoreSubscription)
-			this.formValueChangesSubscription.unsubscribe();
+		this.schools$ = this.formData$.pipe(
+			map((value: SpellFormData): SpellSchool[] => {
+				return value.schools.sort((a: SpellSchool, b: SpellSchool) => {
+					if (a.name < b.name) return -1;
+					if (a.name > b.name) return 1;
+					return 0;
+				});
+			})
+		);
 	}
 
 	private syncFromStore() {
@@ -119,32 +123,44 @@ export class SpellEditComponent implements OnInit, OnDestroy {
 		this.formStoreSubscription = this.store
 			.select(["app", "forms", "spellForm"])
 			.subscribe((spell: Spell) => {
+				console.log("sync from");
 				this.spellFormGroup.patchValue(spell);
 
-				if (spell.spellSchool)
-					this.spellSchoolId = spell.spellSchool.id;
-
-				if (spell.spellRange) {
-					const rangeTypeValue = this.getRangeType(spell.spellRange);
-					(<FormGroup>(
-						this.spellFormGroup.controls["spellRange"]
-					)).controls["type"].patchValue(rangeTypeValue);
-					this.rangeType = rangeTypeValue;
-				}
-
-				if (spell.spellComponents) {
-					this.hasMaterial =
-						spell.spellComponents.material &&
-						spell.spellComponents.material.length > 0;
-
-					// Dynamically create the form controls for material components
-					if (this.hasMaterial)
-						this.getMaterialComponents(
-							spell.spellComponents.material
-						);
-				}
+				//this.syncFromRange(spell);
+				//this.syncFromMaterial(spell);
 			});
 	}
+	private syncFromRange(spell: Spell) {
+		if (!spell.spellRange) return;
+		let rangeTypeValue: string;
+
+		if (spell.spellRange.self) rangeTypeValue = "self";
+		else if (spell.spellRange.touch) rangeTypeValue = "touch";
+		else rangeTypeValue = "ranged";
+
+		(<FormGroup>this.spellFormGroup.controls["spellRange"]).controls[
+			"type"
+		].patchValue(rangeTypeValue);
+		this.rangeType = rangeTypeValue;
+	}
+	private syncFromMaterial(spell: Spell) {
+		if (!spell.spellComponents) return;
+		this.hasMaterial =
+			spell.spellComponents.material &&
+			spell.spellComponents.material.length > 0;
+
+		// Dynamically create the form controls for material components
+		if (this.hasMaterial)
+			for (let i = 0; i < spell.spellComponents.material.length; i++)
+				((this.spellFormGroup.get("spellComponents") as FormGroup).get(
+					"materials"
+				) as FormArray).push(
+					new FormGroup({
+						name: new FormControl(spell.spellComponents.material[i])
+					})
+				);
+	}
+
 	private syncToStore() {
 		if (this.formValueChangesSubscription !== undefined) return;
 
@@ -156,67 +172,44 @@ export class SpellEditComponent implements OnInit, OnDestroy {
 				)
 			)
 			.subscribe((spell: Spell) => {
-				const rangeTypeValue = (<FormGroup>(
-					this.spellFormGroup.controls["spellRange"]
-				)).controls["type"].value;
-				spell.spellRange = this.setRangeType(
-					rangeTypeValue,
-					spell.spellRange
-				);
-				this.rangeType = rangeTypeValue;
-
-				this.hasMaterial = !!spell.spellComponents.material;
-				if (this.hasMaterial) {
-					spell.spellComponents.material = this.setMaterialComponents();
-					if (spell.spellComponents.material.length === 0)
-						this.addMaterial();
-				} else this.removeAllMaterials();
+				console.log("sync to");
+				// this.syncToRange(spell);
+				// this.syncToMaterial(spell);
 
 				this.store.dispatch(this.actions.spellEditFormChange(spell));
 			});
 	}
-	private getRangeType(range: SpellRange): string {
-		let rangeType: string;
+	private syncToRange(spell: Spell) {
+		const rangeTypeValue = (<FormGroup>(
+			this.spellFormGroup.controls["spellRange"]
+		)).controls["type"].value;
 
-		if (range.self) rangeType = "self";
-		else if (range.touch) rangeType = "touch";
-		else rangeType = "ranged";
-
-		return rangeType;
-	}
-	private setRangeType(type: string, range: SpellRange): SpellRange {
-		switch (type) {
+		switch (rangeTypeValue) {
 			case "ranged":
-				range.self = false;
-				range.touch = false;
+				spell.spellRange.self = false;
+				spell.spellRange.touch = false;
 				break;
 
 			case "touch":
-				range.touch = true;
-				range.self = false;
-				range.amount = 0;
+				spell.spellRange.touch = true;
+				spell.spellRange.self = false;
+				spell.spellRange.amount = 0;
 				break;
 
 			case "self":
-				range.self = true;
-				range.touch = false;
-				range.amount = 0;
+				spell.spellRange.self = true;
+				spell.spellRange.touch = false;
+				spell.spellRange.amount = 0;
 				break;
 		}
+	}
+	private syncToMaterial(spell: Spell) {
+		this.hasMaterial =
+			spell.spellComponents.material &&
+			spell.spellComponents.material.length > 0;
 
-		return range;
-	}
-	private getMaterialComponents(materials: string[]): void {
-		for (let i = 0; i < materials.length; i++)
-			((this.spellFormGroup.get("spellComponents") as FormGroup).get(
-				"materials"
-			) as FormArray).push(
-				new FormGroup({
-					name: new FormControl(materials[i])
-				})
-			);
-	}
-	private setMaterialComponents(): string[] {
+		if (!this.hasMaterial) return;
+
 		const materials = Array<string>();
 		const controls = ((this.spellFormGroup.get(
 			"spellComponents"
@@ -225,16 +218,33 @@ export class SpellEditComponent implements OnInit, OnDestroy {
 		for (let i = 0; i < controls.length; i++)
 			materials.push(controls[i].value);
 
-		return materials;
+		spell.spellComponents.material = materials;
 	}
+
+	ngOnDestroy(): void {
+		if (this.formStoreSubscription)
+			this.formStoreSubscription.unsubscribe();
+
+		if (this.formStoreSubscription)
+			this.formValueChangesSubscription.unsubscribe();
+	}
+
 	private openSnackbar(icon: string, message: string): void {}
 
+	public materialChanged(event: MatCheckboxChange) {
+		this.hasMaterial = event.checked;
+		const formArray: FormArray = (this.spellFormGroup.get(
+			"spellComponents"
+		) as FormGroup).get("materials") as FormArray;
+
+		if (event.checked && formArray.length === 0) this.addMaterial();
+	}
 	public addMaterial(): void {
 		((this.spellFormGroup.get("spellComponents") as FormGroup).get(
 			"materials"
 		) as FormArray).push(
 			new FormGroup({
-				name: new FormControl("")
+				name: new FormControl("", Validators.required)
 			})
 		);
 	}
@@ -243,12 +253,6 @@ export class SpellEditComponent implements OnInit, OnDestroy {
 		((this.spellFormGroup.get("spellComponents") as FormGroup).get(
 			"materials"
 		) as FormArray).removeAt(index);
-	}
-
-	private removeAllMaterials(): void {
-		((this.spellFormGroup.get("spellComponents") as FormGroup).get(
-			"materials"
-		) as FormArray).clear();
 	}
 
 	public cancel(): void {

@@ -17,6 +17,8 @@ export class SpellDuration {
 	}
 
 	public static isEqual(a: SpellDuration, b: SpellDuration): boolean {
+		if ((!a && b) || (a && !b)) return false;
+
 		return (
 			a === b ||
 			(a.amount === b.amount &&

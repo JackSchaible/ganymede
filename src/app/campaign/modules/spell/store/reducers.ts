@@ -4,6 +4,7 @@ import { SpellAction, SpellActionTypes } from "./actions";
 import { Spell } from "src/app/campaign/modules/spell/models/spell";
 import * as _ from "lodash";
 import { Campaign } from "src/app/campaign/models/campaign";
+import { SpellSchool } from "../models/spellSchool";
 
 export function spellReducer(state: IAppState, action: AnyAction): IAppState {
 	let result = _.cloneDeep(state);
@@ -57,6 +58,11 @@ function spellEditedReducer(
 	const state = _.cloneDeep(oldState);
 
 	state.app.forms.spellForm = newState.app.forms.spellForm;
+
+	state.app.forms.spellForm.spellSchool = state.app.forms.spellFormData.schools.find(
+		(value: SpellSchool) =>
+			value.id === state.app.forms.spellForm.spellSchoolID
+	);
 
 	return state;
 }

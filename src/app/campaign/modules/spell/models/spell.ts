@@ -42,6 +42,8 @@ export class Spell {
 	}
 
 	public static isEqual(a: Spell, b: Spell): boolean {
+		if ((!a && b) || (a && !b)) return false;
+
 		return (
 			a === b ||
 			(a.atHigherLevels === b.atHigherLevels &&

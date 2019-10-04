@@ -35,8 +35,8 @@
 							<!-- School -->
 							<mat-form-field class="u-flex__grow">
 								<mat-label>School</mat-label>
-								<mat-select formControlName="spellSchoolId" required>
-									<mat-option *ngFor="let school of (formData$ | async)?.schools" [value]="school.id">
+								<mat-select formControlName="spellSchoolID" required>
+									<mat-option *ngFor="let school of schools$ | async" [value]="school.id">
 										{{ school.name }}
 									</mat-option>
 								</mat-select>
@@ -108,7 +108,7 @@
 								</mat-radio-group>
 
 								<!-- Ranged || Self -->
-								<div class="u-flex" [class.hide]="rangeType === 'touch'">
+								<div class="u-flex" [class.hide]="!(rangeType === 'self' || rangeType === 'ranged')">
 									<!-- Amount -->
 									<mat-form-field class="number-input">
 										<input type="number" matInput placeholder="Amount" name="amount"
@@ -156,7 +156,7 @@
 							<div class="u-flex u-flex__justify--space-between">
 								<mat-checkbox class="flex-shrink" formControlName="verbal">Verbal</mat-checkbox>
 								<mat-checkbox class="flex-shrink" formControlName="somatic">Somatic</mat-checkbox>
-								<mat-checkbox class="flex-shrink" formControlName="material">Material</mat-checkbox>
+								<mat-checkbox class="flex-shrink" formControlName="material" (change)="materialChanged($event)">Material</mat-checkbox>
 							</div>
 
 							<ng-container *ngIf="hasMaterial">

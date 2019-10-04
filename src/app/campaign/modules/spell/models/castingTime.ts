@@ -12,6 +12,8 @@ export class CastingTime {
 	}
 
 	public static isEqual(a: CastingTime, b: CastingTime): boolean {
+		if ((!a && b) || (a && !b)) return false;
+
 		return (
 			a === b ||
 			(a.id === b.id &&

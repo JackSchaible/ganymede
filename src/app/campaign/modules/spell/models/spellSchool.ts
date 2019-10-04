@@ -12,6 +12,8 @@ export class SpellSchool {
 	}
 
 	public static isEqual(a: SpellSchool, b: SpellSchool): boolean {
+		if ((!a && b) || (a && !b)) return false;
+
 		return (
 			a === b ||
 			(a.id === b.id &&

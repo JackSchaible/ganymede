@@ -12,6 +12,8 @@ export class SpellComponents {
 	}
 
 	public static isEqual(a: SpellComponents, b: SpellComponents): boolean {
+		if ((!a && b) || (a && !b)) return false;
+
 		return (
 			a === b ||
 			(a.id === b.id &&

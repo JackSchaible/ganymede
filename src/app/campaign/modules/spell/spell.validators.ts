@@ -10,7 +10,7 @@ import {
 export class SpellFormValidators {
 	public static validateCastingTime(words: WordService): ValidatorFn {
 		return (control: AbstractControl): ValidationErrors => {
-			const errors: any = null;
+			const errors: any = {};
 			const castingTime = control as FormGroup;
 			const unit = castingTime.controls["unit"].value;
 
@@ -33,25 +33,21 @@ export class SpellFormValidators {
 		const range = control as FormGroup;
 		const type = range.controls["type"].value;
 
-		if (type !== "touch") {
-			const amount = range.controls["amount"].value;
-			const unit = range.controls["unit"].value;
+		if (
+			type === "touch" ||
+			type === "special" ||
+			type === "sight" ||
+			type === "unlimited"
+		)
+			return errors;
 
-			if (
-				(type === "self" && amount && !unit) ||
-				(type === "ranged" && !unit)
-			)
-				errors["unit"] = "A unit is required";
+		const amount = range.controls["amount"].value;
+		const unit = range.controls["unit"].value;
 
-			if (
-				(type === "self" && !amount && unit) ||
-				(type === "ranged" && !amount)
-			)
-				errors["amount"] = "An amount is required.";
-
-			if (type !== "self" && type !== "ranged")
-				errors["type"] = "Invalid range type!";
-		}
+		if (type === "self" || type === "ranged") {
+			if (!unit) errors["unit"] = "A unit is required";
+			if (!amount) errors["amount"] = "An amount is required.";
+		} else errors["type"] = "Invalid range type!";
 
 		return errors;
 	}
@@ -59,24 +55,24 @@ export class SpellFormValidators {
 	public static validateComponents(words: WordService): ValidatorFn {
 		return (control: AbstractControl): ValidationErrors => {
 			const errors: any = {};
-			const components = control as FormGroup;
+			// const components = control as FormGroup;
 
-			const hasMaterial = components.controls["material"].value;
+			// const hasMaterial = components.controls["material"].value;
 
-			if (hasMaterial) {
-				const materials = (components.controls[
-					"materials"
-				] as FormArray).controls;
+			// if (hasMaterial) {
+			// 	const materials = (components.controls[
+			// 		"materials"
+			// 	] as FormArray).controls;
 
-				if (materials.length === 0)
-					errors["material"] =
-						"Which material components are required to cast this spell?";
-				else
-					for (let i = 0; i < materials.length; i++)
-						if (words.isEmptyOrSpaces(materials[i].value.name))
-							errors[`materials.${i}`] =
-								"Material must have a value.";
-			}
+			// 	if (materials.length === 0)
+			// 		errors["material"] =
+			// 			"Which material components are required to cast this spell?";
+			// 	else
+			// 		for (let i = 0; i < materials.length; i++)
+			// 			if (words.isEmptyOrSpaces(materials[i].value.name))
+			// 				errors[`materials.${i}`] =
+			// 					"Material must have a value.";
+			// }
 
 			return errors;
 		};

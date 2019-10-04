@@ -1,9 +1,9 @@
 <p class="u-flex">
-    <strong class="u-flex__shrink--no">Components:</strong>
-    <span class="u-margin-left u-text-comma-list">
-        <span *ngIf="components.verbal">V</span>
-        <span *ngIf="components.somatic">S</span>
-        <span *ngIf="components.material">M (<span class="u-text-comma-list text-lowercase"><span
-                    *ngFor="let material of components.material">{{material}}</span></span>)</span>
-    </span>
+	<strong class="u-flex__shrink--no">Components:</strong>
+	<span class="u-margin-left u-text-comma-list">
+		<span *ngIf="components.verbal">V</span>
+		<span *ngIf="components.somatic">S</span>
+		<span *ngIf="components.material && components.material.length > 0">M (<span class="u-text-comma-list text-lowercase"><span
+					*ngFor="let material of components.material">{{material}}</span></span>)</span>
+	</span>
 </p>
