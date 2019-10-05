@@ -1,17 +1,14 @@
 <p class="u-flex">
     <strong class="u-flex__shrink--no">Range:</strong>
-    <span class="u-margin-left">
-        <ng-container *ngIf="range.touch || range.unlimited || range.special || range.sight; else standard">
-            <ng-container *ngIf="range.touch">Touch</ng-container>
-            <ng-container *ngIf="range.unlimited">Unlimited</ng-container>
-            <ng-container *ngIf="range.sight">Sight</ng-container>
-            <ng-container *ngIf="range.special">Special</ng-container>
+    <span class="u-margin-left" [ngSwitch]="range.type">
+        <ng-container *ngSwitchCase="'Touch'">Touch</ng-container>
+        <ng-container *ngSwitchCase="'Unlimited'">Unlimited</ng-container>
+        <ng-container *ngSwitchCase="'Sight'">Sight</ng-container>
+        <ng-container *ngSwitchCase="'Special'">Special</ng-container>
+        <ng-container *ngSwitchDefault>
+            <ng-container *ngIf="range.type === 'Self'">Self (</ng-container>{{ range.amount }} {{ range.self ? (range.unit === 'feet' ? 'foot' : range.unit) : range.unit }}
+            <ng-container *ngIf="range.type === 'Self'">{{ range.shape === 'sphere' ? 'radius' : range.shape }}</ng-container>
+            <ng-container *ngIf="range.type === 'Self'">)</ng-container>
         </ng-container>
-        <ng-template #standard>
-            <ng-container *ngIf="range.self">Self (</ng-container>{{ range.amount }}
-            {{ range.self ? (range.unit === 'feet' ? 'foot' : range.unit) : range.unit }}
-            <ng-container *ngIf="range.self"> {{ range.shape === 'sphere' ? 'radius' : range.shape }}</ng-container>
-            <ng-container *ngIf="range.self">)</ng-container>
-        </ng-template>
     </span>
 </p>

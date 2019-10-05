@@ -17,6 +17,7 @@ using Ganymede.Api.BLL.Services.Impl;
 using System.Linq;
 using System.Reflection;
 using Ganymede.Api.Data.Initializers;
+using Newtonsoft.Json.Converters;
 
 namespace api
 {
@@ -44,7 +45,11 @@ namespace api
             services.AddMvc()
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
                 .AddJsonOptions(
-                    options => options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+                    options =>
+                    {
+                        options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+                        options.SerializerSettings.Converters.Add(new StringEnumConverter());
+                    }
                 );
             services.Configure<IISOptions>(o => { o.AutomaticAuthentication = false; });
         }

@@ -152,7 +152,7 @@ namespace Ganymede.Api.Data.Initializers
                 },
                 new SpellRange
                 {
-                    Touch = true
+                    Type = RangeType.Touch
                 }
             };
             ctx.SpellRanges.AddRange(ranges);
@@ -272,7 +272,7 @@ namespace Ganymede.Api.Data.Initializers
                     SpellDurationID = d1cminute,
                     SpellRange = new SpellRange
                     {
-                        Sight = true
+                        Type = RangeType.Sight
                     },
                     SpellSchoolID = conjuration
                 }
@@ -545,7 +545,7 @@ namespace Ganymede.Api.Data.Initializers
                     SpellRange = new SpellRange
                     {
                         Amount = 100,
-                        Self = true,
+                        Type = RangeType.Self,
                         Shape = "line",
                         Unit = "foot"
                     },
@@ -581,7 +581,7 @@ namespace Ganymede.Api.Data.Initializers
                     SpellDurationID = d1round,
                     SpellRange = new SpellRange
                     {
-                        Unlimited = true
+                        Type = RangeType.Unlimited,
                     },
                     SpellSchoolID = evocation
                 }
@@ -628,7 +628,7 @@ namespace Ganymede.Api.Data.Initializers
                         Amount = 60,
                         Unit = "foot",
                         Shape = "line",
-                        Self = true,
+                        Type = RangeType.Self,
                     },
                     SpellComponents = new SpellComponents
                     {
@@ -703,7 +703,7 @@ namespace Ganymede.Api.Data.Initializers
                     SpellRange = new SpellRange
                         {
                             Amount = 30,
-                            Self = true,
+                            Type = RangeType.Self,
                             Shape = "sphere",
                             Unit = "foot"
                         },
@@ -763,7 +763,7 @@ namespace Ganymede.Api.Data.Initializers
                     Name = "Thunderwave",
                     SpellRange = new SpellRange
                     {
-                        Self = true,
+                        Type = RangeType.Self,
                         Amount = 15,
                         Unit = "foot",
                         Shape = "cube"

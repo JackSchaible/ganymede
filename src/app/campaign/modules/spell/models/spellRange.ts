@@ -2,12 +2,8 @@ export class SpellRange {
 	public id: number;
 	public amount: number;
 	public unit: string;
-	public self: boolean;
 	public shape: string;
-	public touch: boolean;
-	public sight: boolean;
-	public unlimited: boolean;
-	public special: boolean;
+	public type: string;
 
 	public static getDefault(): SpellRange {
 		const range = new SpellRange();
@@ -23,9 +19,8 @@ export class SpellRange {
 			a === b ||
 			(a.amount === b.amount &&
 				a.id === b.id &&
-				a.self === b.self &&
 				a.shape === b.shape &&
-				a.touch === b.touch &&
+				a.type === b.type &&
 				a.unit === b.unit)
 		);
 	}

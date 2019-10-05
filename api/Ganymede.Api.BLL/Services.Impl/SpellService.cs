@@ -90,7 +90,7 @@ namespace Ganymede.Api.BLL.Services.Impl
                     old.SpellDurationID = duration.ID;
                 }
 
-                SpellRange range = _ctx.SpellRanges.FirstOrDefault(r => r.Amount == old.SpellRange.Amount && r.Self == old.SpellRange.Self && r.Shape == old.SpellRange.Shape && r.Touch == old.SpellRange.Touch && r.Unit == old.SpellRange.Unit);
+                SpellRange range = _ctx.SpellRanges.FirstOrDefault(r => r.Amount == old.SpellRange.Amount && r.Type == old.SpellRange.Type && r.Shape == old.SpellRange.Shape && r.Unit == old.SpellRange.Unit);
                 if (range != null)
                 {
                     old.SpellRange = range;

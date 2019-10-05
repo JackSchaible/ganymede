@@ -59,11 +59,6 @@ function spellEditedReducer(
 
 	state.app.forms.spellForm = newState.app.forms.spellForm;
 
-	state.app.forms.spellForm.spellSchool = state.app.forms.spellFormData.schools.find(
-		(value: SpellSchool) =>
-			value.id === state.app.forms.spellForm.spellSchoolID
-	);
-
 	return state;
 }
 
