@@ -4,7 +4,6 @@ import { SpellAction, SpellActionTypes } from "./actions";
 import { Spell } from "src/app/campaign/modules/spell/models/spell";
 import * as _ from "lodash";
 import { Campaign } from "src/app/campaign/models/campaign";
-import { SpellSchool } from "../models/spellSchool";
 
 export function spellReducer(state: IAppState, action: AnyAction): IAppState {
 	let result = _.cloneDeep(state);
@@ -18,6 +17,14 @@ export function spellReducer(state: IAppState, action: AnyAction): IAppState {
 
 			case SpellActionTypes.SPELL_FORM_EDITED:
 				result = spellEditedReducer(state, action.state);
+				break;
+
+			case SpellActionTypes.SPELL_FORM_EDITED_MATERIAL_ADDED:
+				result = spellEditedMaterialAddedReducer(state);
+				break;
+
+			case SpellActionTypes.SPELL_FORM_EDITED_MATERIAL_REMOVED:
+				result = spellEditedMaterialRemovedReducer(state, action.state);
 				break;
 
 			case SpellActionTypes.NEW_SPELL_SAVED:
@@ -58,6 +65,31 @@ function spellEditedReducer(
 	const state = _.cloneDeep(oldState);
 
 	state.app.forms.spellForm = newState.app.forms.spellForm;
+
+	return state;
+}
+
+function spellEditedMaterialAddedReducer(oldState: IAppState): IAppState {
+	const state: IAppState = _.cloneDeep(oldState);
+
+	if (!state.app.forms.spellForm.spellComponents.material)
+		state.app.forms.spellForm.spellComponents.material = [];
+
+	state.app.forms.spellForm.spellComponents.material.push("");
+
+	return state;
+}
+
+function spellEditedMaterialRemovedReducer(
+	oldState: IAppState,
+	newState: IAppState
+): IAppState {
+	const state = _.cloneDeep(oldState);
+
+	state.app.forms.spellForm.spellComponents.material.splice(
+		+newState.app.forms.spellForm.spellComponents.material[0],
+		1
+	);
 
 	return state;
 }

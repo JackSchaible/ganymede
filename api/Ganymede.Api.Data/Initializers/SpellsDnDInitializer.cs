@@ -219,7 +219,8 @@ namespace Ganymede.Api.Data.Initializers
                 new SpellComponents
                 {
                     Verbal = true,
-                    Somatic = true
+                    Somatic = true,
+                    Material = new string[0]
                 }
             };
             ctx.SpellComponents.AddRange(spellComponents);
