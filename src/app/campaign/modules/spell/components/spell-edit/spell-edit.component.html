@@ -140,7 +140,8 @@
 							</div>
 
 							<ng-container *ngIf="showMaterials" formArrayName="material">
-								<mat-form-field class="col-12" *ngFor="let material of this.spellFormGroup.get('spellComponents').get('material').controls; let i = index">
+								<mat-form-field class="col-12"
+									*ngFor="let material of this.spellFormGroup.get('spellComponents').get('material').controls; let i = index">
 									<div [formGroupName]="i">
 										<input type="text" matInput placeholder="Material" formControlName="name" required>
 										<button mat-icon-button matSuffix (click)="removeMaterial(i)" title="Remove Material">
@@ -167,16 +168,20 @@
 
 						<ng-container formGroupName="spellDuration">
 							<div class="u-flex u-flex__justify--space-between">
-								<mat-checkbox *ngIf="!this.spellFormGroup.get('spellDuration').get('instantaneous').value" class="flex-shrink" formControlName="special">Special (See Description)
+								<mat-checkbox *ngIf="!this.spellFormGroup.get('spellDuration').get('instantaneous').value" class="flex-shrink"
+									formControlName="special">Special (See Description)
 								</mat-checkbox>
-								<mat-checkbox *ngIf="!this.spellFormGroup.get('spellDuration').get('special').value" class="flex-shrink" formControlName="instantaneous">Instantaneous</mat-checkbox>
+								<mat-checkbox *ngIf="!this.spellFormGroup.get('spellDuration').get('special').value" class="flex-shrink"
+									formControlName="instantaneous">Instantaneous</mat-checkbox>
 							</div>
 
-							<div class="u-flex" *ngIf="!this.spellFormGroup.get('spellDuration').get('instantaneous').value && !this.spellFormGroup.get('spellDuration').get('special').value">
+							<div class="u-flex"
+								*ngIf="!this.spellFormGroup.get('spellDuration').get('instantaneous').value && !this.spellFormGroup.get('spellDuration').get('special').value">
 
 								<!-- Amount -->
 								<mat-form-field class="u-flex__grow">
-									<mat-checkbox matPrefix class="mr-2" [class.mr-3]="this.spellFormGroup.get('spellDuration').get('concentration').value" formControlName="concentration">Concentration</mat-checkbox>
+									<mat-checkbox matPrefix class="mr-2" [class.mr-3]="this.spellFormGroup.get('spellDuration').get('concentration').value"
+										formControlName="concentration">Concentration</mat-checkbox>
 									<mat-checkbox matPrefix class="mr-2" formControlName="upTo">
 										Up To
 									</mat-checkbox>
