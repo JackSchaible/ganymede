@@ -9,10 +9,6 @@ export class SpellActionTypes {
 	public static SPELL_EDIT: string = "SPELL_EDIT";
 	public static NEW_SPELL_SAVED: string = "NEW_SPELL_SAVED";
 	public static SPELL_FORM_EDITED: string = "SPELL_FORM_EDITED";
-	// public static SPELL_FORM_EDITED_MATERIAL_ADDED: string =
-	// 	"SPELL_FORM_EDITED_MATERIAL_ADDED";
-	// public static SPELL_FORM_EDITED_MATERIAL_REMOVED: string =
-	// 	"SPELL_FORM_EDITED_MATERIAL_REMOVED";
 	public static SPELL_SAVED: string = "SPELL_SAVED";
 	public static SPELL_DELETED: string = "SPELL_DELETED";
 }
@@ -56,32 +52,6 @@ export class SpellActions {
 			state: state
 		};
 	}
-
-	// public spellFormMaterialAdded(): AnyAction {
-	// 	return {
-	// 		type: new SpellAction(
-	// 			SpellActionTypes.SPELL_FORM_EDITED_MATERIAL_ADDED
-	// 		)
-	// 	};
-	// }
-
-	// public spellFormMaterialRemoved(index: number): AnyAction {
-	// 	const user = AppUser.getDefault();
-	// 	const app = App.getDefault();
-	// 	app.forms.spellForm = Spell.getDefault();
-	// 	app.forms.spellForm.spellComponents.material = [index.toString()];
-
-	// 	const state: IAppState = {
-	// 		user: user,
-	// 		app: app
-	// 	};
-	// 	return {
-	// 		type: new SpellAction(
-	// 			SpellActionTypes.SPELL_FORM_EDITED_MATERIAL_REMOVED
-	// 		),
-	// 		state: state
-	// 	};
-	// }
 
 	public spellSaved(spell: Spell, isNew: boolean): AnyAction {
 		const user = AppUser.getDefault();
