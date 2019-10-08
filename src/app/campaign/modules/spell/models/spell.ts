@@ -36,7 +36,12 @@ export class Spell {
 
 	public static getDefault() {
 		const spell = new Spell();
+
 		spell.id = -1;
+		spell.castingTime = CastingTime.getDefault();
+		spell.spellRange = SpellRange.getDefault();
+		spell.spellComponents = SpellComponents.getDefault();
+		spell.spellDuration = SpellDuration.getDefault();
 
 		return spell;
 	}

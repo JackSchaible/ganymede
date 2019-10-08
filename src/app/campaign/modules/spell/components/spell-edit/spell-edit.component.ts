@@ -36,6 +36,7 @@ export class SpellEditComponent implements OnInit, OnDestroy {
 	private formStoreSubscription: Subscription;
 	private formValueChangesSubscription: Subscription;
 
+	public hasSubmitted: boolean;
 	public showRange: boolean;
 	public showShape: boolean;
 	public showMaterials: boolean;
@@ -43,14 +44,14 @@ export class SpellEditComponent implements OnInit, OnDestroy {
 	public showUntil: boolean;
 
 	public spellFormGroup: FormGroup = new FormGroup({
-		name: new FormControl("", [Validators.required]),
+		name: new FormControl("", Validators.required),
 		level: new FormControl("", [
 			Validators.required,
 			Validators.min(0),
 			Validators.max(9)
 		]),
 		spellSchool: new FormGroup({
-			id: new FormControl("", [Validators.required]),
+			id: new FormControl("", Validators.required),
 			name: new FormControl(""),
 			description: new FormControl("")
 		}),
@@ -91,9 +92,18 @@ export class SpellEditComponent implements OnInit, OnDestroy {
 			untilDispelled: new FormControl(""),
 			untilTriggered: new FormControl("")
 		}),
-		description: new FormControl(""),
+		description: new FormControl("", Validators.required),
 		atHigherLevels: new FormControl("")
 	});
+	get name() {
+		return this.spellFormGroup.get("name");
+	}
+	get level() {
+		return this.spellFormGroup.get("level");
+	}
+	get school() {
+		return (this.spellFormGroup.get("spellSchool") as FormGroup).get("id");
+	}
 
 	public processing: boolean;
 	public isNew: boolean;
@@ -279,9 +289,10 @@ export class SpellEditComponent implements OnInit, OnDestroy {
 	}
 
 	public save(): void {
+		this.hasSubmitted = true;
 		const spell = this.store.getState().app.forms.spellForm;
 
-		// TODO: Call server backend, validate
+		// TODO: Call server backend
 		if (this.spellFormGroup.valid) {
 			this.processing = true;
 

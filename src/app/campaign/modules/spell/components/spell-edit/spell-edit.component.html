@@ -14,13 +14,21 @@
 					<!-- Name, Level, & School -->
 					<mat-expansion-panel>
 						<mat-expansion-panel-header>
-							<mat-panel-title>Basic Info</mat-panel-title>
+							<mat-panel-title>
+								Basic Info
+								<i class="fas fa-exclamation-triangle text-danger ml-2"
+									*ngIf="hasSubmitted && (name.errors || level.errors || school.errors)"></i>
+							</mat-panel-title>
 						</mat-expansion-panel-header>
+
+						<p *ngIf="hasSubmitted && (name.errors || level.errors || school.errors)" class="text-danger">
+							There were some problems with the basic information.
+						</p>
 
 						<!-- Name -->
 						<mat-form-field>
 							<input type="text" matInput placeholder="Name" formControlName="name" required>
-							<mat-error *ngIf="this.spellFormGroup.controls['name'].invalid">Name is required</mat-error>
+							<mat-error *ngIf="name.errors?.required">Name is required</mat-error>
 						</mat-form-field>
 
 						<!--Level & School-->
@@ -28,7 +36,14 @@
 							<!-- Level -->
 							<mat-form-field class="number-input">
 								<input type="number" matInput placeholder="Level" formControlName="level" required>
-								<mat-error *ngIf="this.spellFormGroup.controls['level'].invalid">Level is required
+								<mat-error *ngIf="level.errors?.required">
+									Level is required.
+								</mat-error>
+								<mat-error *ngIf="level.errors?.min">
+									Level must be greater than 0 (cantrip).
+								</mat-error>
+								<mat-error *ngIf="level.errors?.max">
+									Level must be less than 9.
 								</mat-error>
 							</mat-form-field>
 
@@ -40,6 +55,9 @@
 										{{ school.name }}
 									</mat-option>
 								</mat-select>
+								<mat-error *ngIf="school.errors?.required">
+									Spell must have a school.
+								</mat-error>
 							</mat-form-field>
 						</div>
 					</mat-expansion-panel>
@@ -56,11 +74,18 @@
 								<!-- Amount -->
 								<mat-form-field class="number-input">
 									<input type="number" matInput placeholder="Amount" formControlName="amount" required />
+									<mat-error *ngIf="this.spellFormGroup.controls['castingTime'].controls['amount'].errors?.required">
+										An amount is required.
+									</mat-error>
+									<mat-error *ngIf="this.spellFormGroup.controls['castingTime'].controls['amount'].errors?.min">
+										Amount must be greater than 0.
+									</mat-error>
 								</mat-form-field>
 
 								<!-- Unit -->
 								<mat-form-field class="u-flex__grow">
-									<input type="text" [matAutocomplete]="castingTimeUnitAC" matInput placeholder="Unit" formControlName="unit" required />
+									<input type="text" [matAutocomplete]="castingTimeUnitAC" matInput placeholder="Unit" formControlName="unit"
+										required />
 
 									<mat-autocomplete #castingTimeUnitAC="matAutocomplete">
 										<mat-option *ngFor="let unit of (formData$ | async)?.castingTimeUnits" [value]="unit">
@@ -74,6 +99,9 @@
 							<ng-container *ngIf="(spell$ | async)?.castingTime.unit === 'reaction'">
 								<mat-form-field>
 									<input type="text" matInput placeholder="Reaction Condition" name="reactionCondition" />
+									<mat-error *ngIf="this.spellFormGroup.controls['reactionCondition'].errors?.required">
+										Reaction condition must have a value.
+									</mat-error>
 								</mat-form-field>
 							</ng-container>
 						</div>
