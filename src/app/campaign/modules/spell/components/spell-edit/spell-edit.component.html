@@ -167,16 +167,12 @@
 						</mat-expansion-panel-header>
 
 						<ng-container formGroupName="spellDuration">
-							<div class="u-flex u-flex__justify--space-between">
-								<mat-checkbox *ngIf="!this.spellFormGroup.get('spellDuration').get('instantaneous').value" class="flex-shrink"
-									formControlName="special">Special (See Description)
-								</mat-checkbox>
-								<mat-checkbox *ngIf="!this.spellFormGroup.get('spellDuration').get('special').value" class="flex-shrink"
-									formControlName="instantaneous">Instantaneous</mat-checkbox>
-							</div>
-
-							<div class="u-flex"
-								*ngIf="!this.spellFormGroup.get('spellDuration').get('instantaneous').value && !this.spellFormGroup.get('spellDuration').get('special').value">
+							<mat-radio-group formControlName="type" class="u-flex u-flex__justify--space-between" (change)="durationChanged($event)">
+								<mat-radio-button *ngFor="let type of (formData$ | async)?.durationTypes" [value]="type">
+									{{ type | titlecase }}
+								</mat-radio-button>
+							</mat-radio-group>
+							<div class="u-flex" *ngIf="showDuration">
 
 								<!-- Amount -->
 								<mat-form-field class="u-flex__grow">
@@ -199,6 +195,12 @@
 										</mat-option>
 									</mat-autocomplete>
 								</mat-form-field>
+							</div>
+
+							<!-- Until Conditions -->
+							<div class="u-flex u-flex__justify--space-around mt-3" *ngIf="showUntil">
+								<mat-checkbox formControlName="untilDispelled">Dispelled</mat-checkbox>
+								<mat-checkbox formControlName="untilTriggered">Triggered</mat-checkbox>
 							</div>
 						</ng-container>
 					</mat-expansion-panel>

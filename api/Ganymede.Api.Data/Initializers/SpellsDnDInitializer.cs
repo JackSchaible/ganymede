@@ -27,6 +27,9 @@ namespace Ganymede.Api.Data.Initializers
             d1chour,
             d8hours,
             dinst,
+            dUT,
+            dUD,
+            dUTD,
             //Components
             cVS,
             //Schools
@@ -95,6 +98,9 @@ namespace Ganymede.Api.Data.Initializers
             d1chour = durations[5].ID;
             d8hours = durations[6].ID;
             dinst = durations[7].ID;
+            dUD = durations[8].ID;
+            dUT = durations[9].ID;
+            dUTD = durations[10].ID;
 
             var components = CreateDnDSpellComponents(ctx);
             cVS = components[0].ID;
@@ -166,46 +172,69 @@ namespace Ganymede.Api.Data.Initializers
             {
                 new SpellDuration
                 {
+                    Type = DurationType.Duration,
                     Amount = 1,
                     Unit = "round"
                 },
                 new SpellDuration
                 {
+                    Type = DurationType.Duration,
                     Amount = 1,
                     Unit = "minute"
                 },
                 new SpellDuration
                 {
+                    Type = DurationType.Duration,
                     Amount = 1,
                     Unit = "minute",
                     Concentration = true
                 },
                 new SpellDuration
                 {
+                    Type = DurationType.Duration,
                     Amount = 10,
                     Unit = "minutes",
                     Concentration = true
                 },
                 new SpellDuration
                 {
+                    Type = DurationType.Duration,
                     Amount = 1,
                     Unit = "hour"
                 },
                 new SpellDuration
                 {
+                    Type = DurationType.Duration,
                     Amount = 1,
                     Unit = "hour",
                     Concentration = true
                 },
                 new SpellDuration
                 {
+                    Type = DurationType.Duration,
                     Amount = 8,
                     Unit = "hours"
                 },
                 new SpellDuration
                 {
-                    Instantaneous = true
+                    Type = DurationType.Instantaneous
                 },
+                new SpellDuration
+                {
+                    Type = DurationType.Until,
+                    UntilDispelled = true
+                },
+                new SpellDuration
+                {
+                    Type = DurationType.Until,
+                    UntilTriggered = true
+                },
+                new SpellDuration
+                {
+                    Type = DurationType.Until,
+                    UntilTriggered = true,
+                    UntilDispelled = true
+                }
             };
             ctx.SpellDurations.AddRange(durations);
 
@@ -247,7 +276,7 @@ namespace Ganymede.Api.Data.Initializers
                     Name = "Astral Projection",
                     SpellDuration = new SpellDuration
                     {
-                        Special = true
+                        Type = DurationType.Special
                     },
                     SpellComponents = new SpellComponents
                     {
@@ -338,10 +367,7 @@ namespace Ganymede.Api.Data.Initializers
                         Somatic = true,
                         Verbal = true
                     },
-                    SpellDuration = new SpellDuration
-                    {
-                        UntilDispelled = true
-                    },
+                    SpellDurationID = dUD,
                     SpellRangeID = rtouch,
                     SpellSchoolID = illusion
                 }
@@ -485,11 +511,7 @@ namespace Ganymede.Api.Data.Initializers
                         Somatic = true,
                         Verbal = true
                     },
-                    SpellDuration = new SpellDuration
-                    {
-                        UntilDispelled = true,
-                        UntilTriggered = true
-                    },
+                    SpellDurationID = dUTD,
                     SpellRangeID = rtouch,
                     SpellSchoolID = abjuration,
                 },

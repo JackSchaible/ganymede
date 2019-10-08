@@ -1,10 +1,9 @@
 export class SpellDuration {
 	public id: number;
+	public type: string;
 	public amount: number;
 	public unit: string;
 	public concentration: boolean;
-	public special: boolean;
-	public instantaneous: boolean;
 	public upTo: boolean;
 	public untilDispelled: boolean;
 	public untilTriggered: boolean;
@@ -24,10 +23,11 @@ export class SpellDuration {
 			(a.amount === b.amount &&
 				a.concentration === b.concentration &&
 				a.id === b.id &&
-				a.instantaneous === b.instantaneous &&
-				a.special === b.special &&
+				a.type === b.type &&
 				a.unit === b.unit &&
-				a.upTo === b.upTo)
+				a.upTo === b.upTo &&
+				a.untilDispelled === b.untilDispelled &&
+				a.untilTriggered === b.untilTriggered)
 		);
 	}
 }

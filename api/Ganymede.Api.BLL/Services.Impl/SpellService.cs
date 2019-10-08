@@ -75,7 +75,6 @@ namespace Ganymede.Api.BLL.Services.Impl
                     old.CastingTimeID = time.ID;
                 }
 
-                //Might need to ToList() this...Enumerable.IsEqual likely won't work with LINQ to SQL
                 SpellComponents components = _ctx.SpellComponents.FirstOrDefault(c => Enumerable.SequenceEqual(c.Material, old.SpellComponents.Material) && c.Somatic == old.SpellComponents.Somatic && c.Verbal == old.SpellComponents.Verbal);
                 if (components != null)
                 {
@@ -83,7 +82,7 @@ namespace Ganymede.Api.BLL.Services.Impl
                     old.SpellComponentsID = components.ID;
                 }
 
-                SpellDuration duration = _ctx.SpellDurations.FirstOrDefault(d => d.Amount == old.SpellDuration.Amount && d.Concentration == old.SpellDuration.Concentration && d.Instantaneous == old.SpellDuration.Instantaneous && d.Special == old.SpellDuration.Special && d.Unit == old.SpellDuration.Unit && d.UpTo == old.SpellDuration.UpTo);
+                SpellDuration duration = _ctx.SpellDurations.FirstOrDefault(d => d.Amount == old.SpellDuration.Amount && d.Concentration == old.SpellDuration.Concentration && d.Type == old.SpellDuration.Type && d.Unit == old.SpellDuration.Unit && d.UpTo == old.SpellDuration.UpTo);
                 if (duration != null)
                 {
                     old.SpellDuration = duration;

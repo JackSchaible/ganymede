@@ -38,7 +38,9 @@ export class SpellEditComponent implements OnInit, OnDestroy {
 
 	public showRange: boolean;
 	public showShape: boolean;
-	public showMaterials: boolean = false;
+	public showMaterials: boolean;
+	public showDuration: boolean;
+	public showUntil: boolean;
 
 	public spellFormGroup: FormGroup = new FormGroup({
 		name: new FormControl("", [Validators.required]),
@@ -84,9 +86,10 @@ export class SpellEditComponent implements OnInit, OnDestroy {
 			amount: new FormControl(""),
 			unit: new FormControl(""),
 			concentration: new FormControl(""),
-			special: new FormControl(""),
 			upTo: new FormControl(""),
-			instantaneous: new FormControl("")
+			type: new FormControl(""),
+			untilDispelled: new FormControl(""),
+			untilTriggered: new FormControl("")
 		}),
 		description: new FormControl(""),
 		atHigherLevels: new FormControl("")
@@ -126,8 +129,10 @@ export class SpellEditComponent implements OnInit, OnDestroy {
 			.subscribe((spell: Spell) => {
 				console.log("sync from");
 				this.spellFormGroup.patchValue(spell);
+
 				this.syncFromRange(spell.spellRange);
 				this.syncFromMaterial(spell.spellComponents.material);
+				this.setRangeType(spell.spellDuration.type);
 			});
 	}
 	private syncFromRange(spellRange: SpellRange): void {
@@ -244,6 +249,28 @@ export class SpellEditComponent implements OnInit, OnDestroy {
 		((this.spellFormGroup.get("spellComponents") as FormGroup).get(
 			"material"
 		) as FormArray).removeAt(index);
+	}
+
+	public durationChanged(event: MatRadioChange) {
+		this.setRangeType(event.value);
+	}
+	private setRangeType(type: string) {
+		switch (type) {
+			case "Duration":
+				this.showDuration = true;
+				this.showUntil = false;
+				break;
+
+			case "Until":
+				this.showDuration = false;
+				this.showUntil = true;
+				break;
+
+			default:
+				this.showDuration = false;
+				this.showUntil = false;
+				break;
+		}
 	}
 
 	public cancel(): void {

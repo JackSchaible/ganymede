@@ -39,7 +39,8 @@ namespace Ganymede.Api.BLL.Services.Impl
                         RangeShapes = _ctx.Spells.Where(s => s.SpellRange.Shape != null).Select(s => s.SpellRange.Shape).Distinct().ToList(),
                         RangeUnits = _ctx.Spells.Where(s => s.SpellRange.Unit != null).Select(s => s.SpellRange.Unit).Distinct().ToList(),
                         RangeTypes = _ctx.Spells.Select(s => s.SpellRange.Type).Distinct().ToList(),
-                        Durations = _ctx.Spells.Where(s => s.SpellDuration.Unit != null).Select(s => s.SpellDuration.Unit).Distinct().ToList()
+                        Durations = _ctx.Spells.Where(s => s.SpellDuration.Unit != null).Select(s => s.SpellDuration.Unit).Distinct().ToList(),
+                        DurationTypes = _ctx.Spells.Select(s => s.SpellDuration.Type).Distinct().ToList()
                     }
                 }
             };

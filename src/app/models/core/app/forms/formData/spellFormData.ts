@@ -7,6 +7,7 @@ export class SpellFormData {
 	public rangeUnits: string[];
 	public rangeShapes: string[];
 	public durations: string[];
+	public durationTypes: string[];
 
 	static getDefault(): SpellFormData {
 		return {
@@ -15,7 +16,8 @@ export class SpellFormData {
 			rangeTypes: [],
 			rangeUnits: [],
 			rangeShapes: [],
-			durations: []
+			durations: [],
+			durationTypes: []
 		};
 	}
 }
