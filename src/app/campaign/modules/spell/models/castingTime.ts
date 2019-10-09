@@ -1,5 +1,6 @@
 export class CastingTime {
 	public id: number;
+	public type: "Action" | "Reaction" | "Time";
 	public amount: number;
 	public unit: string;
 	public reactionCondition: string;
@@ -17,6 +18,7 @@ export class CastingTime {
 		return (
 			a === b ||
 			(a.id === b.id &&
+				a.type === b.type &&
 				a.amount === b.amount &&
 				a.unit === b.unit &&
 				a.reactionCondition === b.reactionCondition)

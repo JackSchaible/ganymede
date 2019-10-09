@@ -1,6 +1,7 @@
 ﻿using Ganymede.Api.Data.Spells;
 using System.Collections.Generic;
 using System.Linq;
+using static Ganymede.Api.Data.Spells.Enums;
 
 namespace Ganymede.Api.Data.Initializers
 {
@@ -113,13 +114,13 @@ namespace Ganymede.Api.Data.Initializers
             {
                 new CastingTime
                 {
-                    Amount = 1,
-                    Unit = "action"
+                    Type = CastingTimeType.Action
                 },
                 new CastingTime
                 {
                     Amount = 1,
-                    Unit = "hour"
+                    Unit = "hour",
+                    Type = CastingTimeType.Time
                 }
             };
             ctx.CastingTimes.AddRange(times);
@@ -134,27 +135,32 @@ namespace Ganymede.Api.Data.Initializers
                 new SpellRange
                 {
                     Amount = 10,
-                    Unit = "feet"
+                    Unit = "feet",
+                    Type = RangeType.Ranged
                 },
                 new SpellRange
                 {
                     Amount = 30,
-                    Unit = "feet"
+                    Unit = "feet",
+                    Type = RangeType.Ranged
                 },
                 new SpellRange
                 {
                     Amount = 60,
-                    Unit = "feet"
+                    Unit = "feet",
+                    Type = RangeType.Ranged
                 },
                 new SpellRange
                 {
                     Amount = 120,
-                    Unit = "feet"
+                    Unit = "feet",
+                    Type = RangeType.Ranged
                 },
                 new SpellRange
                 {
                     Amount = 150,
-                    Unit = "feet"
+                    Unit = "feet",
+                    Type = RangeType.Ranged
                 },
                 new SpellRange
                 {
@@ -266,11 +272,7 @@ namespace Ganymede.Api.Data.Initializers
                 new Spell
                 {
                     CampaignID = campaignID,
-                    CastingTime = new CastingTime
-                    {
-                        Amount = 1,
-                        Unit = "Hour"
-                    },
+                    CastingTimeID = t1Hour,
                     Description = "<p>You and up to eight willing creatures within range project your astral bodies into the Astral Plane (the spell fails and the casting is wasted if you are already on that plane). The material body you leave behind is unconscious and in a state of suspended animation; it doesn’t need food or air and doesn’t age.</p><p>Your astral body resembles your mortal form in almost every way, replicating your game statistics and possessions. The principal difference is the addition of a silvery cord that extends from between your shoulder blades and trails behind you, fading to invisibility after 1 foot. This cord is your tether to your material body. As long as the tether remains intact, you can find your way home. If the cord is cut—something that can happen only when an effect specifically states that it does—your soul and body are separated, killing you instantly.</p><p>Your astral form can freely travel through the Astral Plane and can pass through portals there leading to any other plane. If you enter a new plane or return to the plane you were on when casting this spell, your body and possessions are transported along the silver cord, allowing you to re - enter your body as you enter the new plane.Your astral form is a separate incarnation.Any damage or other effects that apply to it have no effect on your physical body, nor do they persist when you return to it.</p><p>The spell ends for you and your companions when you use your action to dismiss it.When the spell ends, the affected creature returns to its physical body, and it awakens.</p><p>The spell might also end early for you or one of your companions.A successful dispel magic spell used against an astral or physical body ends the spell for that creature. If a creature’s original body or its astral form drops to 0 hit points, the spell ends for that creature. If the spell ends and the silver cord is intact, the cord pulls the creature’s astral form back to its body, ending its state of suspended animation.</p><p>If you are returned to your body prematurely, your companions remain in their astral forms and must find their own way back to their bodies, usually by dropping to 0 hit points.</p>",
                     Level = 9,
                     Name = "Astral Projection",
@@ -351,7 +353,8 @@ namespace Ganymede.Api.Data.Initializers
                     CastingTime = new CastingTime
                     {
                         Amount = 12,
-                        Unit = "Hours"
+                        Unit = "hours",
+                        Type = CastingTimeType.Time
                     },
                     Description = "<p>You shape an illusory duplicate of one beast or humanoid that is within range for the entire casting time of the spell. The duplicate is a creature, partially real and formed from ice or snow, and it can take actions and otherwise be affected as a normal creature. It appears to be the same as the original, but it has half the creature’s hit point maximum and is formed without any equipment. Otherwise, the illusion uses all the statistics of the creature it duplicates.</p><p>The simulacrum is friendly to you and creatures you designate. It obeys your spoken commands, moving and acting in accordance with your wishes and acting on your turn in combat. The simulacrum lacks the ability to learn or become more powerful, so it never increases its level or other abilities, nor can it regain expended spell slots.</p><p>If the simulacrum is damaged, you can repair it in an alchemical laboratory, using rare herbs and minerals worth 100 gp per hit point it regains. The simulacrum lasts until it drops to 0 hit points, at which point it reverts to snow and melts instantly.</p><p>If you cast this spell again, any currently active duplicates you created with this spell are instantly destroyed.</p>",
                     Level = 7,
@@ -457,7 +460,8 @@ namespace Ganymede.Api.Data.Initializers
                     SpellRange = new SpellRange
                     {
                         Amount = 300,
-                        Unit = "feet"
+                        Unit = "feet",
+                        Type = RangeType.Ranged
                     },
                     SpellComponents = new SpellComponents
                     {
@@ -717,19 +721,14 @@ namespace Ganymede.Api.Data.Initializers
                     Name = "Detect Magic",
                     Ritual = true,
                     SpellComponentsID = cVS,
-                    SpellDuration = new SpellDuration
-                    {
-                        Amount = 10,
-                        Concentration = true,
-                        Unit = "minutes"
-                    },
+                    SpellDurationID = d10cminutes,
                     SpellRange = new SpellRange
-                        {
-                            Amount = 30,
-                            Type = RangeType.Self,
-                            Shape = "sphere",
-                            Unit = "foot"
-                        },
+                    {
+                        Amount = 30,
+                        Type = RangeType.Self,
+                        Shape = "sphere",
+                        Unit = "foot"
+                    },
                     SpellSchoolID = divination,
                 },
                 new Spell
@@ -737,8 +736,7 @@ namespace Ganymede.Api.Data.Initializers
                     CampaignID = campaignID,
                     CastingTime = new CastingTime
                     {
-                        Amount = 1,
-                        Unit = "reaction",
+                        Type = CastingTimeType.Reaction,
                         ReactionCondition = "which you take when you or a creature within 60 feet of you falls"
                     },
                     Description = "<p>Choose up to five Falling creatures within range. A Falling creature's rate of descent slows to 60 feet per round until the spell ends. If the creature lands before the spell ends, it takes no Falling damage and can land on its feet, and the spell ends for that creature.</p>",

@@ -19,6 +19,7 @@ import { SpellFormValidators } from "../../spell.validators";
 import { SpellSchool } from "../../models/spellSchool";
 import { MatCheckboxChange } from "@angular/material/checkbox";
 import { MatRadioChange } from "@angular/material/radio";
+import { CastingTime } from "../../models/castingTime";
 
 @Component({
 	selector: "gm-spell-edit",
@@ -37,73 +38,93 @@ export class SpellEditComponent implements OnInit, OnDestroy {
 	private formValueChangesSubscription: Subscription;
 
 	public hasSubmitted: boolean;
+	public showCastingTime: boolean;
+	public showReaction: boolean;
 	public showRange: boolean;
 	public showShape: boolean;
 	public showMaterials: boolean;
 	public showDuration: boolean;
 	public showUntil: boolean;
 
+	public name: FormControl = new FormControl("", Validators.required);
+	public level: FormControl = new FormControl("", [
+		Validators.required,
+		Validators.min(0),
+		Validators.max(9)
+	]);
+	public schoolId: FormControl = new FormControl("", Validators.required);
+	public castingTimeAmount: FormControl = new FormControl("");
+	public castingTimeUnit: FormControl = new FormControl("");
+	public castingTimeReaction: FormControl = new FormControl("");
+	public castingTimeType: FormControl = new FormControl(
+		"",
+		Validators.required
+	);
+	public castingTime: FormGroup = new FormGroup(
+		{
+			type: this.castingTimeType,
+			amount: this.castingTimeAmount,
+			unit: this.castingTimeUnit,
+			reactionCondition: this.castingTimeReaction
+		},
+		[SpellFormValidators.validateCastingTime(this.words)]
+	);
+	public rangeAmount: FormControl = new FormControl("");
+	public rangeUnit: FormControl = new FormControl("");
+	public rangeType: FormControl = new FormControl("");
+	public rangeShape: FormControl = new FormControl("");
+	public spellRange: FormGroup = new FormGroup(
+		{
+			amount: this.rangeAmount,
+			unit: this.rangeUnit,
+			type: this.rangeType,
+			shape: this.rangeShape
+		},
+		[SpellFormValidators.validateRange(this.words)]
+	);
+	public componentsVerbal: FormControl = new FormControl("");
+	public componentsSomatic: FormControl = new FormControl("");
+	public componentsMaterial: FormArray = new FormArray([]);
+	public spellComponents: FormGroup = new FormGroup(
+		{
+			verbal: this.componentsVerbal,
+			somatic: this.componentsSomatic,
+			material: this.componentsMaterial
+		},
+		SpellFormValidators.validateComponents(this.words)
+	);
+	public durationAmount: FormControl = new FormControl("");
+	public durationUnit: FormControl = new FormControl("");
+	public durationConcentration: FormControl = new FormControl("");
+	public durationUpTo: FormControl = new FormControl("");
+	public durationType: FormControl = new FormControl("");
+	public durationUntilDispelled: FormControl = new FormControl("");
+	public durationUntilTriggered: FormControl = new FormControl("");
+	public spellDuration: FormGroup = new FormGroup({
+		amount: this.durationAmount,
+		unit: this.durationUnit,
+		concentration: this.durationConcentration,
+		upTo: this.durationUpTo,
+		type: this.durationType,
+		untilDispelled: this.durationUntilDispelled,
+		untilTriggered: this.durationUntilTriggered
+	});
+	public description: FormControl = new FormControl("", Validators.required);
 	public spellFormGroup: FormGroup = new FormGroup({
-		name: new FormControl("", Validators.required),
-		level: new FormControl("", [
-			Validators.required,
-			Validators.min(0),
-			Validators.max(9)
-		]),
+		name: this.name,
+		level: this.level,
 		spellSchool: new FormGroup({
-			id: new FormControl("", Validators.required),
+			id: this.schoolId,
 			name: new FormControl(""),
 			description: new FormControl("")
 		}),
-		castingTime: new FormGroup(
-			{
-				amount: new FormControl("", [
-					Validators.required,
-					Validators.min(1)
-				]),
-				unit: new FormControl("", [Validators.required]),
-				reactionCondition: new FormControl("")
-			},
-			[SpellFormValidators.validateCastingTime(this.words)]
-		),
-		spellRange: new FormGroup(
-			{
-				amount: new FormControl(""),
-				unit: new FormControl(""),
-				type: new FormControl(""),
-				shape: new FormControl("")
-			},
-			[SpellFormValidators.validateRange(this.words)]
-		),
-		spellComponents: new FormGroup(
-			{
-				verbal: new FormControl(""),
-				somatic: new FormControl(""),
-				material: new FormArray([])
-			},
-			SpellFormValidators.validateComponents(this.words)
-		),
-		spellDuration: new FormGroup({
-			amount: new FormControl(""),
-			unit: new FormControl(""),
-			concentration: new FormControl(""),
-			upTo: new FormControl(""),
-			type: new FormControl(""),
-			untilDispelled: new FormControl(""),
-			untilTriggered: new FormControl("")
-		}),
-		description: new FormControl("", Validators.required),
+		castingTime: this.castingTime,
+		spellRange: this.spellRange,
+		spellComponents: this.spellComponents,
+		spellDuration: this.spellDuration,
+		description: this.description,
 		atHigherLevels: new FormControl("")
 	});
-	get name() {
-		return this.spellFormGroup.get("name");
-	}
-	get level() {
-		return this.spellFormGroup.get("level");
-	}
-	get school() {
-		return (this.spellFormGroup.get("spellSchool") as FormGroup).get("id");
-	}
 
 	public processing: boolean;
 	public isNew: boolean;
@@ -137,15 +158,19 @@ export class SpellEditComponent implements OnInit, OnDestroy {
 		this.formStoreSubscription = this.store
 			.select(["app", "forms", "spellForm"])
 			.subscribe((spell: Spell) => {
-				console.log("sync from");
 				this.spellFormGroup.patchValue(spell);
 
+				this.syncFromCastingTime(spell.castingTime);
 				this.syncFromRange(spell.spellRange);
 				this.syncFromMaterial(spell.spellComponents.material);
 				this.setRangeType(spell.spellDuration.type);
 			});
 	}
-	private syncFromRange(spellRange: SpellRange): void {
+	private syncFromCastingTime(time: CastingTime) {
+		this.showReaction = this.isReaction(time.type);
+		this.showCastingTime = this.isTime(time.type);
+	}
+	private syncFromRange(spellRange: SpellRange) {
 		this.showRange = this.isRangeRanged(spellRange.type);
 		if (spellRange.type === "Self") this.ifRangeIsSelf();
 		else this.ifRangeIsNotSelf();
@@ -181,7 +206,6 @@ export class SpellEditComponent implements OnInit, OnDestroy {
 				})
 			)
 			.subscribe((spell: Spell) => {
-				console.log("sync to");
 				spell = this.fixWeirdities(spell);
 				this.store.dispatch(this.actions.spellEditFormChange(spell));
 			});
@@ -213,6 +237,17 @@ export class SpellEditComponent implements OnInit, OnDestroy {
 	}
 
 	private openSnackbar(icon: string, message: string): void {}
+
+	public castingTimeChanged(event: MatRadioChange) {
+		this.showReaction = this.isReaction(event.value);
+		this.showCastingTime = this.isTime(event.value);
+	}
+	private isReaction(value: string): boolean {
+		return value === "Reaction";
+	}
+	private isTime(value: string): boolean {
+		return value === "Time";
+	}
 
 	public rangeChanged(event: MatRadioChange) {
 		this.showRange = this.isRangeRanged(event.value);

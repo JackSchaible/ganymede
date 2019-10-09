@@ -35,6 +35,7 @@ namespace Ganymede.Api.BLL.Services.Impl
                     SpellFormData = new SpellFormData
                     {
                         Schools = _ctx.SpellSchools.ToList(),
+                        CastingTimeTypes = _ctx.Spells.Select(s => s.CastingTime.Type).Distinct().ToList(),
                         CastingTimeUnits = _ctx.Spells.Where(s => s.CastingTime.Unit != null).Select(s => s.CastingTime.Unit).Distinct().ToList(),
                         RangeShapes = _ctx.Spells.Where(s => s.SpellRange.Shape != null).Select(s => s.SpellRange.Shape).Distinct().ToList(),
                         RangeUnits = _ctx.Spells.Where(s => s.SpellRange.Unit != null).Select(s => s.SpellRange.Unit).Distinct().ToList(),

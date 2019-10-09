@@ -20,8 +20,9 @@ export class WordService {
 		return result;
 	}
 
-	public isEmptyOrSpaces(str: string): boolean {
-		if (!str) return false;
+	public isNullOrWhitespace(str: string): boolean {
+		if (!str) return true;
+		if (typeof str !== "string") return false;
 
 		return str.match(/^ *$/) !== null;
 	}

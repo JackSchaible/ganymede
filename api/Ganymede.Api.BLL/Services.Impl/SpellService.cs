@@ -68,7 +68,7 @@ namespace Ganymede.Api.BLL.Services.Impl
                 Spell old = _ctx.Spells.Where(c => c.Campaign.AppUserId == userId).Single(c => c.ID == spell.ID);
                 _mapper.Map(spell, old);
 
-                CastingTime time = _ctx.CastingTimes.FirstOrDefault(c => c.Amount == old.CastingTime.Amount && c.Unit == old.CastingTime.Unit && c.ReactionCondition == old.CastingTime.ReactionCondition);
+                CastingTime time = _ctx.CastingTimes.FirstOrDefault(c => c.Amount == old.CastingTime.Amount && c.Unit == old.CastingTime.Unit && c.ReactionCondition == old.CastingTime.ReactionCondition && c.Type == old.CastingTime.Type);
                 if (time != null)
                 {
                     old.CastingTime = time;

@@ -12,17 +12,33 @@ export class SpellFormValidators {
 		return (control: AbstractControl): ValidationErrors => {
 			const errors: any = {};
 			const castingTime = control as FormGroup;
-			const unit = castingTime.controls["unit"].value;
+			const type = castingTime.controls["type"].value;
 
-			if (unit && unit === "reaction") {
+			if (type === "Reaction") {
 				const reaction =
 					castingTime.controls["reactionCondition"].value;
-				const hasValue = !words.isEmptyOrSpaces(reaction);
 
-				if (!hasValue)
-					castingTime.controls[
-						"reactionCondition"
-					].errors.requied = true;
+				if (words.isNullOrWhitespace(reaction))
+					castingTime.controls["reactionCondition"].setErrors({
+						required: true
+					});
+			} else if (type === "Time") {
+				const amount = castingTime.controls["amount"];
+				const unit = castingTime.controls["unit"];
+
+				if (words.isNullOrWhitespace(amount.value))
+					castingTime.setErrors({
+						required: true
+					});
+				else if (+amount.value <= 0)
+					castingTime.setErrors({
+						min: true
+					});
+
+				if (words.isNullOrWhitespace(unit.value))
+					unit.setErrors({
+						required: true
+					});
 			}
 
 			return errors;
@@ -52,7 +68,7 @@ export class SpellFormValidators {
 
 				if (
 					type === "Self" &&
-					words.isEmptyOrSpaces(range.controls["shape"].value)
+					words.isNullOrWhitespace(range.controls["shape"].value)
 				)
 					errors["range.shape"] = "A shape is required";
 			} else errors["range.type"] = "Invalid range type!";
@@ -74,7 +90,7 @@ export class SpellFormValidators {
 
 				if (materials.length > 0)
 					for (let i = 0; i < materials.length; i++)
-						if (words.isEmptyOrSpaces(materials[i].value.name))
+						if (words.isNullOrWhitespace(materials[i].value.name))
 							errors[`components.materials.${i}`] =
 								"Material must have a value.";
 			}

@@ -3,7 +3,13 @@ export class SpellRange {
 	public amount: number;
 	public unit: string;
 	public shape: string;
-	public type: string;
+	public type:
+		| "Ranged"
+		| "Self"
+		| "Touch"
+		| "Sight"
+		| "Unlimited"
+		| "Special";
 
 	public static getDefault(): SpellRange {
 		const range = new SpellRange();

@@ -1,6 +1,6 @@
 export class SpellDuration {
 	public id: number;
-	public type: string;
+	public type: "Duration" | "Instantaneous" | "Until" | "Special";
 	public amount: number;
 	public unit: string;
 	public concentration: boolean;

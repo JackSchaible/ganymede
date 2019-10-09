@@ -1,4 +1,6 @@
-﻿namespace Ganymede.Api.Data.Spells
+﻿using static Ganymede.Api.Data.Spells.Enums;
+
+namespace Ganymede.Api.Data.Spells
 {
     public class SpellDuration
     {
@@ -10,13 +12,5 @@
         public bool UpTo { get; set; }
         public bool UntilDispelled { get; set; }
         public bool UntilTriggered { get; set; }
-    }
-
-    public enum DurationType
-    {
-        Duration,
-        Instantaneous,
-        Until,
-        Special
     }
 }

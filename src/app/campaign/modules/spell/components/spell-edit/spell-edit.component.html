@@ -17,11 +17,11 @@
 							<mat-panel-title>
 								Basic Info
 								<i class="fas fa-exclamation-triangle text-danger ml-2"
-									*ngIf="hasSubmitted && (name.errors || level.errors || school.errors)"></i>
+									*ngIf="hasSubmitted && (name.errors || level.errors || schoolId.errors)"></i>
 							</mat-panel-title>
 						</mat-expansion-panel-header>
 
-						<p *ngIf="hasSubmitted && (name.errors || level.errors || school.errors)" class="text-danger">
+						<p *ngIf="hasSubmitted && (name.errors || level.errors || schoolId.errors)" class="text-danger">
 							There were some problems with the basic information.
 						</p>
 
@@ -55,7 +55,7 @@
 										{{ school.name }}
 									</mat-option>
 								</mat-select>
-								<mat-error *ngIf="school.errors?.required">
+								<mat-error *ngIf="schoolId.errors?.required">
 									Spell must have a school.
 								</mat-error>
 							</mat-form-field>
@@ -66,18 +66,36 @@
 					<!-- Casting Time-->
 					<mat-expansion-panel>
 						<mat-expansion-panel-header>
-							<mat-panel-title>Casting Time</mat-panel-title>
+							<mat-panel-title>
+								Casting Time
+								<i class="fas fa-exclamation-triangle text-danger ml-2"
+									*ngIf="hasSubmitted && !castingTime.valid"></i>
+							</mat-panel-title>
 						</mat-expansion-panel-header>
 
+						<p *ngIf="hasSubmitted && !castingTime.valid" class="text-danger mb-3">
+							There were some problems with the casting time information.
+						</p>
+
 						<div formGroupName="castingTime">
-							<div class="u-flex">
+							<!-- Type -->
+							<mat-radio-group formControlName="type" class="u-flex u-flex__justify--space-between" (change)="castingTimeChanged($event)">
+								<mat-radio-button *ngFor="let type of (formData$ | async)?.castingTimeTypes" [value]="type">
+									{{ type | titlecase }}
+								</mat-radio-button>
+							</mat-radio-group>
+							<mat-error *ngIf="hasSubmitted && castingTimeType.errors?.required">
+								A casting time type is required.
+							</mat-error>
+
+							<div class="u-flex" *ngIf="showCastingTime">
 								<!-- Amount -->
 								<mat-form-field class="number-input">
 									<input type="number" matInput placeholder="Amount" formControlName="amount" required />
-									<mat-error *ngIf="this.spellFormGroup.controls['castingTime'].controls['amount'].errors?.required">
+									<mat-error *ngIf="castingTimeAmount.errors?.required">
 										An amount is required.
 									</mat-error>
-									<mat-error *ngIf="this.spellFormGroup.controls['castingTime'].controls['amount'].errors?.min">
+									<mat-error *ngIf="castingTimeAmount.errors?.min">
 										Amount must be greater than 0.
 									</mat-error>
 								</mat-form-field>
@@ -86,6 +104,9 @@
 								<mat-form-field class="u-flex__grow">
 									<input type="text" [matAutocomplete]="castingTimeUnitAC" matInput placeholder="Unit" formControlName="unit"
 										required />
+									<mat-error *ngIf="castingTimeUnit.errors?.required">
+										A unit is required.
+									</mat-error>
 
 									<mat-autocomplete #castingTimeUnitAC="matAutocomplete">
 										<mat-option *ngFor="let unit of (formData$ | async)?.castingTimeUnits" [value]="unit">
@@ -96,11 +117,11 @@
 							</div>
 
 							<!-- Reaction Condition -->
-							<ng-container *ngIf="(spell$ | async)?.castingTime.unit === 'reaction'">
-								<mat-form-field>
-									<input type="text" matInput placeholder="Reaction Condition" name="reactionCondition" />
-									<mat-error *ngIf="this.spellFormGroup.controls['reactionCondition'].errors?.required">
-										Reaction condition must have a value.
+							<ng-container *ngIf="showReaction">
+								<mat-form-field class="col-12">
+									<input type="text" matInput placeholder="Reaction Condition" formControlName="reactionCondition" />
+									<mat-error *ngIf="castingTimeReaction.errors?.required">
+										If action type is reaction, the reaction condition must have a value.
 									</mat-error>
 								</mat-form-field>
 							</ng-container>
