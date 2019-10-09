@@ -73,7 +73,7 @@ export class SpellEditComponent implements OnInit, OnDestroy {
 	public rangeUnit: FormControl = new FormControl("");
 	public rangeType: FormControl = new FormControl("");
 	public rangeShape: FormControl = new FormControl("");
-	public spellRange: FormGroup = new FormGroup(
+	public range: FormGroup = new FormGroup(
 		{
 			amount: this.rangeAmount,
 			unit: this.rangeUnit,
@@ -119,7 +119,7 @@ export class SpellEditComponent implements OnInit, OnDestroy {
 			description: new FormControl("")
 		}),
 		castingTime: this.castingTime,
-		spellRange: this.spellRange,
+		spellRange: this.range,
 		spellComponents: this.spellComponents,
 		spellDuration: this.spellDuration,
 		description: this.description,
@@ -259,15 +259,19 @@ export class SpellEditComponent implements OnInit, OnDestroy {
 	}
 	private ifRangeIsSelf(): void {
 		this.showShape = true;
-		(this.spellFormGroup.controls["spellRange"] as FormGroup).controls[
-			"unit"
-		].patchValue("foot");
+		const control = (this.spellFormGroup.controls[
+			"spellRange"
+		] as FormGroup).controls["unit"];
+		if (this.words.isNullOrWhitespace(control.value))
+			control.patchValue("foot");
 	}
 	private ifRangeIsNotSelf(): void {
 		this.showShape = false;
-		(this.spellFormGroup.controls["spellRange"] as FormGroup).controls[
-			"unit"
-		].patchValue("feet");
+		const control = (this.spellFormGroup.controls[
+			"spellRange"
+		] as FormGroup).controls["unit"];
+		if (this.words.isNullOrWhitespace(control.value))
+			control.patchValue("feet");
 	}
 
 	public materialChanged(event: MatCheckboxChange) {

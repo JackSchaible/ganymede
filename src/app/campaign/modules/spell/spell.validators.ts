@@ -10,7 +10,6 @@ import {
 export class SpellFormValidators {
 	public static validateCastingTime(words: WordService): ValidatorFn {
 		return (control: AbstractControl): ValidationErrors => {
-			const errors: any = {};
 			const castingTime = control as FormGroup;
 			const type = castingTime.controls["type"].value;
 
@@ -26,54 +25,41 @@ export class SpellFormValidators {
 				const amount = castingTime.controls["amount"];
 				const unit = castingTime.controls["unit"];
 
-				if (words.isNullOrWhitespace(amount.value))
-					castingTime.setErrors({
-						required: true
-					});
-				else if (+amount.value <= 0)
-					castingTime.setErrors({
-						min: true
-					});
-
-				if (words.isNullOrWhitespace(unit.value))
-					unit.setErrors({
-						required: true
-					});
+				this.validateAmountAndUnit(words, amount, unit);
 			}
 
-			return errors;
+			return {};
 		};
 	}
 
 	public static validateRange(words: WordService): ValidatorFn {
 		return (control: AbstractControl): ValidationErrors => {
-			const errors: any = {};
 			const range = control as FormGroup;
-			const type = range.controls["type"].value;
+			const type = range.controls["type"];
 
 			if (
-				type === "Touch" ||
-				type === "Special" ||
-				type === "Sight" ||
-				type === "Unlimited"
+				type.value === "Touch" ||
+				type.value === "Special" ||
+				type.value === "Sight" ||
+				type.value === "Unlimited"
 			)
-				return errors;
+				return {};
 
-			const amount = range.controls["amount"].value;
-			const unit = range.controls["unit"].value;
+			if (type.value === "Self" || type.value === "Ranged") {
+				const amount = range.controls["amount"];
+				const unit = range.controls["unit"];
 
-			if (type === "Self" || type === "Ranged") {
-				if (!unit) errors["range.unit"] = "A unit is required";
-				if (!amount) errors["range.amount"] = "An amount is required.";
+				this.validateAmountAndUnit(words, amount, unit);
 
-				if (
-					type === "Self" &&
-					words.isNullOrWhitespace(range.controls["shape"].value)
-				)
-					errors["range.shape"] = "A shape is required";
-			} else errors["range.type"] = "Invalid range type!";
+				if (type.value === "Self") {
+					const shape = range.controls["shape"];
 
-			return errors;
+					if (words.isNullOrWhitespace(shape.value))
+						shape.setErrors({ required: true });
+				}
+			} else type.setErrors({ required: true });
+
+			return {};
 		};
 	}
 
@@ -123,5 +109,25 @@ export class SpellFormValidators {
 
 			return errors;
 		};
+	}
+
+	private static validateAmountAndUnit(
+		words: WordService,
+		amount: AbstractControl,
+		unit: AbstractControl
+	) {
+		if (words.isNullOrWhitespace(amount.value))
+			amount.setErrors({
+				required: true
+			});
+		else if (+amount.value <= 0)
+			amount.setErrors({
+				min: true
+			});
+
+		if (words.isNullOrWhitespace(unit.value))
+			unit.setErrors({
+				required: true
+			});
 	}
 }

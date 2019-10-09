@@ -132,7 +132,11 @@
 					<!-- Range -->
 					<mat-expansion-panel>
 						<mat-expansion-panel-header>
-							<mat-panel-title>Range</mat-panel-title>
+							<mat-panel-title>
+								Range
+								<i class="fas fa-exclamation-triangle text-danger ml-2"
+									*ngIf="hasSubmitted && !range.valid"></i>
+							</mat-panel-title>
 						</mat-expansion-panel-header>
 
 						<div formGroupName="spellRange">
@@ -141,17 +145,29 @@
 									{{ type | titlecase }}
 								</mat-radio-button>
 							</mat-radio-group>
+							<mat-error *ngIf="hasSubmitted && rangeType.errors?.required">
+								A range type is required.
+							</mat-error>
 
 							<!-- Ranged || Self -->
 							<div class="u-flex" *ngIf="showRange">
 								<!-- Amount -->
 								<mat-form-field class="number-input">
 									<input type="number" matInput placeholder="Amount" name="amount" formControlName="amount" />
+									<mat-error *ngIf="rangeAmount.errors?.required">
+										An amount is required.
+									</mat-error>
+									<mat-error *ngIf="rangeAmount.errors?.min">
+										Amount must be greater than 0.
+									</mat-error>
 								</mat-form-field>
 
 								<!-- Unit -->
 								<mat-form-field class="u-flex__grow">
 									<input type="text" [matAutocomplete]="rangeUnitAC" matInput placeholder="Unit" name="unit" formControlName="unit" />
+									<mat-error *ngIf="rangeUnit.errors?.required">
+										A unit is required.
+									</mat-error>
 
 									<mat-autocomplete #rangeUnitAC="matAutocomplete">
 										<mat-option *ngFor="let unit of (formData$ | async)?.rangeUnits" [value]="unit">
@@ -163,6 +179,9 @@
 								<!-- Shape -->
 								<mat-form-field class="u-flex__grow" *ngIf="showShape">
 									<input type="text" [matAutocomplete]="rangeShapeAC" matInput placeholder="Shape" name="shape" formControlName="shape" />
+									<mat-error *ngIf="rangeShape.errors?.required">
+										A shape is required.
+									</mat-error>
 
 									<mat-autocomplete #rangeShapeAC="matAutocomplete">
 										<mat-option *ngFor="let shape of (formData$ | async)?.rangeShapes" [value]="shape">
