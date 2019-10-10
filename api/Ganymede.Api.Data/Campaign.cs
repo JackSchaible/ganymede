@@ -14,7 +14,7 @@ namespace Ganymede.Api.Data
 
 
         public int RulesetID { get; set; }
-        [ForeignKey("RulesetID")]
+        [ForeignKey(nameof(RulesetID))]
         public Ruleset Ruleset { get; set; }
 
         public string AppUserId { get; set; }

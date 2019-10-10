@@ -17,6 +17,8 @@ using Ganymede.Api.BLL.Services.Impl;
 using System.Linq;
 using System.Reflection;
 using Ganymede.Api.Data.Initializers;
+using Ganymede.Api.Data.Extensions;
+using System.Text.Json.Serialization;
 using Newtonsoft.Json.Converters;
 
 namespace api
@@ -24,9 +26,9 @@ namespace api
     public class Startup
     {
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) => WebHost.CreateDefaultBuilder(args);
-        private IHostingEnvironment _env;
+        private readonly IWebHostEnvironment _env;
 
-        public Startup(IHostingEnvironment env, IConfiguration configuration)
+        public Startup(IWebHostEnvironment env, IConfiguration configuration)
         {
             Configuration = configuration;
             _env = env;
@@ -43,22 +45,20 @@ namespace api
             ConfigureBllServices(services);
 
             services.AddMvc()
-                .SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
-                .AddJsonOptions(
-                    options =>
-                    {
-                        options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
-                        options.SerializerSettings.Converters.Add(new StringEnumConverter());
-                    }
-                );
+                .SetCompatibilityVersion(CompatibilityVersion.Version_3_0)
+                .AddNewtonsoftJson(options =>
+                {
+                    options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+                    options.SerializerSettings.Converters.Add(new StringEnumConverter());
+                });
             services.Configure<IISOptions>(o => { o.AutomaticAuthentication = false; });
         }
 
-        public void Configure(IApplicationBuilder app, ApplicationDbContext context, IDbInitializer initializer, IMapper autoMapper)
+        public void Configure(IApplicationBuilder app, ApplicationDbContext context, IDbInitializer initializer)
         {
             app.UseCors("AllowOrigin");
 
-            if (_env.IsDevelopment())
+            if (_env.EnvironmentName == "Development")
             {
                 app.UseDeveloperExceptionPage();
             }
@@ -70,7 +70,6 @@ namespace api
 
             app.UseAuthentication();
             app.UseHttpsRedirection();
-            app.UseMvc();
 
             context.Database.EnsureCreated();
             initializer.Initialize().Wait();
@@ -114,7 +113,7 @@ namespace api
         }
         private void ConfigureCors(IServiceCollection services)
         {
-            string domain = _env.IsDevelopment() ? "https://localhost:4200" : "http://dm.jackschaible.ca";
+            string domain = _env.EnvironmentName == "Development" ? "https://localhost:4200" : "http://dm.jackschaible.ca";
 
             services.AddCors(o =>
                 o.AddPolicy("AllowOrigin",

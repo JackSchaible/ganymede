@@ -6,7 +6,7 @@ namespace Ganymede.Api.Data.Initializers
 {
     internal class SpellsInitializer
     {
-        public void Initialize(ApplicationDbContext ctx, IEnumerable<SpellSchool> dAndDSchools, IEnumerable<SpellSchool> pfSchools, Campaign pota, out IEnumerable<Spell> dAndDSpells, out IEnumerable<Spell> pfSpells)
+        public void Initialize(ApplicationDbContext ctx, Campaign pota, out IEnumerable<Spell> dAndDSpells, out IEnumerable<Spell> pfSpells)
         {
             pfSpells = null;
 
@@ -14,14 +14,14 @@ namespace Ganymede.Api.Data.Initializers
                 dAndDSpells = ctx.Spells;
             else
             {
-                dAndDSpells = CreateDandDSpells(ctx, dAndDSchools, pota.ID);
+                dAndDSpells = CreateDandDSpells(ctx, pota.ID);
                 ctx.Spells.AddRange(dAndDSpells);
             }
         }
 
-        private List<Spell> CreateDandDSpells(ApplicationDbContext ctx, IEnumerable<SpellSchool> schools, int campaignID)
+        private List<Spell> CreateDandDSpells(ApplicationDbContext ctx, int campaignID)
         {
-            return new SpellsDnDInitializer().Initialize(ctx, schools, campaignID);
+            return new SpellsDnDInitializer().Initialize(ctx, campaignID);
         }
     }
 }

@@ -33,7 +33,6 @@ namespace Ganymede.Api.Data.Initializers
                     Abbrevation = "5e",
                     Name = "Dungeons & Dragons 5th Edition",
                     Publisher = wizards,
-                    PublisherID = wizards.ID,
                     ReleaseDate = new DateTime(2014, 7, 15),
                 },
                 new Ruleset
@@ -41,7 +40,6 @@ namespace Ganymede.Api.Data.Initializers
                     Abbrevation = "Pf",
                     Name = "Pathfinder Roleplaying Game",
                     Publisher = paizo,
-                    PublisherID = paizo.ID,
                     ReleaseDate = new DateTime(2009, 8, 1)
                 }
             };

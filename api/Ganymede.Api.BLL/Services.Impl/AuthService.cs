@@ -18,7 +18,7 @@ namespace Ganymede.Api.BLL.Services.Impl
 {
     public class AuthService : IAuthService
     {
-        private Dictionary<string, ApiError> _errors = new Dictionary<string, ApiError>
+        private readonly Dictionary<string, ApiError> _errors = new Dictionary<string, ApiError>
         {
             { "DuplicateUserName", new ApiError { Field = "Username", ErrorCode = "NOT_UNIQUE"}},
             { "PasswordRequiresNonAlphanumeric", new ApiError { Field = "Password", ErrorCode = "NO_SPECIAL_CHAR"}},
