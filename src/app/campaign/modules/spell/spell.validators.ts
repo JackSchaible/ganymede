@@ -3,29 +3,28 @@ import {
 	ValidatorFn,
 	AbstractControl,
 	ValidationErrors,
-	FormGroup,
-	FormArray
+	FormGroup
 } from "@angular/forms";
 
 export class SpellFormValidators {
 	public static validateCastingTime(words: WordService): ValidatorFn {
 		return (control: AbstractControl): ValidationErrors => {
 			const castingTime = control as FormGroup;
-			const type = castingTime.controls["type"].value;
+			const type = castingTime.get("type").value;
+			const amount = castingTime.get("amount");
+			const unit = castingTime.get("unit");
 
-			if (type === "Reaction") {
-				const reaction =
-					castingTime.controls["reactionCondition"].value;
+			this.clearAmountAndUnitErrors(amount, unit);
+			if (type === "Reaction")
+				this.validateRequired(
+					words,
+					castingTime.controls["reactionCondition"]
+				);
+			else {
+				castingTime.get("reactionCondition").setErrors(null);
 
-				if (words.isNullOrWhitespace(reaction))
-					castingTime.controls["reactionCondition"].setErrors({
-						required: true
-					});
-			} else if (type === "Time") {
-				const amount = castingTime.controls["amount"];
-				const unit = castingTime.controls["unit"];
-
-				this.validateAmountAndUnit(words, amount, unit);
+				if (type === "Time")
+					this.validateAmountAndUnit(words, amount, unit);
 			}
 
 			return {};
@@ -35,7 +34,12 @@ export class SpellFormValidators {
 	public static validateRange(words: WordService): ValidatorFn {
 		return (control: AbstractControl): ValidationErrors => {
 			const range = control as FormGroup;
-			const type = range.controls["type"];
+			const type = range.get("type");
+			const amount = range.get("amount");
+			const unit = range.get("unit");
+
+			this.clearAmountAndUnitErrors(amount, unit);
+			range.get("shape").setErrors(null);
 
 			if (
 				type.value === "Touch" ||
@@ -46,42 +50,13 @@ export class SpellFormValidators {
 				return {};
 
 			if (type.value === "Self" || type.value === "Ranged") {
-				const amount = range.controls["amount"];
-				const unit = range.controls["unit"];
-
 				this.validateAmountAndUnit(words, amount, unit);
 
-				if (type.value === "Self") {
-					const shape = range.controls["shape"];
-
-					if (words.isNullOrWhitespace(shape.value))
-						shape.setErrors({ required: true });
-				}
+				if (type.value === "Self")
+					this.validateRequired(words, range.controls["shape"]);
 			} else type.setErrors({ required: true });
 
 			return {};
-		};
-	}
-
-	public static validateComponents(words: WordService): ValidatorFn {
-		return (control: AbstractControl): ValidationErrors => {
-			const errors: any = {};
-			const components = control as FormGroup;
-
-			const hasMaterial = components.controls["material"].value;
-
-			if (hasMaterial) {
-				const materials = (components.controls["material"] as FormArray)
-					.controls;
-
-				if (materials.length > 0)
-					for (let i = 0; i < materials.length; i++)
-						if (words.isNullOrWhitespace(materials[i].value.name))
-							errors[`components.materials.${i}`] =
-								"Material must have a value.";
-			}
-
-			return errors;
 		};
 	}
 
@@ -111,6 +86,13 @@ export class SpellFormValidators {
 		};
 	}
 
+	private static clearAmountAndUnitErrors(
+		amount: AbstractControl,
+		unit: AbstractControl
+	) {
+		amount.setErrors(null);
+		unit.setErrors(null);
+	}
 	private static validateAmountAndUnit(
 		words: WordService,
 		amount: AbstractControl,
@@ -129,5 +111,12 @@ export class SpellFormValidators {
 			unit.setErrors({
 				required: true
 			});
+	}
+	private static validateRequired(
+		words: WordService,
+		control: AbstractControl
+	) {
+		if (words.isNullOrWhitespace(control.value))
+			control.setErrors({ required: true });
 	}
 }
