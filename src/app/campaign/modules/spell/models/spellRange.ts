@@ -20,6 +20,7 @@ export class SpellRange {
 
 	public static isEqual(a: SpellRange, b: SpellRange): boolean {
 		if ((!a && b) || (a && !b)) return false;
+		if (!a && !b) return true;
 
 		return (
 			a === b ||

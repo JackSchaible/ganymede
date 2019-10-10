@@ -20,6 +20,7 @@ import { SpellSchool } from "../../models/spellSchool";
 import { MatCheckboxChange } from "@angular/material/checkbox";
 import { MatRadioChange } from "@angular/material/radio";
 import { CastingTime } from "../../models/castingTime";
+import { SpellComponents } from "../../models/spellComponents";
 
 @Component({
 	selector: "gm-spell-edit",
@@ -43,9 +44,11 @@ export class SpellEditComponent implements OnInit, OnDestroy {
 	public showRange: boolean;
 	public showShape: boolean;
 	public showMaterials: boolean;
+	public noComponents: boolean;
 	public showDuration: boolean;
 	public showUntil: boolean;
 
+	// #region FormDef
 	public name: FormControl = new FormControl("", Validators.required);
 	public level: FormControl = new FormControl("", [
 		Validators.required,
@@ -85,14 +88,11 @@ export class SpellEditComponent implements OnInit, OnDestroy {
 	public componentsVerbal: FormControl = new FormControl("");
 	public componentsSomatic: FormControl = new FormControl("");
 	public componentsMaterial: FormArray = new FormArray([]);
-	public spellComponents: FormGroup = new FormGroup(
-		{
-			verbal: this.componentsVerbal,
-			somatic: this.componentsSomatic,
-			material: this.componentsMaterial
-		},
-		SpellFormValidators.validateComponents(this.words)
-	);
+	public components: FormGroup = new FormGroup({
+		verbal: this.componentsVerbal,
+		somatic: this.componentsSomatic,
+		material: this.componentsMaterial
+	});
 	public durationAmount: FormControl = new FormControl("");
 	public durationUnit: FormControl = new FormControl("");
 	public durationConcentration: FormControl = new FormControl("");
@@ -100,7 +100,7 @@ export class SpellEditComponent implements OnInit, OnDestroy {
 	public durationType: FormControl = new FormControl("");
 	public durationUntilDispelled: FormControl = new FormControl("");
 	public durationUntilTriggered: FormControl = new FormControl("");
-	public spellDuration: FormGroup = new FormGroup({
+	public duration: FormGroup = new FormGroup({
 		amount: this.durationAmount,
 		unit: this.durationUnit,
 		concentration: this.durationConcentration,
@@ -119,12 +119,13 @@ export class SpellEditComponent implements OnInit, OnDestroy {
 			description: new FormControl("")
 		}),
 		castingTime: this.castingTime,
-		spellRange: this.range,
-		spellComponents: this.spellComponents,
-		spellDuration: this.spellDuration,
+		range: this.range,
+		components: this.components,
+		duration: this.duration,
 		description: this.description,
 		atHigherLevels: new FormControl("")
 	});
+	// #endregion
 
 	public processing: boolean;
 	public isNew: boolean;
@@ -162,23 +163,28 @@ export class SpellEditComponent implements OnInit, OnDestroy {
 
 				this.syncFromCastingTime(spell.castingTime);
 				this.syncFromRange(spell.spellRange);
-				this.syncFromMaterial(spell.spellComponents.material);
-				this.setRangeType(spell.spellDuration.type);
+				if (spell.spellComponents)
+					this.syncFromMaterial(spell.spellComponents.material);
+				if (spell.spellDuration)
+					this.setRangeType(spell.spellDuration.type);
 			});
 	}
 	private syncFromCastingTime(time: CastingTime) {
+		if (!time) return;
 		this.showReaction = this.isReaction(time.type);
 		this.showCastingTime = this.isTime(time.type);
 	}
 	private syncFromRange(spellRange: SpellRange) {
+		if (!spellRange) return;
 		this.showRange = this.isRangeRanged(spellRange.type);
 		if (spellRange.type === "Self") this.ifRangeIsSelf();
 		else this.ifRangeIsNotSelf();
 	}
 	private syncFromMaterial(materials: string[]) {
+		if (!materials) return;
 		this.showMaterials = materials && materials.length > 0;
 		const array: FormArray = (this.spellFormGroup.get(
-			"spellComponents"
+			"components"
 		) as FormGroup).get("material") as FormArray;
 
 		if (!materials || array.length > 0) return;
@@ -207,6 +213,7 @@ export class SpellEditComponent implements OnInit, OnDestroy {
 			)
 			.subscribe((spell: Spell) => {
 				spell = this.fixWeirdities(spell);
+				this.validateComponents();
 				this.store.dispatch(this.actions.spellEditFormChange(spell));
 			});
 	}
@@ -214,6 +221,7 @@ export class SpellEditComponent implements OnInit, OnDestroy {
 	private fixWeirdities(spellIn: any): Spell {
 		const spell = _.cloneDeep(spellIn);
 		if (
+			spell.spellComponents &&
 			spell.spellComponents.material &&
 			spell.spellComponents.material.length > 0
 		)
@@ -259,17 +267,15 @@ export class SpellEditComponent implements OnInit, OnDestroy {
 	}
 	private ifRangeIsSelf(): void {
 		this.showShape = true;
-		const control = (this.spellFormGroup.controls[
-			"spellRange"
-		] as FormGroup).controls["unit"];
+		const control = (this.spellFormGroup.controls["range"] as FormGroup)
+			.controls["unit"];
 		if (this.words.isNullOrWhitespace(control.value))
 			control.patchValue("foot");
 	}
 	private ifRangeIsNotSelf(): void {
 		this.showShape = false;
-		const control = (this.spellFormGroup.controls[
-			"spellRange"
-		] as FormGroup).controls["unit"];
+		const control = (this.spellFormGroup.controls["range"] as FormGroup)
+			.controls["unit"];
 		if (this.words.isNullOrWhitespace(control.value))
 			control.patchValue("feet");
 	}
@@ -298,6 +304,30 @@ export class SpellEditComponent implements OnInit, OnDestroy {
 		((this.spellFormGroup.get("spellComponents") as FormGroup).get(
 			"material"
 		) as FormArray).removeAt(index);
+	}
+	private validateComponents(): boolean {
+		let valid = true;
+		this.noComponents = false;
+		const materials = this.componentsMaterial.controls;
+
+		if (materials.length > 0)
+			for (let i = 0; i < materials.length; i++) {
+				if (this.words.isNullOrWhitespace(materials[i].value.name)) {
+					materials[i].setErrors({ required: true });
+					valid = false;
+				}
+			}
+		else {
+			if (
+				!this.components.controls["verbal"].value &&
+				!this.components.controls["somatic"].value
+			) {
+				this.noComponents = true;
+				valid = false;
+			}
+		}
+
+		return valid;
 	}
 
 	public durationChanged(event: MatRadioChange) {
@@ -332,7 +362,7 @@ export class SpellEditComponent implements OnInit, OnDestroy {
 		const spell = this.store.getState().app.forms.spellForm;
 
 		// TODO: Call server backend
-		if (this.spellFormGroup.valid) {
+		if (this.validateComponents() && this.spellFormGroup.valid) {
 			this.processing = true;
 
 			this.service.save(spell).subscribe(

@@ -139,7 +139,11 @@
 							</mat-panel-title>
 						</mat-expansion-panel-header>
 
-						<div formGroupName="spellRange">
+						<p *ngIf="hasSubmitted && !range.valid" class="text-danger mb-3">
+							There were some problems with the range information.
+						</p>
+
+						<div formGroupName="range">
 							<mat-radio-group formControlName="type" class="u-flex u-flex__justify--space-between" (change)="rangeChanged($event)">
 								<mat-radio-button *ngFor="let type of (formData$ | async)?.rangeTypes" [value]="type">
 									{{ type | titlecase }}
@@ -197,15 +201,25 @@
 					<!-- Components -->
 					<mat-expansion-panel>
 						<mat-expansion-panel-header>
-							<mat-panel-title>Components</mat-panel-title>
+							<mat-panel-title>
+								Components
+								<i class="fas fa-exclamation-triangle text-danger ml-2"
+									*ngIf="hasSubmitted && (!components.valid || noComponents)"></i>
+							</mat-panel-title>
 						</mat-expansion-panel-header>
 
-						<div formGroupName="spellComponents">
+						<p *ngIf="hasSubmitted && (!components.valid || noComponents)" class="text-danger mb-3">
+							There were some problems with the components information.
+						</p>
+
+						<div formGroupName="components">
 							<div class="u-flex u-flex__justify--space-between">
 								<mat-checkbox class="flex-shrink" formControlName="verbal">Verbal</mat-checkbox>
 								<mat-checkbox class="flex-shrink" formControlName="somatic">Somatic</mat-checkbox>
 								<mat-checkbox class="flex-shrink" [checked]="showMaterials" (change)="materialChanged($event)">Material</mat-checkbox>
 							</div>
+
+							<p *ngIf="hasSubmitted && noComponents" class="text-danger">A spell must have some components to it.</p>
 
 							<ng-container *ngIf="showMaterials" formArrayName="material">
 								<mat-form-field class="col-12"
@@ -234,7 +248,7 @@
 							<mat-panel-title>Duration</mat-panel-title>
 						</mat-expansion-panel-header>
 
-						<ng-container formGroupName="spellDuration">
+						<ng-container formGroupName="duration">
 							<mat-radio-group formControlName="type" class="u-flex u-flex__justify--space-between" (change)="durationChanged($event)">
 								<mat-radio-button *ngFor="let type of (formData$ | async)?.durationTypes" [value]="type">
 									{{ type | titlecase }}

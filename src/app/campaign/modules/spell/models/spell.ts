@@ -48,6 +48,7 @@ export class Spell {
 
 	public static isEqual(a: Spell, b: Spell): boolean {
 		if ((!a && b) || (a && !b)) return false;
+		if (!a && !b) return true;
 
 		return (
 			a === b ||

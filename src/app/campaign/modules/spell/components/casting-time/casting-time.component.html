@@ -1,10 +1,15 @@
 <p class="u-flex">
 	<strong class="u-flex__shrink--no">Casting Time:</strong>
-	<span class="u-margin-left">
-		<ng-container [ngSwitch]="castingTime.type">
-			<ng-container *ngSwitchCase="'Time'">{{ castingTime.amount }} {{ castingTime.unit }}</ng-container>
-			<ng-container *ngSwitchCase="'Action'">1 action</ng-container>
-			<ng-container *ngSwitchCase="'Reaction'">1 reaction, {{ castingTime.reactionCondition }}</ng-container>
-		</ng-container>
-	</span>
+	<ng-container *ngIf="castingTime; else noCastingTime">
+		<span class="u-margin-left">
+			<ng-container [ngSwitch]="castingTime.type">
+				<ng-container *ngSwitchCase="'Time'">{{ castingTime.amount }} {{ castingTime.unit }}</ng-container>
+				<ng-container *ngSwitchCase="'Action'">1 action</ng-container>
+				<ng-container *ngSwitchCase="'Reaction'">1 reaction, {{ castingTime.reactionCondition }}</ng-container>
+			</ng-container>
+		</span>
+	</ng-container>
+	<ng-template #noCastingTime>
+		<p><em> [Not Set]</em></p>
+	</ng-template>
 </p>
