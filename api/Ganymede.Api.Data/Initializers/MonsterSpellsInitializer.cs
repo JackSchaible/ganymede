@@ -14,8 +14,8 @@ namespace Ganymede.Api.Data.Initializers
             if (!ctx.MonsterSpells.Any())
                 ctx.MonsterSpells.AddRange(dAndDSpells.Except(except).Select(s => new MonsterSpell
                 {
-                    MonsterID = aerisi.ID,
-                    SpellID = s.ID
+                    Monster = aerisi,
+                    Spell = s
                 }));
         }
     }

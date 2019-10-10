@@ -14,14 +14,14 @@ namespace Ganymede.Api.Data.Initializers
                 dAndDSpells = ctx.Spells;
             else
             {
-                dAndDSpells = CreateDandDSpells(ctx, pota.ID);
+                dAndDSpells = CreateDandDSpells(ctx, pota);
                 ctx.Spells.AddRange(dAndDSpells);
             }
         }
 
-        private List<Spell> CreateDandDSpells(ApplicationDbContext ctx, int campaignID)
+        private List<Spell> CreateDandDSpells(ApplicationDbContext ctx, Campaign campaign)
         {
-            return new SpellsDnDInitializer().Initialize(ctx, campaignID);
+            return new SpellsDnDInitializer().Initialize(ctx, campaign);
         }
     }
 }

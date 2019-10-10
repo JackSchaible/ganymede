@@ -44,8 +44,8 @@ namespace api
             ConfigureAutomapper(services);
             ConfigureBllServices(services);
 
-            services.AddMvc()
-                .SetCompatibilityVersion(CompatibilityVersion.Version_3_0)
+            //Need newtonsoft's json until .NET supports circular reference handling. See https://github.com/dotnet/corefx/issues/38579
+            services.AddControllers()
                 .AddNewtonsoftJson(options =>
                 {
                     options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
@@ -56,20 +56,21 @@ namespace api
 
         public void Configure(IApplicationBuilder app, ApplicationDbContext context, IDbInitializer initializer)
         {
-            app.UseCors("AllowOrigin");
-
             if (_env.EnvironmentName == "Development")
-            {
                 app.UseDeveloperExceptionPage();
-            }
             else
             {
                 app.UseCors(b => b.WithOrigins("http://dm.jackschaible.ca/"));
                 app.UseHsts();
             }
 
+            app.UseCors("AllowOrigin");
+            app.UseAuthorization();
             app.UseAuthentication();
             app.UseHttpsRedirection();
+
+            app.UseRouting();
+            app.UseEndpoints(endpoints => endpoints.MapControllers());
 
             context.Database.EnsureCreated();
             initializer.Initialize().Wait();

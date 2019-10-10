@@ -19,7 +19,10 @@ export class ErrorInterceptor implements HttpInterceptor {
 	): Observable<HttpEvent<any>> {
 		return next.handle(request).pipe(
 			catchError(err => {
-				console.log(request.url);
+				console.log(
+					`%c ${request.url}`,
+					"background: #0ff; color: #f00"
+				);
 				if (
 					err.status === 401 &&
 					// Exclude the getuserdata route, otherwise it causes an infinite redirect
