@@ -2,7 +2,6 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
@@ -17,8 +16,6 @@ using Ganymede.Api.BLL.Services.Impl;
 using System.Linq;
 using System.Reflection;
 using Ganymede.Api.Data.Initializers;
-using Ganymede.Api.Data.Extensions;
-using System.Text.Json.Serialization;
 using Newtonsoft.Json.Converters;
 
 namespace api
