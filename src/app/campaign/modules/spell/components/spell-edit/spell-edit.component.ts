@@ -44,7 +44,6 @@ export class SpellEditComponent implements OnInit, OnDestroy {
 	public showRange: boolean;
 	public showShape: boolean;
 	public showMaterials: boolean;
-	public noComponents: boolean;
 	public showDuration: boolean;
 	public showUntil: boolean;
 
@@ -83,16 +82,19 @@ export class SpellEditComponent implements OnInit, OnDestroy {
 			type: this.rangeType,
 			shape: this.rangeShape
 		},
-		[SpellFormValidators.validateRange(this.words)]
+		SpellFormValidators.validateRange(this.words)
 	);
 	public componentsVerbal: FormControl = new FormControl("");
 	public componentsSomatic: FormControl = new FormControl("");
 	public componentsMaterial: FormArray = new FormArray([]);
-	public components: FormGroup = new FormGroup({
-		verbal: this.componentsVerbal,
-		somatic: this.componentsSomatic,
-		material: this.componentsMaterial
-	});
+	public components: FormGroup = new FormGroup(
+		{
+			verbal: this.componentsVerbal,
+			somatic: this.componentsSomatic,
+			material: this.componentsMaterial
+		},
+		SpellFormValidators.validateComponents(this.words)
+	);
 	public durationAmount: FormControl = new FormControl("");
 	public durationUnit: FormControl = new FormControl("");
 	public durationConcentration: FormControl = new FormControl("");
@@ -213,7 +215,6 @@ export class SpellEditComponent implements OnInit, OnDestroy {
 			)
 			.subscribe((spell: Spell) => {
 				spell = this.fixWeirdities(spell);
-				this.validateComponents();
 				this.store.dispatch(this.actions.spellEditFormChange(spell));
 			});
 	}
@@ -305,30 +306,6 @@ export class SpellEditComponent implements OnInit, OnDestroy {
 			"material"
 		) as FormArray).removeAt(index);
 	}
-	private validateComponents(): boolean {
-		let valid = true;
-		this.noComponents = false;
-		const materials = this.componentsMaterial.controls;
-
-		if (materials.length > 0)
-			for (let i = 0; i < materials.length; i++) {
-				if (this.words.isNullOrWhitespace(materials[i].value.name)) {
-					materials[i].setErrors({ required: true });
-					valid = false;
-				}
-			}
-		else {
-			if (
-				!this.components.controls["verbal"].value &&
-				!this.components.controls["somatic"].value
-			) {
-				this.noComponents = true;
-				valid = false;
-			}
-		}
-
-		return valid;
-	}
 
 	public durationChanged(event: MatRadioChange) {
 		this.setRangeType(event.value);
@@ -362,7 +339,7 @@ export class SpellEditComponent implements OnInit, OnDestroy {
 		const spell = this.store.getState().app.forms.spellForm;
 
 		// TODO: Call server backend
-		if (this.validateComponents() && this.spellFormGroup.valid) {
+		if (this.spellFormGroup.valid) {
 			this.processing = true;
 
 			this.service.save(spell).subscribe(

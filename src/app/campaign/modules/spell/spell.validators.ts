@@ -3,7 +3,8 @@ import {
 	ValidatorFn,
 	AbstractControl,
 	ValidationErrors,
-	FormGroup
+	FormGroup,
+	FormArray
 } from "@angular/forms";
 
 export class SpellFormValidators {
@@ -55,6 +56,27 @@ export class SpellFormValidators {
 				if (type.value === "Self")
 					this.validateRequired(words, range.controls["shape"]);
 			} else type.setErrors({ required: true });
+
+			return {};
+		};
+	}
+
+	public static validateComponents(words: WordService): ValidatorFn {
+		return (control: AbstractControl): ValidationErrors => {
+			const components = control as FormGroup;
+			const verbal = components.controls["verbal"];
+			verbal.setErrors(null);
+
+			const hasMaterial: boolean =
+				components.controls["material"].value &&
+				(components.controls["material"].value as Array<string>)
+					.length > 0;
+			const hasSomatic: boolean = !!components.controls["somatic"].value;
+			const hasVerbal: boolean = !!verbal.value;
+
+			// set to the verbal checkbox, the error has to go somewhere not on the formgroup
+			if (!hasVerbal && !hasSomatic && !hasMaterial)
+				verbal.setErrors({ required: true });
 
 			return {};
 		};

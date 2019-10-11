@@ -204,11 +204,11 @@
 							<mat-panel-title>
 								Components
 								<i class="fas fa-exclamation-triangle text-danger ml-2"
-									*ngIf="hasSubmitted && (!components.valid || noComponents)"></i>
+									*ngIf="hasSubmitted && !components.valid"></i>
 							</mat-panel-title>
 						</mat-expansion-panel-header>
 
-						<p *ngIf="hasSubmitted && (!components.valid || noComponents)" class="text-danger mb-3">
+						<p *ngIf="hasSubmitted && !components.valid" class="text-danger mb-3">
 							There were some problems with the components information.
 						</p>
 
@@ -219,7 +219,9 @@
 								<mat-checkbox class="flex-shrink" [checked]="showMaterials" (change)="materialChanged($event)">Material</mat-checkbox>
 							</div>
 
-							<p *ngIf="hasSubmitted && noComponents" class="text-danger">A spell must have some components to it.</p>
+							<mat-error *ngIf="hasSubmitted && componentsVerbal.errors?.required">
+								A spell must have some components to it.
+							</mat-error>
 
 							<ng-container *ngIf="showMaterials" formArrayName="material">
 								<mat-form-field class="col-12"
