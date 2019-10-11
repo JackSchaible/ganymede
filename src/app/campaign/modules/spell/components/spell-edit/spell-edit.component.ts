@@ -45,6 +45,7 @@ export class SpellEditComponent implements OnInit, OnDestroy {
 	public showShape: boolean;
 	public showMaterials: boolean;
 	public showDuration: boolean;
+	public conHasExtraSpacing: boolean;
 	public showUntil: boolean;
 
 	// #region FormDef
@@ -102,15 +103,18 @@ export class SpellEditComponent implements OnInit, OnDestroy {
 	public durationType: FormControl = new FormControl("");
 	public durationUntilDispelled: FormControl = new FormControl("");
 	public durationUntilTriggered: FormControl = new FormControl("");
-	public duration: FormGroup = new FormGroup({
-		amount: this.durationAmount,
-		unit: this.durationUnit,
-		concentration: this.durationConcentration,
-		upTo: this.durationUpTo,
-		type: this.durationType,
-		untilDispelled: this.durationUntilDispelled,
-		untilTriggered: this.durationUntilTriggered
-	});
+	public duration: FormGroup = new FormGroup(
+		{
+			amount: this.durationAmount,
+			unit: this.durationUnit,
+			concentration: this.durationConcentration,
+			upTo: this.durationUpTo,
+			type: this.durationType,
+			untilDispelled: this.durationUntilDispelled,
+			untilTriggered: this.durationUntilTriggered
+		},
+		SpellFormValidators.validateDuration(this.words)
+	);
 	public description: FormControl = new FormControl("", Validators.required);
 	public spellFormGroup: FormGroup = new FormGroup({
 		name: this.name,
@@ -309,6 +313,7 @@ export class SpellEditComponent implements OnInit, OnDestroy {
 
 	public durationChanged(event: MatRadioChange) {
 		this.setRangeType(event.value);
+		this.conHasExtraSpacing = !!this.durationConcentration.value;
 	}
 	private setRangeType(type: string) {
 		switch (type) {

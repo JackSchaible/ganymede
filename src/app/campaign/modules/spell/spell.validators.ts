@@ -84,27 +84,24 @@ export class SpellFormValidators {
 
 	public static validateDuration(words: WordService): ValidatorFn {
 		return (control: AbstractControl): ValidationErrors => {
-			const errors: any = {};
 			const duration = control as FormGroup;
-			const type = duration.controls["type"].value;
+			const type = duration.controls["type"];
 
-			if (type === "Duration") {
+			if (!type.value) type.setErrors({ required: true });
+			else if (type.value === "Duration") {
 				const amount = duration.controls["amount"].value;
 				const unit = duration.controls["unit"].value;
 
-				if (!amount)
-					errors["duration.amount"] = "An amount is required.";
-				if (!unit) errors["duration.unit"] = "A duration is required.";
-			} else if (type === "Until") {
-				const dispelled = duration.controls["untilDispelled"].value;
-				const triggered = duration.controls["untilTriggered"].value;
+				this.validateAmountAndUnit(words, amount, unit);
+			} else if (type.value === "Until") {
+				const dispelled = duration.controls["untilDispelled"];
+				const triggered = duration.controls["untilTriggered"];
 
-				if (!dispelled && !triggered)
-					errors["duration.until"] =
-						"Until must have either triggered, dispelled, or both.";
+				if (!dispelled.value && !triggered.value)
+					dispelled.setErrors({ required: true });
 			}
 
-			return errors;
+			return {};
 		};
 	}
 

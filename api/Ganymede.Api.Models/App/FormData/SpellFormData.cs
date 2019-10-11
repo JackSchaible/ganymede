@@ -12,7 +12,7 @@ namespace Ganymede.Api.Models.App.FormData
         public List<RangeType> RangeTypes { get; set; }
         public List<string> RangeUnits { get; set; }
         public List<string> RangeShapes { get; set; }
-        public List<string> Durations { get; set; }
+        public List<string> DurationUnits { get; set; }
         public List<DurationType> DurationTypes { get; set; }
     }
 }

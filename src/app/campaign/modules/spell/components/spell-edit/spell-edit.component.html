@@ -247,31 +247,46 @@
 					<!-- Duration -->
 					<mat-expansion-panel>
 						<mat-expansion-panel-header>
-							<mat-panel-title>Duration</mat-panel-title>
+							<mat-panel-title>
+								Duration
+								<i class="fas fa-exclamation-triangle text-danger ml-2"
+									*ngIf="hasSubmitted && !duration.valid"></i>
+							</mat-panel-title>
 						</mat-expansion-panel-header>
 
+						<p *ngIf="hasSubmitted && !duration.valid" class="text-danger mb-3">
+							There were some problems with the duration information.
+						</p>
+
 						<ng-container formGroupName="duration">
+							<!-- Type -->
 							<mat-radio-group formControlName="type" class="u-flex u-flex__justify--space-between" (change)="durationChanged($event)">
 								<mat-radio-button *ngFor="let type of (formData$ | async)?.durationTypes" [value]="type">
 									{{ type | titlecase }}
 								</mat-radio-button>
 							</mat-radio-group>
+							<mat-error *ngIf="hasSubmitted && durationType.errors?.required">A duration type is required.</mat-error>
+
+							<!-- Amount & Unit-->
 							<div class="u-flex" *ngIf="showDuration">
 
 								<!-- Amount -->
 								<mat-form-field class="u-flex__grow">
-									<mat-checkbox matPrefix class="mr-2" [class.mr-3]="this.spellFormGroup.get('spellDuration').get('concentration').value"
-										formControlName="concentration">Concentration</mat-checkbox>
+									<mat-checkbox matPrefix class="mr-2" [class.mr-3]="conHasExtraSpacing" formControlName="concentration">
+										Concentration
+									</mat-checkbox>
 									<mat-checkbox matPrefix class="mr-2" formControlName="upTo">
 										Up To
 									</mat-checkbox>
 
 									<input type="number" matInput placeholder="Amount" formControlName="amount" required />
+									<mat-error *ngIf="hasSubmitted && durationAmount.errors?.required">Amount must have a value.</mat-error>
 								</mat-form-field>
 
 								<!-- Unit -->
 								<mat-form-field class="u-flex__shrink">
 									<input type="text" [matAutocomplete]="durationUnitAC" matInput placeholder="Unit" formControlName="unit" required />
+									<mat-error *ngIf="hasSubmitted && durationUnit.errors?.required">Unit must have a value.</mat-error>
 
 									<mat-autocomplete #durationUnitAC="matAutocomplete">
 										<mat-option *ngFor="let unit of (formData$ | async)?.durationUnits" [value]="unit">
@@ -286,6 +301,8 @@
 								<mat-checkbox formControlName="untilDispelled">Dispelled</mat-checkbox>
 								<mat-checkbox formControlName="untilTriggered">Triggered</mat-checkbox>
 							</div>
+							<mat-error *ngIf="hasSubmitted && durationUntilDispelled.errors?.required">You must choose a condition to end the spell.</mat-error>
+
 						</ng-container>
 					</mat-expansion-panel>
 					<!-- /Duration -->
