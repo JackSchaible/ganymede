@@ -310,13 +310,18 @@
 					<!-- Description -->
 					<mat-expansion-panel>
 						<mat-expansion-panel-header>
-							<mat-panel-title>Description</mat-panel-title>
+							<mat-panel-title>
+								Description
+								<i class="fas fa-exclamation-triangle text-danger ml-2"
+									*ngIf="hasSubmitted && !description.valid"></i>
+							</mat-panel-title>
 						</mat-expansion-panel-header>
 
 						<p class="ml-3"><small><em>HTML-Formatted</em></small></p>
 
 						<mat-form-field class="col-12">
 							<textarea matInput rows="6" formControlName="description" required></textarea>
+							<mat-error *ngIf="hasSubmitted && description.errors?.required">Spells must have a description.</mat-error>
 						</mat-form-field>
 					</mat-expansion-panel>
 					<!-- /Description -->
