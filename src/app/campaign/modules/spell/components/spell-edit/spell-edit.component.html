@@ -225,7 +225,7 @@
 
 							<ng-container *ngIf="showMaterials" formArrayName="material">
 								<mat-form-field class="col-12"
-									*ngFor="let material of this.spellFormGroup.get('spellComponents').get('material').controls; let i = index">
+									*ngFor="let material of componentsMaterial.controls; let i = index">
 									<div [formGroupName]="i">
 										<input type="text" matInput placeholder="Material" formControlName="name" required>
 										<button mat-icon-button matSuffix (click)="removeMaterial(i)" title="Remove Material">

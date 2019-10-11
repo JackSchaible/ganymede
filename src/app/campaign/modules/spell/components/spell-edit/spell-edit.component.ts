@@ -188,16 +188,13 @@ export class SpellEditComponent implements OnInit, OnDestroy {
 	}
 	private syncFromMaterial(materials: string[]) {
 		if (!materials) return;
-		this.showMaterials = materials && materials.length > 0;
-		const array: FormArray = (this.spellFormGroup.get(
-			"components"
-		) as FormGroup).get("material") as FormArray;
+		this.showMaterials = (materials && materials.length > 0) as boolean;
 
-		if (!materials || array.length > 0) return;
+		if (!materials || this.componentsMaterial.length > 0) return;
 
 		// Dynamically create the form controls for material components
 		for (let i = 0; i < materials.length; i++) {
-			array.push(
+			this.componentsMaterial.push(
 				new FormGroup({
 					name: new FormControl(materials[i])
 				})
@@ -286,29 +283,20 @@ export class SpellEditComponent implements OnInit, OnDestroy {
 	}
 
 	public materialChanged(event: MatCheckboxChange) {
-		this.showMaterials = event.checked;
+		this.showMaterials = !!event.checked;
 
-		if (
-			this.showMaterials &&
-			((this.spellFormGroup.get("spellComponents") as FormGroup).get(
-				"material"
-			) as FormArray).length === 0
-		)
+		if (this.showMaterials && this.componentsMaterial.length === 0)
 			this.addMaterial();
 	}
 	public addMaterial(): void {
-		((this.spellFormGroup.get("spellComponents") as FormGroup).get(
-			"material"
-		) as FormArray).push(
+		this.componentsMaterial.push(
 			new FormGroup({
 				name: new FormControl("", Validators.required)
 			})
 		);
 	}
 	public removeMaterial(index: number): void {
-		((this.spellFormGroup.get("spellComponents") as FormGroup).get(
-			"material"
-		) as FormArray).removeAt(index);
+		this.componentsMaterial.removeAt(index);
 	}
 
 	public durationChanged(event: MatRadioChange) {
