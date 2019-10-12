@@ -42,6 +42,8 @@ namespace Ganymede.Api.BLL.Services.Impl
                 spell.CampaignID = campaign.ID;
                 spell.ID = default;
 
+                spell = MapValues(spell);
+
                 _ctx.Spells.Add(spell);
                 _ctx.SaveChanges();
 
@@ -68,33 +70,7 @@ namespace Ganymede.Api.BLL.Services.Impl
                 Spell old = _ctx.Spells.Where(c => c.Campaign.AppUserId == userId).Single(c => c.ID == spell.ID);
                 _mapper.Map(spell, old);
 
-                CastingTime time = _ctx.CastingTimes.FirstOrDefault(c => c.Amount == old.CastingTime.Amount && c.Unit == old.CastingTime.Unit && c.ReactionCondition == old.CastingTime.ReactionCondition && c.Type == old.CastingTime.Type);
-                if (time != null)
-                {
-                    old.CastingTime = time;
-                    old.CastingTimeID = time.ID;
-                }
-
-                SpellComponents components = _ctx.SpellComponents.FirstOrDefault(c => Enumerable.SequenceEqual(c.Material, old.SpellComponents.Material) && c.Somatic == old.SpellComponents.Somatic && c.Verbal == old.SpellComponents.Verbal);
-                if (components != null)
-                {
-                    old.SpellComponents = components;
-                    old.SpellComponentsID = components.ID;
-                }
-
-                SpellDuration duration = _ctx.SpellDurations.FirstOrDefault(d => d.Amount == old.SpellDuration.Amount && d.Concentration == old.SpellDuration.Concentration && d.Type == old.SpellDuration.Type && d.Unit == old.SpellDuration.Unit && d.UpTo == old.SpellDuration.UpTo);
-                if (duration != null)
-                {
-                    old.SpellDuration = duration;
-                    old.SpellDurationID = duration.ID;
-                }
-
-                SpellRange range = _ctx.SpellRanges.FirstOrDefault(r => r.Amount == old.SpellRange.Amount && r.Type == old.SpellRange.Type && r.Shape == old.SpellRange.Shape && r.Unit == old.SpellRange.Unit);
-                if (range != null)
-                {
-                    old.SpellRange = range;
-                    old.SpellRangeID = range.ID;
-                }
+                old = MapValues(old);
 
                 _ctx.SaveChanges();
 
@@ -132,6 +108,27 @@ namespace Ganymede.Api.BLL.Services.Impl
                     StatusCode = ApiCodes.Error
                 };
             }
+        }
+
+        private Spell MapValues(Spell item)
+        {
+            CastingTime time = _ctx.CastingTimes.FirstOrDefault(c => c.Amount == item.CastingTime.Amount && c.Unit == item.CastingTime.Unit && c.ReactionCondition == item.CastingTime.ReactionCondition && c.Type == item.CastingTime.Type);
+            if (time != null)
+                item.CastingTime = time;
+
+            SpellComponents components = _ctx.SpellComponents.FirstOrDefault(c => Enumerable.SequenceEqual(c.Material, item.SpellComponents.Material) && c.Somatic == item.SpellComponents.Somatic && c.Verbal == item.SpellComponents.Verbal);
+            if (components != null)
+                item.SpellComponents = components;
+
+            SpellDuration duration = _ctx.SpellDurations.FirstOrDefault(d => d.Amount == item.SpellDuration.Amount && d.Concentration == item.SpellDuration.Concentration && d.Type == item.SpellDuration.Type && d.Unit == item.SpellDuration.Unit && d.UpTo == item.SpellDuration.UpTo);
+            if (duration != null)
+                item.SpellDuration = duration;
+
+            SpellRange range = _ctx.SpellRanges.FirstOrDefault(r => r.Amount == item.SpellRange.Amount && r.Type == item.SpellRange.Type && r.Shape == item.SpellRange.Shape && r.Unit == item.SpellRange.Unit);
+            if (range != null)
+                item.SpellRange = range;
+
+            return item;
         }
     }
 }

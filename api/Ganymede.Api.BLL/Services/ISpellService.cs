@@ -8,6 +8,5 @@ namespace Ganymede.Api.BLL.Services
         ApiResponse Add(Spell spell, int campaignId, string userId);
         ApiResponse Update(Spell spell, string userId);
         ApiResponse Delete(int id, string userId);
-
     }
 }

@@ -21,5 +21,29 @@ namespace Ganymede.Api.Controllers
             _userManager = userManager;
             _service = service;
         }
+
+        // PUT: api/Spell/5
+        [HttpPut]
+        public ApiResponse Save(Spell value, int campaignId)
+        {
+            var user = _userManager.GetUserId(HttpContext.User);
+
+            ApiResponse response;
+
+            if (value.ID == -1)
+                response = _service.Add(value, campaignId, user);
+            else
+                response = _service.Update(value, user);
+
+            return response;
+        }
+
+        // DELETE: api/Spell/5
+        [HttpDelete("{id}")]
+        public ApiResponse Delete(int id)
+        {
+            var user = _userManager.GetUserId(HttpContext.User);
+            return _service.Delete(id, user);
+        }
     }
 }

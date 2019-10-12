@@ -16,8 +16,7 @@
 						<mat-expansion-panel-header>
 							<mat-panel-title>
 								Basic Info
-								<i class="fas fa-exclamation-triangle text-danger ml-2"
-									*ngIf="hasSubmitted && (name.errors || level.errors || schoolId.errors)"></i>
+								<i class="fas fa-exclamation-triangle text-danger ml-2" *ngIf="hasSubmitted && (name.errors || level.errors || schoolId.errors)"></i>
 							</mat-panel-title>
 						</mat-expansion-panel-header>
 
@@ -68,8 +67,7 @@
 						<mat-expansion-panel-header>
 							<mat-panel-title>
 								Casting Time
-								<i class="fas fa-exclamation-triangle text-danger ml-2"
-									*ngIf="hasSubmitted && !castingTime.valid"></i>
+								<i class="fas fa-exclamation-triangle text-danger ml-2" *ngIf="hasSubmitted && !castingTime.valid"></i>
 							</mat-panel-title>
 						</mat-expansion-panel-header>
 
@@ -102,8 +100,7 @@
 
 								<!-- Unit -->
 								<mat-form-field class="u-flex__grow">
-									<input type="text" [matAutocomplete]="castingTimeUnitAC" matInput placeholder="Unit" formControlName="unit"
-										required />
+									<input type="text" [matAutocomplete]="castingTimeUnitAC" matInput placeholder="Unit" formControlName="unit" required />
 									<mat-error *ngIf="castingTimeUnit.errors?.required">
 										A unit is required.
 									</mat-error>
@@ -134,8 +131,7 @@
 						<mat-expansion-panel-header>
 							<mat-panel-title>
 								Range
-								<i class="fas fa-exclamation-triangle text-danger ml-2"
-									*ngIf="hasSubmitted && !range.valid"></i>
+								<i class="fas fa-exclamation-triangle text-danger ml-2" *ngIf="hasSubmitted && !range.valid"></i>
 							</mat-panel-title>
 						</mat-expansion-panel-header>
 
@@ -143,7 +139,7 @@
 							There were some problems with the range information.
 						</p>
 
-						<div formGroupName="range">
+						<div formGroupName="spellRange">
 							<mat-radio-group formControlName="type" class="u-flex u-flex__justify--space-between" (change)="rangeChanged($event)">
 								<mat-radio-button *ngFor="let type of (formData$ | async)?.rangeTypes" [value]="type">
 									{{ type | titlecase }}
@@ -157,7 +153,7 @@
 							<div class="u-flex" *ngIf="showRange">
 								<!-- Amount -->
 								<mat-form-field class="number-input">
-									<input type="number" matInput placeholder="Amount" name="amount" formControlName="amount" />
+									<input type="number" matInput placeholder="Amount" formControlName="amount" />
 									<mat-error *ngIf="rangeAmount.errors?.required">
 										An amount is required.
 									</mat-error>
@@ -168,7 +164,7 @@
 
 								<!-- Unit -->
 								<mat-form-field class="u-flex__grow">
-									<input type="text" [matAutocomplete]="rangeUnitAC" matInput placeholder="Unit" name="unit" formControlName="unit" />
+									<input type="text" [matAutocomplete]="rangeUnitAC" matInput placeholder="Unit" formControlName="unit" />
 									<mat-error *ngIf="rangeUnit.errors?.required">
 										A unit is required.
 									</mat-error>
@@ -203,8 +199,7 @@
 						<mat-expansion-panel-header>
 							<mat-panel-title>
 								Components
-								<i class="fas fa-exclamation-triangle text-danger ml-2"
-									*ngIf="hasSubmitted && !components.valid"></i>
+								<i class="fas fa-exclamation-triangle text-danger ml-2" *ngIf="hasSubmitted && !components.valid"></i>
 							</mat-panel-title>
 						</mat-expansion-panel-header>
 
@@ -212,7 +207,7 @@
 							There were some problems with the components information.
 						</p>
 
-						<div formGroupName="components">
+						<div formGroupName="spellComponents">
 							<div class="u-flex u-flex__justify--space-between">
 								<mat-checkbox class="flex-shrink" formControlName="verbal">Verbal</mat-checkbox>
 								<mat-checkbox class="flex-shrink" formControlName="somatic">Somatic</mat-checkbox>
@@ -224,8 +219,7 @@
 							</mat-error>
 
 							<ng-container *ngIf="showMaterials" formArrayName="material">
-								<mat-form-field class="col-12"
-									*ngFor="let material of componentsMaterial.controls; let i = index">
+								<mat-form-field class="col-12" *ngFor="let material of componentsMaterial.controls; let i = index">
 									<div [formGroupName]="i">
 										<input type="text" matInput placeholder="Material" formControlName="name" required>
 										<button mat-icon-button matSuffix (click)="removeMaterial(i)" title="Remove Material">
@@ -249,8 +243,7 @@
 						<mat-expansion-panel-header>
 							<mat-panel-title>
 								Duration
-								<i class="fas fa-exclamation-triangle text-danger ml-2"
-									*ngIf="hasSubmitted && !duration.valid"></i>
+								<i class="fas fa-exclamation-triangle text-danger ml-2" *ngIf="hasSubmitted && !duration.valid"></i>
 							</mat-panel-title>
 						</mat-expansion-panel-header>
 
@@ -258,7 +251,7 @@
 							There were some problems with the duration information.
 						</p>
 
-						<ng-container formGroupName="duration">
+						<ng-container formGroupName="spellDuration">
 							<!-- Type -->
 							<mat-radio-group formControlName="type" class="u-flex u-flex__justify--space-between" (change)="durationChanged($event)">
 								<mat-radio-button *ngFor="let type of (formData$ | async)?.durationTypes" [value]="type">
@@ -312,8 +305,7 @@
 						<mat-expansion-panel-header>
 							<mat-panel-title>
 								Description
-								<i class="fas fa-exclamation-triangle text-danger ml-2"
-									*ngIf="hasSubmitted && !description.valid"></i>
+								<i class="fas fa-exclamation-triangle text-danger ml-2" *ngIf="hasSubmitted && !description.valid"></i>
 							</mat-panel-title>
 						</mat-expansion-panel-header>
 
@@ -341,11 +333,18 @@
 					<!-- /At Higher Levels -->
 				</mat-accordion>
 
-				<div class="u-flex u-flex__justify--end mt-3">
+				<mat-card-actions class="u-flex u-flex__justify--flex-end">
+					<button (click)="cancel()" class="mr-3" mat-raised-button color="danger"><i class="fas fa-times-square mr-2"></i> Cancel</button>
+					<button (click)="save()" mat-raised-button color="primary"><i class="fas fa-save mr-2"></i>
+						Save
+					</button>
+				</mat-card-actions>
+
+				<!-- <div class="u-flex u-flex__justify--end mt-3">
 					<button (click)="cancel()" class="mr-3" mat-raised-button color="danger"><i class="fas fa-times-square mr-2"></i> Cancel</button>
 					<button (click)="save()" mat-raised-button color="primary"><i class="fas fa-save mr-2"></i>
 						Save</button>
-				</div>
+				</div> -->
 			</mat-card-content>
 		</mat-card>
 	</form>

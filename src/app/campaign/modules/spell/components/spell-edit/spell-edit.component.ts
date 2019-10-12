@@ -125,9 +125,9 @@ export class SpellEditComponent implements OnInit, OnDestroy {
 			description: new FormControl("")
 		}),
 		castingTime: this.castingTime,
-		range: this.range,
-		components: this.components,
-		duration: this.duration,
+		spellRange: this.range,
+		spellComponents: this.components,
+		spellDuration: this.duration,
 		description: this.description,
 		atHigherLevels: new FormControl("")
 	});
@@ -269,17 +269,31 @@ export class SpellEditComponent implements OnInit, OnDestroy {
 	}
 	private ifRangeIsSelf(): void {
 		this.showShape = true;
-		const control = (this.spellFormGroup.controls["range"] as FormGroup)
-			.controls["unit"];
-		if (this.words.isNullOrWhitespace(control.value))
-			control.patchValue("foot");
+		if (this.words.isNullOrWhitespace(this.rangeUnit.value))
+			this.rangeUnit.patchValue("foot");
 	}
 	private ifRangeIsNotSelf(): void {
 		this.showShape = false;
-		const control = (this.spellFormGroup.controls["range"] as FormGroup)
-			.controls["unit"];
-		if (this.words.isNullOrWhitespace(control.value))
-			control.patchValue("feet");
+		if (this.words.isNullOrWhitespace(this.rangeUnit.value))
+			this.rangeUnit.patchValue("feet");
+	}
+	private setRangeType(type: string) {
+		switch (type) {
+			case "Duration":
+				this.showDuration = true;
+				this.showUntil = false;
+				break;
+
+			case "Until":
+				this.showDuration = false;
+				this.showUntil = true;
+				break;
+
+			default:
+				this.showDuration = false;
+				this.showUntil = false;
+				break;
+		}
 	}
 
 	public materialChanged(event: MatCheckboxChange) {
@@ -303,24 +317,6 @@ export class SpellEditComponent implements OnInit, OnDestroy {
 		this.setRangeType(event.value);
 		this.conHasExtraSpacing = !!this.durationConcentration.value;
 	}
-	private setRangeType(type: string) {
-		switch (type) {
-			case "Duration":
-				this.showDuration = true;
-				this.showUntil = false;
-				break;
-
-			case "Until":
-				this.showDuration = false;
-				this.showUntil = true;
-				break;
-
-			default:
-				this.showDuration = false;
-				this.showUntil = false;
-				break;
-		}
-	}
 
 	public cancel(): void {
 		this.actions.spellEditFormChange(null);
@@ -329,13 +325,14 @@ export class SpellEditComponent implements OnInit, OnDestroy {
 
 	public save(): void {
 		this.hasSubmitted = true;
-		const spell = this.store.getState().app.forms.spellForm;
 
-		// TODO: Call server backend
 		if (this.spellFormGroup.valid) {
+			const spell = this.store.getState().app.forms.spellForm;
+			const campaignId = this.store.getState().app.campaign.id;
+
 			this.processing = true;
 
-			this.service.save(spell).subscribe(
+			this.service.save(spell, campaignId).subscribe(
 				(response: ApiResponse) => {
 					this.processing = false;
 					if (response) {

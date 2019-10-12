@@ -15,7 +15,10 @@ export class SpellService extends MasterService {
 		super(http);
 	}
 
-	public save(spell: Spell): Observable<ApiResponse> {
-		return this.http.put<ApiResponse>(`${this.baseUrl}/save`, spell);
+	public save(spell: Spell, campaignId: number): Observable<ApiResponse> {
+		return this.http.put<ApiResponse>(`${this.baseUrl}/save`, {
+			spell: spell,
+			campaignId: campaignId
+		});
 	}
 }

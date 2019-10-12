@@ -2,24 +2,25 @@
 	<strong class="u-flex__shrink--no">Duration:</strong>
 	<ng-container *ngIf="duration; else noDuration">
 		<span class="u-margin-left">
-			<ng-container *ngIf="duration.instantaneous">Instantaneous</ng-container>
-			<ng-container *ngIf="duration.special">Special</ng-container>
-			<ng-container *ngIf="duration.untilDispelled || duration.untilTriggered">
-				<ng-container *ngIf="duration.untilDispelled && !duration.untilTriggered">Until dispelled</ng-container>
-				<ng-container *ngIf="duration.untilTriggered && !duration.untilDispelled">Until triggered</ng-container>
-				<ng-container *ngIf="duration.untilTriggered && duration.untilDispelled">
-					Until disppelled or triggered
+			<ng-container [ngSwitch]="duration.type">
+				<ng-container *ngSwitchCase="'Instantaneous'">Instantaneous</ng-container>
+				<ng-container *ngSwitchCase="'Special'">Special</ng-container>
+				<ng-container *ngSwitchCase="'Until'">
+					<ng-container *ngIf="duration.untilDispelled && !duration.untilTriggered">Until dispelled</ng-container>
+					<ng-container *ngIf="duration.untilTriggered && !duration.untilDispelled">Until triggered</ng-container>
+					<ng-container *ngIf="duration.untilTriggered && duration.untilDispelled">
+						Until disppelled or triggered
+					</ng-container>
 				</ng-container>
-			</ng-container>
-			<ng-container
-				*ngIf="!duration.instantaneous && !duration.special && !duration.untilDispelled && !duration.untilTriggered">
-				<ng-container *ngIf="duration.concentration">
-					Concentration, Up to
+				<ng-container *ngSwitchCase="'Duration'">
+					<ng-container *ngIf="duration.concentration">
+						Concentration, Up to
+					</ng-container>
+					<ng-container *ngIf="duration.upTo">
+						Up to
+					</ng-container>
+					{{duration.amount}} {{duration.unit}}
 				</ng-container>
-				<ng-container *ngIf="duration.upTo">
-					Up to
-				</ng-container>
-				{{duration.amount}} {{duration.unit}}
 			</ng-container>
 		</span>
 	</ng-container>
