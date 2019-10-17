@@ -5,8 +5,9 @@ import { SpellComponents } from "./spellComponents";
 import { SpellDuration } from "./spellDuration";
 import { SpellSchool } from "./spellSchool";
 import { SpellRange } from "./spellRange";
+import IFormEditable from "src/app/models/core/app/forms/iFormEditable";
 
-export class Spell {
+export class Spell implements IFormEditable {
 	public id: number;
 	public name: string;
 	public level: number;

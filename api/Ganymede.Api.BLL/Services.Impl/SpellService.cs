@@ -34,17 +34,13 @@ namespace Ganymede.Api.BLL.Services.Impl
             _mapper = mapper;
         }
 
-        public ApiResponse Add(Spell spell, int campaignID, string userId)
+        public ApiResponse Add(Spell spell, string userId)
         {
             try
             {
-                Campaign campaign = _ctx.Campaigns.Where(c => c.ID == campaignID && c.AppUserId == userId).Single();
-                spell.CampaignID = campaign.ID;
                 spell.ID = default;
 
-                spell = MapValues(spell);
-
-                _ctx.Spells.Add(spell);
+                _ctx.Spells.Add(MapValues(spell, userId));
                 _ctx.SaveChanges();
 
                 return new ApiResponse
@@ -70,7 +66,7 @@ namespace Ganymede.Api.BLL.Services.Impl
                 Spell old = _ctx.Spells.Where(c => c.Campaign.AppUserId == userId).Single(c => c.ID == spell.ID);
                 _mapper.Map(spell, old);
 
-                old = MapValues(old);
+                old = MapValues(old, userId);
 
                 _ctx.SaveChanges();
 
@@ -110,25 +106,27 @@ namespace Ganymede.Api.BLL.Services.Impl
             }
         }
 
-        private Spell MapValues(Spell item)
+        private Spell MapValues(Spell spell, string userId)
         {
-            CastingTime time = _ctx.CastingTimes.FirstOrDefault(c => c.Amount == item.CastingTime.Amount && c.Unit == item.CastingTime.Unit && c.ReactionCondition == item.CastingTime.ReactionCondition && c.Type == item.CastingTime.Type);
+            CastingTime time = _ctx.CastingTimes.FirstOrDefault(c => c.Amount == spell.CastingTime.Amount && c.Unit == spell.CastingTime.Unit && c.ReactionCondition == spell.CastingTime.ReactionCondition && c.Type == spell.CastingTime.Type);
             if (time != null)
-                item.CastingTime = time;
+                spell.CastingTime = time;
 
-            SpellComponents components = _ctx.SpellComponents.FirstOrDefault(c => Enumerable.SequenceEqual(c.Material, item.SpellComponents.Material) && c.Somatic == item.SpellComponents.Somatic && c.Verbal == item.SpellComponents.Verbal);
+            SpellComponents components = _ctx.SpellComponents.FirstOrDefault(c => Enumerable.SequenceEqual(c.Material, spell.SpellComponents.Material) && c.Somatic == spell.SpellComponents.Somatic && c.Verbal == spell.SpellComponents.Verbal);
             if (components != null)
-                item.SpellComponents = components;
+                spell.SpellComponents = components;
 
-            SpellDuration duration = _ctx.SpellDurations.FirstOrDefault(d => d.Amount == item.SpellDuration.Amount && d.Concentration == item.SpellDuration.Concentration && d.Type == item.SpellDuration.Type && d.Unit == item.SpellDuration.Unit && d.UpTo == item.SpellDuration.UpTo);
+            SpellDuration duration = _ctx.SpellDurations.FirstOrDefault(d => d.Amount == spell.SpellDuration.Amount && d.Concentration == spell.SpellDuration.Concentration && d.Type == spell.SpellDuration.Type && d.Unit == spell.SpellDuration.Unit && d.UpTo == spell.SpellDuration.UpTo);
             if (duration != null)
-                item.SpellDuration = duration;
+                spell.SpellDuration = duration;
 
-            SpellRange range = _ctx.SpellRanges.FirstOrDefault(r => r.Amount == item.SpellRange.Amount && r.Type == item.SpellRange.Type && r.Shape == item.SpellRange.Shape && r.Unit == item.SpellRange.Unit);
+            SpellRange range = _ctx.SpellRanges.FirstOrDefault(r => r.Amount == spell.SpellRange.Amount && r.Type == spell.SpellRange.Type && r.Shape == spell.SpellRange.Shape && r.Unit == spell.SpellRange.Unit);
             if (range != null)
-                item.SpellRange = range;
+                spell.SpellRange = range;
 
-            return item;
+            spell.Campaign = _ctx.Campaigns.Where(c => c.ID == spell.CampaignID && c.AppUserId == userId).Single();
+
+            return spell;
         }
     }
 }

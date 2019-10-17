@@ -54,7 +54,7 @@ export class CampaignListComponent implements OnInit {
 	}
 
 	public edit(campaignId: number): void {
-		this.store.dispatch(this.actions.editCampaign(campaignId));
+		this.store.dispatch(this.actions.edit(campaignId));
 		this.router.navigateByUrl(`/campaigns/edit/${campaignId}`);
 	}
 
@@ -89,7 +89,7 @@ export class CampaignListComponent implements OnInit {
 		this.processing = true;
 		this.service.deleteCampaign(campaign.id).subscribe(
 			() => {
-				this.store.dispatch(this.actions.deleteCampaign(campaign.id));
+				this.store.dispatch(this.actions.delete(campaign.id));
 				this.processing = false;
 			},
 			() => {

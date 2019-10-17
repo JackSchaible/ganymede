@@ -4,6 +4,7 @@ import { Spell } from "src/app/campaign/modules/spell/models/spell";
 import { App } from "src/app/models/core/app/app";
 import { IAppState } from "src/app/models/core/iAppState";
 import { AppUser } from "src/app/models/core/appUser";
+import IFormActions from "src/app/store/iFormActions";
 
 export class SpellActionTypes {
 	public static SPELL_EDIT: string = "SPELL_EDIT";
@@ -20,8 +21,8 @@ export class SpellAction {
 @Injectable({
 	providedIn: "root"
 })
-export class SpellActions {
-	public editSpell(spellId: number): AnyAction {
+export class SpellActions implements IFormActions<Spell> {
+	public edit(spellId: number): AnyAction {
 		const spellForm: Spell = Spell.getDefault();
 		spellForm.id = spellId;
 
@@ -38,7 +39,7 @@ export class SpellActions {
 		};
 	}
 
-	public spellEditFormChange(spell: Spell): AnyAction {
+	public change(spell: Spell): AnyAction {
 		const user = AppUser.getDefault();
 		const app = App.getDefault();
 		app.forms.spellForm = spell;
@@ -53,7 +54,7 @@ export class SpellActions {
 		};
 	}
 
-	public spellSaved(spell: Spell, isNew: boolean): AnyAction {
+	public save(spell: Spell, isNew: boolean): AnyAction {
 		const user = AppUser.getDefault();
 		const app = App.getDefault();
 		app.forms.spellForm = spell;
@@ -73,10 +74,10 @@ export class SpellActions {
 		};
 	}
 
-	public deleteSpell(id: number): AnyAction {
+	public delete(spellId: number): AnyAction {
 		const app = App.getDefault();
 		const spell = Spell.getDefault();
-		spell.id = id;
+		spell.id = spellId;
 		app.forms.spellForm = spell;
 
 		const state: IAppState = {

@@ -24,14 +24,14 @@ namespace Ganymede.Api.Controllers
 
         // PUT: api/Spell/5
         [HttpPut]
-        public ApiResponse Save(Spell value, int campaignId)
+        public ApiResponse Save(Spell value)
         {
             var user = _userManager.GetUserId(HttpContext.User);
 
             ApiResponse response;
 
             if (value.ID == -1)
-                response = _service.Add(value, campaignId, user);
+                response = _service.Add(value, user);
             else
                 response = _service.Update(value, user);
 

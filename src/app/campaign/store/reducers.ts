@@ -26,8 +26,8 @@ export function campaignReducer(
 				result = campaignEditReducer(state, action.state);
 				break;
 
-			case CampaignActionTypes.CAMPAIGN_EDIT_RULESET_CHANGED:
-				result = campaignEditRulesetChangedReducer(state, action.state);
+			case CampaignActionTypes.CAMPAIGN_EDIT_FORM_CHANGED:
+				result = campaignFormChangedReducer(state, action.state);
 				break;
 
 			case CampaignActionTypes.NEW_CAMPAIGN_SAVED:
@@ -90,20 +90,24 @@ function campaignEditReducer(
 	return state;
 }
 
-function campaignEditRulesetChangedReducer(
+function campaignFormChangedReducer(
 	oldState: IAppState,
 	newState: IAppState
 ): IAppState {
 	const state = _.cloneDeep(oldState);
-	const rulesetID: number = newState.app.forms.campaignForm.ruleset.id;
-	const ruleset: Ruleset = oldState.app.forms.campaignFormData.rulesets.find(
-		(r: Ruleset) => {
-			return r.id === rulesetID;
-		}
-	);
 
-	state.app.forms.campaignForm.rulesetID = rulesetID;
-	state.app.forms.campaignForm.ruleset = _.cloneDeep(ruleset);
+	state.app.forms.campaignForm = newState.app.forms.campaignForm;
+
+	if (
+		state.app.forms.campaignForm.ruleset &&
+		(state.app.forms.campaignForm.ruleset.id ||
+			state.app.forms.campaignForm.ruleset.id === 0)
+	)
+		state.app.forms.campaignForm.ruleset = state.app.forms.campaignFormData.rulesets.find(
+			(r: Ruleset) => {
+				return r.id === state.app.forms.campaignForm.ruleset.id;
+			}
+		);
 
 	return state;
 }

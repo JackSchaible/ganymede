@@ -1,14 +1,14 @@
 import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { Observable } from "rxjs";
-import MasterService from "../services/master.service";
 import { ApiResponse } from "../services/http/apiResponse";
 import { Campaign } from "./models/campaign";
+import FormService from "../services/form.service";
 
 @Injectable({
 	providedIn: "root"
 })
-export class CampaignService extends MasterService {
+export class CampaignService extends FormService<Campaign> {
 	protected baseUrl: string = this.apiUrl + "Campaign";
 
 	constructor(private client: HttpClient) {
@@ -23,7 +23,7 @@ export class CampaignService extends MasterService {
 		return this.client.get<Campaign>(`${this.baseUrl}/get/${id}`);
 	}
 
-	public saveCampaign(campaign: Campaign): Observable<ApiResponse> {
+	public save(campaign: Campaign): Observable<ApiResponse> {
 		return this.client.put<ApiResponse>(`${this.baseUrl}/save`, campaign);
 	}
 

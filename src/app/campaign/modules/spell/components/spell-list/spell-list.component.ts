@@ -45,7 +45,7 @@ export class SpellListComponent implements OnInit {
 	}
 
 	public edit(spellId: number): void {
-		this.store.dispatch(this.actions.editSpell(spellId));
+		this.store.dispatch(this.actions.edit(spellId));
 
 		const campaignId = this.store.getState().app.campaign.id;
 		this.router.navigateByUrl(

@@ -12,22 +12,33 @@ import * as _ from "lodash";
 import { Location } from "@angular/common";
 import { SpellService } from "../../spell.service";
 import { ApiResponse } from "src/app/services/http/apiResponse";
-import { MatSnackBar } from "@angular/material/snack-bar";
-import ApiCodes from "src/app/services/http/apiCodes";
 import { WordService } from "src/app/services/word.service";
 import { SpellFormValidators } from "../../spell.validators";
 import { SpellSchool } from "../../models/spellSchool";
 import { MatCheckboxChange } from "@angular/material/checkbox";
 import { MatRadioChange } from "@angular/material/radio";
 import { CastingTime } from "../../models/castingTime";
-import { SpellComponents } from "../../models/spellComponents";
+import { SnackBarService } from "src/app/services/snackbar.service";
+import FormBase from "src/app/common/formBase/formBase";
 
 @Component({
 	selector: "gm-spell-edit",
 	templateUrl: "./spell-edit.component.html",
 	styleUrls: ["./spell-edit.component.scss"]
 })
-export class SpellEditComponent implements OnInit, OnDestroy {
+export class SpellEditComponent extends FormBase<Spell, SpellActions>
+	implements OnInit, OnDestroy {
+	constructor(
+		protected store: NgRedux<IAppState>,
+		protected actions: SpellActions,
+		protected location: Location,
+		protected service: SpellService,
+		protected snackBarService: SnackBarService,
+		private words: WordService
+	) {
+		super(store, actions, location, service, snackBarService);
+	}
+
 	@select(["app", "forms", "spellForm"])
 	public spell$: Observable<Spell>;
 
@@ -35,10 +46,6 @@ export class SpellEditComponent implements OnInit, OnDestroy {
 	public formData$: Observable<SpellFormData>;
 	public schools$: Observable<SpellSchool[]>;
 
-	private formStoreSubscription: Subscription;
-	private formValueChangesSubscription: Subscription;
-
-	public hasSubmitted: boolean;
 	public showCastingTime: boolean;
 	public showReaction: boolean;
 	public showRange: boolean;
@@ -116,7 +123,7 @@ export class SpellEditComponent implements OnInit, OnDestroy {
 		SpellFormValidators.validateDuration(this.words)
 	);
 	public description: FormControl = new FormControl("", Validators.required);
-	public spellFormGroup: FormGroup = new FormGroup({
+	public formGroup: FormGroup = new FormGroup({
 		name: this.name,
 		level: this.level,
 		spellSchool: new FormGroup({
@@ -133,21 +140,10 @@ export class SpellEditComponent implements OnInit, OnDestroy {
 	});
 	// #endregion
 
-	public processing: boolean;
-	public isNew: boolean;
+	protected formSelector = ["app", "forms", "spellForm"];
 
-	constructor(
-		private store: NgRedux<IAppState>,
-		private actions: SpellActions,
-		private location: Location,
-		private service: SpellService,
-		private snackBar: MatSnackBar,
-		private words: WordService
-	) {}
-
-	ngOnInit() {
-		this.syncFromStore();
-		this.syncToStore();
+	public ngOnInit() {
+		this.onInit();
 
 		this.schools$ = this.formData$.pipe(
 			map((value: SpellFormData): SpellSchool[] => {
@@ -159,21 +155,17 @@ export class SpellEditComponent implements OnInit, OnDestroy {
 			})
 		);
 	}
-	private syncFromStore() {
-		if (this.formStoreSubscription !== undefined) return;
 
-		this.formStoreSubscription = this.store
-			.select(["app", "forms", "spellForm"])
-			.subscribe((spell: Spell) => {
-				this.spellFormGroup.patchValue(spell);
+	public ngOnDestroy() {
+		this.onDestroy();
+	}
 
-				this.syncFromCastingTime(spell.castingTime);
-				this.syncFromRange(spell.spellRange);
-				if (spell.spellComponents)
-					this.syncFromMaterial(spell.spellComponents.material);
-				if (spell.spellDuration)
-					this.setRangeType(spell.spellDuration.type);
-			});
+	protected syncFrom(spell: Spell) {
+		this.syncFromCastingTime(spell.castingTime);
+		this.syncFromRange(spell.spellRange);
+		if (spell.spellComponents)
+			this.syncFromMaterial(spell.spellComponents.material);
+		if (spell.spellDuration) this.setRangeType(spell.spellDuration.type);
 	}
 	private syncFromCastingTime(time: CastingTime) {
 		if (!time) return;
@@ -202,25 +194,8 @@ export class SpellEditComponent implements OnInit, OnDestroy {
 		}
 	}
 
-	private syncToStore() {
-		if (this.formValueChangesSubscription !== undefined) return;
-
-		this.formValueChangesSubscription = this.spellFormGroup.valueChanges
-			.pipe(
-				debounceTime(250),
-				distinctUntilChanged((a: Spell, b: Spell): boolean => {
-					a = this.fixWeirdities(a);
-					b = this.fixWeirdities(b);
-					return Spell.isEqual(a, b);
-				})
-			)
-			.subscribe((spell: Spell) => {
-				spell = this.fixWeirdities(spell);
-				this.store.dispatch(this.actions.spellEditFormChange(spell));
-			});
-	}
 	// Fix oddities with the form
-	private fixWeirdities(spellIn: any): Spell {
+	protected fixWeirdities(spellIn: any): Spell {
 		const spell = _.cloneDeep(spellIn);
 		if (
 			spell.spellComponents &&
@@ -238,15 +213,9 @@ export class SpellEditComponent implements OnInit, OnDestroy {
 		return spell;
 	}
 
-	ngOnDestroy(): void {
-		if (this.formStoreSubscription)
-			this.formStoreSubscription.unsubscribe();
-
-		if (this.formStoreSubscription)
-			this.formValueChangesSubscription.unsubscribe();
+	protected isEqual(a: Spell, b: Spell): boolean {
+		return Spell.isEqual(a, b);
 	}
-
-	private openSnackbar(icon: string, message: string): void {}
 
 	public castingTimeChanged(event: MatRadioChange) {
 		this.showReaction = this.isReaction(event.value);
@@ -318,59 +287,12 @@ export class SpellEditComponent implements OnInit, OnDestroy {
 		this.conHasExtraSpacing = !!this.durationConcentration.value;
 	}
 
-	public cancel(): void {
-		this.actions.spellEditFormChange(null);
-		this.location.back();
+	protected getInstance(): Spell {
+		return this.store.getState().app.forms.spellForm;
 	}
 
-	public save(): void {
-		this.hasSubmitted = true;
-
-		if (this.spellFormGroup.valid) {
-			const spell = this.store.getState().app.forms.spellForm;
-			const campaignId = this.store.getState().app.campaign.id;
-
-			this.processing = true;
-
-			this.service.save(spell, campaignId).subscribe(
-				(response: ApiResponse) => {
-					this.processing = false;
-					if (response) {
-						if (response.statusCode === ApiCodes.Ok) {
-							this.openSnackbar(
-								"check-square",
-								`${spell.name} was successfully saved!`
-							);
-
-							const wasNew = this.isNew;
-
-							if (this.isNew) {
-								this.isNew = false;
-								spell.id = response.insertedID;
-							}
-
-							this.store.dispatch(
-								this.actions.spellSaved(spell, wasNew)
-							);
-						} else
-							this.openSnackbar(
-								"exclamation-triangle",
-								`An error occurred while saving ${spell.name}!`
-							);
-					} else
-						this.openSnackbar(
-							"exclamation-triangle",
-							`An error occurred while saving ${spell.name}!`
-						);
-				},
-				() => {
-					this.processing = false;
-					this.openSnackbar(
-						"exclamation-triangle",
-						`An error occurred while saving ${spell.name}!`
-					);
-				}
-			);
-		}
+	protected afterNew(spell: Spell): Spell {
+		spell.campaignID = this.store.getState().app.campaign.id;
+		return spell;
 	}
 }

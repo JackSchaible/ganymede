@@ -5,7 +5,7 @@ namespace Ganymede.Api.BLL.Services
 {
     public interface ISpellService
     {
-        ApiResponse Add(Spell spell, int campaignId, string userId);
+        ApiResponse Add(Spell spell, string userId);
         ApiResponse Update(Spell spell, string userId);
         ApiResponse Delete(int id, string userId);
     }
