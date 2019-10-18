@@ -49,15 +49,14 @@ namespace Ganymede.Api.BLL.Services.Impl
             return campaign;
         }
 
-        public ApiResponse Add(CampaignEditModel campaignModel, string userId)
+        public ApiResponse Add(Campaign campaign, string userId)
         {
             try
             {
-                Campaign campaign = _mapper.Map<Campaign>(campaignModel);
                 campaign.AppUserId = userId;
                 campaign.ID = default;
 
-                _ctx.Campaigns.Add(campaign);
+                _ctx.Campaigns.Add(MapValues(campaign));
                 _ctx.SaveChanges();
 
                 return new ApiResponse
@@ -76,7 +75,7 @@ namespace Ganymede.Api.BLL.Services.Impl
             }
         }
 
-        public ApiResponse Update(CampaignEditModel campaign, string userId)
+        public ApiResponse Update(Campaign campaign, string userId)
         {
             try
             {
@@ -119,6 +118,13 @@ namespace Ganymede.Api.BLL.Services.Impl
                     StatusCode = ApiCodes.Error
                 };
             }
+        }
+
+        private Campaign MapValues(Campaign campaign)
+        {
+            campaign.Ruleset = _ctx.Rulesets.Single(r => r.ID == campaign.Ruleset.ID);
+
+            return campaign;
         }
     }
 }

@@ -106,11 +106,11 @@ export class AppModule {
 		]);
 
 		store.subscribe(() => {
-			const state = store.getState();
+			const newState = store.getState();
 
 			this.stateService.saveState({
-				user: state.user,
-				app: state.app
+				user: newState.user,
+				app: newState.app
 			});
 		});
 

@@ -41,6 +41,8 @@ export default abstract class FormBase<
 	protected onInit() {
 		this.syncFromStore();
 		this.syncToStore();
+
+		this.isNew = this.getInstance().id === -1;
 	}
 
 	protected onDestroy() {
@@ -73,6 +75,8 @@ export default abstract class FormBase<
 			this.service.save(item).subscribe(
 				(response: ApiResponse) => {
 					this.processing = false;
+
+					this.store.dispatch(this.actions.save(item, this.isNew));
 
 					this.snackBarService.showSuccess(
 						response,

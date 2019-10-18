@@ -119,7 +119,7 @@ function campaignSaved(
 ): IAppState {
 	const state = _.cloneDeep(oldState);
 
-	const newCampaign = newState.user.campaigns[0];
+	const newCampaign = newState.app.forms.campaignForm;
 	state.app.forms.campaignForm = newState.app.forms.campaignForm;
 
 	if (isNew) state.user.campaigns.push(newCampaign);

@@ -82,8 +82,6 @@ export class CampaignActions implements IFormActions<Campaign> {
 
 	public save(campaign: Campaign, isNew: boolean): AnyAction {
 		const user = AppUser.getDefault();
-		user.campaigns = [campaign];
-
 		const app = App.getDefault();
 		app.forms.campaignForm = campaign;
 
@@ -92,9 +90,10 @@ export class CampaignActions implements IFormActions<Campaign> {
 			app: app
 		};
 
-		let actionType: string = CampaignActionTypes.CAMPAIGN_SAVED;
+		let actionType: string;
 
 		if (isNew) actionType = CampaignActionTypes.NEW_CAMPAIGN_SAVED;
+		else actionType = CampaignActionTypes.CAMPAIGN_SAVED;
 
 		return {
 			type: new CampaignAction(actionType),

@@ -32,7 +32,7 @@ namespace Ganymede.api.Controllers
 
         // PUT: api/Campaign/5
         [HttpPut]
-        public ApiResponse Save(CampaignEditModel value)
+        public ApiResponse Save(Campaign value)
         {
             var user = _userManager.GetUserId(HttpContext.User);
 
