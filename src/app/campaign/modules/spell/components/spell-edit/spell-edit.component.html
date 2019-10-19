@@ -16,11 +16,11 @@
 						<mat-expansion-panel-header>
 							<mat-panel-title>
 								Basic Info
-								<i class="fas fa-exclamation-triangle text-danger ml-2" *ngIf="hasSubmitted && (name.errors || level.errors || schoolId.errors)"></i>
+								<i class="fas fa-exclamation-triangle text-danger ml-2" *ngIf="name.invalid && (name.dirty || name.touched)"></i>
 							</mat-panel-title>
 						</mat-expansion-panel-header>
 
-						<p *ngIf="hasSubmitted && (name.errors || level.errors || schoolId.errors)" class="text-danger">
+						<p *ngIf="(!name.valid && (name.dirty || name.touched)) || (!level.valid && (level.dirty || level.touched)) || (!schoolId.valid && (schoolId.dirty || schoolId.touched))" class="text-danger">
 							There were some problems with the basic information.
 						</p>
 
@@ -67,11 +67,11 @@
 						<mat-expansion-panel-header>
 							<mat-panel-title>
 								Casting Time
-								<i class="fas fa-exclamation-triangle text-danger ml-2" *ngIf="hasSubmitted && !castingTime.valid"></i>
+								<i class="fas fa-exclamation-triangle text-danger ml-2" *ngIf="formGroupErrors?.castingTime"></i>
 							</mat-panel-title>
 						</mat-expansion-panel-header>
 
-						<p *ngIf="hasSubmitted && !castingTime.valid" class="text-danger mb-3">
+						<p *ngIf="this.castingTimeInvalid" class="text-danger mb-3">
 							There were some problems with the casting time information.
 						</p>
 
@@ -82,7 +82,7 @@
 									{{ type | titlecase }}
 								</mat-radio-button>
 							</mat-radio-group>
-							<mat-error *ngIf="hasSubmitted && castingTimeType.errors?.required">
+							<mat-error *ngIf="(castingTimeType.dirty || castingTimeType.touched) && castingTimeType.errors?.required">
 								A casting time type is required.
 							</mat-error>
 
@@ -131,11 +131,11 @@
 						<mat-expansion-panel-header>
 							<mat-panel-title>
 								Range
-								<i class="fas fa-exclamation-triangle text-danger ml-2" *ngIf="hasSubmitted && !range.valid"></i>
+								<i class="fas fa-exclamation-triangle text-danger ml-2" *ngIf="(range.dirty || range.touched) && !range.valid"></i>
 							</mat-panel-title>
 						</mat-expansion-panel-header>
 
-						<p *ngIf="hasSubmitted && !range.valid" class="text-danger mb-3">
+						<p *ngIf="(range.dirty || range.touched) && !range.valid" class="text-danger mb-3">
 							There were some problems with the range information.
 						</p>
 
@@ -145,7 +145,7 @@
 									{{ type | titlecase }}
 								</mat-radio-button>
 							</mat-radio-group>
-							<mat-error *ngIf="hasSubmitted && rangeType.errors?.required">
+							<mat-error *ngIf="(rangeType.dirty || rangeType.touched) && rangeType.errors?.required">
 								A range type is required.
 							</mat-error>
 
@@ -199,11 +199,11 @@
 						<mat-expansion-panel-header>
 							<mat-panel-title>
 								Components
-								<i class="fas fa-exclamation-triangle text-danger ml-2" *ngIf="hasSubmitted && !components.valid"></i>
+								<i class="fas fa-exclamation-triangle text-danger ml-2" *ngIf="(components.touched || components.dirty) && !components.valid"></i>
 							</mat-panel-title>
 						</mat-expansion-panel-header>
 
-						<p *ngIf="hasSubmitted && !components.valid" class="text-danger mb-3">
+						<p *ngIf="(components.touched || components.dirty)  && !components.valid" class="text-danger mb-3">
 							There were some problems with the components information.
 						</p>
 
@@ -214,7 +214,7 @@
 								<mat-checkbox class="flex-shrink" [checked]="showMaterials" (change)="materialChanged($event)">Material</mat-checkbox>
 							</div>
 
-							<mat-error *ngIf="hasSubmitted && componentsVerbal.errors?.required">
+							<mat-error *ngIf="(componentsVerbal.touched || componentsVerbal.dirty)  && componentsVerbal.errors?.required">
 								A spell must have some components to it.
 							</mat-error>
 
@@ -243,11 +243,11 @@
 						<mat-expansion-panel-header>
 							<mat-panel-title>
 								Duration
-								<i class="fas fa-exclamation-triangle text-danger ml-2" *ngIf="hasSubmitted && !duration.valid"></i>
+								<i class="fas fa-exclamation-triangle text-danger ml-2" *ngIf="(duration.dirty || duration.touched) && !duration.valid"></i>
 							</mat-panel-title>
 						</mat-expansion-panel-header>
 
-						<p *ngIf="hasSubmitted && !duration.valid" class="text-danger mb-3">
+						<p *ngIf="(duration.dirty || duration.touched) && !duration.valid" class="text-danger mb-3">
 							There were some problems with the duration information.
 						</p>
 
@@ -258,7 +258,7 @@
 									{{ type | titlecase }}
 								</mat-radio-button>
 							</mat-radio-group>
-							<mat-error *ngIf="hasSubmitted && durationType.errors?.required">A duration type is required.</mat-error>
+							<mat-error *ngIf="(durationType.dirty || durationType.touched) && durationType.errors?.required">A duration type is required.</mat-error>
 
 							<!-- Amount & Unit-->
 							<div class="u-flex" *ngIf="showDuration">
@@ -273,13 +273,13 @@
 									</mat-checkbox>
 
 									<input type="number" matInput placeholder="Amount" formControlName="amount" required />
-									<mat-error *ngIf="hasSubmitted && durationAmount.errors?.required">Amount must have a value.</mat-error>
+									<mat-error *ngIf="(durationAmount.dirty || durationAmount.touched) && durationAmount.errors?.required">Amount must have a value.</mat-error>
 								</mat-form-field>
 
 								<!-- Unit -->
 								<mat-form-field class="u-flex__shrink">
 									<input type="text" [matAutocomplete]="durationUnitAC" matInput placeholder="Unit" formControlName="unit" required />
-									<mat-error *ngIf="hasSubmitted && durationUnit.errors?.required">Unit must have a value.</mat-error>
+									<mat-error *ngIf="(durationUnit.dirty || durationUnit.touched) && durationUnit.errors?.required">Unit must have a value.</mat-error>
 
 									<mat-autocomplete #durationUnitAC="matAutocomplete">
 										<mat-option *ngFor="let unit of (formData$ | async)?.durationUnits" [value]="unit">
@@ -294,7 +294,7 @@
 								<mat-checkbox formControlName="untilDispelled">Dispelled</mat-checkbox>
 								<mat-checkbox formControlName="untilTriggered">Triggered</mat-checkbox>
 							</div>
-							<mat-error *ngIf="hasSubmitted && durationUntilDispelled.errors?.required">You must choose a condition to end the spell.</mat-error>
+							<mat-error *ngIf="(durationUntilDispelled.dirty || durationUntilDispelled.touched) && durationUntilDispelled.errors?.required">You must choose a condition to end the spell.</mat-error>
 
 						</ng-container>
 					</mat-expansion-panel>
@@ -305,7 +305,7 @@
 						<mat-expansion-panel-header>
 							<mat-panel-title>
 								Description
-								<i class="fas fa-exclamation-triangle text-danger ml-2" *ngIf="hasSubmitted && !description.valid"></i>
+								<i class="fas fa-exclamation-triangle text-danger ml-2" *ngIf="(description.dirty || description.touched) && !description.valid"></i>
 							</mat-panel-title>
 						</mat-expansion-panel-header>
 
@@ -313,7 +313,7 @@
 
 						<mat-form-field class="col-12">
 							<textarea matInput rows="6" formControlName="description" required></textarea>
-							<mat-error *ngIf="hasSubmitted && description.errors?.required">Spells must have a description.</mat-error>
+							<mat-error *ngIf="(description.dirty || description.touched) && description.errors?.required">Spells must have a description.</mat-error>
 						</mat-form-field>
 					</mat-expansion-panel>
 					<!-- /Description -->
@@ -335,16 +335,13 @@
 
 				<mat-card-actions class="u-flex u-flex__justify--flex-end">
 					<button (click)="cancel()" class="mr-3" mat-raised-button color="danger"><i class="fas fa-times-square mr-2"></i> Cancel</button>
+					<!--button [disabled]="!formGroup.valid" (click)="save()" mat-raised-button color="primary"><i class="fas fa-save mr-2"></i>
+						Save
+					</button-->
 					<button (click)="save()" mat-raised-button color="primary"><i class="fas fa-save mr-2"></i>
 						Save
 					</button>
 				</mat-card-actions>
-
-				<!-- <div class="u-flex u-flex__justify--end mt-3">
-					<button (click)="cancel()" class="mr-3" mat-raised-button color="danger"><i class="fas fa-times-square mr-2"></i> Cancel</button>
-					<button (click)="save()" mat-raised-button color="primary"><i class="fas fa-save mr-2"></i>
-						Save</button>
-				</div> -->
 			</mat-card-content>
 		</mat-card>
 	</form>

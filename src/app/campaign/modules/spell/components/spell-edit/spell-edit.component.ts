@@ -1,17 +1,16 @@
 import { Component, OnInit, OnDestroy } from "@angular/core";
-import { Subscription, Observable } from "rxjs";
+import { Observable } from "rxjs";
 import { Spell } from "src/app/campaign/modules/spell/models/spell";
 import { NgRedux, select } from "@angular-redux/store";
 import { SpellActions } from "../../store/actions";
 import { IAppState } from "src/app/models/core/iAppState";
 import { SpellRange } from "src/app/campaign/modules/spell/models/spellRange";
 import { FormGroup, FormControl, FormArray, Validators } from "@angular/forms";
-import { debounceTime, distinctUntilChanged, map } from "rxjs/operators";
+import { map } from "rxjs/operators";
 import { SpellFormData } from "src/app/models/core/app/forms/formData/spellFormData";
 import * as _ from "lodash";
 import { Location } from "@angular/common";
 import { SpellService } from "../../spell.service";
-import { ApiResponse } from "src/app/services/http/apiResponse";
 import { WordService } from "src/app/services/word.service";
 import { SpellFormValidators } from "../../spell.validators";
 import { SpellSchool } from "../../models/spellSchool";
@@ -193,6 +192,8 @@ export class SpellEditComponent extends FormBase<Spell, SpellActions>
 			);
 		}
 	}
+
+	protected syncTo(spell: Spell) {}
 
 	// Fix oddities with the form
 	protected fixWeirdities(spellIn: any): Spell {

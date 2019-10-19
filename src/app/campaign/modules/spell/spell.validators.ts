@@ -4,19 +4,21 @@ import {
 	AbstractControl,
 	ValidationErrors,
 	FormGroup,
-	FormArray
+	FormArray,
+	FormControl
 } from "@angular/forms";
+import { until } from "selenium-webdriver";
 
 export class SpellFormValidators {
 	public static validateCastingTime(words: WordService): ValidatorFn {
 		return (control: AbstractControl): ValidationErrors => {
 			const castingTime = control as FormGroup;
-			const type = castingTime.get("type").value;
+			const type = castingTime.get("type");
 			const amount = castingTime.get("amount");
 			const unit = castingTime.get("unit");
 
 			this.clearAmountAndUnitErrors(amount, unit);
-			if (type === "Reaction")
+			if (type.value === "Reaction")
 				this.validateRequired(
 					words,
 					castingTime.controls["reactionCondition"]
@@ -24,11 +26,11 @@ export class SpellFormValidators {
 			else {
 				castingTime.get("reactionCondition").setErrors(null);
 
-				if (type === "Time")
+				if (type.value === "Time")
 					this.validateAmountAndUnit(words, amount, unit);
 			}
 
-			return {};
+			return null;
 		};
 	}
 
@@ -48,7 +50,7 @@ export class SpellFormValidators {
 				type.value === "Sight" ||
 				type.value === "Unlimited"
 			)
-				return {};
+				return null;
 
 			if (type.value === "Self" || type.value === "Ranged") {
 				this.validateAmountAndUnit(words, amount, unit);
@@ -57,7 +59,7 @@ export class SpellFormValidators {
 					this.validateRequired(words, range.controls["shape"]);
 			} else type.setErrors({ required: true });
 
-			return {};
+			return null;
 		};
 	}
 
@@ -78,7 +80,7 @@ export class SpellFormValidators {
 			if (!hasVerbal && !hasSomatic && !hasMaterial)
 				verbal.setErrors({ required: true });
 
-			return {};
+			return null;
 		};
 	}
 
@@ -101,7 +103,7 @@ export class SpellFormValidators {
 					dispelled.setErrors({ required: true });
 			}
 
-			return {};
+			return null;
 		};
 	}
 
@@ -125,11 +127,13 @@ export class SpellFormValidators {
 			amount.setErrors({
 				min: true
 			});
+		else amount.setErrors(null);
 
 		if (words.isNullOrWhitespace(unit.value))
 			unit.setErrors({
 				required: true
 			});
+		else unit.setErrors(null);
 	}
 	private static validateRequired(
 		words: WordService,

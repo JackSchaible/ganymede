@@ -66,4 +66,5 @@ export class CampaignEditComponent extends FormBase<Campaign, CampaignActions>
 		return Campaign.isEqual(a, b);
 	}
 	protected syncFrom() {}
+	protected syncTo() {}
 }
