@@ -112,7 +112,8 @@ namespace Ganymede.Api.BLL.Services.Impl
             if (time != null)
                 spell.CastingTime = time;
 
-            SpellComponents components = _ctx.SpellComponents.FirstOrDefault(c => Enumerable.SequenceEqual(c.Material, spell.SpellComponents.Material) && c.Somatic == spell.SpellComponents.Somatic && c.Verbal == spell.SpellComponents.Verbal);
+            List<SpellComponents> componentses = _ctx.SpellComponents.Where(c => c.Somatic == spell.SpellComponents.Somatic && c.Verbal == spell.SpellComponents.Verbal).ToList();
+            SpellComponents components = componentses.FirstOrDefault(c => Enumerable.SequenceEqual(c.Material, spell.SpellComponents.Material));
             if (components != null)
                 spell.SpellComponents = components;
 

@@ -123,6 +123,8 @@ export class SpellEditComponent extends FormBase<Spell, SpellActions>
 	);
 	public description: FormControl = new FormControl("", Validators.required);
 	public formGroup: FormGroup = new FormGroup({
+		id: new FormControl(""),
+		campaignID: new FormControl(""),
 		name: this.name,
 		level: this.level,
 		spellSchool: new FormGroup({

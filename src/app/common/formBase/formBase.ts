@@ -83,15 +83,21 @@ export default abstract class FormBase<
 				(response: ApiResponse) => {
 					this.processing = false;
 
-					this.store.dispatch(this.actions.save(item, this.isNew));
+					if (response.statusCode === "error")
+						this.snackBarService.showError(item.name);
+					else {
+						this.store.dispatch(
+							this.actions.save(item, this.isNew)
+						);
 
-					this.snackBarService.showSuccess(
-						response,
-						item.name,
-						item,
-						this.isNew,
-						this.actions.save
-					);
+						this.snackBarService.showSuccess(
+							response,
+							item.name,
+							item,
+							this.isNew,
+							this.actions.save
+						);
+					}
 				},
 				() => {
 					this.processing = false;
@@ -145,9 +151,14 @@ export default abstract class FormBase<
 
 	private validateFormGroup() {
 		this.formGroupErrors = {};
-		Object.keys(this.formGroup.controls).forEach((field: string) => {
-			this.setGroupError(this.formGroup.get(field), field);
-		});
+		Object.keys(this.formGroup.controls)
+			.filter(
+				(value: string): boolean =>
+					this.formGroup.get(value) instanceof FormGroup
+			)
+			.forEach((field: string) => {
+				this.setGroupError(this.formGroup.get(field), field);
+			});
 	}
 
 	private setGroupError(control: AbstractControl, field: string) {
@@ -172,7 +183,8 @@ export default abstract class FormBase<
 
 		Object.keys(group.controls).forEach((key: string) => {
 			const control = group.get(key);
-			valid = this.isValid(control);
+
+			if (!this.isValid(control)) valid = false;
 		});
 
 		return valid;
@@ -181,8 +193,8 @@ export default abstract class FormBase<
 	private isArrayValid(array: FormArray): boolean {
 		let isValid = true;
 
-		array.controls.forEach((value: AbstractControl) => {
-			isValid = this.isValid(value);
+		array.controls.forEach((control: AbstractControl) => {
+			if (!this.isValid(control)) isValid = false;
 		});
 
 		return isValid;
@@ -190,6 +202,6 @@ export default abstract class FormBase<
 
 	private isControlValid(control: FormControl): boolean {
 		if (control.valid) return true;
-		return control.touched || control.dirty;
+		return control.valid && (control.touched || control.dirty);
 	}
 }

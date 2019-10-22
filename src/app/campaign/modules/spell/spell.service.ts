@@ -4,6 +4,7 @@ import { Observable } from "rxjs";
 import { ApiResponse } from "src/app/services/http/apiResponse";
 import { HttpClient } from "@angular/common/http";
 import FormService from "src/app/services/form.service";
+import * as _ from "lodash";
 
 @Injectable({
 	providedIn: "root"
@@ -16,8 +17,8 @@ export class SpellService extends FormService<Spell> {
 	}
 
 	public save(spell: Spell): Observable<ApiResponse> {
-		return this.http.put<ApiResponse>(`${this.baseUrl}/save`, {
-			value: spell
-		});
+		const saveSpell = _.cloneDeep(spell);
+		saveSpell.monsterSpells = null;
+		return this.http.put<ApiResponse>(`${this.baseUrl}/save`, saveSpell);
 	}
 }

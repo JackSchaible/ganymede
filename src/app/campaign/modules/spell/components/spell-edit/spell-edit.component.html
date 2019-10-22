@@ -131,11 +131,11 @@
 						<mat-expansion-panel-header>
 							<mat-panel-title>
 								Range
-								<i class="fas fa-exclamation-triangle text-danger ml-2" *ngIf="(range.dirty || range.touched) && !range.valid"></i>
+								<i class="fas fa-exclamation-triangle text-danger ml-2" *ngIf="formGroupErrors?.spellRange"></i>
 							</mat-panel-title>
 						</mat-expansion-panel-header>
 
-						<p *ngIf="(range.dirty || range.touched) && !range.valid" class="text-danger mb-3">
+						<p *ngIf="formGroupErrors?.spellRange" class="text-danger mb-3">
 							There were some problems with the range information.
 						</p>
 
@@ -199,11 +199,11 @@
 						<mat-expansion-panel-header>
 							<mat-panel-title>
 								Components
-								<i class="fas fa-exclamation-triangle text-danger ml-2" *ngIf="(components.touched || components.dirty) && !components.valid"></i>
+								<i class="fas fa-exclamation-triangle text-danger ml-2" *ngIf="formGroupErrors?.spellComponents"></i>
 							</mat-panel-title>
 						</mat-expansion-panel-header>
 
-						<p *ngIf="(components.touched || components.dirty)  && !components.valid" class="text-danger mb-3">
+						<p *ngIf="formGroupErrors?.spellComponents" class="text-danger mb-3">
 							There were some problems with the components information.
 						</p>
 
@@ -243,11 +243,11 @@
 						<mat-expansion-panel-header>
 							<mat-panel-title>
 								Duration
-								<i class="fas fa-exclamation-triangle text-danger ml-2" *ngIf="(duration.dirty || duration.touched) && !duration.valid"></i>
+								<i class="fas fa-exclamation-triangle text-danger ml-2" *ngIf="formGroupErrors?.spellDuration"></i>
 							</mat-panel-title>
 						</mat-expansion-panel-header>
 
-						<p *ngIf="(duration.dirty || duration.touched) && !duration.valid" class="text-danger mb-3">
+						<p *ngIf="formGroupErrors?.spellDuration" class="text-danger mb-3">
 							There were some problems with the duration information.
 						</p>
 
