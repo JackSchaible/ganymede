@@ -1,11 +1,6 @@
 import { Location } from "@angular/common";
 import { Subscription } from "rxjs";
-import {
-	FormGroup,
-	FormControl,
-	FormArray,
-	AbstractControl
-} from "@angular/forms";
+import { FormGroup, FormControl } from "@angular/forms";
 import { IAppState } from "src/app/models/core/iAppState";
 import { NgRedux } from "@angular-redux/store";
 import { debounceTime, distinctUntilChanged } from "rxjs/operators";
@@ -35,7 +30,6 @@ export default abstract class FormBase<
 
 	public processing: boolean;
 	public isNew: boolean;
-	public formGroupErrors: any = {};
 
 	protected abstract fixWeirdities(item: T): T;
 	protected abstract isEqual(a: T, b: T): boolean;
@@ -66,7 +60,6 @@ export default abstract class FormBase<
 
 	public save(): void {
 		this.validateAllFormFields(this.formGroup);
-		this.validateFormGroup();
 
 		if (this.formGroup.valid) {
 			this.processing = true;
@@ -134,8 +127,6 @@ export default abstract class FormBase<
 				item = this.fixWeirdities(item);
 				this.store.dispatch(this.actions.change(item));
 				this.syncTo(item);
-
-				this.validateFormGroup();
 			});
 	}
 
@@ -147,61 +138,5 @@ export default abstract class FormBase<
 			else if (control instanceof FormGroup)
 				this.validateAllFormFields(control);
 		});
-	}
-
-	private validateFormGroup() {
-		this.formGroupErrors = {};
-		Object.keys(this.formGroup.controls)
-			.filter(
-				(value: string): boolean =>
-					this.formGroup.get(value) instanceof FormGroup
-			)
-			.forEach((field: string) => {
-				this.setGroupError(this.formGroup.get(field), field);
-			});
-	}
-
-	private setGroupError(control: AbstractControl, field: string) {
-		if (!this.isValid(control)) this.formGroupErrors[field] = true;
-	}
-
-	private isValid(control: AbstractControl): boolean {
-		let valid = true;
-
-		if (control instanceof FormGroup)
-			valid = this.isFormGroupValid(control);
-		else if (control instanceof FormArray)
-			valid = this.isArrayValid(control);
-		else if (control instanceof FormControl)
-			valid = this.isControlValid(control);
-
-		return valid;
-	}
-
-	private isFormGroupValid(group: FormGroup): boolean {
-		let valid = true;
-
-		Object.keys(group.controls).forEach((key: string) => {
-			const control = group.get(key);
-
-			if (!this.isValid(control)) valid = false;
-		});
-
-		return valid;
-	}
-
-	private isArrayValid(array: FormArray): boolean {
-		let isValid = true;
-
-		array.controls.forEach((control: AbstractControl) => {
-			if (!this.isValid(control)) isValid = false;
-		});
-
-		return isValid;
-	}
-
-	private isControlValid(control: FormControl): boolean {
-		if (control.valid) return true;
-		return control.valid && (control.touched || control.dirty);
 	}
 }

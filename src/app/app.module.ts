@@ -38,6 +38,7 @@ import { reduce } from "./store/rootReducer";
 import { IAppState } from "./models/core/iAppState";
 import { AppUser } from "./models/core/appUser";
 import { App } from "./models/core/app/app";
+import { STEPPER_GLOBAL_OPTIONS } from "@angular/cdk/stepper";
 
 @NgModule({
 	declarations: [
@@ -69,7 +70,11 @@ import { App } from "./models/core/app/app";
 	providers: [
 		{ provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
 		{ provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
-		StateLoaderService
+		StateLoaderService,
+		{
+			provide: STEPPER_GLOBAL_OPTIONS,
+			useValue: { showError: true }
+		}
 	],
 	bootstrap: [AppComponent]
 })

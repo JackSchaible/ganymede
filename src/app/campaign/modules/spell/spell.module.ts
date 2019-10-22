@@ -19,6 +19,7 @@ import { SpellDisplayComponent } from "./components/spell-display/spell-display.
 import { MatAutocompleteModule } from "@angular/material/autocomplete";
 import { MatRadioModule } from "@angular/material/radio";
 import { MatCheckboxModule } from "@angular/material/checkbox";
+import { MatStepperModule } from "@angular/material/stepper";
 
 @NgModule({
 	declarations: [
@@ -44,7 +45,8 @@ import { MatCheckboxModule } from "@angular/material/checkbox";
 		MatSelectModule,
 		MatSnackBarModule,
 		ReactiveFormsModule,
-		FormsModule
+		FormsModule,
+		MatStepperModule
 	]
 })
 export class SpellModule {}
