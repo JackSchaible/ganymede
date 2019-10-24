@@ -621,7 +621,7 @@ namespace Ganymede.Api.Data.Initializers
                         Amount = 100,
                         Type = RangeType.Self,
                         Shape = "line",
-                        Unit = "foot"
+                        Unit = "feet"
                     },
                     SpellComponents = new SpellComponents
                     {
@@ -700,7 +700,7 @@ namespace Ganymede.Api.Data.Initializers
                     SpellRange = new SpellRange
                     {
                         Amount = 60,
-                        Unit = "foot",
+                        Unit = "feet",
                         Shape = "line",
                         Type = RangeType.Self,
                     },
@@ -774,7 +774,7 @@ namespace Ganymede.Api.Data.Initializers
                         Amount = 30,
                         Type = RangeType.Self,
                         Shape = "sphere",
-                        Unit = "foot"
+                        Unit = "feet"
                     },
                     SpellSchool = _divination,
                 },
@@ -833,7 +833,7 @@ namespace Ganymede.Api.Data.Initializers
                     {
                         Type = RangeType.Self,
                         Amount = 15,
-                        Unit = "foot",
+                        Unit = "feet",
                         Shape = "cube"
                     },
                     SpellComponents = _cVS,

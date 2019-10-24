@@ -1,5 +1,12 @@
-import { Component, OnInit, OnDestroy } from "@angular/core";
-import { Observable } from "rxjs";
+import {
+	Component,
+	OnInit,
+	OnDestroy,
+	ViewChild,
+	ElementRef,
+	AfterViewInit
+} from "@angular/core";
+import { Observable, Subscription } from "rxjs";
 import { Spell } from "src/app/campaign/modules/spell/models/spell";
 import { NgRedux, select } from "@angular-redux/store";
 import { SpellActions } from "../../store/actions";
@@ -19,6 +26,7 @@ import { MatRadioChange } from "@angular/material/radio";
 import { CastingTime } from "../../models/castingTime";
 import { SnackBarService } from "src/app/services/snackbar.service";
 import FormBase from "src/app/common/formBase/formBase";
+import { KeyboardService } from "src/app/services/keyboard.service";
 
 @Component({
 	selector: "gm-spell-edit",
@@ -26,14 +34,15 @@ import FormBase from "src/app/common/formBase/formBase";
 	styleUrls: ["./spell-edit.component.scss"]
 })
 export class SpellEditComponent extends FormBase<Spell, SpellActions>
-	implements OnInit, OnDestroy {
+	implements OnInit, AfterViewInit, OnDestroy {
 	constructor(
 		protected store: NgRedux<IAppState>,
 		protected actions: SpellActions,
 		protected location: Location,
 		protected service: SpellService,
 		protected snackBarService: SnackBarService,
-		private words: WordService
+		private words: WordService,
+		private keyboardService: KeyboardService
 	) {
 		super(store, actions, location, service, snackBarService);
 	}
@@ -44,6 +53,8 @@ export class SpellEditComponent extends FormBase<Spell, SpellActions>
 	@select(["app", "forms", "spellFormData"])
 	public formData$: Observable<SpellFormData>;
 	public schools$: Observable<SpellSchool[]>;
+
+	@ViewChild("name", { static: false }) nameEl: ElementRef;
 
 	public showCastingTime: boolean;
 	public showReaction: boolean;
@@ -143,8 +154,14 @@ export class SpellEditComponent extends FormBase<Spell, SpellActions>
 
 	protected formSelector = ["app", "forms", "spellForm"];
 
+	private keyboardSubscription: Subscription;
+
 	public ngOnInit() {
 		this.onInit();
+
+		this.keyboardSubscription = this.keyboardService
+			.keydown()
+			.subscribe(this.keyPressed);
 
 		this.schools$ = this.formData$.pipe(
 			map((value: SpellFormData): SpellSchool[] => {
@@ -157,7 +174,12 @@ export class SpellEditComponent extends FormBase<Spell, SpellActions>
 		);
 	}
 
+	public ngAfterViewInit() {
+		setTimeout(() => this.nameEl.nativeElement.focus(), 500);
+	}
+
 	public ngOnDestroy() {
+		this.keyboardSubscription.unsubscribe();
 		this.onDestroy();
 	}
 
@@ -176,8 +198,6 @@ export class SpellEditComponent extends FormBase<Spell, SpellActions>
 	private syncFromRange(spellRange: SpellRange) {
 		if (!spellRange) return;
 		this.showRange = this.isRangeRanged(spellRange.type);
-		if (spellRange.type === "Self") this.ifRangeIsSelf();
-		else this.ifRangeIsNotSelf();
 	}
 	private syncFromMaterial(materials: string[]) {
 		if (!materials) return;
@@ -233,21 +253,9 @@ export class SpellEditComponent extends FormBase<Spell, SpellActions>
 
 	public rangeChanged(event: MatRadioChange) {
 		this.showRange = this.isRangeRanged(event.value);
-		if (event.value === "Self") this.ifRangeIsSelf();
-		else this.ifRangeIsNotSelf();
 	}
 	private isRangeRanged(value: string): boolean {
 		return value === "Ranged" || value === "Self";
-	}
-	private ifRangeIsSelf(): void {
-		this.showShape = true;
-		if (this.words.isNullOrWhitespace(this.rangeUnit.value))
-			this.rangeUnit.patchValue("foot");
-	}
-	private ifRangeIsNotSelf(): void {
-		this.showShape = false;
-		if (this.words.isNullOrWhitespace(this.rangeUnit.value))
-			this.rangeUnit.patchValue("feet");
 	}
 	private setRangeType(type: string) {
 		switch (type) {
@@ -297,5 +305,15 @@ export class SpellEditComponent extends FormBase<Spell, SpellActions>
 	protected afterNew(spell: Spell): Spell {
 		spell.campaignID = this.store.getState().app.campaign.id;
 		return spell;
+	}
+
+	protected keyPressed(event: KeyboardEvent) {
+		if (event.ctrlKey && event.key === "2") {
+			console.log("control 2");
+		}
+		console.log(event.key);
+		// switch (event.key === ) {
+
+		// }
 	}
 }

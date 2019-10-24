@@ -6,6 +6,8 @@ import { NavComponent } from "./main/nav/nav.component";
 import { HomeComponent } from "./main/home/home.component";
 import { CrCalculatorComponent } from "./main/cr-calculator/cr-calculator.component";
 import { RouteNotFoundComponent } from "./main/route-not-found/route-not-found.component";
+import { NavItemComponent } from "./main/nav-item/nav-item.component";
+
 import { ReactiveFormsModule } from "@angular/forms";
 import { AppRoutingModule } from "./app.routing";
 import { HttpClientModule, HTTP_INTERCEPTORS } from "@angular/common/http";
@@ -14,13 +16,14 @@ import { AuthModule } from "./auth/auth.module";
 import { FormsModule } from "./forms/forms.module";
 import { MatMenuModule } from "@angular/material/menu";
 import { MatToolbarModule } from "@angular/material/toolbar";
-import { NavItemComponent } from "./main/nav-item/nav-item.component";
 import { CampaignModule } from "./campaign/campaign.module";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
+import { LayoutModule } from "@angular/cdk/layout";
+
 import { JwtInterceptor } from "./helpers/jwt.interceptor";
 import { ErrorInterceptor } from "./helpers/error.interceptor";
+
 import { StateLoaderService } from "./services/stateLoader.service";
-import { LayoutModule } from "@angular/cdk/layout";
 
 import {
 	NgRedux,
@@ -71,10 +74,7 @@ import { STEPPER_GLOBAL_OPTIONS } from "@angular/cdk/stepper";
 		{ provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
 		{ provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
 		StateLoaderService,
-		{
-			provide: STEPPER_GLOBAL_OPTIONS,
-			useValue: { showError: true }
-		}
+		{ provide: STEPPER_GLOBAL_OPTIONS, useValue: { showError: true } }
 	],
 	bootstrap: [AppComponent]
 })

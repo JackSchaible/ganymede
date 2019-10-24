@@ -110,22 +110,35 @@ namespace Ganymede.Api.BLL.Services.Impl
         {
             CastingTime time = _ctx.CastingTimes.FirstOrDefault(c => c.Amount == spell.CastingTime.Amount && c.Unit == spell.CastingTime.Unit && c.ReactionCondition == spell.CastingTime.ReactionCondition && c.Type == spell.CastingTime.Type);
             if (time != null)
+            {
                 spell.CastingTime = time;
+                spell.CastingTimeID = time.ID;
+            }
 
             List<SpellComponents> componentses = _ctx.SpellComponents.Where(c => c.Somatic == spell.SpellComponents.Somatic && c.Verbal == spell.SpellComponents.Verbal).ToList();
             SpellComponents components = componentses.FirstOrDefault(c => Enumerable.SequenceEqual(c.Material, spell.SpellComponents.Material));
             if (components != null)
+            {
                 spell.SpellComponents = components;
+                spell.SpellComponentsID = components.ID;
+            }
 
             SpellDuration duration = _ctx.SpellDurations.FirstOrDefault(d => d.Amount == spell.SpellDuration.Amount && d.Concentration == spell.SpellDuration.Concentration && d.Type == spell.SpellDuration.Type && d.Unit == spell.SpellDuration.Unit && d.UpTo == spell.SpellDuration.UpTo);
             if (duration != null)
+            {
                 spell.SpellDuration = duration;
+                spell.SpellDurationID = duration.ID;
+            }
 
             SpellRange range = _ctx.SpellRanges.FirstOrDefault(r => r.Amount == spell.SpellRange.Amount && r.Type == spell.SpellRange.Type && r.Shape == spell.SpellRange.Shape && r.Unit == spell.SpellRange.Unit);
             if (range != null)
+            {
                 spell.SpellRange = range;
+                spell.SpellRangeID = range.ID;
+            }
 
             spell.Campaign = _ctx.Campaigns.Where(c => c.ID == spell.CampaignID && c.AppUserId == userId).Single();
+            spell.CampaignID = spell.Campaign.ID;
 
             return spell;
         }
