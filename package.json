@@ -32,6 +32,7 @@
     "redux": "^4.0.1",
     "redux-devtools-extension": "^2.13.8",
     "rxjs": "^6.5.3",
+    "ts-key-enum": "^3.0.0",
     "ts-md5": "^1.2.4",
     "zone.js": "~0.9.1"
   },

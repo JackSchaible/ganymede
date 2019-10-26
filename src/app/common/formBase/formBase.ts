@@ -9,6 +9,11 @@ import IFormEditable from "src/app/models/core/app/forms/iFormEditable";
 import IFormActions from "src/app/store/iFormActions";
 import FormService from "src/app/services/form.service";
 import { SnackBarService } from "src/app/services/snackbar.service";
+import { Key } from "ts-key-enum";
+import {
+	KeyboardService,
+	KeyboardSubscription
+} from "src/app/services/keyboard.service";
 
 export default abstract class FormBase<
 	T extends IFormEditable,
@@ -19,11 +24,15 @@ export default abstract class FormBase<
 		protected actions: U,
 		protected location: Location,
 		protected service: FormService<T>,
-		protected snackBarService: SnackBarService
+		protected snackBarService: SnackBarService,
+		private keyboardService: KeyboardService
 	) {}
+
+	protected keySubscriptions: KeyboardSubscription[];
 
 	private formStoreSubscription: Subscription;
 	private formValueChangesSubscription: Subscription;
+	private keyboardSubscription: Subscription;
 
 	public abstract formGroup: FormGroup;
 	protected abstract formSelector: Array<string>;
@@ -43,6 +52,24 @@ export default abstract class FormBase<
 		this.syncToStore();
 
 		this.isNew = this.getInstance().id === -1;
+
+		this.keySubscriptions = [];
+		this.keyboardSubscription = this.keyboardService
+			.keydown()
+			.subscribe((event: KeyboardEvent) => this.keyPressed(event));
+
+		this.keySubscriptions.push(
+			{
+				key: "s",
+				modifierKeys: [Key.Control],
+				callbackFn: () => this.save()
+			},
+			{
+				key: Key.Backspace,
+				modifierKeys: [Key.Alt],
+				callbackFn: () => this.cancel()
+			}
+		);
 	}
 
 	protected onDestroy() {
@@ -51,6 +78,8 @@ export default abstract class FormBase<
 
 		if (this.formStoreSubscription)
 			this.formValueChangesSubscription.unsubscribe();
+
+		if (this.keyboardSubscription) this.keyboardSubscription.unsubscribe();
 	}
 
 	public cancel(): void {
@@ -138,5 +167,44 @@ export default abstract class FormBase<
 			else if (control instanceof FormGroup)
 				this.validateAllFormFields(control);
 		});
+	}
+
+	private keyPressed(event: KeyboardEvent) {
+		let combinationFound = false;
+
+		this.keySubscriptions.forEach((subscription: KeyboardSubscription) => {
+			let modifiers = true;
+
+			if (subscription.modifierKeys) {
+				subscription.modifierKeys.forEach((key: Key) => {
+					switch (key) {
+						case Key.Alt:
+							if (!event.altKey) modifiers = false;
+							break;
+
+						case Key.Control:
+							if (!event.ctrlKey) modifiers = false;
+							break;
+
+						case Key.Shift:
+							if (!event.shiftKey) modifiers = false;
+							break;
+
+						default:
+							throw new Error(
+								`Modifier key '${key}' is not supported.`
+							);
+					}
+				});
+			}
+
+			if (modifiers)
+				if (event.key === subscription.key) {
+					subscription.callbackFn();
+					combinationFound = true;
+				}
+		});
+
+		if (combinationFound) event.preventDefault();
 	}
 }
