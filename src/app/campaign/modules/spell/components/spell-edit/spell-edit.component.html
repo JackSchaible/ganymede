@@ -1,5 +1,9 @@
 <gm-processing-overlay [isActive]="processing"></gm-processing-overlay>
 
+<div class="u-flex">
+	<p class="kbd-icon u-margin-left"><i class="fas fa-arrow-left"></i> <span>ALT+BACKSPACE</span></p>
+	<p class="kbd-icon u-margin-left"><i class="fas fa-save"></i> <span>CTRL+S</span></p>
+</div>
 <section class="u-flex u-flex__wrap">
 	<form class="col-12 col-md-6" [formGroup]="formGroup">
 		<h1>
@@ -8,13 +12,15 @@
 			<p>{{ isNew ? 'Add a new' : 'Edit Your' }} Spell</p>
 		</h1>
 
-		<mat-vertical-stepper linear="false">
+		<mat-vertical-stepper #steppy linear="false">
 			<!-- Name, Level, & School -->
 			<mat-step [stepControl]="name" errorMessage="There were some problems with the basic information.">
-				<ng-template matStepLabel>Basic Info</ng-template>
+				<ng-template matStepLabel>
+					<p class="kbd-icon u-margin-right-half">CTRL+1</p> Basic Info
+				</ng-template>
 
 				<mat-form-field>
-					<input type="text" matInput placeholder="Name" formControlName="name" required>
+					<input #name type="text" matInput placeholder="Name" formControlName="name" required>
 					<mat-error *ngIf="name.errors?.required">Name is required</mat-error>
 				</mat-form-field>
 
@@ -52,7 +58,9 @@
 
 			<!-- Casting Time-->
 			<mat-step [stepControl]="castingTime" errorMessage="There were some problems with the casting time information.">
-				<ng-template matStepLabel>Casting Time</ng-template>
+				<ng-template matStepLabel>
+					<p class="kbd-icon u-margin-right-half">CTRL+2</p>Casting Time
+				</ng-template>
 
 				<div formGroupName="castingTime">
 					<!-- Type -->
@@ -107,7 +115,9 @@
 
 			<!-- Range -->
 			<mat-step [stepControl]="range" errorMessage="There were some problems with the range information.">
-				<ng-template matStepLabel>Range</ng-template>
+				<ng-template matStepLabel>
+					<p class="kbd-icon u-margin-right-half">CTRL+3</p>Range
+				</ng-template>
 
 				<div formGroupName="spellRange">
 					<mat-radio-group formControlName="type" class="u-flex u-flex__justify--space-between" (change)="rangeChanged($event)">
@@ -166,7 +176,9 @@
 
 			<!-- Components -->
 			<mat-step [stepControl]="components" errorMessage="There were some problems with the components information.">
-				<ng-template matStepLabel>Components</ng-template>
+				<ng-template matStepLabel>
+					<p class="kbd-icon u-margin-right-half">CTRL+4</p>Components
+				</ng-template>
 
 				<div formGroupName="spellComponents">
 					<div class="u-flex u-flex__justify--space-between">
@@ -201,7 +213,9 @@
 
 			<!-- Duration -->
 			<mat-step [stepControl]="duration" errorMessage="There were some problems with the duration information.">
-				<ng-template matStepLabel>Duration</ng-template>
+				<ng-template matStepLabel>
+					<p class="kbd-icon u-margin-right-half">CTRL+5</p>Duration
+				</ng-template>
 
 				<div formGroupName="spellDuration">
 					<!-- Type -->
@@ -254,7 +268,9 @@
 
 			<!-- Description -->
 			<mat-step [stepControl]="description" errorMessage="Spells must have a description.">
-				<ng-template matStepLabel>Description</ng-template>
+				<ng-template matStepLabel>
+					<p class="kbd-icon u-margin-right-half">CTRL+6</p>Description
+				</ng-template>
 
 				<p class="ml-3"><small><em>HTML-Formatted</em></small></p>
 
@@ -266,7 +282,9 @@
 
 			<!-- At Higher Levels -->
 			<mat-step [stepControl]="atHigherLevels">
-				<ng-template matStepLabel>At Higher Levels</ng-template>
+				<ng-template matStepLabel>
+					<p class="kbd-icon u-margin-right-half">CTRL+7</p>At Higher Levels
+				</ng-template>
 
 				<p class="ml-3"><small><em>HTML-Formatted</em></small></p>
 
@@ -278,7 +296,9 @@
 
 			<!-- Done -->
 			<mat-step>
-				<ng-template matStepLabel>Done</ng-template>
+				<ng-template matStepLabel>
+					<p class="kbd-icon u-margin-right-half">CTRL+8</p>Done
+				</ng-template>
 				<button (click)="cancel()" class="mr-3" mat-raised-button color="danger">
 					<i class="fas fa-times-square mr-2"></i> Cancel
 				</button>

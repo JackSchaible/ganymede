@@ -10,6 +10,7 @@ import { SnackBarService } from "src/app/services/snackbar.service";
 import FormBase from "src/app/common/formBase/formBase";
 import { Location } from "@angular/common";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
+import { KeyboardService } from "src/app/services/keyboard.service";
 
 @Component({
 	selector: "gm-campaign-edit",
@@ -44,9 +45,17 @@ export class CampaignEditComponent extends FormBase<Campaign, CampaignActions>
 		protected service: CampaignService,
 		protected snackBarService: SnackBarService,
 		protected store: NgRedux<IAppState>,
-		protected actions: CampaignActions
+		protected actions: CampaignActions,
+		keyboardService: KeyboardService
 	) {
-		super(store, actions, location, service, snackBarService);
+		super(
+			store,
+			actions,
+			location,
+			service,
+			snackBarService,
+			keyboardService
+		);
 	}
 
 	public ngOnInit() {

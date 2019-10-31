@@ -27,6 +27,8 @@ import { CastingTime } from "../../models/castingTime";
 import { SnackBarService } from "src/app/services/snackbar.service";
 import FormBase from "src/app/common/formBase/formBase";
 import { KeyboardService } from "src/app/services/keyboard.service";
+import { MatStepper } from "@angular/material/stepper";
+import { Key } from "ts-key-enum";
 
 @Component({
 	selector: "gm-spell-edit",
@@ -42,9 +44,16 @@ export class SpellEditComponent extends FormBase<Spell, SpellActions>
 		protected service: SpellService,
 		protected snackBarService: SnackBarService,
 		private words: WordService,
-		private keyboardService: KeyboardService
+		keyboardService: KeyboardService
 	) {
-		super(store, actions, location, service, snackBarService);
+		super(
+			store,
+			actions,
+			location,
+			service,
+			snackBarService,
+			keyboardService
+		);
 	}
 
 	@select(["app", "forms", "spellForm"])
@@ -54,6 +63,7 @@ export class SpellEditComponent extends FormBase<Spell, SpellActions>
 	public formData$: Observable<SpellFormData>;
 	public schools$: Observable<SpellSchool[]>;
 
+	@ViewChild("steppy", { static: true }) stepper: MatStepper;
 	@ViewChild("name", { static: false }) nameEl: ElementRef;
 
 	public showCastingTime: boolean;
@@ -154,14 +164,8 @@ export class SpellEditComponent extends FormBase<Spell, SpellActions>
 
 	protected formSelector = ["app", "forms", "spellForm"];
 
-	private keyboardSubscription: Subscription;
-
 	public ngOnInit() {
 		this.onInit();
-
-		this.keyboardSubscription = this.keyboardService
-			.keydown()
-			.subscribe(this.keyPressed);
 
 		this.schools$ = this.formData$.pipe(
 			map((value: SpellFormData): SpellSchool[] => {
@@ -172,6 +176,49 @@ export class SpellEditComponent extends FormBase<Spell, SpellActions>
 				});
 			})
 		);
+
+		this.keySubscriptions.push(
+			{
+				key: "1",
+				modifierKeys: [Key.Control],
+				callbackFn: () => (this.stepper.selectedIndex = 0)
+			},
+			{
+				key: "2",
+				modifierKeys: [Key.Control],
+				callbackFn: () => (this.stepper.selectedIndex = 1)
+			},
+			{
+				key: "3",
+				modifierKeys: [Key.Control],
+				callbackFn: () => (this.stepper.selectedIndex = 2)
+			},
+			{
+				key: "4",
+				modifierKeys: [Key.Control],
+				callbackFn: () => (this.stepper.selectedIndex = 3)
+			},
+			{
+				key: "5",
+				modifierKeys: [Key.Control],
+				callbackFn: () => (this.stepper.selectedIndex = 4)
+			},
+			{
+				key: "6",
+				modifierKeys: [Key.Control],
+				callbackFn: () => (this.stepper.selectedIndex = 5)
+			},
+			{
+				key: "7",
+				modifierKeys: [Key.Control],
+				callbackFn: () => (this.stepper.selectedIndex = 6)
+			},
+			{
+				key: "8",
+				modifierKeys: [Key.Control],
+				callbackFn: () => (this.stepper.selectedIndex = 7)
+			}
+		);
 	}
 
 	public ngAfterViewInit() {
@@ -179,7 +226,6 @@ export class SpellEditComponent extends FormBase<Spell, SpellActions>
 	}
 
 	public ngOnDestroy() {
-		this.keyboardSubscription.unsubscribe();
 		this.onDestroy();
 	}
 
@@ -308,15 +354,5 @@ export class SpellEditComponent extends FormBase<Spell, SpellActions>
 
 	protected afterNew(spell: Spell): Spell {
 		return spell;
-	}
-
-	protected keyPressed(event: KeyboardEvent) {
-		if (event.ctrlKey && event.key === "2") {
-			console.log("control 2");
-		}
-		console.log(event.key);
-		// switch (event.key === ) {
-
-		// }
 	}
 }
