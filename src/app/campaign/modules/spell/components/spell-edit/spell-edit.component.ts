@@ -302,8 +302,11 @@ export class SpellEditComponent extends FormBase<Spell, SpellActions>
 		return this.store.getState().app.forms.spellForm;
 	}
 
+	protected getParentId(): number {
+		return this.store.getState().app.campaign.id;
+	}
+
 	protected afterNew(spell: Spell): Spell {
-		spell.campaignID = this.store.getState().app.campaign.id;
 		return spell;
 	}
 

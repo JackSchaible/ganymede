@@ -51,7 +51,7 @@ namespace api
             services.Configure<IISOptions>(o => { o.AutomaticAuthentication = false; });
         }
 
-        public void Configure(IApplicationBuilder app, ApplicationDbContext context, IDbInitializer initializer)
+        public void Configure(IApplicationBuilder app, ApplicationDbContext context, IDbInitializer initializer, IMapper autoMapper)
         {
             if (_env.EnvironmentName == "Development")
                 app.UseDeveloperExceptionPage();
@@ -70,8 +70,8 @@ namespace api
             app.UseEndpoints(endpoints => endpoints.MapControllers());
 
             context.Database.EnsureCreated();
-            initializer.Initialize().Wait();
-            //autoMapper.ConfigurationProvider.AssertConfigurationIsValid();
+            initializer.Initialize();
+            autoMapper.ConfigurationProvider.AssertConfigurationIsValid();
         }
 
         private void ConfigureDb(IServiceCollection services)

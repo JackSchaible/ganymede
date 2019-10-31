@@ -18,7 +18,6 @@ export class SpellService extends FormService<Spell> {
 
 	public save(spell: Spell): Observable<ApiResponse> {
 		const saveSpell = _.cloneDeep(spell);
-		saveSpell.monsterSpells = null;
 		return this.http.put<ApiResponse>(`${this.baseUrl}/save`, saveSpell);
 	}
 }

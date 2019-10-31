@@ -79,11 +79,7 @@ function spellSaved(
 ): IAppState {
 	const state = _.cloneDeep(oldState);
 	const newSpell = newState.app.forms.spellForm;
-	const campaignIndex = state.user.campaigns.findIndex(
-		(campaign: Campaign) => {
-			return campaign.id === state.app.forms.spellForm.campaignID;
-		}
-	);
+	const campaignIndex = state.app.forms.campaignForm.id;
 
 	state.app.forms.spellForm = newState.app.forms.spellForm;
 
@@ -104,10 +100,7 @@ function spellSaved(
 function spellDeleted(oldState: IAppState, newState: IAppState): IAppState {
 	const state = _.cloneDeep(oldState);
 
-	const campaignIndex = state.user.campaigns.findIndex(
-		(campaign: Campaign) =>
-			campaign.id === newState.app.forms.spellForm.campaignID
-	);
+	const campaignIndex = state.app.forms.campaignForm.id;
 	const id = newState.app.forms.spellForm.id;
 	const index = state.user.campaigns[campaignIndex].spells.findIndex(
 		(spell: Spell) => {

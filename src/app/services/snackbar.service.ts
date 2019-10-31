@@ -16,7 +16,7 @@ export class SnackBarService {
 		itemName: string,
 		item: any,
 		isNew: boolean,
-		saveFunction: (item: any, wasNew: boolean) => void
+		saveFunction: (item: any, parentId: number, wasNew: boolean) => void
 	) {
 		if (response) {
 			if (response.statusCode === ApiCodes.Ok) {
@@ -32,7 +32,7 @@ export class SnackBarService {
 					item.id = response.insertedID;
 				}
 
-				saveFunction(item, wasNew);
+				saveFunction(item, response.parentID, wasNew);
 			} else
 				this.openSnackbar(
 					"exclamation-triangle",

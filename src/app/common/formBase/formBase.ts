@@ -37,6 +37,7 @@ export default abstract class FormBase<
 	protected abstract syncTo(item: T): void;
 	protected abstract getInstance(): T;
 	protected abstract afterNew(item: T): T;
+	protected abstract getParentId(): number;
 
 	protected onInit() {
 		this.syncFromStore();
@@ -80,7 +81,11 @@ export default abstract class FormBase<
 						this.snackBarService.showError(item.name);
 					else {
 						this.store.dispatch(
-							this.actions.save(item, this.isNew)
+							this.actions.save(
+								item,
+								this.getParentId(),
+								this.isNew
+							)
 						);
 
 						this.snackBarService.showSuccess(

@@ -1,12 +1,12 @@
-﻿using Ganymede.Api.Data.Spells;
-using Ganymede.Api.Models.Api;
+﻿using Ganymede.Api.Models.Api;
+using Ganymede.Api.Models.Spells;
 
 namespace Ganymede.Api.BLL.Services
 {
     public interface ISpellService
     {
-        ApiResponse Add(Spell spell, string userId);
-        ApiResponse Update(Spell spell, string userId);
+        ApiResponse Add(SpellModel spell, string userId);
+        ApiResponse Update(SpellModel spell, string userId);
         ApiResponse Delete(int id, string userId);
     }
 }

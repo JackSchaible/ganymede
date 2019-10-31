@@ -3,8 +3,6 @@ using Ganymede.Api.Data.Rulesets;
 using Ganymede.Api.Data.Spells;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using System;
 
 namespace Ganymede.Api.Data
 {
@@ -25,11 +23,6 @@ namespace Ganymede.Api.Data
 
         protected override void OnModelCreating(ModelBuilder builder)
 		{
-            var stringToArrayConverter = new ValueConverter<string[], string>(
-                v => string.Join("%2C", v),
-                v => v.Split("%2C", StringSplitOptions.RemoveEmptyEntries)
-            );
-
             builder.Entity<Publisher>()
                 .HasIndex(p => p.Name)
                 .IsUnique();
@@ -37,10 +30,6 @@ namespace Ganymede.Api.Data
             builder.Entity<Ruleset>()
                 .HasIndex(r => r.Abbrevation)
                 .IsUnique();
-
-            builder.Entity<SpellComponents>()
-                .Property(c => c.Material)
-                .HasConversion(stringToArrayConverter);
 
             builder.Entity<MonsterSpell>()
                 .HasKey(ms => new { ms.MonsterID, ms.SpellID });

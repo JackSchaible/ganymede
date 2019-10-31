@@ -1,18 +1,13 @@
 import { Ruleset } from "../../models/core/rulesets/ruleset";
 import { Spell } from "../modules/spell/models/spell";
-import { AppUser } from "../../models/core/appUser";
 import IFormEditable from "src/app/models/core/app/forms/iFormEditable";
 
 export class Campaign implements IFormEditable {
 	public id: number;
 	public name: string;
 	public description: number;
-
-	public rulesetID: number;
 	public ruleset: Ruleset;
-
-	public appUserID: string;
-	public user: AppUser;
+	public user: string;
 
 	public monsters: any[];
 	public spells: Spell[];
@@ -20,9 +15,9 @@ export class Campaign implements IFormEditable {
 	public static getDefault(): Campaign {
 		const campaign = new Campaign();
 		campaign.id = -1;
+		campaign.user = undefined;
 
 		campaign.ruleset = Ruleset.getDefault();
-		campaign.user = AppUser.getDefault();
 		campaign.monsters = [];
 		campaign.spells = [];
 
@@ -33,9 +28,7 @@ export class Campaign implements IFormEditable {
 		return (
 			a.id === b.id &&
 			a.name === b.name &&
-			a.description === b.description &&
-			a.rulesetID === b.rulesetID &&
-			a.appUserID === b.appUserID
+			a.description === b.description
 		);
 	}
 }

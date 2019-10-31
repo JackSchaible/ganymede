@@ -1,4 +1,4 @@
-﻿namespace Ganymede.Api.Data.Spells
+﻿namespace Ganymede.Api.Models.Spells
 {
     public static class Enums
     {

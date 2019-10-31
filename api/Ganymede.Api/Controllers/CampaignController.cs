@@ -1,10 +1,10 @@
 ﻿using Ganymede.Api.Models.Api;
 using Ganymede.Api.Models.Campaigns;
-using Ganymede.Api.Data;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Ganymede.Api.BLL.Services;
+using Ganymede.Api.Data;
 
 namespace Ganymede.api.Controllers
 {
@@ -24,7 +24,7 @@ namespace Ganymede.api.Controllers
 
         // GET: api/Campaign/5
         [HttpGet("{id}", Name = "Get")]
-        public Campaign Get(int id)
+        public CampaignModel Get(int id)
         {
             var user = _userManager.GetUserId(HttpContext.User);
             return _service.GetByUserAndId(id, user);
@@ -32,7 +32,7 @@ namespace Ganymede.api.Controllers
 
         // PUT: api/Campaign/5
         [HttpPut]
-        public ApiResponse Save(Campaign value)
+        public ApiResponse Save(CampaignModel value)
         {
             var user = _userManager.GetUserId(HttpContext.User);
 

@@ -1,7 +1,7 @@
 ﻿using Ganymede.Api.BLL.Services;
 using Ganymede.Api.Data;
-using Ganymede.Api.Data.Spells;
 using Ganymede.Api.Models.Api;
+using Ganymede.Api.Models.Spells;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -24,7 +24,7 @@ namespace Ganymede.Api.Controllers
 
         // PUT: api/Spell/5
         [HttpPut]
-        public ApiResponse Save(Spell value)
+        public ApiResponse Save(SpellModel value)
         {
             var user = _userManager.GetUserId(HttpContext.User);
 

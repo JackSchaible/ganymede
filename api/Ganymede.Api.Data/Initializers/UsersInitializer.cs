@@ -1,12 +1,11 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace Ganymede.Api.Data.Initializers
 {
     internal class UsersInitializer
     {
-        public async Task<string> Initialize(ApplicationDbContext ctx, UserManager<AppUser> usrMgr)
+        public string Initialize(ApplicationDbContext ctx, UserManager<AppUser> usrMgr)
         {
             string
                 email = "jack.schaible@hotmail.com",
@@ -16,8 +15,8 @@ namespace Ganymede.Api.Data.Initializers
                 userId = Queryable.First(ctx.Users, x => x.Email == email).Id;
             else
             {
-                await usrMgr.CreateAsync(new AppUser { Email = email, UserName = email }, "Testing!23");
-                var usr = await usrMgr.FindByEmailAsync(email);
+                usrMgr.CreateAsync(new AppUser { Email = email, UserName = email }, "Testing!23").Wait();
+                var usr = usrMgr.FindByEmailAsync(email).Result;
                 userId = usr.Id;
             }
 

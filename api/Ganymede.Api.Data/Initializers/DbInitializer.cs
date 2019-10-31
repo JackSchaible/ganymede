@@ -3,7 +3,6 @@ using Ganymede.Api.Data.Rulesets;
 using Ganymede.Api.Data.Spells;
 using Microsoft.AspNetCore.Identity;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace Ganymede.Api.Data.Initializers
 {
@@ -26,9 +25,9 @@ namespace Ganymede.Api.Data.Initializers
             _usrMgr = usrMgr;
         }
 
-        public async Task Initialize()
+        public void Initialize()
         {
-            string userId = await users.Initialize(_ctx, _usrMgr);
+            string userId = users.Initialize(_ctx, _usrMgr);
             publishers.Initialize(_ctx, out Publisher wizards, out Publisher paizo);
             rulesets.Initialize(_ctx, wizards, paizo, out Ruleset fifth, out Ruleset pf);
             monsters.Initialize(_ctx, out IEnumerable<Monster> dAndDMonsters, out IEnumerable<Monster> pfMonsters, out Monster aerisi);

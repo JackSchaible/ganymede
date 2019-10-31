@@ -97,16 +97,9 @@ function campaignFormChangedReducer(
 	const state = _.cloneDeep(oldState);
 
 	state.app.forms.campaignForm = newState.app.forms.campaignForm;
-
-	if (
-		state.app.forms.campaignForm.ruleset &&
-		(state.app.forms.campaignForm.ruleset.id ||
-			state.app.forms.campaignForm.ruleset.id === 0)
-	)
+	if (state.app.forms.campaignForm.ruleset)
 		state.app.forms.campaignForm.ruleset = state.app.forms.campaignFormData.rulesets.find(
-			(r: Ruleset) => {
-				return r.id === state.app.forms.campaignForm.ruleset.id;
-			}
+			(r: Ruleset) => r.id === state.app.forms.campaignForm.ruleset.id
 		);
 
 	return state;
@@ -124,9 +117,9 @@ function campaignSaved(
 
 	if (isNew) state.user.campaigns.push(newCampaign);
 	else {
-		const index = state.user.campaigns.findIndex((campaign: Campaign) => {
-			return campaign.id === newCampaign.id;
-		});
+		const index = state.user.campaigns.findIndex(
+			(campaign: Campaign) => campaign.id === newCampaign.id
+		);
 
 		state.user.campaigns[index] = newCampaign;
 	}

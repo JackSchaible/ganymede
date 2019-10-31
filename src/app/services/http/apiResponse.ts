@@ -4,4 +4,5 @@ export class ApiResponse {
 	public statusCode: string;
 	public apiErrors: ApiError[];
 	public insertedID: number;
+	public parentID: number;
 }

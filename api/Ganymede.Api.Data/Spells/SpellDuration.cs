@@ -1,11 +1,9 @@
-﻿using static Ganymede.Api.Data.Spells.Enums;
-
-namespace Ganymede.Api.Data.Spells
+﻿namespace Ganymede.Api.Data.Spells
 {
     public class SpellDuration
     {
         public int ID { get; set; }
-        public DurationType Type { get; set; }
+        public int Type { get; set; }
         public int Amount { get; set; }
         public string Unit { get; set; }
         public bool Concentration { get; set; }

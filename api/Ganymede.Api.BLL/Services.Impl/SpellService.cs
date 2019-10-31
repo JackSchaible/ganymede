@@ -2,6 +2,7 @@
 using Ganymede.Api.Data;
 using Ganymede.Api.Data.Spells;
 using Ganymede.Api.Models.Api;
+using Ganymede.Api.Models.Spells;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -34,19 +35,21 @@ namespace Ganymede.Api.BLL.Services.Impl
             _mapper = mapper;
         }
 
-        public ApiResponse Add(Spell spell, string userId)
+        public ApiResponse Add(SpellModel spell, string userId)
         {
             try
             {
                 spell.ID = default;
 
-                _ctx.Spells.Add(MapValues(spell, userId));
+                var newSpell = MapValues(spell, userId);
+                _ctx.Spells.Add(newSpell);
                 _ctx.SaveChanges();
 
                 return new ApiResponse
                 {
                     StatusCode = ApiCodes.Ok,
-                    InsertedID = spell.ID
+                    InsertedID = newSpell.ID,
+                    ParentID = newSpell.CampaignID
                 };
             }
             catch (Exception e)
@@ -59,7 +62,7 @@ namespace Ganymede.Api.BLL.Services.Impl
             }
         }
 
-        public ApiResponse Update(Spell spell, string userId)
+        public ApiResponse Update(SpellModel spell, string userId)
         {
             try
             {
@@ -106,17 +109,23 @@ namespace Ganymede.Api.BLL.Services.Impl
             }
         }
 
+        private Spell MapValues(SpellModel spellModel, string userId)
+        {
+            var spell = _mapper.Map<SpellModel, Spell>(spellModel);
+
+            return MapValues(spell, userId);
+        }
+
         private Spell MapValues(Spell spell, string userId)
         {
-            CastingTime time = _ctx.CastingTimes.FirstOrDefault(c => c.Amount == spell.CastingTime.Amount && c.Unit == spell.CastingTime.Unit && c.ReactionCondition == spell.CastingTime.ReactionCondition && c.Type == spell.CastingTime.Type);
+            CastingTime time = _ctx.CastingTimes.FirstOrDefault(c => c.Amount == spell.CastingTime.Amount && c.Unit == spell.CastingTime.Unit && c.ReactionCondition == spell.CastingTime.ReactionCondition && c.Type == (int)spell.CastingTime.Type);
             if (time != null)
             {
                 spell.CastingTime = time;
                 spell.CastingTimeID = time.ID;
             }
 
-            List<SpellComponents> componentses = _ctx.SpellComponents.Where(c => c.Somatic == spell.SpellComponents.Somatic && c.Verbal == spell.SpellComponents.Verbal).ToList();
-            SpellComponents components = componentses.FirstOrDefault(c => Enumerable.SequenceEqual(c.Material, spell.SpellComponents.Material));
+            SpellComponents components = _ctx.SpellComponents.FirstOrDefault(c => c.Somatic == spell.SpellComponents.Somatic && c.Verbal == spell.SpellComponents.Verbal && spell.SpellComponents.Material == c.Material);
             if (components != null)
             {
                 spell.SpellComponents = components;

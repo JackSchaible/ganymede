@@ -1,5 +1,9 @@
 begin tran
 
+drop table SpellComponents
+drop table SpellDurations
+drop table SpellRanges
+drop table SpellSchools
 drop table MonsterSpells
 drop table Spells
 drop table BasicStats

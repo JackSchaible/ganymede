@@ -65,6 +65,9 @@ export class CampaignEditComponent extends FormBase<Campaign, CampaignActions>
 	protected isEqual(a: Campaign, b: Campaign): boolean {
 		return Campaign.isEqual(a, b);
 	}
+	protected getParentId(): number {
+		return null;
+	}
 	protected syncFrom() {}
 	protected syncTo() {}
 }

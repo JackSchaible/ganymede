@@ -80,7 +80,11 @@ export class CampaignActions implements IFormActions<Campaign> {
 		};
 	}
 
-	public save(campaign: Campaign, isNew: boolean): AnyAction {
+	public save(
+		campaign: Campaign,
+		parentId: number,
+		isNew: boolean
+	): AnyAction {
 		const user = AppUser.getDefault();
 		const app = App.getDefault();
 		app.forms.campaignForm = campaign;

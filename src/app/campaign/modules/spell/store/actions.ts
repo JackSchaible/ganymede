@@ -54,10 +54,11 @@ export class SpellActions implements IFormActions<Spell> {
 		};
 	}
 
-	public save(spell: Spell, isNew: boolean): AnyAction {
+	public save(spell: Spell, campaignId: number, isNew: boolean): AnyAction {
 		const user = AppUser.getDefault();
 		const app = App.getDefault();
 		app.forms.spellForm = spell;
+		app.forms.campaignForm.id = campaignId;
 
 		const state: IAppState = {
 			user: user,

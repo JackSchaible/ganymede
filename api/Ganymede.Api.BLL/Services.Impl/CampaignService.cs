@@ -35,7 +35,7 @@ namespace Ganymede.Api.BLL.Services.Impl
             _mapper = mapper;
         }
 
-        public Campaign GetByUserAndId(int id, string userId)
+        public CampaignModel GetByUserAndId(int id, string userId)
         {
             Campaign campaign;
 
@@ -46,11 +46,13 @@ namespace Ganymede.Api.BLL.Services.Impl
                     .IncludeCampaignData()
                     .Single(c => c.AppUserId == userId && c.ID == id);
 
-            return campaign;
+            return _mapper.Map<Campaign, CampaignModel>(campaign);
         }
 
-        public ApiResponse Add(Campaign campaign, string userId)
+        public ApiResponse Add(CampaignModel campaignModel, string userId)
         {
+            var campaign = _mapper.Map<CampaignModel, Campaign>(campaignModel);
+
             try
             {
                 campaign.AppUserId = userId;
@@ -75,7 +77,7 @@ namespace Ganymede.Api.BLL.Services.Impl
             }
         }
 
-        public ApiResponse Update(Campaign campaign, string userId)
+        public ApiResponse Update(CampaignModel campaign, string userId)
         {
             try
             {

@@ -1,6 +1,4 @@
-import { MonsterSpell } from "./monsterSpell";
 import { CastingTime } from "./castingTime";
-import { Campaign } from "../../../models/campaign";
 import { SpellComponents } from "./spellComponents";
 import { SpellDuration } from "./spellDuration";
 import { SpellSchool } from "./spellSchool";
@@ -14,26 +12,11 @@ export class Spell implements IFormEditable {
 	public ritual: boolean;
 	public description: string;
 	public atHigherLevels: string;
-
-	public spellSchoolID: number;
 	public spellSchool: SpellSchool;
-
-	public castingTimeID: number;
 	public castingTime: CastingTime;
-
-	public spellRangeID: number;
 	public spellRange: SpellRange;
-
-	public spellComponentsID: number;
 	public spellComponents: SpellComponents;
-
-	public spellDurationID: number;
 	public spellDuration: SpellDuration;
-
-	public campaignID: number;
-	public campaign: Campaign;
-
-	public monsterSpells: MonsterSpell[];
 
 	public static getDefault() {
 		const spell = new Spell();
@@ -54,7 +37,6 @@ export class Spell implements IFormEditable {
 		return (
 			a === b ||
 			(a.atHigherLevels === b.atHigherLevels &&
-				a.campaignID === b.campaignID &&
 				CastingTime.isEqual(a.castingTime, b.castingTime) &&
 				a.description === b.description &&
 				a.id === b.id &&
