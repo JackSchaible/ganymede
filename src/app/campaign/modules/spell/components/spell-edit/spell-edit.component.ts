@@ -1,10 +1,10 @@
 import {
 	Component,
 	OnInit,
-	OnDestroy,
 	ViewChild,
 	ElementRef,
-	AfterViewInit
+	AfterViewInit,
+	OnDestroy
 } from "@angular/core";
 import { Observable, Subscription } from "rxjs";
 import { Spell } from "src/app/campaign/modules/spell/models/spell";
@@ -25,8 +25,8 @@ import { MatCheckboxChange } from "@angular/material/checkbox";
 import { MatRadioChange } from "@angular/material/radio";
 import { CastingTime } from "../../models/castingTime";
 import { SnackBarService } from "src/app/services/snackbar.service";
-import FormBase from "src/app/common/formBase/formBase";
-import { KeyboardService } from "src/app/services/keyboard.service";
+import FormBaseComponent from "src/app/common/baseComponents/formBase";
+import { KeyboardService } from "src/app/services/keyboard/keyboard.service";
 import { MatStepper } from "@angular/material/stepper";
 import { Key } from "ts-key-enum";
 
@@ -35,7 +35,7 @@ import { Key } from "ts-key-enum";
 	templateUrl: "./spell-edit.component.html",
 	styleUrls: ["./spell-edit.component.scss"]
 })
-export class SpellEditComponent extends FormBase<Spell, SpellActions>
+export class SpellEditComponent extends FormBaseComponent<Spell, SpellActions>
 	implements OnInit, AfterViewInit, OnDestroy {
 	constructor(
 		protected store: NgRedux<IAppState>,
@@ -165,8 +165,7 @@ export class SpellEditComponent extends FormBase<Spell, SpellActions>
 	protected formSelector = ["app", "forms", "spellForm"];
 
 	public ngOnInit() {
-		this.onInit();
-
+		super.onInit();
 		this.schools$ = this.formData$.pipe(
 			map((value: SpellFormData): SpellSchool[] => {
 				return value.schools.sort((a: SpellSchool, b: SpellSchool) => {
@@ -221,12 +220,12 @@ export class SpellEditComponent extends FormBase<Spell, SpellActions>
 		);
 	}
 
-	public ngAfterViewInit() {
-		setTimeout(() => this.nameEl.nativeElement.focus(), 500);
+	public ngOnDestroy() {
+		super.onDestroy();
 	}
 
-	public ngOnDestroy() {
-		this.onDestroy();
+	public ngAfterViewInit() {
+		setTimeout(() => this.nameEl.nativeElement.focus(), 500);
 	}
 
 	protected syncFrom(spell: Spell) {

@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, OnDestroy } from "@angular/core";
 import { CampaignService } from "../../campaign.service";
 import { NgRedux, select } from "@angular-redux/store";
 import { IAppState } from "src/app/models/core/iAppState";
@@ -7,18 +7,19 @@ import { Campaign } from "src/app/campaign/models/campaign";
 import { Ruleset } from "src/app/models/core/rulesets/ruleset";
 import { Observable } from "rxjs";
 import { SnackBarService } from "src/app/services/snackbar.service";
-import FormBase from "src/app/common/formBase/formBase";
+import FormBaseComponent from "src/app/common/baseComponents/formBase";
 import { Location } from "@angular/common";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
-import { KeyboardService } from "src/app/services/keyboard.service";
+import { KeyboardService } from "src/app/services/keyboard/keyboard.service";
 
 @Component({
 	selector: "gm-campaign-edit",
 	templateUrl: "./campaign-edit.component.html",
 	styleUrls: ["./campaign-edit.component.scss"]
 })
-export class CampaignEditComponent extends FormBase<Campaign, CampaignActions>
-	implements OnInit {
+export class CampaignEditComponent
+	extends FormBaseComponent<Campaign, CampaignActions>
+	implements OnInit, OnDestroy {
 	@select(["app", "forms", "campaignForm"])
 	public campaign$: Observable<Campaign>;
 
@@ -59,7 +60,11 @@ export class CampaignEditComponent extends FormBase<Campaign, CampaignActions>
 	}
 
 	public ngOnInit() {
-		this.onInit();
+		super.onInit();
+	}
+
+	public ngOnDestroy() {
+		super.onDestroy();
 	}
 
 	protected fixWeirdities(item: Campaign): Campaign {

@@ -5,6 +5,7 @@ import { App } from "src/app/models/core/app/app";
 import { IAppState } from "src/app/models/core/iAppState";
 import { AppUser } from "src/app/models/core/appUser";
 import IFormActions from "src/app/store/iFormActions";
+import IListActions from "src/app/store/iListActions";
 
 export class SpellActionTypes {
 	public static SPELL_EDIT: string = "SPELL_EDIT";
@@ -21,7 +22,7 @@ export class SpellAction {
 @Injectable({
 	providedIn: "root"
 })
-export class SpellActions implements IFormActions<Spell> {
+export class SpellActions implements IFormActions<Spell>, IListActions<Spell> {
 	public edit(spellId: number): AnyAction {
 		const spellForm: Spell = Spell.getDefault();
 		spellForm.id = spellId;

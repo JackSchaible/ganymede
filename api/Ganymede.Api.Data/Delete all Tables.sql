@@ -1,11 +1,11 @@
 begin tran
 
+drop table MonsterSpells
+drop table Spells
 drop table SpellComponents
 drop table SpellDurations
 drop table SpellRanges
 drop table SpellSchools
-drop table MonsterSpells
-drop table Spells
 drop table BasicStats
 drop table Monsters
 drop table Campaigns
@@ -21,3 +21,4 @@ drop table AspNetUserTokens
 drop table AspNetUsers
 
 rollback tran
+--commit tran

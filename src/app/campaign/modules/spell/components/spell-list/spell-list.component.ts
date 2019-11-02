@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, OnDestroy, AfterViewInit } from "@angular/core";
 import { select, NgRedux } from "@angular-redux/store";
 import { Observable } from "rxjs";
 import { Spell } from "src/app/campaign/modules/spell/models/spell";
@@ -7,13 +7,17 @@ import { IAppState } from "src/app/models/core/iAppState";
 import { Router } from "@angular/router";
 import { tap } from "rxjs/operators";
 import { SpellActions } from "../../store/actions";
+import { ListBaseComponent } from "src/app/common/baseComponents/listBaseComponent";
+import { KeyboardService } from "src/app/services/keyboard/keyboard.service";
+import { Location } from "@angular/common";
 
 @Component({
 	selector: "gm-spell-list",
 	templateUrl: "./spell-list.component.html",
 	styleUrls: ["./spell-list.component.scss"]
 })
-export class SpellListComponent implements OnInit {
+export class SpellListComponent extends ListBaseComponent<Spell, SpellActions>
+	implements OnInit, AfterViewInit, OnDestroy {
 	@select(["app", "campaign", "spells"])
 	public allSpells$: Observable<Spell[]>;
 	public spells$: Observable<Spell[]>;
@@ -22,12 +26,18 @@ export class SpellListComponent implements OnInit {
 
 	constructor(
 		public words: WordService,
-		private store: NgRedux<IAppState>,
-		private router: Router,
-		private actions: SpellActions
-	) {}
+		protected store: NgRedux<IAppState>,
+		location: Location,
+		router: Router,
+		actions: SpellActions,
+		keyboardService: KeyboardService
+	) {
+		super(store, router, actions, location, keyboardService);
+	}
 
-	ngOnInit() {
+	public ngOnInit() {
+		super.ngOnInit();
+
 		this.spells$ = this.allSpells$.pipe(
 			tap((spells: Spell[]) => {
 				return spells.sort((a: Spell, b: Spell) => {
@@ -44,12 +54,16 @@ export class SpellListComponent implements OnInit {
 		);
 	}
 
-	public edit(spellId: number): void {
-		this.store.dispatch(this.actions.edit(spellId));
+	public ngAfterViewInit() {
+		super.ngAfterViewInit();
+	}
 
+	public ngOnDestroy() {
+		super.ngOnDestroy();
+	}
+
+	protected constructUrl(id: number): string {
 		const campaignId = this.store.getState().app.campaign.id;
-		this.router.navigateByUrl(
-			`campaigns/${campaignId}/spells/edit/${spellId}`
-		);
+		return `campaigns/${campaignId}/spells/edit/${id}`;
 	}
 }
