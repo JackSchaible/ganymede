@@ -20,4 +20,10 @@ export class SpellService extends FormService<Spell> {
 		const saveSpell = _.cloneDeep(spell);
 		return this.http.put<ApiResponse>(`${this.baseUrl}/save`, saveSpell);
 	}
+
+	public delete(spellId: number): Observable<ApiResponse> {
+		return this.http.delete<ApiResponse>(
+			`${this.baseUrl}/delete/${spellId}`
+		);
+	}
 }

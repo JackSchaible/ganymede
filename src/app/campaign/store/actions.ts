@@ -2,7 +2,6 @@ import { Injectable } from "@angular/core";
 import { AnyAction } from "redux";
 import { IAppState } from "src/app/models/core/iAppState";
 import { Campaign } from "src/app/campaign/models/campaign";
-import { Ruleset } from "src/app/models/core/rulesets/ruleset";
 import { App } from "src/app/models/core/app/app";
 import { AppUser } from "src/app/models/core/appUser";
 import IFormActions from "src/app/store/iFormActions";

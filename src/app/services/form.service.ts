@@ -7,4 +7,5 @@ export default abstract class FormService<
 	T extends IFormEditable
 > extends MasterService {
 	public abstract save(item: T): Observable<ApiResponse>;
+	public abstract delete(id: number): Observable<ApiResponse>;
 }

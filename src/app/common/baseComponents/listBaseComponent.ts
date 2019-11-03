@@ -4,8 +4,7 @@ import {
 	OnDestroy,
 	QueryList,
 	ViewChildren,
-	AfterViewInit,
-	ElementRef
+	AfterViewInit
 } from "@angular/core";
 import KeyboardBaseComponent from "./keyboardBaseComponents";
 import { KeyboardService } from "src/app/services/keyboard/keyboard.service";
@@ -17,34 +16,46 @@ import IListActions from "src/app/store/iListActions";
 import IListable from "src/app/models/core/app/forms/iListable";
 import { Location } from "@angular/common";
 import { MatExpansionPanel } from "@angular/material/expansion";
-import { startWith, debounceTime, map, mergeAll } from "rxjs/operators";
-import { combineLatest, Subject, scheduled, asapScheduler } from "rxjs";
+import { startWith, debounceTime, mergeAll } from "rxjs/operators";
+import { scheduled, asapScheduler } from "rxjs";
+import { ModalModel } from "../models/modalModel";
+import { MatDialog } from "@angular/material/dialog";
+import FormService from "src/app/services/form.service";
+import SnackbarModel from "../models/snackbarModel";
+import { SnackbarComponent } from "../snackbar/snackbar.component";
+import { MatSnackBar } from "@angular/material/snack-bar";
+import { ModalComponent } from "../modal/modal.component";
 
 @Component({})
 export abstract class ListBaseComponent<
 	T extends IListable,
-	U extends IListActions<T>
+	U extends IListActions<T>,
+	V extends FormService<T>
 > extends KeyboardBaseComponent implements OnInit, AfterViewInit, OnDestroy {
+	public processing: boolean;
+
 	@ViewChildren(MatExpansionPanel)
 	private matExpansionPanels: QueryList<any>;
 	private accordionItems: MatExpansionPanel[];
+	protected selectedItem: number;
 
-	private openedEvents$ = new Subject();
-
-	private selectedItem: number;
 	private hasOpened: boolean;
 
 	constructor(
 		protected store: NgRedux<IAppState>,
-		private router: Router,
-		private actions: U,
+		protected router: Router,
+		protected actions: U,
+		protected campaignService: V,
 		private location: Location,
+		private snackBar: MatSnackBar,
+		private dialog: MatDialog,
 		keyboardService: KeyboardService
 	) {
 		super(keyboardService);
 	}
 
-	protected abstract constructUrl(itemId: number): string;
+	protected abstract constructEditUrl(itemId: number): string;
+	protected abstract getItem(): T;
 
 	public ngOnInit() {
 		super.ngOnInit();
@@ -54,7 +65,7 @@ export abstract class ListBaseComponent<
 		this.keySubscriptions.push(
 			{
 				key: "n",
-				modifierKeys: [Key.Control],
+				modifierKeys: [Key.Alt],
 				callbackFn: () => this.edit(-1)
 			},
 			{
@@ -68,9 +79,9 @@ export abstract class ListBaseComponent<
 				callbackFn: () => {
 					if (this.selectedItem <= 0) return;
 
-					this.getExpansionPanelById(this.selectedItem).close();
+					this.getExpansionPanelById().close();
 					this.selectedItem--;
-					this.getExpansionPanelById(this.selectedItem).open();
+					this.getExpansionPanelById().open();
 				}
 			},
 			{
@@ -79,13 +90,23 @@ export abstract class ListBaseComponent<
 				callbackFn: () => {
 					if (this.selectedItem > this.accordionItems.length) return;
 
-					this.getExpansionPanelById(this.selectedItem).close();
+					this.getExpansionPanelById().close();
 
 					if (this.hasOpened) this.selectedItem++;
 					else this.hasOpened = true;
 
-					this.getExpansionPanelById(this.selectedItem).open();
+					this.getExpansionPanelById().open();
 				}
+			},
+			{
+				key: "e",
+				modifierKeys: [Key.Alt],
+				callbackFn: () => this.edit(this.getItem().id)
+			},
+			{
+				key: Key.Delete,
+				modifierKeys: [],
+				callbackFn: () => this.delete(this.getItem())
 			}
 		);
 	}
@@ -128,13 +149,82 @@ export abstract class ListBaseComponent<
 
 	public edit(itemId: number): void {
 		this.store.dispatch(this.actions.edit(itemId));
-		this.router.navigateByUrl(this.constructUrl(itemId));
+		this.router.navigateByUrl(this.constructEditUrl(itemId));
 	}
 
-	private getExpansionPanelById(id: number): MatExpansionPanel {
+	public delete(item: T): void {
+		const model: ModalModel = {
+			title: "Confirm Delete",
+			content: `<p>Are you sure you wish to delete ${item.name}?`,
+			closeButton: {
+				icon: null,
+				color: "primary",
+				titleText: "Close",
+				onActivate: () => {}
+			},
+			buttons: [
+				{
+					icon: "trash-alt",
+					color: "warn",
+					titleText: "Delete",
+					onActivate: () => {
+						this.confirmDelete(item);
+					}
+				}
+			]
+		};
+
+		this.dialog.open(ModalComponent, {
+			data: model
+		});
+	}
+
+	private confirmDelete(item: T): void {
+		this.processing = true;
+		this.campaignService.delete(item.id).subscribe(
+			() => {
+				this.store.dispatch(this.actions.delete(item.id));
+				this.processing = false;
+			},
+			() => {
+				this.processing = false;
+				this.openSnackbar(
+					"exclamation-triangle",
+					`An error occurred while deleting ${item.name}!`
+				);
+			}
+		);
+	}
+
+	private getExpansionPanelById(): MatExpansionPanel {
 		return this.accordionItems.find(
-			(item: MatExpansionPanel, index: number) =>
+			(_item: MatExpansionPanel, index: number) =>
 				index === this.selectedItem
 		);
+	}
+
+	protected openSnackbar(icon: string, message: string): void {
+		let textClass = "text-info";
+
+		switch (icon) {
+			case "check-square":
+				textClass = "text-success";
+				break;
+
+			case "exclamation-triangle":
+				textClass = "text-danger";
+				break;
+		}
+
+		const options: SnackbarModel = {
+			icon: icon,
+			message: message,
+			textClass: textClass
+		};
+
+		this.snackBar.openFromComponent(SnackbarComponent, {
+			data: options,
+			duration: 5000
+		});
 	}
 }

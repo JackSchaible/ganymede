@@ -49,6 +49,7 @@ export default abstract class FormBase<
 	protected abstract getParentId(): number;
 
 	protected onInit() {
+		window.scrollTo({ top: 0 });
 		this.syncFromStore();
 		this.syncToStore();
 

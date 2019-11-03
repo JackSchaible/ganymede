@@ -1,0 +1,9 @@
+<p>
+	<ng-container *ngIf="model.icon; else noIcon">
+		<i [class]="model.icon"></i>
+		<span>{{model.key}}</span>
+	</ng-container>
+	<ng-template #noIcon>
+		{{model.key}}
+	</ng-template>
+</p>

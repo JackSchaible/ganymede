@@ -46,7 +46,8 @@ import { MatStepperModule } from "@angular/material/stepper";
 		MatSnackBarModule,
 		ReactiveFormsModule,
 		FormsModule,
-		MatStepperModule
+		MatStepperModule,
+		GmCommonModule
 	]
 })
 export class SpellModule {}

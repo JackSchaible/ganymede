@@ -1,5 +1,10 @@
 <gm-processing-overlay [isActive]="processing"></gm-processing-overlay>
 
+<div class="u-flex">
+	<gm-key-command [model]="{key: 'ALT-BACKSPACE', icon: 'fas fa-arrow-left'}"></gm-key-command>
+	<gm-key-command class="ml-1" [model]="{key: 'CTRL+S', icon: 'fas fa-save'}"></gm-key-command>
+</div>
+
 <form [formGroup]="formGroup">
 	<h1>
 		<ng-container *ngIf="(campaign$ | async)?.name; else noName">{{ (campaign$ | async)?.name }}</ng-container>
@@ -13,7 +18,7 @@
 
 		<mat-card-content class="u-flex">
 			<mat-form-field class="col-6">
-				<input matInput placeholder="Name" formControlName="name">
+				<input #name matInput placeholder="Name" formControlName="name">
 				<mat-error *ngIf="name.errors?.required">A name is required.</mat-error>
 			</mat-form-field>
 

@@ -17,6 +17,7 @@ import { CampaignComponent } from "./components/campaign/campaign.component";
 @NgModule({
 	imports: [
 		CommonModule,
+		GmCommonModule,
 		CampaignRoutingModule,
 		MatExpansionModule,
 		MatButtonModule,

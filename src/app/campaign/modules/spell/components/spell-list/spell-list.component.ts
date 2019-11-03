@@ -10,13 +10,17 @@ import { SpellActions } from "../../store/actions";
 import { ListBaseComponent } from "src/app/common/baseComponents/listBaseComponent";
 import { KeyboardService } from "src/app/services/keyboard/keyboard.service";
 import { Location } from "@angular/common";
+import { SpellService } from "../../spell.service";
+import { MatDialog } from "@angular/material/dialog";
+import { MatSnackBar } from "@angular/material/snack-bar";
 
 @Component({
 	selector: "gm-spell-list",
 	templateUrl: "./spell-list.component.html",
 	styleUrls: ["./spell-list.component.scss"]
 })
-export class SpellListComponent extends ListBaseComponent<Spell, SpellActions>
+export class SpellListComponent
+	extends ListBaseComponent<Spell, SpellActions, SpellService>
 	implements OnInit, AfterViewInit, OnDestroy {
 	@select(["app", "campaign", "spells"])
 	public allSpells$: Observable<Spell[]>;
@@ -29,10 +33,22 @@ export class SpellListComponent extends ListBaseComponent<Spell, SpellActions>
 		protected store: NgRedux<IAppState>,
 		location: Location,
 		router: Router,
+		dialog: MatDialog,
+		snackBar: MatSnackBar,
 		actions: SpellActions,
+		spellService: SpellService,
 		keyboardService: KeyboardService
 	) {
-		super(store, router, actions, location, keyboardService);
+		super(
+			store,
+			router,
+			actions,
+			spellService,
+			location,
+			snackBar,
+			dialog,
+			keyboardService
+		);
 	}
 
 	public ngOnInit() {
@@ -62,8 +78,12 @@ export class SpellListComponent extends ListBaseComponent<Spell, SpellActions>
 		super.ngOnDestroy();
 	}
 
-	protected constructUrl(id: number): string {
+	protected constructEditUrl(id: number): string {
 		const campaignId = this.store.getState().app.campaign.id;
 		return `campaigns/${campaignId}/spells/edit/${id}`;
+	}
+
+	protected getItem(): Spell {
+		return this.store.getState().app.campaign.spells[this.selectedItem];
 	}
 }

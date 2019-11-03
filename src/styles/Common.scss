@@ -34,18 +34,3 @@ small {
 em {
 	font-family: "Futura PT Condensed", "Futura PT", Helvetica, sans-serif;
 }
-
-::ng-deep {
-	.kbd-icon {
-		color: #fff;
-		text-transform: capitalize;
-		font-size: 8px;
-		border: 1px solid #fff;
-		display: inline;
-		padding: 3px 6px;
-
-		span {
-			margin-left: 5px;
-		}
-	}
-}

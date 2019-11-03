@@ -1,4 +1,10 @@
-import { Component, OnInit, OnDestroy } from "@angular/core";
+import {
+	Component,
+	OnInit,
+	OnDestroy,
+	ElementRef,
+	ViewChild
+} from "@angular/core";
 import { CampaignService } from "../../campaign.service";
 import { NgRedux, select } from "@angular-redux/store";
 import { IAppState } from "src/app/models/core/iAppState";
@@ -25,6 +31,8 @@ export class CampaignEditComponent
 
 	@select(["app", "forms", "campaignFormData", "rulesets"])
 	public rulesets$: Observable<Ruleset[]>;
+
+	@ViewChild("name", { static: false }) nameEl: ElementRef;
 
 	public name: FormControl = new FormControl("", Validators.required);
 	public description: FormControl = new FormControl("", Validators.required);
@@ -61,6 +69,8 @@ export class CampaignEditComponent
 
 	public ngOnInit() {
 		super.onInit();
+
+		setTimeout(() => this.nameEl.nativeElement.focus(), 500);
 	}
 
 	public ngOnDestroy() {

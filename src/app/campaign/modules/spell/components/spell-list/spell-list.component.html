@@ -1,9 +1,9 @@
 <gm-processing-overlay [isActive]="processing"></gm-processing-overlay>
 
 <div class="u-flex">
-	<p class="kbd-icon"><i class="fas fa-arrow-left"></i> <span>ALT+BACKSPACE</span></p>
-	<p class="kbd-icon u-margin-left"><i class="fas fa-arrow-up"></i><span>UP</span></p>
-	<p class="kbd-icon u-margin-left"><i class=" fas fa-arrow-down"></i><span>DOWN</span></p>
+	<gm-key-command [model]="{key: 'ALT-BACKSPACE', icon: 'fas fa-arrow-left'}"></gm-key-command>
+	<gm-key-command class="ml-1" [model]="{key: 'UP', icon: 'fas fa-arrow-up'}"></gm-key-command>
+	<gm-key-command class="ml-1" [model]="{key: 'DOWN', icon: 'fas fa-arrow-down'}"></gm-key-command>
 </div>
 
 <h1>Spells</h1>
@@ -12,7 +12,7 @@
 <div class="u-flex u-flex__justify--flex-end">
 	<div class="u-flex u-flex__column">
 		<div class="u-margin-bottom-half">
-			<p class="kbd-icon">CTRL+N</p>
+			<gm-key-command [model]="{key: 'ALT-N'}"></gm-key-command>
 		</div>
 
 		<button mat-raised-button color="accent" (click)="edit(-1)" class="mb-2">
@@ -59,8 +59,18 @@
 		<p>Monsters with this Spell: {{ spell?.monsterSpells?.length }}</p>
 
 		<mat-action-row>
-			<button title="Edit" mat-mini-fab color="primary" (click)="edit(spell?.id)" class="mr-3"><i class="fas fa-pencil"></i></button>
-			<button title="Delete" mat-mini-fab color="warn" (click)="delete(spell)"><i class="fas fa-trash"></i></button>
+			<div class="u-flex u-flex__column mr-3">
+				<div class="mb-1 u-text-center">
+					<gm-key-command [model]="{key: 'ALT+E'}"></gm-key-command>
+				</div>
+				<button title="Edit" mat-mini-fab color="primary" (click)="edit(this.getItem().id)"><i class="fas fa-pencil"></i></button>
+			</div>
+			<div class="u-flex u-flex__column mr-3">
+				<div class="mb-1 u-text-center">
+					<gm-key-command [model]="{key: 'DEL'}"></gm-key-command>
+				</div>
+				<button title="Delete" mat-mini-fab color="warn" (click)="delete(this.getItem())"><i class="fas fa-trash"></i></button>
+			</div>
 		</mat-action-row>
 	</mat-expansion-panel>
 </mat-accordion>

@@ -7,6 +7,7 @@ import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
 import { ProcessingOverlayComponent } from "./processing-overlay/processing-overlay.component";
 import { SnackbarComponent } from "./snackbar/snackbar.component";
 import { ModalComponent } from "./modal/modal.component";
+import { KeyCommandComponent } from "./key-command/key-command.component";
 
 @NgModule({
 	imports: [
@@ -16,8 +17,18 @@ import { ModalComponent } from "./modal/modal.component";
 		MatProgressSpinnerModule,
 		MatDialogModule
 	],
-	declarations: [ProcessingOverlayComponent, SnackbarComponent, ModalComponent],
-	exports: [ProcessingOverlayComponent, SnackbarComponent, ModalComponent],
+	declarations: [
+		ProcessingOverlayComponent,
+		SnackbarComponent,
+		ModalComponent,
+		KeyCommandComponent
+	],
+	exports: [
+		ProcessingOverlayComponent,
+		KeyCommandComponent,
+		SnackbarComponent,
+		ModalComponent
+	],
 	entryComponents: [SnackbarComponent, ModalComponent]
 })
 export class GmCommonModule {}

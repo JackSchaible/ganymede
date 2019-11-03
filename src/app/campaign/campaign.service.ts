@@ -27,7 +27,7 @@ export class CampaignService extends FormService<Campaign> {
 		return this.client.put<ApiResponse>(`${this.baseUrl}/save`, campaign);
 	}
 
-	public deleteCampaign(id: number): Observable<ApiResponse> {
+	public delete(id: number): Observable<ApiResponse> {
 		return this.client.delete<ApiResponse>(`${this.baseUrl}/delete/${id}`);
 	}
 }

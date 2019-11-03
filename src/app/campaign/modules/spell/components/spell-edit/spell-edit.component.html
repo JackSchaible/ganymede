@@ -1,9 +1,10 @@
 <gm-processing-overlay [isActive]="processing"></gm-processing-overlay>
 
 <div class="u-flex">
-	<p class="kbd-icon u-margin-left"><i class="fas fa-arrow-left"></i> <span>ALT+BACKSPACE</span></p>
-	<p class="kbd-icon u-margin-left"><i class="fas fa-save"></i> <span>CTRL+S</span></p>
+	<gm-key-command [model]="{key: 'ALT-BACKSPACE', icon: 'fas fa-arrow-left'}"></gm-key-command>
+	<gm-key-command class="ml-1" [model]="{key: 'CTRL+S', icon: 'fas fa-save'}"></gm-key-command>
 </div>
+
 <section class="u-flex u-flex__wrap">
 	<form class="col-12 col-md-6" [formGroup]="formGroup">
 		<h1>
@@ -16,7 +17,8 @@
 			<!-- Name, Level, & School -->
 			<mat-step [stepControl]="name" errorMessage="There were some problems with the basic information.">
 				<ng-template matStepLabel>
-					<p class="kbd-icon u-margin-right-half">CTRL+1</p> Basic Info
+					<gm-key-command class="mr-1" [model]="{key: 'CTRL+1'}"></gm-key-command>
+					Basic Info
 				</ng-template>
 
 				<mat-form-field>
@@ -59,7 +61,7 @@
 			<!-- Casting Time-->
 			<mat-step [stepControl]="castingTime" errorMessage="There were some problems with the casting time information.">
 				<ng-template matStepLabel>
-					<p class="kbd-icon u-margin-right-half">CTRL+2</p>Casting Time
+					<gm-key-command class="mr-1" [model]="{key: 'CTRL+2'}"></gm-key-command>Casting Time
 				</ng-template>
 
 				<div formGroupName="castingTime">
@@ -116,7 +118,7 @@
 			<!-- Range -->
 			<mat-step [stepControl]="range" errorMessage="There were some problems with the range information.">
 				<ng-template matStepLabel>
-					<p class="kbd-icon u-margin-right-half">CTRL+3</p>Range
+					<gm-key-command class="mr-1" [model]="{key: 'CTRL+3'}"></gm-key-command>Range
 				</ng-template>
 
 				<div formGroupName="spellRange">
@@ -177,7 +179,7 @@
 			<!-- Components -->
 			<mat-step [stepControl]="components" errorMessage="There were some problems with the components information.">
 				<ng-template matStepLabel>
-					<p class="kbd-icon u-margin-right-half">CTRL+4</p>Components
+					<gm-key-command class="mr-1" [model]="{key: 'CTRL+4'}"></gm-key-command>Components
 				</ng-template>
 
 				<div formGroupName="spellComponents">
@@ -214,7 +216,7 @@
 			<!-- Duration -->
 			<mat-step [stepControl]="duration" errorMessage="There were some problems with the duration information.">
 				<ng-template matStepLabel>
-					<p class="kbd-icon u-margin-right-half">CTRL+5</p>Duration
+					<gm-key-command class="mr-1" [model]="{key: 'CTRL+5'}"></gm-key-command>Duration
 				</ng-template>
 
 				<div formGroupName="spellDuration">
@@ -269,7 +271,7 @@
 			<!-- Description -->
 			<mat-step [stepControl]="description" errorMessage="Spells must have a description.">
 				<ng-template matStepLabel>
-					<p class="kbd-icon u-margin-right-half">CTRL+6</p>Description
+					<gm-key-command class="mr-1" [model]="{key: 'CTRL+6'}"></gm-key-command>>Description
 				</ng-template>
 
 				<p class="ml-3"><small><em>HTML-Formatted</em></small></p>
@@ -283,7 +285,7 @@
 			<!-- At Higher Levels -->
 			<mat-step [stepControl]="atHigherLevels">
 				<ng-template matStepLabel>
-					<p class="kbd-icon u-margin-right-half">CTRL+7</p>At Higher Levels
+					<gm-key-command class="mr-1" [model]="{key: 'CTRL+7'}"></gm-key-command>At Higher Levels
 				</ng-template>
 
 				<p class="ml-3"><small><em>HTML-Formatted</em></small></p>
@@ -297,7 +299,7 @@
 			<!-- Done -->
 			<mat-step>
 				<ng-template matStepLabel>
-					<p class="kbd-icon u-margin-right-half">CTRL+8</p>Done
+					<gm-key-command class="mr-1" [model]="{key: 'CTRL+8'}"></gm-key-command>Done
 				</ng-template>
 				<button (click)="cancel()" class="mr-3" mat-raised-button color="danger">
 					<i class="fas fa-times-square mr-2"></i> Cancel
