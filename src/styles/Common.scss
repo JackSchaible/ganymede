@@ -12,7 +12,10 @@
 @import "_trumps.text-align.scss";
 @import url("https://use.typekit.net/qug3eze.css");
 
-$font: "Futura PT", Helvetica, sans-serif;
+$font: "Futura PT",
+Helvetica,
+sans-serif;
+
 p {
 	font-family: $font;
 	font-size: 1.5em;

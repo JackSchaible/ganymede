@@ -7,9 +7,9 @@ using Ganymede.Api.Data;
 
 namespace Ganymede.api.Controllers
 {
-    [Route("api/[controller]/[action]")]
     [ApiController]
-    public class AccountController : Controller
+    [Route("api/[controller]/[action]")]
+    public class AccountController : ControllerBase
     {
         private readonly IAuthService _service;
         private readonly UserManager<AppUser> _user;
@@ -21,10 +21,10 @@ namespace Ganymede.api.Controllers
         }
 
         [HttpPost]
-        public IActionResult Login([FromBody] LoginData data)
+        public LoginResult Login([FromBody] LoginData data)
         {
             LoginResult model = _service.Login(data);
-            return Json(model);
+            return model;
         }
 
         [HttpPost]

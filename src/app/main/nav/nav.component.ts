@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, OnDestroy } from "@angular/core";
 import { AuthService } from "../../auth/auth.service";
 import { Router, NavigationEnd, RouterEvent } from "@angular/router";
 import { Md5 } from "ts-md5/dist/md5";
@@ -7,20 +7,25 @@ import NavItem from "../models/navItem";
 import { Observable } from "rxjs";
 import { NgRedux, select } from "@angular-redux/store";
 import { IAppState } from "src/app/models/core/iAppState";
-import AppUser from "src/app/models/core/appUser";
+import { AppUser } from "src/app/models/core/appUser";
 import { AuthActions } from "src/app/auth/store/actions";
 import {
 	BreakpointObserver,
 	BreakpointState,
 	Breakpoints
 } from "@angular/cdk/layout";
+import { CampaignActions } from "src/app/campaign/store/actions";
+import KeyboardBaseComponent from "src/app/common/baseComponents/keyboardBaseComponents";
+import { KeyboardService } from "src/app/services/keyboard/keyboard.service";
+import { Key } from "ts-key-enum";
 
 @Component({
 	selector: "gm-nav",
 	templateUrl: "./nav.component.html",
 	styleUrls: ["./nav.component.scss"]
 })
-export class NavComponent implements OnInit {
+export class NavComponent extends KeyboardBaseComponent
+	implements OnInit, OnDestroy {
 	isMobile: boolean;
 	isTablet: boolean;
 	isDesktop: boolean;
@@ -37,11 +42,14 @@ export class NavComponent implements OnInit {
 
 	constructor(
 		private authService: AuthService,
-		private breakpointObserver: BreakpointObserver,
 		private router: Router,
-		private redux: NgRedux<IAppState>,
-		private actions: AuthActions
+		private store: NgRedux<IAppState>,
+		private authActions: AuthActions,
+		private campaignActions: CampaignActions,
+		breakpointObserver: BreakpointObserver,
+		keyboardService: KeyboardService
 	) {
+		super(keyboardService);
 		breakpointObserver
 			.observe([Breakpoints.Handset])
 			.subscribe((result: BreakpointState) => {
@@ -67,55 +75,98 @@ export class NavComponent implements OnInit {
 			new NavItem("encounter", "fas fa-helmet-battle", "Encounters"),
 			new NavItem("campaigns", "fas fa-scroll", "Campaigns")
 		];
+	}
 
+	public ngOnInit() {
+		super.ngOnInit();
 		this.user$.subscribe((user: AppUser) => {
 			this.loggedIn = user && !!user.email;
 			if (!this.loggedIn) return;
 
 			this.userHash = Md5.hashStr(user.email) as string;
 		});
-	}
 
-	ngOnInit(): void {
 		this.router.events
-			.pipe(filter((event: RouterEvent) => event instanceof NavigationEnd))
+			.pipe(
+				filter((event: RouterEvent) => event instanceof NavigationEnd)
+			)
 			.subscribe((event: NavigationEnd) =>
 				this.configureItems(event.urlAfterRedirects)
 			);
 	}
 
+	public ngOnDestroy() {
+		super.ngOnDestroy();
+	}
+
 	logout() {
 		this.authService.logout();
 		this.router.navigateByUrl("/");
-		this.redux.dispatch(this.actions.loggedOut());
+		this.store.dispatch(this.authActions.loggedOut());
 	}
 
 	private configureItems(url: string) {
-		const matches = url.match(/campaign\/[0-9]+/g);
-
-		if (matches && matches.length > 0) {
-			const searchStr = "campaign/";
-			const match: string = matches[0];
-			const campaignIndex = match.indexOf(searchStr) + searchStr.length;
-			if (campaignIndex >= 0) {
-				const id = parseInt(
-					match.substr(campaignIndex, match.length - campaignIndex),
-					10
-				);
+		if (url === "/") {
+			this.store.dispatch(this.campaignActions.deselectCampaign());
+			this.currentItems = this.items;
+		} else {
+			const state = this.store.getState();
+			if (state.app.campaign && state.app.campaign.id) {
+				const id = this.store.getState().app.campaign.id;
 				this.campaignItems = [
 					new NavItem("", "fab fa-d-and-d", "DM Tools", true),
 					new NavItem(
-						`campaign/${id}`,
+						`campaigns/${id}`,
 						"fas fa-scroll",
 						"The Campaign",
 						false,
-						[new NavItem(`campaign/edit/${id}`, "fas fa-pencil", "Edit")]
+						[
+							new NavItem(
+								`campaigns/edit/${id}`,
+								"fas fa-pencil",
+								"Edit"
+							)
+						]
 					),
-					new NavItem(`campaign/${id}/monsters`, "fas fa-paw-claws", "Monsters")
+					new NavItem(
+						`campaigns/${id}/monsters`,
+						"fas fa-paw-claws",
+						"Monsters"
+					),
+					new NavItem(
+						`campaigns/${id}/spells`,
+						"fas fa-book-spells",
+						"Spells"
+					)
 				];
-
 				this.currentItems = this.campaignItems;
+			} else this.currentItems = this.items;
+		}
+
+		this.keySubscriptions = [];
+		for (let i = 0; i < this.currentItems.length; i++) {
+			if (this.currentItems[i].isBrand) continue;
+			this.keySubscriptions.push({
+				// @ts-ignore 2322
+				key: i.toString(),
+				modifierKeys: [Key.Control],
+				callbackFn: () => {
+					this.router.navigateByUrl(this.currentItems[i].url);
+				}
+			});
+		}
+		this.keySubscriptions.push({
+			key: "l",
+			modifierKeys: [Key.Control],
+			callbackFn: () => {
+				if (this.loggedIn) this.logout();
+				else this.router.navigateByUrl("/login");
 			}
-		} else this.currentItems = this.items;
+		});
+		this.keySubscriptions.push({
+			key: "h",
+			modifierKeys: [Key.Control],
+			callbackFn: () => this.router.navigateByUrl("/")
+		});
 	}
 }

@@ -1,0 +1,19 @@
+::ng-deep {
+    figure.c-spell-display {
+        section {
+            &.description {
+                p {
+                    margin-top: 1rem;
+                }
+            }
+
+            &.atHigherLevels {
+                p {
+                    &:first-child {
+                        display: inline;
+                    }
+                }
+            }
+        }
+    }
+}

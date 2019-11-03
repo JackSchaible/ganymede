@@ -2,7 +2,6 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
@@ -16,15 +15,17 @@ using Ganymede.Api.BLL.Services;
 using Ganymede.Api.BLL.Services.Impl;
 using System.Linq;
 using System.Reflection;
+using Ganymede.Api.Data.Initializers;
+using Newtonsoft.Json.Converters;
 
 namespace api
 {
     public class Startup
     {
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) => WebHost.CreateDefaultBuilder(args);
-        private IHostingEnvironment _env;
+        private readonly IWebHostEnvironment _env;
 
-        public Startup(IHostingEnvironment env, IConfiguration configuration)
+        public Startup(IWebHostEnvironment env, IConfiguration configuration)
         {
             Configuration = configuration;
             _env = env;
@@ -40,35 +41,37 @@ namespace api
             ConfigureAutomapper(services);
             ConfigureBllServices(services);
 
-            services.AddMvc()
-                .SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
-                .AddJsonOptions(
-                    options => options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
-                );
+            //Need newtonsoft's json until .NET supports circular reference handling. See https://github.com/dotnet/corefx/issues/38579
+            services.AddControllers()
+                .AddNewtonsoftJson(options =>
+                {
+                    options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+                    options.SerializerSettings.Converters.Add(new StringEnumConverter());
+                });
             services.Configure<IISOptions>(o => { o.AutomaticAuthentication = false; });
         }
 
         public void Configure(IApplicationBuilder app, ApplicationDbContext context, IDbInitializer initializer, IMapper autoMapper)
         {
-            app.UseCors("AllowOrigin");
-
-            if (_env.IsDevelopment())
-            {
+            if (_env.EnvironmentName == "Development")
                 app.UseDeveloperExceptionPage();
-            }
             else
             {
                 app.UseCors(b => b.WithOrigins("http://dm.jackschaible.ca/"));
                 app.UseHsts();
             }
 
+            app.UseCors("AllowOrigin");
+            app.UseAuthorization();
             app.UseAuthentication();
             app.UseHttpsRedirection();
-            app.UseMvc();
+
+            app.UseRouting();
+            app.UseEndpoints(endpoints => endpoints.MapControllers());
 
             context.Database.EnsureCreated();
-            initializer.Initialize().Wait();
-            //autoMapper.ConfigurationProvider.AssertConfigurationIsValid();
+            initializer.Initialize();
+            autoMapper.ConfigurationProvider.AssertConfigurationIsValid();
         }
 
         private void ConfigureDb(IServiceCollection services)
@@ -108,7 +111,7 @@ namespace api
         }
         private void ConfigureCors(IServiceCollection services)
         {
-            string domain = _env.IsDevelopment() ? "https://localhost:4200" : "http://dm.jackschaible.ca";
+            string domain = _env.EnvironmentName == "Development" ? "https://localhost:4200" : "http://dm.jackschaible.ca";
 
             services.AddCors(o =>
                 o.AddPolicy("AllowOrigin",
@@ -130,6 +133,7 @@ namespace api
             services.AddTransient<IAppService, AppService>();
             services.AddTransient<ICampaignService, CampaignService>();
             services.AddTransient<IAuthService, AuthService>();
+            services.AddTransient<ISpellService, SpellService>();
         }
     }
 }

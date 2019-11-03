@@ -1,14 +1,17 @@
 import { Injectable } from "@angular/core";
 import { AnyAction } from "redux";
 import { IAppState } from "src/app/models/core/iAppState";
-import { Campaign } from "src/app/models/core/campaign";
-import { Ruleset } from "src/app/models/core/rulesets/ruleset";
+import { Campaign } from "src/app/campaign/models/campaign";
+import { App } from "src/app/models/core/app/app";
+import { AppUser } from "src/app/models/core/appUser";
+import IFormActions from "src/app/store/iFormActions";
 
 export class CampaignActionTypes {
 	public static CAMPAIGN_SELECTED: string = "CAMPAIGN_SELECTED";
+	public static CAMPAIGN_DESELECTED: string = "CAMPAIGN_DESELECTED";
 	public static CAMPAIGN_EDIT: string = "CAMPAIGN_EDIT";
-	public static CAMPAIGN_EDIT_RULESET_CHANGED: string =
-		"CAMPAIGN_EDIT_RULESET_CHANGED";
+	public static CAMPAIGN_EDIT_FORM_CHANGED: string =
+		"CAMPAIGN_EDIT_FORM_CHANGED";
 	public static NEW_CAMPAIGN_SAVED: string = "NEW_CAMPAIGN_SAVED";
 	public static CAMPAIGN_SAVED: string = "CAMPAIGN_SAVED";
 	public static CAMPAIGN_DELETED: string = "CAMPAIGN_DELETED";
@@ -21,18 +24,14 @@ export class CampaignAction {
 @Injectable({
 	providedIn: "root"
 })
-export class CampaignActions {
-	public selectCampaign(campaignId: number): AnyAction {
-		const campaign: Campaign = Campaign.getDefault();
-		campaign.id = campaignId;
+export class CampaignActions implements IFormActions<Campaign> {
+	public selectCampaign(campaign: Campaign): AnyAction {
+		const app = App.getDefault();
+		app.campaign = campaign;
 
 		const state: IAppState = {
 			user: undefined,
-			app: {
-				campaign: campaign,
-				forms: undefined,
-				rulesets: undefined
-			}
+			app: app
 		};
 		return {
 			type: new CampaignAction(CampaignActionTypes.CAMPAIGN_SELECTED),
@@ -40,19 +39,22 @@ export class CampaignActions {
 		};
 	}
 
-	public editCampaign(campaignId: number): AnyAction {
+	public deselectCampaign(): AnyAction {
+		return {
+			type: new CampaignAction(CampaignActionTypes.CAMPAIGN_DESELECTED)
+		};
+	}
+
+	public edit(campaignId: number): AnyAction {
 		const campaignForm: Campaign = Campaign.getDefault();
 		campaignForm.id = campaignId;
 
+		const app = App.getDefault();
+		app.forms.campaignForm = campaignForm;
+
 		const state: IAppState = {
-			user: null,
-			app: {
-				rulesets: null,
-				forms: {
-					campaignForm: campaignForm
-				},
-				campaign: undefined
-			}
+			user: undefined,
+			app: app
 		};
 		return {
 			type: new CampaignAction(CampaignActionTypes.CAMPAIGN_EDIT),
@@ -60,47 +62,41 @@ export class CampaignActions {
 		};
 	}
 
-	public editCampaignSetRuleset(rulesetId: number): AnyAction {
-		const campaignForm: Campaign = Campaign.getDefault();
-		campaignForm.ruleset = Ruleset.getDefault();
-		campaignForm.ruleset.id = rulesetId;
+	public change(campaign: Campaign): AnyAction {
+		const user = AppUser.getDefault();
+		const app = App.getDefault();
+		app.forms.campaignForm = campaign;
 
 		const state: IAppState = {
-			user: undefined,
-			app: {
-				rulesets: undefined,
-				forms: {
-					campaignForm: campaignForm
-				},
-				campaign: undefined
-			}
+			user: user,
+			app: app
 		};
 		return {
 			type: new CampaignAction(
-				CampaignActionTypes.CAMPAIGN_EDIT_RULESET_CHANGED
+				CampaignActionTypes.CAMPAIGN_EDIT_FORM_CHANGED
 			),
 			state: state
 		};
 	}
 
-	public saveCampaign(campaign: Campaign, isNew: boolean): AnyAction {
+	public save(
+		campaign: Campaign,
+		parentId: number,
+		isNew: boolean
+	): AnyAction {
+		const user = AppUser.getDefault();
+		const app = App.getDefault();
+		app.forms.campaignForm = campaign;
+
 		const state: IAppState = {
-			user: {
-				campaigns: [campaign],
-				email: undefined
-			},
-			app: {
-				rulesets: undefined,
-				forms: {
-					campaignForm: campaign
-				},
-				campaign: undefined
-			}
+			user: user,
+			app: app
 		};
 
-		let actionType: string = CampaignActionTypes.CAMPAIGN_SAVED;
+		let actionType: string;
 
 		if (isNew) actionType = CampaignActionTypes.NEW_CAMPAIGN_SAVED;
+		else actionType = CampaignActionTypes.CAMPAIGN_SAVED;
 
 		return {
 			type: new CampaignAction(actionType),
@@ -108,19 +104,15 @@ export class CampaignActions {
 		};
 	}
 
-	public deleteCampaign(id: number): AnyAction {
-		const campaign: Campaign = Campaign.getDefault();
+	public delete(id: number): AnyAction {
+		const app = App.getDefault();
+		const campaign = Campaign.getDefault();
 		campaign.id = id;
+		app.forms.campaignForm = campaign;
 
 		const state: IAppState = {
 			user: undefined,
-			app: {
-				rulesets: undefined,
-				forms: {
-					campaignForm: campaign
-				},
-				campaign: undefined
-			}
+			app: app
 		};
 
 		return {

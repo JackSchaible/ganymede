@@ -6,6 +6,8 @@ import { NavComponent } from "./main/nav/nav.component";
 import { HomeComponent } from "./main/home/home.component";
 import { CrCalculatorComponent } from "./main/cr-calculator/cr-calculator.component";
 import { RouteNotFoundComponent } from "./main/route-not-found/route-not-found.component";
+import { NavItemComponent } from "./main/nav-item/nav-item.component";
+
 import { ReactiveFormsModule } from "@angular/forms";
 import { AppRoutingModule } from "./app.routing";
 import { HttpClientModule, HTTP_INTERCEPTORS } from "@angular/common/http";
@@ -14,11 +16,13 @@ import { AuthModule } from "./auth/auth.module";
 import { FormsModule } from "./forms/forms.module";
 import { MatMenuModule } from "@angular/material/menu";
 import { MatToolbarModule } from "@angular/material/toolbar";
-import { NavItemComponent } from "./main/nav-item/nav-item.component";
 import { CampaignModule } from "./campaign/campaign.module";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
+import { LayoutModule } from "@angular/cdk/layout";
+
 import { JwtInterceptor } from "./helpers/jwt.interceptor";
 import { ErrorInterceptor } from "./helpers/error.interceptor";
+
 import { StateLoaderService } from "./services/stateLoader.service";
 
 import {
@@ -32,11 +36,13 @@ import {
 	provideReduxForms
 } from "@angular-redux/form";
 import { compose, Middleware } from "redux";
-import { IAppState } from "./models/core/iAppState";
 import { reduce } from "./store/rootReducer";
-import AppUser from "./models/core/appUser";
+
+import { IAppState } from "./models/core/iAppState";
+import { AppUser } from "./models/core/appUser";
 import { App } from "./models/core/app/app";
-import { LayoutModule } from "@angular/cdk/layout";
+import { STEPPER_GLOBAL_OPTIONS } from "@angular/cdk/stepper";
+import { GmCommonModule } from "./common/gm-common.module";
 
 @NgModule({
 	declarations: [
@@ -48,6 +54,7 @@ import { LayoutModule } from "@angular/cdk/layout";
 		NavItemComponent
 	],
 	imports: [
+		GmCommonModule,
 		BrowserAnimationsModule,
 		BrowserModule,
 		ReactiveFormsModule,
@@ -68,7 +75,8 @@ import { LayoutModule } from "@angular/cdk/layout";
 	providers: [
 		{ provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
 		{ provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
-		StateLoaderService
+		StateLoaderService,
+		{ provide: STEPPER_GLOBAL_OPTIONS, useValue: { showError: true } }
 	],
 	bootstrap: [AppComponent]
 })
@@ -78,7 +86,10 @@ export class AppModule {
 		private devTools: DevToolsExtension,
 		private stateService: StateLoaderService
 	) {
-		const reducers = composeReducers<IAppState>(defaultFormReducer(), reduce);
+		const reducers = composeReducers<IAppState>(
+			defaultFormReducer(),
+			reduce
+		);
 
 		const middleware: Middleware[] = [];
 
@@ -97,14 +108,16 @@ export class AppModule {
 			app: App.getDefault()
 		};
 
-		store.configureStore(reducers, state, middleware, [compose(...enhancers)]);
+		store.configureStore(reducers, state, middleware, [
+			compose(...enhancers)
+		]);
 
 		store.subscribe(() => {
-			const state = store.getState();
+			const newState = store.getState();
 
 			this.stateService.saveState({
-				user: state.user,
-				app: state.app
+				user: newState.user,
+				app: newState.app
 			});
 		});
 

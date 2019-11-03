@@ -1,5 +1,5 @@
 import { AnyAction } from "redux";
-import AppUser from "../models/core/appUser";
+import { AppUser } from "../models/core/appUser";
 import { Injectable } from "@angular/core";
 import { App } from "../models/core/app/app";
 import { IAppState } from "../models/core/iAppState";

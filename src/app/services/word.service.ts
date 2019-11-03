@@ -5,7 +5,7 @@ import { Injectable } from "@angular/core";
 })
 export class WordService {
 	public getSuffix(i: number): string {
-		if (!i) return null;
+		if (!i && i !== 0) return null;
 
 		let result = "th";
 
@@ -15,7 +15,15 @@ export class WordService {
 		if (i < 10 || i > 19)
 			if (lastChar === "1") result = "st";
 			else if (lastChar === "2") result = "nd";
+			else if (lastChar === "3") result = "rd";
 
 		return result;
+	}
+
+	public isNullOrWhitespace(str: string): boolean {
+		if (!str) return true;
+		if (typeof str !== "string") return false;
+
+		return str.match(/^ *$/) !== null;
 	}
 }

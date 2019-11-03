@@ -1,0 +1,35 @@
+<figure class="c-spell-display">
+    <mat-accordion>
+        <mat-expansion-panel [expanded]="autoOpen">
+            <mat-expansion-panel-header>
+                <mat-panel-title>
+                    {{ (spell$ | async)?.name }}
+                </mat-panel-title>
+            </mat-expansion-panel-header>
+            <!--Content-->
+            <p>
+                <em>
+                    <ng-container *ngIf="(spell$ | async).level > 0">{{ level }}-level</ng-container>
+                    {{ (spell$ | async)?.spellSchool?.name }}
+                    <ng-container *ngIf="(spell$ | async).level === 0">cantrip</ng-container>
+                    <span *ngIf="(spell$ | async).ritual">&nbsp;(ritual)</span>
+                </em>
+            </p>
+
+            <section class="mt-3">
+                <gm-casting-time [castingTime]="(spell$ | async).castingTime"></gm-casting-time>
+                <gm-spell-range [range]="(spell$ | async).spellRange"></gm-spell-range>
+                <gm-spell-components [components]="(spell$ | async).spellComponents"></gm-spell-components>
+                <gm-spell-duration [duration]="(spell$ | async).spellDuration"></gm-spell-duration>
+            </section>
+
+            <section class="mt-2 description" [innerHTML]="(spell$ | async).description"></section>
+            <section class="mt-2 atHigherLevels" *ngIf="(spell$ | async).atHigherLevels">
+                <p>
+                    <strong><em>At Higher Levels:</em></strong>&nbsp;
+                    <span [innerHtml]="(spell$ | async)?.atHigherLevels"></span>
+                </p>
+            </section>
+        </mat-expansion-panel>
+    </mat-accordion>
+</figure>

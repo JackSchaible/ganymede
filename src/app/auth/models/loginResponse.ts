@@ -1,4 +1,4 @@
-import AppUser from "src/app/models/core/appUser";
+import { AppUser } from "src/app/models/core/appUser";
 import ApiError from "src/app/services/http/apiError";
 
 export class LoginResponse {

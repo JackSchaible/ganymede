@@ -1,6 +1,5 @@
-import AppUser from "src/app/models/core/appUser";
+import { AppUser } from "src/app/models/core/appUser";
 import { Injectable } from "@angular/core";
-import { StateLoaderService } from "src/app/services/stateLoader.service";
 import { AnyAction } from "redux";
 import { IAppState } from "src/app/models/core/iAppState";
 
@@ -22,7 +21,10 @@ export class AuthActions {
 			user: user,
 			app: null
 		};
-		return { type: new AuthAction(AuthActionTypes.LOGGED_IN), state: state };
+		return {
+			type: new AuthAction(AuthActionTypes.LOGGED_IN),
+			state: state
+		};
 	}
 
 	public loggedOut(): AnyAction {
@@ -30,6 +32,9 @@ export class AuthActions {
 			user: null,
 			app: null
 		};
-		return { type: new AuthAction(AuthActionTypes.LOGGED_OUT), state: state };
+		return {
+			type: new AuthAction(AuthActionTypes.LOGGED_OUT),
+			state: state
+		};
 	}
 }

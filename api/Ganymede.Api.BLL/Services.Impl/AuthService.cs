@@ -1,6 +1,8 @@
-﻿using Ganymede.Api.Data;
+﻿using AutoMapper;
+using Ganymede.Api.Data;
 using Ganymede.Api.Models.Api;
 using Ganymede.Api.Models.Auth;
+using Ganymede.Api.Models.Campaigns;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -18,7 +20,7 @@ namespace Ganymede.Api.BLL.Services.Impl
 {
     public class AuthService : IAuthService
     {
-        private Dictionary<string, ApiError> _errors = new Dictionary<string, ApiError>
+        private readonly Dictionary<string, ApiError> _errors = new Dictionary<string, ApiError>
         {
             { "DuplicateUserName", new ApiError { Field = "Username", ErrorCode = "NOT_UNIQUE"}},
             { "PasswordRequiresNonAlphanumeric", new ApiError { Field = "Password", ErrorCode = "NO_SPECIAL_CHAR"}},
@@ -32,14 +34,16 @@ namespace Ganymede.Api.BLL.Services.Impl
         private readonly IConfiguration _configuration;
         private readonly ILogger<AuthService> _logger;
         private readonly ApplicationDbContext _context;
+        private readonly IMapper _mapper;
 
-        public AuthService(SignInManager<AppUser> signinManager, UserManager<AppUser> userManager, IConfiguration configuration, ILogger<AuthService> logger, ApplicationDbContext context)
+        public AuthService(SignInManager<AppUser> signinManager, UserManager<AppUser> userManager, IConfiguration configuration, ILogger<AuthService> logger, ApplicationDbContext context, IMapper mapper)
         {
             _signinManager = signinManager;
             _userManager = userManager;
             _configuration = configuration;
             _logger = logger;
             _context = context;
+            _mapper = mapper;
         }
 
         public LoginResult Login(LoginData model)
@@ -54,10 +58,10 @@ namespace Ganymede.Api.BLL.Services.Impl
                 result.Token = GenerateJwtToken(model.Email, appUser);
                 result.Success = true;
                 AppUser user = GetUserData(appUser.Id);
-                result.User = new User
+                result.User = new UserModel
                 {
                     Email = user.Email,
-                    Campaigns = user.Campaigns
+                    Campaigns = _mapper.Map<ICollection<Campaign>, List<CampaignModel>>(user.Campaigns)
                 };
             }
             else if (!signinResult.IsLockedOut && !signinResult.RequiresTwoFactor && !signinResult.IsNotAllowed)
@@ -98,10 +102,10 @@ namespace Ganymede.Api.BLL.Services.Impl
                 var appUser = _userManager.Users.SingleOrDefault(r => r.Email == model.Email);
                 appUser = GetUserData(appUser.Id);
 
-                result.User = new User
+                result.User = new UserModel
                 {
                     Email = appUser.Email,
-                    Campaigns = appUser.Campaigns
+                    Campaigns = _mapper.Map<ICollection<Campaign>, List<CampaignModel>>(appUser.Campaigns)
                 };
                 return result;
             }

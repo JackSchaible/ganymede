@@ -1,0 +1,44 @@
+<gm-processing-overlay [isActive]="processing"></gm-processing-overlay>
+
+<div class="u-flex">
+	<gm-key-command [model]="{key: 'ALT-BACKSPACE', icon: 'fas fa-arrow-left'}"></gm-key-command>
+	<gm-key-command class="ml-1" [model]="{key: 'CTRL+S', icon: 'fas fa-save'}"></gm-key-command>
+</div>
+
+<form [formGroup]="formGroup">
+	<h1>
+		<ng-container *ngIf="(campaign$ | async)?.name; else noName">{{ (campaign$ | async)?.name }}</ng-container>
+		<ng-template #noName>New Campaign</ng-template>
+	</h1>
+
+	<mat-card class="mt-3">
+		<mat-card-header>
+			{{ isNew ? 'Add a new' : 'Edit Your' }} Campaign
+		</mat-card-header>
+
+		<mat-card-content class="u-flex">
+			<mat-form-field class="col-6">
+				<input #name matInput placeholder="Name" formControlName="name">
+				<mat-error *ngIf="name.errors?.required">A name is required.</mat-error>
+			</mat-form-field>
+
+			<mat-form-field class="col-6" formGroupName="ruleset">
+				<mat-label>Ruleset</mat-label>
+				<mat-select formControlName="id">
+					<mat-option *ngFor="let ruleset of rulesets$ | async" [value]="ruleset.id">{{ ruleset.name }}
+						({{ ruleset.publisher.name }})</mat-option>
+				</mat-select>
+				<mat-error *ngIf="rulesetID.errors?.required">A ruleset is required.</mat-error>
+			</mat-form-field>
+
+			<mat-form-field class="col-12">
+				<textarea rows="5" matInput placeholder="Description" formControlName="description"></textarea>
+				<mat-error *ngIf="description.errors?.required">A description is required.</mat-error>
+			</mat-form-field>
+		</mat-card-content>
+
+		<mat-card-actions class="u-flex u-flex__justify--flex-end">
+			<button title="Save" mat-mini-fab color="primary" (click)="save()" class="mr-3"><i class="fas fa-save"></i></button>
+		</mat-card-actions>
+	</mat-card>
+</form>

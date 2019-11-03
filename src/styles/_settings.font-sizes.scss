@@ -24,15 +24,6 @@ $font-size-xs: 0.75rem; //12px
 $font-size-xxs: 0.625rem; //10px
 $font-size-xxxs: 0.6rem; //9.6px
 
-/*
-    JP: Ideas for more predictable naming of font-size vars
-    - use pixels for variable definitions,
-      then convert to rems when variables are implemented
-    - 10px minimum size
-    - 2px minimum difference between fonts
-    - TODO: Replace references to font-size variables above with the variables below
-    - TODO: Replace references in _elements.headings.scss with new variables below
-   */
 $font-size-xxxxxlarge: 58px;
 $font-size-xxxxlarge: 48px;
 $font-size-xxxlarge: 36px;

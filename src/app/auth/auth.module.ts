@@ -7,10 +7,12 @@ import { FormsModule } from "../forms/forms.module";
 import { RegisterComponent } from "./register/register.component";
 import { AuthActions } from "./store/actions";
 import { NgReduxModule } from "@angular-redux/store";
+import { GmCommonModule } from "../common/gm-common.module";
 
 @NgModule({
 	imports: [
 		CommonModule,
+		GmCommonModule,
 		ReactiveFormsModule,
 		AuthRoutingModule,
 		FormsModule,

@@ -6,7 +6,7 @@ import MasterService from "../services/master.service";
 import { User } from "./models/user";
 import { LoginResponse } from "./models/loginResponse";
 import { StorageKeys } from "../storage/localStorageKeys";
-import AppUser from "../models/core/appUser";
+import { AppUser } from "../models/core/appUser";
 
 @Injectable({
 	providedIn: "root"
@@ -21,24 +21,32 @@ export class AuthService extends MasterService {
 		super(http);
 	}
 
-	public login(username: string, password: string): Observable<LoginResponse> {
+	public login(
+		username: string,
+		password: string
+	): Observable<LoginResponse> {
 		const url = this.baseUrl + "login";
-		return this.http.post(url, { email: username, password: password }).pipe(
-			map((response: LoginResponse) => {
-				if (response.success) {
-					this.isLoggedIn = true;
-					const user: User = {
-						token: response.token,
-						expiry: new Date(new Date().getTime() + 2592000000),
-						user: username
-					};
+		return this.http
+			.post(url, { email: username, password: password })
+			.pipe(
+				map((response: LoginResponse) => {
+					if (response.success) {
+						this.isLoggedIn = true;
+						const user: User = {
+							token: response.token,
+							expiry: new Date(new Date().getTime() + 2592000000),
+							user: username
+						};
 
-					localStorage.setItem(StorageKeys.auth.user, JSON.stringify(user));
-				}
+						localStorage.setItem(
+							StorageKeys.auth.user,
+							JSON.stringify(user)
+						);
+					}
 
-				return response;
-			})
-		);
+					return response;
+				})
+			);
 	}
 
 	public register(
@@ -61,7 +69,10 @@ export class AuthService extends MasterService {
 							user: username
 						};
 
-						localStorage.setItem(StorageKeys.auth.user, JSON.stringify(user));
+						localStorage.setItem(
+							StorageKeys.auth.user,
+							JSON.stringify(user)
+						);
 					}
 
 					return response;

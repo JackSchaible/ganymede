@@ -1,10 +1,11 @@
 import { NgModule } from "@angular/core";
 import { Routes, RouterModule } from "@angular/router";
-import { CampaignListComponent } from "./campaign-list/campaign-list.component";
+import { CampaignListComponent } from "./components/campaign-list/campaign-list.component";
 import { AuthGuard } from "../guards/auth.guard";
-import { CampaignEditComponent } from "./campaign-edit/campaign-edit.component";
-import { CampaignComponent } from "./campaign/campaign.component";
-import { MonsterModule } from "./monster/monster.module";
+import { CampaignEditComponent } from "./components/campaign-edit/campaign-edit.component";
+import { CampaignComponent } from "./components/campaign/campaign.component";
+import { MonsterModule } from "./modules/monster/monster.module";
+import { SpellModule } from "./modules/spell/spell.module";
 
 const routes: Routes = [
 	{
@@ -14,20 +15,26 @@ const routes: Routes = [
 		canActivate: [AuthGuard]
 	},
 	{
-		path: "campaign/edit/:id",
+		path: "campaigns/edit/:id",
 		component: CampaignEditComponent,
 		data: { animation: "campaigns" },
 		canActivate: [AuthGuard]
 	},
 	{
-		path: "campaign/:id",
+		path: "campaigns/:id",
 		component: CampaignComponent,
 		data: { animation: "campaigns" },
 		canActivate: [AuthGuard]
 	},
 	{
-		path: "campaign/:id/monsters",
-		loadChildren: () => MonsterModule
+		path: "campaigns/:id/monsters",
+		loadChildren: () => MonsterModule,
+		canActivate: [AuthGuard]
+	},
+	{
+		path: "campaigns/:id/spells",
+		loadChildren: () => SpellModule,
+		canActivate: [AuthGuard]
 	}
 ];
 

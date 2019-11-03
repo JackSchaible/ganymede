@@ -1,0 +1,321 @@
+<gm-processing-overlay [isActive]="processing"></gm-processing-overlay>
+
+<div class="u-flex">
+	<gm-key-command [model]="{key: 'ALT-BACKSPACE', icon: 'fas fa-arrow-left'}"></gm-key-command>
+	<gm-key-command class="ml-1" [model]="{key: 'CTRL+S', icon: 'fas fa-save'}"></gm-key-command>
+</div>
+
+<section class="u-flex u-flex__wrap">
+	<form class="col-12 col-md-6" [formGroup]="formGroup">
+		<h1>
+			<ng-container *ngIf="(spell$ | async)?.name; else noName">{{ (spell$ | async)?.name }}</ng-container>
+			<ng-template #noName>New Spell</ng-template>
+			<p>{{ isNew ? 'Add a new' : 'Edit Your' }} Spell</p>
+		</h1>
+
+		<mat-vertical-stepper #steppy linear="false">
+			<!-- Name, Level, & School -->
+			<mat-step [stepControl]="name" errorMessage="There were some problems with the basic information.">
+				<ng-template matStepLabel>
+					<gm-key-command class="mr-1" [model]="{key: 'CTRL+1'}"></gm-key-command>
+					Basic Info
+				</ng-template>
+
+				<mat-form-field>
+					<input #name type="text" matInput placeholder="Name" formControlName="name" required>
+					<mat-error *ngIf="name.errors?.required">Name is required</mat-error>
+				</mat-form-field>
+
+				<!--Level & School-->
+				<div class="u-flex">
+					<!-- Level -->
+					<mat-form-field class="number-input">
+						<input type="number" matInput placeholder="Level" formControlName="level" required>
+						<mat-error *ngIf="level.errors?.required">
+							Level is required.
+						</mat-error>
+						<mat-error *ngIf="level.errors?.min">
+							Level must be greater than 0 (cantrip).
+						</mat-error>
+						<mat-error *ngIf="level.errors?.max">
+							Level must be less than 9.
+						</mat-error>
+					</mat-form-field>
+
+					<!-- School -->
+					<mat-form-field class="u-flex__grow" formGroupName="spellSchool">
+						<mat-label>School</mat-label>
+						<mat-select formControlName="id" required>
+							<mat-option *ngFor="let school of schools$ | async" [value]="school.id">
+								{{ school.name }}
+							</mat-option>
+						</mat-select>
+						<mat-error *ngIf="schoolId.errors?.required">
+							Spell must have a school.
+						</mat-error>
+					</mat-form-field>
+				</div>
+			</mat-step>
+			<!-- /Name, Level, & School -->
+
+			<!-- Casting Time-->
+			<mat-step [stepControl]="castingTime" errorMessage="There were some problems with the casting time information.">
+				<ng-template matStepLabel>
+					<gm-key-command class="mr-1" [model]="{key: 'CTRL+2'}"></gm-key-command>Casting Time
+				</ng-template>
+
+				<div formGroupName="castingTime">
+					<!-- Type -->
+					<mat-radio-group formControlName="type" class="u-flex u-flex__justify--space-between" (change)="castingTimeChanged($event)">
+						<mat-radio-button *ngFor="let type of (formData$ | async)?.castingTimeTypes" [value]="type">
+							{{ type | titlecase }}
+						</mat-radio-button>
+					</mat-radio-group>
+					<mat-error *ngIf="(castingTimeType.dirty || castingTimeType.touched) && castingTimeType.errors?.required">
+						A casting time type is required.
+					</mat-error>
+
+					<div class="u-flex" *ngIf="showCastingTime">
+						<!-- Amount -->
+						<mat-form-field class="number-input">
+							<input type="number" matInput placeholder="Amount" formControlName="amount" required />
+							<mat-error *ngIf="castingTimeAmount.errors?.required">
+								An amount is required.
+							</mat-error>
+							<mat-error *ngIf="castingTimeAmount.errors?.min">
+								Amount must be greater than 0.
+							</mat-error>
+						</mat-form-field>
+
+						<!-- Unit -->
+						<mat-form-field class="u-flex__grow">
+							<input type="text" [matAutocomplete]="castingTimeUnitAC" matInput placeholder="Unit" formControlName="unit" required />
+							<mat-error *ngIf="castingTimeUnit.errors?.required">
+								A unit is required.
+							</mat-error>
+
+							<mat-autocomplete #castingTimeUnitAC="matAutocomplete">
+								<mat-option *ngFor="let unit of (formData$ | async)?.castingTimeUnits" [value]="unit">
+									{{unit}}
+								</mat-option>
+							</mat-autocomplete>
+						</mat-form-field>
+					</div>
+
+					<!-- Reaction Condition -->
+					<ng-container *ngIf="showReaction">
+						<mat-form-field class="col-12">
+							<input type="text" matInput placeholder="Reaction Condition" formControlName="reactionCondition" />
+							<mat-error *ngIf="castingTimeReaction.errors?.required">
+								If action type is reaction, the reaction condition must have a value.
+							</mat-error>
+						</mat-form-field>
+					</ng-container>
+				</div>
+			</mat-step>
+			<!-- /Casting Time -->
+
+			<!-- Range -->
+			<mat-step [stepControl]="range" errorMessage="There were some problems with the range information.">
+				<ng-template matStepLabel>
+					<gm-key-command class="mr-1" [model]="{key: 'CTRL+3'}"></gm-key-command>Range
+				</ng-template>
+
+				<div formGroupName="spellRange">
+					<mat-radio-group formControlName="type" class="u-flex u-flex__justify--space-between" (change)="rangeChanged($event)">
+						<mat-radio-button *ngFor="let type of (formData$ | async)?.rangeTypes" [value]="type">
+							{{ type | titlecase }}
+						</mat-radio-button>
+					</mat-radio-group>
+					<mat-error *ngIf="(rangeType.dirty || rangeType.touched) && rangeType.errors?.required">
+						A range type is required.
+					</mat-error>
+
+					<!-- Ranged || Self -->
+					<div class="u-flex" *ngIf="showRange">
+						<!-- Amount -->
+						<mat-form-field class="number-input">
+							<input type="number" matInput placeholder="Amount" formControlName="amount" />
+							<mat-error *ngIf="rangeAmount.errors?.required">
+								An amount is required.
+							</mat-error>
+							<mat-error *ngIf="rangeAmount.errors?.min">
+								Amount must be greater than 0.
+							</mat-error>
+						</mat-form-field>
+
+						<!-- Unit -->
+						<mat-form-field class="u-flex__grow">
+							<input type="text" [matAutocomplete]="rangeUnitAC" matInput placeholder="Unit" formControlName="unit" />
+							<mat-error *ngIf="rangeUnit.errors?.required">
+								A unit is required.
+							</mat-error>
+
+							<mat-autocomplete #rangeUnitAC="matAutocomplete">
+								<mat-option *ngFor="let unit of (formData$ | async)?.rangeUnits" [value]="unit">
+									{{unit}}
+								</mat-option>
+							</mat-autocomplete>
+						</mat-form-field>
+
+						<!-- Shape -->
+						<mat-form-field class="u-flex__grow" *ngIf="showShape">
+							<input type="text" [matAutocomplete]="rangeShapeAC" matInput placeholder="Shape" name="shape" formControlName="shape" />
+							<mat-error *ngIf="rangeShape.errors?.required">
+								A shape is required.
+							</mat-error>
+
+							<mat-autocomplete #rangeShapeAC="matAutocomplete">
+								<mat-option *ngFor="let shape of (formData$ | async)?.rangeShapes" [value]="shape">
+									{{shape}}
+								</mat-option>
+							</mat-autocomplete>
+						</mat-form-field>
+					</div>
+				</div>
+			</mat-step>
+			<!-- /Range -->
+
+			<!-- Components -->
+			<mat-step [stepControl]="components" errorMessage="There were some problems with the components information.">
+				<ng-template matStepLabel>
+					<gm-key-command class="mr-1" [model]="{key: 'CTRL+4'}"></gm-key-command>Components
+				</ng-template>
+
+				<div formGroupName="spellComponents">
+					<div class="u-flex u-flex__justify--space-between">
+						<mat-checkbox class="flex-shrink" formControlName="verbal">Verbal</mat-checkbox>
+						<mat-checkbox class="flex-shrink" formControlName="somatic">Somatic</mat-checkbox>
+						<mat-checkbox class="flex-shrink" [checked]="showMaterials" (change)="materialChanged($event)">Material</mat-checkbox>
+					</div>
+
+					<mat-error *ngIf="(componentsVerbal.touched || componentsVerbal.dirty)  && componentsVerbal.errors?.required">
+						A spell must have some components to it.
+					</mat-error>
+
+					<ng-container *ngIf="showMaterials" formArrayName="material">
+						<mat-form-field class="col-12" *ngFor="let material of componentsMaterial.controls; let i = index">
+							<div [formGroupName]="i">
+								<input type="text" matInput placeholder="Material" formControlName="name" required>
+								<button mat-icon-button matSuffix (click)="removeMaterial(i)" title="Remove Material">
+									<i class="text-danger fas fa-times-circle"></i>
+								</button>
+							</div>
+						</mat-form-field>
+
+						<div class="u-flex u-flex__justify--end">
+							<button mat-raised-button title="Add a New Material" color="primary" (click)="addMaterial()">
+								Add Material <i class="ml-1 far fa-plus-square"></i>
+							</button>
+						</div>
+					</ng-container>
+				</div>
+			</mat-step>
+			<!-- /Components -->
+
+			<!-- Duration -->
+			<mat-step [stepControl]="duration" errorMessage="There were some problems with the duration information.">
+				<ng-template matStepLabel>
+					<gm-key-command class="mr-1" [model]="{key: 'CTRL+5'}"></gm-key-command>Duration
+				</ng-template>
+
+				<div formGroupName="spellDuration">
+					<!-- Type -->
+					<mat-radio-group formControlName="type" class="u-flex u-flex__justify--space-between" (change)="durationChanged($event)">
+						<mat-radio-button *ngFor="let type of (formData$ | async)?.durationTypes" [value]="type">
+							{{ type | titlecase }}
+						</mat-radio-button>
+					</mat-radio-group>
+					<mat-error *ngIf="(durationType.dirty || durationType.touched) && durationType.errors?.required">A duration type is required.</mat-error>
+
+					<!-- Amount & Unit-->
+					<div class="u-flex" *ngIf="showDuration">
+
+						<!-- Amount -->
+						<mat-form-field class="u-flex__grow">
+							<mat-checkbox matPrefix class="mr-2" [class.mr-3]="conHasExtraSpacing" formControlName="concentration">
+								Concentration
+							</mat-checkbox>
+							<mat-checkbox matPrefix class="mr-2" formControlName="upTo">
+								Up To
+							</mat-checkbox>
+
+							<input type="number" matInput placeholder="Amount" formControlName="amount" required />
+							<mat-error *ngIf="(durationAmount.dirty || durationAmount.touched) && durationAmount.errors?.required">Amount must have a value.</mat-error>
+						</mat-form-field>
+
+						<!-- Unit -->
+						<mat-form-field class="u-flex__shrink">
+							<input type="text" [matAutocomplete]="durationUnitAC" matInput placeholder="Unit" formControlName="unit" required />
+							<mat-error *ngIf="(durationUnit.dirty || durationUnit.touched) && durationUnit.errors?.required">Unit must have a value.</mat-error>
+
+							<mat-autocomplete #durationUnitAC="matAutocomplete">
+								<mat-option *ngFor="let unit of (formData$ | async)?.durationUnits" [value]="unit">
+									{{unit}}
+								</mat-option>
+							</mat-autocomplete>
+						</mat-form-field>
+					</div>
+
+					<!-- Until Conditions -->
+					<div class="u-flex u-flex__justify--space-around mt-3" *ngIf="showUntil">
+						<mat-checkbox formControlName="untilDispelled">Dispelled</mat-checkbox>
+						<mat-checkbox formControlName="untilTriggered">Triggered</mat-checkbox>
+					</div>
+					<mat-error *ngIf="(durationUntilDispelled.dirty || durationUntilDispelled.touched) && durationUntilDispelled.errors?.required">You must choose a condition to end the spell.</mat-error>
+
+				</div>
+			</mat-step>
+			<!-- /Duration -->
+
+			<!-- Description -->
+			<mat-step [stepControl]="description" errorMessage="Spells must have a description.">
+				<ng-template matStepLabel>
+					<gm-key-command class="mr-1" [model]="{key: 'CTRL+6'}"></gm-key-command>>Description
+				</ng-template>
+
+				<p class="ml-3"><small><em>HTML-Formatted</em></small></p>
+
+				<mat-form-field class="col-12">
+					<textarea matInput rows="6" formControlName="description" required></textarea>
+				</mat-form-field>
+			</mat-step>
+			<!-- /Description -->
+
+			<!-- At Higher Levels -->
+			<mat-step [stepControl]="atHigherLevels">
+				<ng-template matStepLabel>
+					<gm-key-command class="mr-1" [model]="{key: 'CTRL+7'}"></gm-key-command>At Higher Levels
+				</ng-template>
+
+				<p class="ml-3"><small><em>HTML-Formatted</em></small></p>
+
+				<mat-form-field class="col-12">
+					<textarea matInput rows="6" formControlName="atHigherLevels"></textarea>
+				</mat-form-field>
+			</mat-step>
+			<!-- /At Higher Levels -->
+
+			<!-- Done -->
+			<mat-step>
+				<ng-template matStepLabel>
+					<gm-key-command class="mr-1" [model]="{key: 'CTRL+8'}"></gm-key-command>Done
+				</ng-template>
+				<button (click)="cancel()" class="mr-3" mat-raised-button color="danger">
+					<i class="fas fa-times-square mr-2"></i> Cancel
+				</button>
+
+				<button [disabled]="!formGroup.valid" (click)="save()" mat-raised-button color="primary">
+					<i class="fas fa-save mr-2"></i> Save
+				</button>
+			</mat-step>
+			<!-- /Done -->
+		</mat-vertical-stepper>
+	</form>
+
+	<section class="col-12 col-md-6">
+		<p><em>Preview</em></p>
+		<gm-spell-display [spell$]="spell$" [autoOpen]="true">
+		</gm-spell-display>
+	</section>
+</section>

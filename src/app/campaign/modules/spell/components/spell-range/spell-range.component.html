@@ -1,0 +1,20 @@
+<p class="u-flex">
+	<strong class="u-flex__shrink--no">Range:</strong>
+	<ng-container *ngIf="range; else noRange">
+		<span class="u-margin-left" [ngSwitch]="range.type">
+			<ng-container *ngSwitchCase="'Touch'">Touch</ng-container>
+			<ng-container *ngSwitchCase="'Unlimited'">Unlimited</ng-container>
+			<ng-container *ngSwitchCase="'Sight'">Sight</ng-container>
+			<ng-container *ngSwitchCase="'Special'">Special</ng-container>
+			<ng-container *ngSwitchDefault>
+				<ng-container *ngIf="range.type === 'Self'">Self (</ng-container>{{ range.amount }}
+				{{ range.self ? (range.unit === 'feet' ? 'foot' : range.unit) : range.unit }}
+				<ng-container *ngIf="range.type === 'Self'">{{ range.shape === 'sphere' ? 'radius' : range.shape }}</ng-container>
+				<ng-container *ngIf="range.type === 'Self'">)</ng-container>
+			</ng-container>
+		</span>
+	</ng-container>
+	<ng-template #noRange>
+		<p><em> [Not Set]</em></p>
+	</ng-template>
+</p>

@@ -13,7 +13,7 @@ export class Ruleset {
 			name: undefined,
 			abbreviation: undefined,
 			releaseDate: undefined,
-			publisher: undefined
+			publisher: Publisher.getDefault()
 		};
 	}
 }
