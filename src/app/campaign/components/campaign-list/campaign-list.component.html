@@ -37,19 +37,19 @@
 		<p *ngIf="campaign.description">{{ campaign?.description }}</p>
 
 		<mat-action-row>
-			<div class="u-flex u-flex__column mr-3">
+			<div class="u-flex u-flex__column u-flex__align-items--center mr-3">
 				<div class="mb-1 u-text-center">
-					<gm-key-command [model]="{key: 'ENTER'}"></gm-key-command>
+					<gm-key-command [model]="{key: 'CTRL+ENTER'}"></gm-key-command>
 				</div>
 				<button title="Select" mat-mini-fab color="accent" (click)="select(campaign?.id)"><i class="fas fa-play"></i></button>
 			</div>
-			<div class="u-flex u-flex__column mr-3">
+			<div class="u-flex u-flex__column u-flex__align-items--center mr-3">
 				<div class="mb-1 u-text-center">
 					<gm-key-command [model]="{key: 'ALT+E'}"></gm-key-command>
 				</div>
 				<button title="Edit" mat-mini-fab color="primary" (click)="edit(campaign?.id)"><i class="fas fa-pencil"></i></button>
 			</div>
-			<div class="u-flex u-flex__column mr-3">
+			<div class="u-flex u-flex__column u-flex__align-items--center mr-3">
 				<div class="mb-1 u-text-center">
 					<gm-key-command [model]="{key: 'DEL'}"></gm-key-command>
 				</div>

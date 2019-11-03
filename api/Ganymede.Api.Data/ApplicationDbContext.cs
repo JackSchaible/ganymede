@@ -44,6 +44,16 @@ namespace Ganymede.Api.Data
                 .HasForeignKey(ms => ms.SpellID)
                 .OnDelete(DeleteBehavior.Restrict);
 
+            builder.Entity<Monster>()
+                .HasMany(m => m.MonsterSpells)
+                .WithOne(ms => ms.Monster)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            builder.Entity<Spell>()
+                .HasMany(s => s.MonsterSpells)
+                .WithOne(ms => ms.Spell)
+                .OnDelete(DeleteBehavior.Restrict);
+
             base.OnModelCreating(builder);
 		}
 

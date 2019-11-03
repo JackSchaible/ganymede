@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Ganymede.Api.Data;
 using Ganymede.Api.Data.Extensions;
+using Ganymede.Api.Data.Spells;
 using Ganymede.Api.Models.Api;
 using Ganymede.Api.Models.Campaigns;
 using Microsoft.Extensions.Logging;
@@ -105,7 +106,8 @@ namespace Ganymede.Api.BLL.Services.Impl
         {
             try
             {
-                _ctx.Campaigns.Remove(_ctx.Campaigns.Where(c => c.AppUserId == userId).Single(c => c.ID == id));
+                Campaign item = _ctx.Campaigns.IncludeCampaignData().Single(c => c.AppUserId == userId && c.ID == id);
+                _ctx.Campaigns.Remove(item);
                 _ctx.SaveChanges();
                 return new ApiResponse
                 {

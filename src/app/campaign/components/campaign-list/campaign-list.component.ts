@@ -51,7 +51,7 @@ export class CampaignListComponent
 
 		this.keySubscriptions.push({
 			key: Key.Enter,
-			modifierKeys: [],
+			modifierKeys: [Key.Control],
 			callbackFn: () => this.select(this.getItem().id)
 		});
 	}
@@ -64,7 +64,7 @@ export class CampaignListComponent
 		super.ngOnDestroy();
 	}
 
-	protected constructEditUrl(id: number): string {
+	protected constructEditUrl(): string {
 		const campaignId = this.store.getState().user.campaigns[
 			this.selectedItem
 		];
@@ -72,7 +72,8 @@ export class CampaignListComponent
 	}
 
 	protected getItem(): Campaign {
-		return this.store.getState().user.campaigns[this.selectedItem];
+		const state = this.store.getState();
+		return state.user.campaigns[this.selectedItem];
 	}
 
 	public select(campaignId: number): void {
