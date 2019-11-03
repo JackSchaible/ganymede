@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, OnDestroy } from "@angular/core";
 import { AuthService } from "../../auth/auth.service";
 import { Router, NavigationEnd, RouterEvent } from "@angular/router";
 import { Md5 } from "ts-md5/dist/md5";
@@ -15,13 +15,17 @@ import {
 	Breakpoints
 } from "@angular/cdk/layout";
 import { CampaignActions } from "src/app/campaign/store/actions";
+import KeyboardBaseComponent from "src/app/common/baseComponents/keyboardBaseComponents";
+import { KeyboardService } from "src/app/services/keyboard/keyboard.service";
+import { Key } from "ts-key-enum";
 
 @Component({
 	selector: "gm-nav",
 	templateUrl: "./nav.component.html",
 	styleUrls: ["./nav.component.scss"]
 })
-export class NavComponent implements OnInit {
+export class NavComponent extends KeyboardBaseComponent
+	implements OnInit, OnDestroy {
 	isMobile: boolean;
 	isTablet: boolean;
 	isDesktop: boolean;
@@ -42,8 +46,10 @@ export class NavComponent implements OnInit {
 		private store: NgRedux<IAppState>,
 		private authActions: AuthActions,
 		private campaignActions: CampaignActions,
-		breakpointObserver: BreakpointObserver
+		breakpointObserver: BreakpointObserver,
+		keyboardService: KeyboardService
 	) {
+		super(keyboardService);
 		breakpointObserver
 			.observe([Breakpoints.Handset])
 			.subscribe((result: BreakpointState) => {
@@ -71,7 +77,8 @@ export class NavComponent implements OnInit {
 		];
 	}
 
-	ngOnInit(): void {
+	public ngOnInit() {
+		super.ngOnInit();
 		this.user$.subscribe((user: AppUser) => {
 			this.loggedIn = user && !!user.email;
 			if (!this.loggedIn) return;
@@ -86,6 +93,10 @@ export class NavComponent implements OnInit {
 			.subscribe((event: NavigationEnd) =>
 				this.configureItems(event.urlAfterRedirects)
 			);
+	}
+
+	public ngOnDestroy() {
+		super.ngOnDestroy();
 	}
 
 	logout() {
@@ -131,5 +142,31 @@ export class NavComponent implements OnInit {
 				this.currentItems = this.campaignItems;
 			} else this.currentItems = this.items;
 		}
+
+		this.keySubscriptions = [];
+		for (let i = 0; i < this.currentItems.length; i++) {
+			if (this.currentItems[i].isBrand) continue;
+			this.keySubscriptions.push({
+				// @ts-ignore 2322
+				key: i.toString(),
+				modifierKeys: [Key.Control],
+				callbackFn: () => {
+					this.router.navigateByUrl(this.currentItems[i].url);
+				}
+			});
+		}
+		this.keySubscriptions.push({
+			key: "l",
+			modifierKeys: [Key.Control],
+			callbackFn: () => {
+				if (this.loggedIn) this.logout();
+				else this.router.navigateByUrl("/login");
+			}
+		});
+		this.keySubscriptions.push({
+			key: "h",
+			modifierKeys: [Key.Control],
+			callbackFn: () => this.router.navigateByUrl("/")
+		});
 	}
 }

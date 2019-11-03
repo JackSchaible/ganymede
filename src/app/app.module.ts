@@ -42,6 +42,7 @@ import { IAppState } from "./models/core/iAppState";
 import { AppUser } from "./models/core/appUser";
 import { App } from "./models/core/app/app";
 import { STEPPER_GLOBAL_OPTIONS } from "@angular/cdk/stepper";
+import { GmCommonModule } from "./common/gm-common.module";
 
 @NgModule({
 	declarations: [
@@ -53,6 +54,7 @@ import { STEPPER_GLOBAL_OPTIONS } from "@angular/cdk/stepper";
 		NavItemComponent
 	],
 	imports: [
+		GmCommonModule,
 		BrowserAnimationsModule,
 		BrowserModule,
 		ReactiveFormsModule,
