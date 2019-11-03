@@ -1,6 +1,8 @@
+import KeyboardShortcut from "./keyboardShortcut";
+
 export class ButtonModel {
 	public icon: string;
 	public color: string;
 	public titleText: string;
-	public onActivate: () => void;
+	public keyCommand: KeyboardShortcut;
 }

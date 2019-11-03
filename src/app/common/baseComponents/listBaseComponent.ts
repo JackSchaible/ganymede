@@ -25,6 +25,7 @@ import SnackbarModel from "../models/snackbarModel";
 import { SnackbarComponent } from "../snackbar/snackbar.component";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { ModalComponent } from "../modal/modal.component";
+import { ApiResponse } from "src/app/services/http/apiResponse";
 
 @Component({})
 export abstract class ListBaseComponent<
@@ -160,15 +161,35 @@ export abstract class ListBaseComponent<
 				icon: null,
 				color: "primary",
 				titleText: "Close",
-				onActivate: () => {}
+				keyCommand: {
+					model: {
+						icon: undefined,
+						key: "ESC"
+					},
+					subscription: {
+						key: Key.Escape,
+						modifierKeys: [],
+						callbackFn: () => {}
+					}
+				}
 			},
 			buttons: [
 				{
 					icon: "trash-alt",
 					color: "warn",
 					titleText: "Delete",
-					onActivate: () => {
-						this.confirmDelete(item);
+					keyCommand: {
+						model: {
+							icon: undefined,
+							key: "ENTER"
+						},
+						subscription: {
+							key: Key.Enter,
+							modifierKeys: [],
+							callbackFn: () => {
+								this.confirmDelete(item);
+							}
+						}
 					}
 				}
 			]
@@ -182,17 +203,21 @@ export abstract class ListBaseComponent<
 	private confirmDelete(item: T): void {
 		this.processing = true;
 		this.campaignService.delete(item.id).subscribe(
-			() => {
-				this.store.dispatch(this.actions.delete(item.id));
-				this.processing = false;
+			(response: ApiResponse) => {
+				if (response.statusCode === "ok") {
+					this.store.dispatch(this.actions.delete(item.id));
+					this.processing = false;
+				} else this.deleteError(item);
 			},
-			() => {
-				this.processing = false;
-				this.openSnackbar(
-					"exclamation-triangle",
-					`An error occurred while deleting ${item.name}!`
-				);
-			}
+			() => this.deleteError(item)
+		);
+	}
+
+	private deleteError(item: T) {
+		this.processing = false;
+		this.openSnackbar(
+			"exclamation-triangle",
+			`An error occurred while deleting ${item.name}!`
 		);
 	}
 

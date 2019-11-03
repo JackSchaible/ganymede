@@ -6,6 +6,7 @@ import { IAppState } from "src/app/models/core/iAppState";
 import { AppUser } from "src/app/models/core/appUser";
 import IFormActions from "src/app/store/iFormActions";
 import IListActions from "src/app/store/iListActions";
+import { Campaign } from "src/app/campaign/models/campaign";
 
 export class SpellActionTypes {
 	public static SPELL_EDIT: string = "SPELL_EDIT";

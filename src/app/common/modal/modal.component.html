@@ -8,9 +8,10 @@
 </div>
 
 <ng-template #button let-button let-close="close">
-	<div class="u-flex u-flex__column">
+	<div class="u-flex u-flex__column mr-3 u-text-center">
 		<div class="mb-1">
+			<gm-key-command [model]="button.keyCommand.model"></gm-key-command>
 		</div>
-		<button mat-mini-fab [mat-dialog-close]="close" [title]="button.titleText" [color]="button.color" (click)="button.onClick()" class="mr-3"><i [class]="'fas fa-' + (button.icon ? button.icon : 'times-circle')"></i></button>
+		<button mat-mini-fab [mat-dialog-close]="close" [title]="button.titleText" [color]="button.color" (click)="button.keyCommand.subscription.callbackFn()"><i [class]="'fas fa-' + (button.icon ? button.icon : 'times-circle')"></i></button>
 	</div>
 </ng-template>

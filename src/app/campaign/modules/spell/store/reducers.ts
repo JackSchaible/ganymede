@@ -5,6 +5,7 @@ import { Spell } from "src/app/campaign/modules/spell/models/spell";
 import * as _ from "lodash";
 import { Campaign } from "src/app/campaign/models/campaign";
 import { SpellSchool } from "../models/spellSchool";
+import { Monster } from "../../monster/models/monster";
 
 export function spellReducer(state: IAppState, action: AnyAction): IAppState {
 	let result = _.cloneDeep(state);
@@ -100,15 +101,20 @@ function spellSaved(
 function spellDeleted(oldState: IAppState, newState: IAppState): IAppState {
 	const state = _.cloneDeep(oldState);
 
-	const campaignIndex = state.app.forms.campaignForm.id;
 	const id = newState.app.forms.spellForm.id;
-	const index = state.user.campaigns[campaignIndex].spells.findIndex(
-		(spell: Spell) => {
-			return spell.id === id;
-		}
-	);
+	const campaign = state.app.campaign;
+	const index = campaign.spells.findIndex((spell: Spell) => {
+		return spell.id === id;
+	});
 
-	state.user.campaigns[campaignIndex].spells.splice(index, 1);
+	campaign.spells.splice(index, 1);
+
+	// TODO: Remove spell from every monster that may have it
+	campaign.monsters.forEach((monster: Monster) => {});
+
+	state.user.campaigns[
+		state.user.campaigns.findIndex((c: Campaign) => c.id === campaign.id)
+	] = _.cloneDeep(campaign);
 
 	return state;
 }
