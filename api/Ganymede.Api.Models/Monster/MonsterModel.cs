@@ -1,4 +1,9 @@
 ﻿using AutoMapper;
+using Ganymede.Api.Models.Equipment;
+using Ganymede.Api.Models.Monster.Actions;
+using Ganymede.Api.Models.Monster.BasicStats;
+using Ganymede.Api.Models.Monster.OptionalStats;
+using Ganymede.Api.Models.Monster.SpecialTraits;
 using Ganymede.Api.Models.Spells;
 using System.Collections.Generic;
 
@@ -8,11 +13,17 @@ namespace Ganymede.Api.Models.Monster
     {
         public int ID { get; set; }
         public string Name { get; set; }
-        public string Description { get; set; }
-
-        public virtual BasicStatsModel BasicStats { get; set; }
-
-        public List<SpellModel> MonsterSpells { get; set; }
+        public MonsterEnums.Size Size { get; set; }
+        public MonsterTypeModel Type { get; set; }
+        public List<MonsterTagModel> Tags { get; set; }
+        public AlignmentModel Alignment { get; set; }
+        public BasicStatsModel BasicStats { get; set; }
+        public AbilityScoresModel AbilityScores { get; set; }
+        public OptionalStatsModel OptionalStats { get; set; }
+        public SpecialTraitsModel SpecialTraits { get; set; }
+        public ActionsModel Actions { get; set; }
+        public List<EquipmentModel> Equipment { get; set; }
+        public LegendaryActionsModel LegendaryActions { get; set; }
     }
 
     public class MonsterMapper : Profile
@@ -23,8 +34,7 @@ namespace Ganymede.Api.Models.Monster
                 .ForMember(dest => dest.Campaign, opt => opt.Ignore())
                 .ForMember(dest => dest.CampaignID, opt => opt.Ignore())
                 .ForMember(dest => dest.MonsterSpells, opt => opt.Ignore());
-            CreateMap<Data.Monsters.Monster, MonsterModel>()
-                .ForMember(dest => dest.MonsterSpells, opt => opt.Ignore());
+            CreateMap<Data.Monsters.Monster, MonsterModel>();
         }
     }
 }

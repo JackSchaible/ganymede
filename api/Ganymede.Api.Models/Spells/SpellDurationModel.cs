@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using Ganymede.Api.Data.Spells;
-using static Ganymede.Api.Models.Spells.Enums;
+using static Ganymede.Api.Models.Spells.SpellEnums;
 
 namespace Ganymede.Api.Models.Spells
 {
