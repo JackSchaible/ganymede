@@ -1,5 +1,4 @@
 import {
-	Component,
 	OnInit,
 	OnDestroy,
 	QueryList,
@@ -27,7 +26,6 @@ import { MatSnackBar } from "@angular/material/snack-bar";
 import { ModalComponent } from "../modal/modal.component";
 import { ApiResponse } from "src/app/services/http/apiResponse";
 
-@Component({})
 export abstract class ListBaseComponent<
 	T extends IListable,
 	U extends IListActions<T>,

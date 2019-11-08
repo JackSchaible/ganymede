@@ -6,7 +6,7 @@ import {
 	AfterViewInit,
 	OnDestroy
 } from "@angular/core";
-import { Observable, Subscription } from "rxjs";
+import { Observable, Subscription, VirtualTimeScheduler } from "rxjs";
 import { Spell } from "src/app/campaign/modules/spell/models/spell";
 import { NgRedux, select } from "@angular-redux/store";
 import { SpellActions } from "../../store/actions";
@@ -143,6 +143,7 @@ export class SpellEditComponent extends FormBaseComponent<Spell, SpellActions>
 		SpellFormValidators.validateDuration(this.words)
 	);
 	public description: FormControl = new FormControl("", Validators.required);
+	public atHigherLevels: FormControl = new FormControl("");
 	public formGroup: FormGroup = new FormGroup({
 		id: new FormControl(""),
 		campaignID: new FormControl(""),
@@ -158,7 +159,7 @@ export class SpellEditComponent extends FormBaseComponent<Spell, SpellActions>
 		spellComponents: this.components,
 		spellDuration: this.duration,
 		description: this.description,
-		atHigherLevels: new FormControl("")
+		atHigherLevels: this.atHigherLevels
 	});
 	// #endregion
 

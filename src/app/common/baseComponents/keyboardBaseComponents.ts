@@ -2,11 +2,10 @@ import {
 	KeyboardSubscription,
 	KeyboardService
 } from "../../services/keyboard/keyboard.service";
-import { Component, OnInit, OnDestroy } from "@angular/core";
+import { OnInit, OnDestroy } from "@angular/core";
 import { Subscription } from "rxjs";
 import { Key } from "ts-key-enum";
 
-@Component({})
 export default abstract class KeyboardBaseComponent
 	implements OnInit, OnDestroy {
 	protected keySubscriptions: KeyboardSubscription[];
