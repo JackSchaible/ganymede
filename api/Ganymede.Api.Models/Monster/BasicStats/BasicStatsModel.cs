@@ -7,7 +7,7 @@ namespace Ganymede.Api.Models.Monster.BasicStats
     {
         public int ID { get; set; }
         public ArmorClassModel AC { get; set; }
-        public DiceRoll HPDice { get; set; }
+        public DiceRollModel HPDice { get; set; }
         public MonsterMovementModel Movement { get; set; }
     }
 

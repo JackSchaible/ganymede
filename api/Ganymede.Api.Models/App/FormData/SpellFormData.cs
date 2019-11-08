@@ -1,7 +1,7 @@
 ﻿using Ganymede.Api.Data.Spells;
 using Ganymede.Api.Models.Spells;
 using System.Collections.Generic;
-using static Ganymede.Api.Models.Spells.Enums;
+using static Ganymede.Api.Models.Spells.SpellEnums;
 
 namespace Ganymede.Api.Models.App.FormData
 {

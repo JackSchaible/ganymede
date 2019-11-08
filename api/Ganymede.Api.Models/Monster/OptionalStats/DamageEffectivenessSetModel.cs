@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace Ganymede.Api.Models.Monster.OptionalStats
 {
-    public class DamageEffectivenessesModel
+    public class DamageEffectivenessSetModel
     {
         public List<ActionEnums.DamageTypes> Vulnerabilities { get; set; }
         public List<ActionEnums.DamageTypes> Resistances { get; set; }

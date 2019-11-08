@@ -2,11 +2,13 @@
 
 namespace Ganymede.Api.Models.Monster.OptionalStats
 {
-    public class OptionalStatsModel
+    public class OptionalStatsSetModel
     {
+        public int ID { get; set; }
+
         public MonsterSavingThrowsModel SavingThrows { get; set; }
-        public DamageEffectivenessesModel Effectivenesses { get; set; }
+        public DamageEffectivenessSetModel Effectivenesses { get; set; }
         public SensesModel Senses { get; set; }
-        public MonsterLanguagesModel Languages { get; set; }
+        public MonsterLanguageSetModel Languages { get; set; }
     }
 }

@@ -1,12 +1,12 @@
 import { Routes, RouterModule } from "@angular/router";
 import { NgModule } from "@angular/core";
-import { MonstersHomeComponent } from "./monsters-home/monsters-home.component";
 import { AuthGuard } from "src/app/guards/auth.guard";
+import { MonsterListComponent } from "./components/monster-list/monster-list.component";
 
 const routes: Routes = [
 	{
 		path: "",
-		component: MonstersHomeComponent,
+		component: MonsterListComponent,
 		canActivate: [AuthGuard],
 		children: []
 	}

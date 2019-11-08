@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Ganymede.Api.Data.Monsters.SpecialTraits.Spellcasting;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Ganymede.Api.Data.Spells
@@ -36,6 +37,6 @@ namespace Ganymede.Api.Data.Spells
         [ForeignKey("CampaignID")]
         public Campaign Campaign { get; set; }
 
-        public ICollection<MonsterSpell> MonsterSpells { get; set; }
+        public virtual ICollection<InnateSpell> InnateSpells { get; set; }
     }
 }

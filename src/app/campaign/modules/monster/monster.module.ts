@@ -1,13 +1,13 @@
 import { NgModule } from "@angular/core";
 import { CommonModule } from "@angular/common";
-import { MonstersHomeComponent } from "./monsters-home/monsters-home.component";
 import { MonsterRoutingModule } from "./monster-routing.module";
 import { GmCommonModule } from "src/app/common/gm-common.module";
 import { MatButtonModule } from "@angular/material/button";
 import { MatExpansionModule } from "@angular/material/expansion";
+import { MonsterListComponent } from "./components/monster-list/monster-list.component";
 
 @NgModule({
-	declarations: [MonstersHomeComponent],
+	declarations: [MonsterListComponent],
 	imports: [
 		CommonModule,
 		MonsterRoutingModule,

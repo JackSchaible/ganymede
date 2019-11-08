@@ -1,8 +1,8 @@
 ﻿namespace Ganymede.Api.Models.Skills
 {
-    public class Skill
+    public class SkillModel
     {
-        public int SkillID { get; set; }
+        public int ID { get; set; }
         public string Name { get; set; }
         public string Ability { get; set; }
     }

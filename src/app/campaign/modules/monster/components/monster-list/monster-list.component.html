@@ -1,0 +1,76 @@
+<gm-processing-overlay [isActive]="processing"></gm-processing-overlay>
+
+<div class="u-flex">
+	<gm-key-command [model]="{key: 'ALT-BACKSPACE', icon: 'fas fa-arrow-left'}"></gm-key-command>
+	<gm-key-command class="ml-1" [model]="{key: 'UP', icon: 'fas fa-arrow-up'}"></gm-key-command>
+	<gm-key-command class="ml-1" [model]="{key: 'DOWN', icon: 'fas fa-arrow-down'}"></gm-key-command>
+</div>
+
+<h1>Monsters</h1>
+<p>Manage the monsters in your campaign.</p>
+
+<div class="u-flex u-flex__justify--flex-end">
+	<div class="u-flex u-flex__column">
+		<div class="u-margin-bottom-half">
+			<gm-key-command [model]="{key: 'ALT-N'}"></gm-key-command>
+		</div>
+
+		<button mat-raised-button color="accent" (click)="edit(-1)" class="mb-2">
+			<i class="fas fa-plus mr-2"></i> Add
+		</button>
+	</div>
+</div>
+
+<mat-accordion #accordion>
+	<mat-expansion-panel *ngFor="let monster of monsters$ | async; let i = index" (opened)="selectedItem=i">
+		<mat-expansion-panel-header>
+			<mat-panel-title>{{ spell?.name }}</mat-panel-title>
+			<mat-panel-description>
+				<em>
+					<ng-container *ngIf="spell?.level > 0">
+						{{ spell?.level }}{{ words.getSuffix(spell?.level) }}-level
+					</ng-container>
+					{{spell?.spellSchool?.name}}
+					<ng-container *ngIf="spell?.level === 0">cantrip</ng-container>
+				</em>
+			</mat-panel-description>
+		</mat-expansion-panel-header>
+
+		<div class="u-flex u-flex__wrap">
+			<div class="col-6 mt-3">
+				<gm-casting-time [castingTime]="spell?.castingTime"></gm-casting-time>
+			</div>
+
+			<div class="col-6 mt-3">
+				<gm-spell-range [range]="spell?.spellRange"></gm-spell-range>
+			</div>
+
+			<div class="col-6 mt-2">
+				<gm-spell-components [components]="spell?.spellComponents"></gm-spell-components>
+			</div>
+
+			<div class="col-6 mt-2">
+				<gm-spell-duration [duration]="spell?.spellDuration"></gm-spell-duration>
+			</div>
+		</div>
+
+		<p class="mt-3" *ngIf="spell.description" [innerHTML]="spell?.description"></p>
+
+		<p>Monsters with this Spell: {{ spell?.monsterSpells?.length }}</p>
+
+		<mat-action-row>
+			<div class="u-flex u-flex__column u-flex__align-items--center mr-3">
+				<div class="mb-1 u-text-center">
+					<gm-key-command [model]="{key: 'ALT+E'}"></gm-key-command>
+				</div>
+				<button title="Edit" mat-mini-fab color="primary" (click)="edit(this.getItem().id)"><i class="fas fa-pencil"></i></button>
+			</div>
+			<div class="u-flex u-flex__column u-flex__align-items--center mr-3">
+				<div class="mb-1 u-text-center">
+					<gm-key-command [model]="{key: 'DEL'}"></gm-key-command>
+				</div>
+				<button title="Delete" mat-mini-fab color="warn" (click)="delete(this.getItem())"><i class="fas fa-trash"></i></button>
+			</div>
+		</mat-action-row>
+	</mat-expansion-panel>
+</mat-accordion>

@@ -2,7 +2,7 @@
 
 namespace Ganymede.Api.Models.Monster.OptionalStats.Languages
 {
-    public class MonsterLanguagesModel
+    public class MonsterLanguageSetModel
     {
         public int ID { get; set; }
         public List<MonsterLanguageModel> Languages { get; set; }
