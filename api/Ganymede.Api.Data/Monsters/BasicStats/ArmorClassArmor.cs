@@ -1,5 +1,5 @@
 ﻿using Ganymede.Api.Data.Equipment;
-using Ganymede.Api.Data.Monster.BasicStats;
+using Ganymede.Api.Data.Monsters.BasicStats;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Ganymede.Api.Data.Monsters.BasicStats

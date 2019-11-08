@@ -11,12 +11,7 @@ namespace Ganymede.Api.Data.Initializers
         {
             IEnumerable<Spell> except = dAndDSpells.Where(s => s.Name == "Detect Magic");
 
-            if (!ctx.MonsterSpells.Any())
-                ctx.MonsterSpells.AddRange(dAndDSpells.Except(except).Select(s => new MonsterSpell
-                {
-                    Monster = aerisi,
-                    Spell = s
-                }));
+            //TODO: Monster spells
         }
     }
 }

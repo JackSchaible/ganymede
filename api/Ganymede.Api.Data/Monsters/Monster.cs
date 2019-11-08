@@ -1,7 +1,9 @@
-﻿using Ganymede.Api.Data.Monsters.BasicStats;
+﻿using Ganymede.Api.Data.Monsters.Actions;
+using Ganymede.Api.Data.Monsters.SpecialTraits;
 using Ganymede.Api.Data.Monsters.OptionalStats;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
+using Ganymede.Api.Data.Monsters.BasicStats;
 
 namespace Ganymede.Api.Data.Monsters
 {
@@ -23,7 +25,7 @@ namespace Ganymede.Api.Data.Monsters
 
         public int BasicStatsID { get; set; }
         [ForeignKey("BasicStatsID")]
-        public BasicStatsModel BasicStats { get; set; }
+        public BasicStatsSet BasicStats { get; set; }
 
         public int AbilityScoresID { get; set; }
         [ForeignKey("AbilityScoresID")]
@@ -33,12 +35,22 @@ namespace Ganymede.Api.Data.Monsters
         [ForeignKey("OptionalStatsID")]
         public OptionalStatsSet OptionalStats { get; set; }
 
+        public int SpecialTraitSetID { get; set; }
+        [ForeignKey("SpecialTraitSetID")]
+        public SpecialTraitSet SpecialTraitSet { get; set; }
 
+        public int ActionSetID { get; set; }
+        [ForeignKey("ActionSetID")]
+        public ActionsSet ActionSet { get; set; }
 
+        public virtual ICollection<MonsterEquipment> Equipment { get; set; }
 
-        public SpecialTraitsModel SpecialTraits { get; set; }
-        public ActionsModel Actions { get; set; }
-        public List<EquipmentModel> Equipment { get; set; }
-        public LegendaryActionsModel LegendaryActions { get; set; }
+        public int LegendaryActionsID { get; set; }
+        [ForeignKey("LegendaryActionsID")]
+        public LegendaryActionsSet LegendaryActions { get; set; }
+
+        public int CampaignID { get; set; }
+        [ForeignKey("CampaignID")]
+        public virtual Campaign Campaign { get; set; }
     }
 }

@@ -3,10 +3,10 @@ using System.Collections.Generic;
 
 namespace Ganymede.Api.Models.Monster.SpecialTraits
 {
-    public class SpecialTraitsModel
+    public class SpecialTraitSetModel
     {
         public int ID { get; set; }
-        public List<SpecialTraitsModel> SpecialTraits { get; set; }
+        public List<SpecialTraitModel> SpecialTraits { get; set; }
         public MonsterSpellcastingModel SpellcastingModel { get; set; }
     }
 }

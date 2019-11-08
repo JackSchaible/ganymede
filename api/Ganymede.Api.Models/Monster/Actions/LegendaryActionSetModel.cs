@@ -2,7 +2,7 @@
 
 namespace Ganymede.Api.Models.Monster.Actions
 {
-    public class LegendaryActionsModel
+    public class LegendaryActionsSetModel
     {
         public int ID { get; set; }
         public int LegendaryActionCount { get; set; }

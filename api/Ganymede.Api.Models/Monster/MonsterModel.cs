@@ -17,13 +17,13 @@ namespace Ganymede.Api.Models.Monster
         public MonsterTypeModel Type { get; set; }
         public List<TagModel> Tags { get; set; }
         public AlignmentModel Alignment { get; set; }
-        public BasicStatsModel BasicStats { get; set; }
+        public BasicStatsSetModel BasicStats { get; set; }
         public AbilityScoresModel AbilityScores { get; set; }
         public OptionalStatsSetModel OptionalStats { get; set; }
-        public SpecialTraitsModel SpecialTraits { get; set; }
-        public ActionsModel Actions { get; set; }
+        public SpecialTraitSetModel SpecialTraits { get; set; }
+        public ActionsSetModel Actions { get; set; }
         public List<EquipmentModel> Equipment { get; set; }
-        public LegendaryActionsModel LegendaryActions { get; set; }
+        public LegendaryActionsSetModel LegendaryActions { get; set; }
     }
 
     public class MonsterMapper : Profile
@@ -32,8 +32,7 @@ namespace Ganymede.Api.Models.Monster
         {
             CreateMap<MonsterModel, Data.Monsters.Monster>()
                 .ForMember(dest => dest.Campaign, opt => opt.Ignore())
-                .ForMember(dest => dest.CampaignID, opt => opt.Ignore())
-                .ForMember(dest => dest.MonsterSpells, opt => opt.Ignore());
+                .ForMember(dest => dest.CampaignID, opt => opt.Ignore());
             CreateMap<Data.Monsters.Monster, MonsterModel>();
         }
     }

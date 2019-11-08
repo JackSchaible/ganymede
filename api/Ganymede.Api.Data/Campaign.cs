@@ -21,7 +21,7 @@ namespace Ganymede.Api.Data
         [ForeignKey("AppUserId")]
         public AppUser User { get; set; }
 
-        public ICollection<Monster> Monsters { get; set; }
-        public ICollection<Spell> Spells { get; set; }
+        public virtual ICollection<Monster> Monsters { get; set; }
+        public virtual ICollection<Spell> Spells { get; set; }
     }
 }

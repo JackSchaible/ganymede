@@ -1,10 +1,9 @@
 ﻿using Ganymede.Api.Data.Common;
-using Ganymede.Api.Data.Monster.BasicStats;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Ganymede.Api.Data.Monsters.BasicStats
 {
-    public class BasicStatsModel
+    public class BasicStatsSet
     {
         public int ID { get; set; }
 

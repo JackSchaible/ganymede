@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using Ganymede.Api.Data.Monsters.OptionalStats;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Ganymede.Api.Data.Monsters
 {
@@ -6,7 +7,7 @@ namespace Ganymede.Api.Data.Monsters
     {
         public int OptionalStatsID { get; set; }
         [ForeignKey("OptionalStatsID")]
-        public OptionalStats OptionalStats { get; set; }
+        public OptionalStatsSet OptionalStats { get; set; }
 
         public int SkillID { get; set; }
         [ForeignKey("SkillID")]

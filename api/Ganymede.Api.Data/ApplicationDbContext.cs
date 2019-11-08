@@ -1,12 +1,10 @@
 using Ganymede.Api.Data.Common;
 using Ganymede.Api.Data.Equipment;
-using Ganymede.Api.Data.Monster;
-using Ganymede.Api.Data.Monster.BasicStats;
-using Ganymede.Api.Data.Monsters;
 using Ganymede.Api.Data.Monsters.BasicStats;
+using Ganymede.Api.Data.Monsters.SpecialTraits.Spellcasting;
+using Ganymede.Api.Data.Monsters;
 using Ganymede.Api.Data.Monsters.OptionalStats;
 using Ganymede.Api.Data.Monsters.OptionalStats.Languages;
-using Ganymede.Api.Data.Monsters.SpecialTraits.Spellcasting;
 using Ganymede.Api.Data.Rulesets;
 using Ganymede.Api.Data.Spells;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -44,8 +42,12 @@ namespace Ganymede.Api.Data
         public DbSet<MonsterSkillSet> MonsterSkillSets { get; set; }
         public DbSet<OptionalStatsSet> OptionalStats { get; set; }
 
-        public DbSet<InnateSpellcastingSpellsPerDay> InnateSpellcastingSpellsPerDays { get; set; }
         public DbSet<InnateSpell> InnateSpells { get; set; }
+        public DbSet<InnateSpellcasting> InnateSpellcastings { get; set; }
+        public DbSet<InnateSpellcastingSpellsPerDay> InnateSpellcastingSpellsPerDays { get; set; }
+        public DbSet<MonsterSpellcasting> MonsterSpellcastings { get; set; }
+        public DbSet<Spellcaster> Spellcasters { get; set; }
+        public DbSet<SpellcasterSpells> SpellcasterSpells { get; set; }
 
         public DbSet<Spell> Spells { get; set; }
         public DbSet<CastingTime> CastingTimes { get; set; }
@@ -56,6 +58,8 @@ namespace Ganymede.Api.Data
 
         protected override void OnModelCreating(ModelBuilder builder)
 		{
+            builder.Entity<Armor>();
+
             builder.Entity<Publisher>()
                 .HasIndex(p => p.Name)
                 .IsUnique();
@@ -65,13 +69,16 @@ namespace Ganymede.Api.Data
                 .IsUnique();
 
             builder.Entity<DiceRoll>()
-                .HasKey(dr => new { dr.Number, dr.Sides });
+                .HasIndex(dr => new { dr.Number, dr.Sides })
+                .IsUnique();
 
             ConfigureMonsterTags(builder);
             ConfigureArmorClassArmors(builder);
             ConfigureMonsterLanguages(builder);
             ConfigureMonsterSkills(builder);
             ConfigureMonsterInnateSpells(builder);
+            ConfigureMonsterEquipment(builder);
+            ConfigureSpellcasterSpells(builder);
 
             base.OnModelCreating(builder);
 		}
@@ -182,12 +189,18 @@ namespace Ganymede.Api.Data
         private void ConfigureMonsterInnateSpells(ModelBuilder builder)
         {
             builder.Entity<InnateSpellcastingSpellsPerDay>()
-                .HasKey(isspd => new { isspd.NumberPerDay, isspd.SpellcastingID });
+                .HasIndex(isspd => new { isspd.NumberPerDay, isspd.SpellcastingID })
+                .IsUnique();
+
             builder.Entity<InnateSpellcastingSpellsPerDay>()
                 .HasOne(isspd => isspd.Spellcasting)
                 .WithMany(sc => sc.SpellsPerDay)
                 .HasForeignKey(isspd => isspd.SpellcastingID)
                 .OnDelete(DeleteBehavior.Restrict);
+            builder.Entity<InnateSpellcastingSpellsPerDay>()
+                .HasMany(isspd => isspd.Spells)
+                .WithOne(s => s.SpellcastingSpellsPerDay)
+                .OnDelete(DeleteBehavior.Cascade);
 
             builder.Entity<InnateSpell>()
                 .HasKey(ins => new { ins.SpellID, ins.InnateSpellcastingSpellsPerDayID });
@@ -202,13 +215,58 @@ namespace Ganymede.Api.Data
                 .HasForeignKey(ins => ins.SpellID)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            builder.Entity<InnateSpellcastingSpellsPerDay>()
-                .HasMany(isspd => isspd.Spells)
-                .WithOne(s => s.SpellcastingSpellsPerDay)
-                .OnDelete(DeleteBehavior.Cascade);
+            
             builder.Entity<Spell>()
                 .HasMany(s => s.InnateSpells)
                 .WithOne(ins => ins.Spell)
+                .OnDelete(DeleteBehavior.Restrict);
+        }
+
+        private void ConfigureSpellcasterSpells(ModelBuilder builder)
+        {
+            builder.Entity<SpellcasterSpells>()
+                .HasKey(ss => new { ss.SpellID, ss.SpellcasterID});
+            builder.Entity<SpellcasterSpells>()
+                .HasOne(ss => ss.Spell)
+                .WithMany(s => s.SpellcasterSpells)
+                .HasForeignKey(ss => ss.SpellID)
+                .OnDelete(DeleteBehavior.Restrict);
+            builder.Entity<SpellcasterSpells>()
+                .HasOne(ss => ss.Spellcaster)
+                .WithMany(s => s.PreparedSpells)
+                .HasForeignKey(ss => ss.SpellcasterID)
+                .OnDelete(DeleteBehavior.Restrict);
+            builder.Entity<Spellcaster>()
+                .HasMany(s => s.PreparedSpells)
+                .WithOne(ss => ss.Spellcaster)
+                .OnDelete(DeleteBehavior.Cascade);
+            builder.Entity<Spell>()
+                .HasMany(s => s.SpellcasterSpells)
+                .WithOne(ss => ss.Spell)
+                .OnDelete(DeleteBehavior.Restrict);
+        }
+
+        private void ConfigureMonsterEquipment(ModelBuilder builder)
+        {
+            builder.Entity<MonsterEquipment>()
+                .HasKey(me => new { me.MonsterID, me.EquipmentID });
+            builder.Entity<MonsterEquipment>()
+                .HasOne(me => me.Equipment)
+                .WithMany(e => e.Monsters)
+                .HasForeignKey(me => me.EquipmentID)
+                .OnDelete(DeleteBehavior.Restrict);
+            builder.Entity<MonsterEquipment>()
+                .HasOne(me => me.Monster)
+                .WithMany(m => m.Equipment)
+                .HasForeignKey(me => me.MonsterID)
+                .OnDelete(DeleteBehavior.Restrict);
+            builder.Entity<Monster>()
+                .HasMany(m => m.Equipment)
+                .WithOne(me => me.Monster)
+                .OnDelete(DeleteBehavior.Cascade);
+            builder.Entity<Equipment.Equipment>()
+                .HasMany(e => e.Monsters)
+                .WithOne(me => me.Equipment)
                 .OnDelete(DeleteBehavior.Restrict);
         }
     }

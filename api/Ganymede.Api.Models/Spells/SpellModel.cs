@@ -30,7 +30,8 @@ namespace Ganymede.Api.Models.Spells
             CreateMap<SpellModel, Spell>()
                 .ForMember(dest => dest.CampaignID, opt => opt.Ignore())
                 .ForMember(dest => dest.Campaign, opt => opt.Ignore())
-                .ForMember(dest => dest.MonsterSpells, opt => opt.Ignore());
+                .ForMember(dest => dest.InnateSpells, opt => opt.Ignore())
+                .ForMember(dest => dest.SpellcasterSpells, opt => opt.Ignore());
             CreateMap<Spell, SpellModel>();
         }
     }

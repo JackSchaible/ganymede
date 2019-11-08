@@ -1,7 +1,6 @@
-﻿using Ganymede.Api.Data.Monsters.BasicStats;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
-namespace Ganymede.Api.Data.Monster.BasicStats
+namespace Ganymede.Api.Data.Monsters.BasicStats
 {
     public class ArmorClass
     {

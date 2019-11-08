@@ -38,5 +38,6 @@ namespace Ganymede.Api.Data.Spells
         public Campaign Campaign { get; set; }
 
         public virtual ICollection<InnateSpell> InnateSpells { get; set; }
+        public virtual ICollection<SpellcasterSpells> SpellcasterSpells { get; set; }
     }
 }

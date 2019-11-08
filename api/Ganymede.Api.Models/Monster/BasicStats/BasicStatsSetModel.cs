@@ -3,7 +3,7 @@ using Ganymede.Api.Models.Common;
 
 namespace Ganymede.Api.Models.Monster.BasicStats
 {
-    public class BasicStatsModel
+    public class BasicStatsSetModel
     {
         public int ID { get; set; }
         public ArmorClassModel AC { get; set; }

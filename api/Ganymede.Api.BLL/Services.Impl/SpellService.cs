@@ -94,7 +94,8 @@ namespace Ganymede.Api.BLL.Services.Impl
             {
                 var spell = _ctx.Spells.Where(c => c.Campaign.AppUserId == userId).Single(c => c.ID == id);
 
-                _ctx.MonsterSpells.RemoveRange(_ctx.MonsterSpells.Where(x => x.SpellID == spell.ID));
+                _ctx.InnateSpells.RemoveRange(_ctx.InnateSpells.Where(x => x.SpellID == spell.ID));
+                _ctx.SpellcasterSpells.RemoveRange(_ctx.SpellcasterSpells.Where(x => x.SpellID == spell.ID));
                 _ctx.Spells.Remove(spell);
                 _ctx.SaveChanges();
                 return new ApiResponse

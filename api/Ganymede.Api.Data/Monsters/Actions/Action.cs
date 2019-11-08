@@ -1,6 +1,6 @@
-﻿namespace Ganymede.Api.Models.Monster.Actions
+﻿namespace Ganymede.Api.Data.Monsters.Actions
 {
-    public class ActionModel
+    public class Action
     {
         public int ID { get; set; }
         public string Name { get; set; }

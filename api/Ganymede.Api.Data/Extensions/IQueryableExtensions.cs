@@ -32,10 +32,8 @@ namespace Ganymede.Api.Data.Extensions
         public static IQueryable<Campaign> IncludeMonsters(this IQueryable<Campaign> campaigns)
         {
             return campaigns
-                .Include(c => c.Monsters)
-                    .ThenInclude(m => m.BasicStats)
-                .Include(c => c.Monsters)
-                    .ThenInclude(m => m.MonsterSpells);
+                .Include(c => c.Monsters);
+            //TODO: Include the tree of navigation properties
         }
 
         public static IQueryable<Campaign> IncludeSpells(this IQueryable<Campaign> campaigns)
@@ -52,7 +50,9 @@ namespace Ganymede.Api.Data.Extensions
                 .Include(c => c.Spells)
                     .ThenInclude(s => s.SpellSchool)
                 .Include(c => c.Spells)
-                    .ThenInclude(s => s.MonsterSpells);
+                    .ThenInclude(s => s.SpellcasterSpells)
+                .Include(c => c.Spells)
+                    .ThenInclude(c => c.InnateSpells);
         }
     }
 }

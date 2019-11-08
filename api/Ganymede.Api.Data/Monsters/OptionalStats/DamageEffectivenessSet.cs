@@ -6,6 +6,8 @@ namespace Ganymede.Api.Data.Monsters.OptionalStats
 {
     public class DamageEffectivenessSet
     {
+        public int ID { get; set; }
+
         public string DatabaseVulnerabilities { get; set; }
         [NotMapped]
         public int[] Vulnerabilities

@@ -1,6 +1,6 @@
-﻿namespace Ganymede.Api.Models.Monster.SpecialTraits
+﻿namespace Ganymede.Api.Data.Monsters.SpecialTraits
 {
-    public class SpecialTraitModel
+    public class SpecialTrait
     {
         public int ID { get; set; }
         public string Name { get; set; }
