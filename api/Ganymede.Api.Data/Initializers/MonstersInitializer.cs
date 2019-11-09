@@ -244,13 +244,17 @@ namespace Ganymede.Api.Data.Initializers
                         Damage = dr.OneDSix,
                         DamageType = Constants.DTLightning
                     }
+                },
+                Action = new Action
+                {
+                    Name = "Windvane"
                 }
             };
             var actionSet = new ActionsSet
             {
                 Actions = new List<Action>
                 {
-                    windvane
+                    windvane.Action
                 }
             };
             var ac = new ArmorClass

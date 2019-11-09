@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Ganymede.Api.Data.Equipment.Weapons;
 using Ganymede.Api.Data.Characters;
+using Ganymede.Api.Data.Monsters.Actions;
 
 namespace Ganymede.Api.Data
 {
@@ -27,6 +28,15 @@ namespace Ganymede.Api.Data
         public DbSet<Tag> Tags { get; set; }
 
         public DbSet<PlayerClass> PlayerClasses { get; set; }
+
+        public DbSet<Action> Actions { get; set; }
+        public DbSet<ActionsSet> ActionsSets { get; set; }
+        public DbSet<Attack> Attacks { get; set; }
+        public DbSet<HitEffect> HitEffects { get; set; }
+        public DbSet<LegendaryAction> LegendaryActions { get; set; }
+        public DbSet<LegendaryActionsSet> LegendaryActionsSets { get; set; }
+        public DbSet<PerDayAction> PerDayActions { get; set; }
+        public DbSet<RechargeAction> RechargeActions { get; set; }
 
         public DbSet<Monster> Monsters { get; set; }
         public DbSet<MonsterTag> MonsterTags { get; set; }
@@ -211,13 +221,13 @@ namespace Ganymede.Api.Data
                 .OnDelete(DeleteBehavior.Restrict);
             builder.Entity<InnateSpellcastingSpellsPerDay>()
                 .HasMany(isspd => isspd.Spells)
-                .WithOne(s => s.SpellcastingSpellsPerDay)
+                .WithOne(s => s.InnateSpellcastingSpellsPerDay)
                 .OnDelete(DeleteBehavior.Cascade);
 
             builder.Entity<InnateSpell>()
                 .HasKey(ins => new { ins.SpellID, ins.InnateSpellcastingSpellsPerDayID });
             builder.Entity<InnateSpell>()
-                .HasOne(ins => ins.SpellcastingSpellsPerDay)
+                .HasOne(ins => ins.InnateSpellcastingSpellsPerDay)
                 .WithMany(sspd => sspd.Spells)
                 .HasForeignKey(ins => ins.InnateSpellcastingSpellsPerDayID)
                 .OnDelete(DeleteBehavior.Restrict);

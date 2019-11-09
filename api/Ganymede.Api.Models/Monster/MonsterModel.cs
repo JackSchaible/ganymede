@@ -4,8 +4,8 @@ using Ganymede.Api.Models.Monster.Actions;
 using Ganymede.Api.Models.Monster.BasicStats;
 using Ganymede.Api.Models.Monster.OptionalStats;
 using Ganymede.Api.Models.Monster.SpecialTraits;
-using Ganymede.Api.Models.Spells;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Ganymede.Api.Models.Monster
 {
@@ -31,9 +31,22 @@ namespace Ganymede.Api.Models.Monster
         public MonsterMapper()
         {
             CreateMap<MonsterModel, Data.Monsters.Monster>()
-                .ForMember(dest => dest.Campaign, opt => opt.Ignore())
-                .ForMember(dest => dest.CampaignID, opt => opt.Ignore());
-            CreateMap<Data.Monsters.Monster, MonsterModel>();
+                .ForMember(d => d.Campaign, o => o.Ignore())
+                .ForMember(d => d.CampaignID, o => o.Ignore())
+                .ForMember(d => d.MonsterTypeID, o => o.Ignore())
+                .ForMember(d => d.AlignmentID, o => o.Ignore())
+                .ForMember(d => d.SpecialTraitSetID, o => o.Ignore())
+                .ForMember(d => d.ActionSetID, o => o.Ignore())
+                .ForMember(d => d.Tags, o => o.Ignore())
+                .ForMember(d => d.SpecialTraitSet, o => o.MapFrom(s => s.SpecialTraits))
+                .ForMember(d => d.ActionSet, o => o.MapFrom(s => s.Actions))
+                .ForMember(d => d.Equipment, o => o.Ignore());
+
+            CreateMap<Data.Monsters.Monster, MonsterModel>()
+                .ForMember(d => d.Tags, o => o.MapFrom(s => s.Tags.Select(t => t.Tag)))
+                .ForMember(d => d.SpecialTraits, o => o.MapFrom(s => s.SpecialTraitSet))
+                .ForMember(d => d.Actions, o => o.MapFrom(s => s.ActionSet))
+                .ForMember(d => d.Equipment, o => o.MapFrom(s => s.Equipment.Select(e => e.Equipment)));
         }
     }
 }

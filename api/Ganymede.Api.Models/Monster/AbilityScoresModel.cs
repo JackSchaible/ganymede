@@ -1,4 +1,7 @@
-﻿namespace Ganymede.Api.Models.Monster
+﻿using AutoMapper;
+using Ganymede.Api.Data.Monsters;
+
+namespace Ganymede.Api.Models.Monster
 {
     public class AbilityScoresModel
     {
@@ -9,5 +12,14 @@
         public int Intelligence { get; set; }
         public int Wisdom { get; set; }
         public int Charisma { get; set; }
+    }
+
+    public class AbilityScoresModelMapper : Profile
+    {
+        public AbilityScoresModelMapper()
+        {
+            CreateMap<AbilityScoresModel, AbilityScores>();
+            CreateMap<AbilityScores, AbilityScoresModel>();
+        }
     }
 }

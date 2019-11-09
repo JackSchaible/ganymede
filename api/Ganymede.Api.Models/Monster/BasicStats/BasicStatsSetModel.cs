@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Ganymede.Api.Data.Monsters.BasicStats;
 using Ganymede.Api.Models.Common;
 
 namespace Ganymede.Api.Models.Monster.BasicStats
@@ -15,7 +16,10 @@ namespace Ganymede.Api.Models.Monster.BasicStats
     {
         public BasicStatsMapper()
         {
-            
+            CreateMap<BasicStatsSetModel, BasicStatsSet>()
+                .ForMember(d => d.ArmorClassID, o => o.Ignore())
+                .ForMember(d => d.DiceRollID, o => o.Ignore());
+            CreateMap<BasicStatsSet, BasicStatsSetModel>();
         }
     }
 }

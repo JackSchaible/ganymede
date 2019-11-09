@@ -1,7 +1,13 @@
-﻿namespace Ganymede.Api.Data.Monsters.Actions
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace Ganymede.Api.Data.Monsters.Actions
 {
-    public class PerDayAction : Action
+    public class PerDayAction
     {
+        [ForeignKey(nameof(Action))]
+        public int ID { get; set; }
+        public Action Action { get; set; }
+
         public int NumberPerDay { get; set; }
     }
 }

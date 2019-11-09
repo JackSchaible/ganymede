@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using AutoMapper;
+using Ganymede.Api.Data.Monsters.Actions;
+using System.Collections.Generic;
 
 namespace Ganymede.Api.Models.Monster.Actions
 {
@@ -9,5 +11,15 @@ namespace Ganymede.Api.Models.Monster.Actions
         public List<LegendaryActionModel> Actions { get; set; }
         public List<ActionModel> LairActions { get; set; }
         public List<string> RegionalEffects { get; set; }
+    }
+
+    public class LegendaryActionsSetModelMapper : Profile
+    {
+        public LegendaryActionsSetModelMapper()
+        {
+            CreateMap<LegendaryActionsSetModel, LegendaryActionsSet>()
+                .ForMember(d => d.DatabaseRegionalEffects, o => o.Ignore());
+            CreateMap<LegendaryActionsSet, LegendaryActionsSetModel>();
+        }
     }
 }

@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using AutoMapper;
+using Ganymede.Api.Data.Monsters.Actions;
+using System.Collections.Generic;
 
 namespace Ganymede.Api.Models.Monster.Actions
 {
@@ -10,5 +12,22 @@ namespace Ganymede.Api.Models.Monster.Actions
         public bool ExtraGrappleRoll { get; set; }
         public List<HitEffectModel> HitEffects { get; set; }
         public string Miss { get; set; }
+    }
+
+    public class AttackModelMapper : Profile
+    {
+        public AttackModelMapper()
+        {
+            CreateMap<AttackModel, Attack>()
+                .ForMember(d => d.Action, o => o.MapFrom(s => new Action
+                {
+                    ID = s.ID,
+                    Name = s.Name,
+                    Description = s.Description
+                }));
+            CreateMap<Attack, AttackModel>()
+                .ForMember(d => d.Name, o => o.MapFrom(s => s.Action.Name))
+                .ForMember(d => d.Description, o => o.MapFrom(s => s.Action.Description));
+        }
     }
 }

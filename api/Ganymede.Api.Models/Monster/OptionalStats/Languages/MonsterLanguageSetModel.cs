@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using AutoMapper;
+using Ganymede.Api.Data.Monsters.OptionalStats.Languages;
+using System.Collections.Generic;
 
 namespace Ganymede.Api.Models.Monster.OptionalStats.Languages
 {
@@ -8,5 +10,14 @@ namespace Ganymede.Api.Models.Monster.OptionalStats.Languages
         public List<MonsterLanguageModel> Languages { get; set; }
         public int TelepathyRange { get; set; }
         public int AnyFreeLanguages { get; set; }
+    }
+
+    public class MonsterLanguageSetModelMapper : Profile
+    {
+        public MonsterLanguageSetModelMapper()
+        {
+            CreateMap<MonsterLanguageSetModel, MonsterLanguageSet>();
+            CreateMap<MonsterLanguageSet, MonsterLanguageSetModel>();
+        }
     }
 }

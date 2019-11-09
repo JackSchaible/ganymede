@@ -1,5 +1,5 @@
-﻿using Ganymede.Api.Models.Spells;
-using System.Collections.Generic;
+﻿using AutoMapper;
+using Ganymede.Api.Data.Monsters.SpecialTraits.Spellcasting;
 
 namespace Ganymede.Api.Models.Monster.SpecialTraits.Spellcasting
 {
@@ -9,5 +9,14 @@ namespace Ganymede.Api.Models.Monster.SpecialTraits.Spellcasting
         public bool Psionic { get; set; }
         public string SpellcastingAbility { get; set; }
         public SpellcastingEnums.SpellcastingTypes SpellcastingType { get; set; }
+    }
+
+    public class MonsterSpellcastingModelMapper : Profile
+    {
+        public MonsterSpellcastingModelMapper()
+        {
+            CreateMap<MonsterSpellcastingModel, MonsterSpellcasting>();
+            CreateMap<MonsterSpellcasting, MonsterSpellcastingModel>();
+        }
     }
 }

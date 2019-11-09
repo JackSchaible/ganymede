@@ -1,4 +1,7 @@
-﻿namespace Ganymede.Api.Models.Monster.BasicStats
+﻿using AutoMapper;
+using Ganymede.Api.Data.Monsters.BasicStats;
+
+namespace Ganymede.Api.Models.Monster.BasicStats
 {
     public class MonsterMovementModel
     {
@@ -8,5 +11,14 @@
         public int Climb { get; set; }
         public int Fly { get; set; }
         public int Swim { get; set; }
+    }
+
+    public class MonsterMovementModelMapper : Profile
+    {
+        public MonsterMovementModelMapper()
+        {
+            CreateMap<MonsterMovementModel, MonsterMovement>();
+            CreateMap<MonsterMovement, MonsterMovementModel>();
+        }
     }
 }

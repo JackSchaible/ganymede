@@ -1,9 +1,14 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Ganymede.Api.Data.Monsters.Actions
 {
-    public class Attack : Action
+    public class Attack
     {
+        [ForeignKey(nameof(Action))]
+        public int ID { get; set; }
+        public Action Action { get; set; }
+
         public int Type { get; set; }
         public int Range { get; set; }
         public int Target { get; set; }

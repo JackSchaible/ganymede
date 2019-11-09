@@ -11,7 +11,7 @@ namespace Ganymede.Api.Data.Monsters.SpecialTraits.Spellcasting
 
         public int InnateSpellcastingSpellsPerDayID { get; set; }
         [ForeignKey(nameof(InnateSpellcastingSpellsPerDayID))]
-        public InnateSpellcastingSpellsPerDay SpellcastingSpellsPerDay { get; set; }
+        public InnateSpellcastingSpellsPerDay InnateSpellcastingSpellsPerDay { get; set; }
 
         public string SpecialConditions { get; set; }
     }

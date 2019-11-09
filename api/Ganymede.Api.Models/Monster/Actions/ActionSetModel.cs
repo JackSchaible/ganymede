@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using AutoMapper;
+using Ganymede.Api.Data.Monsters.Actions;
+using System.Collections.Generic;
 
 namespace Ganymede.Api.Models.Monster.Actions
 {
@@ -8,5 +10,14 @@ namespace Ganymede.Api.Models.Monster.Actions
         public List<ActionModel> Actions { get; set; }
         public string Multiattack { get; set; }
         public List<ActionModel> Reactions { get; set; }
+    }
+
+    public class ActionsSetModelMapper : Profile
+    {
+        public ActionsSetModelMapper()
+        {
+            CreateMap<ActionsSetModel, ActionsSet>();
+            CreateMap<ActionsSet, ActionsSetModel>();
+        }
     }
 }
