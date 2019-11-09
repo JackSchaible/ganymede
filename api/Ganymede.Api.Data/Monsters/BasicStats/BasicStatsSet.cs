@@ -8,15 +8,15 @@ namespace Ganymede.Api.Data.Monsters.BasicStats
         public int ID { get; set; }
 
         public int ArmorClassID { get; set; }
-        [ForeignKey("ArmorClassID")]
+        [ForeignKey(nameof(ArmorClassID))]
         public ArmorClass AC { get; set; }
 
         public int DiceRollID { get; set; }
-        [ForeignKey("DiceRollID")]
+        [ForeignKey(nameof(DiceRollID))]
         public DiceRoll HPDice { get; set; }
 
         public int MovementID { get; set; }
-        [ForeignKey("MovementID")]
+        [ForeignKey(nameof(MovementID))]
         public MonsterMovement Movement { get; set; }
     }
 }

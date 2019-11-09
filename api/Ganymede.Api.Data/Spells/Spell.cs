@@ -14,27 +14,27 @@ namespace Ganymede.Api.Data.Spells
         public string AtHigherLevels { get; set; }
 
         public int SpellSchoolID { get; set; }
-        [ForeignKey("SpellSchoolID")]
+        [ForeignKey(nameof(SpellSchoolID))]
         public SpellSchool SpellSchool { get; set; }
 
         public int CastingTimeID { get; set; }
-        [ForeignKey("CastingTimeID")]
+        [ForeignKey(nameof(CastingTimeID))]
         public CastingTime CastingTime { get; set; }
 
         public int SpellRangeID { get; set; }
-        [ForeignKey("SpellRangeID")]
+        [ForeignKey(nameof(SpellRangeID))]
         public SpellRange SpellRange { get; set; }
 
         public int SpellComponentsID { get; set; }
-        [ForeignKey("SpellComponentsID")]
+        [ForeignKey(nameof(SpellComponentsID))]
         public SpellComponents SpellComponents { get; set; }
 
         public int SpellDurationID { get; set; }
-        [ForeignKey("SpellDurationID")]
+        [ForeignKey(nameof(SpellDurationID))]
         public SpellDuration SpellDuration { get; set; }
 
         public int CampaignID { get; set; }
-        [ForeignKey("CampaignID")]
+        [ForeignKey(nameof(CampaignID))]
         public Campaign Campaign { get; set; }
 
         public virtual ICollection<InnateSpell> InnateSpells { get; set; }

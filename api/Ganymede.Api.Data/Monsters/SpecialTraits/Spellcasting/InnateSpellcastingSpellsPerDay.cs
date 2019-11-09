@@ -9,7 +9,7 @@ namespace Ganymede.Api.Data.Monsters.SpecialTraits.Spellcasting
         public int NumberPerDay { get; set; }
 
         public int SpellcastingID { get; set; }
-        [ForeignKey("SpellcastingID")]
+        [ForeignKey(nameof(SpellcastingID))]
         public InnateSpellcasting Spellcasting { get; set; }
 
         public virtual ICollection<InnateSpell> Spells { get; set; }

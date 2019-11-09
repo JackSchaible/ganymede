@@ -11,7 +11,7 @@ namespace Ganymede.Api.Data.Rulesets
         public DateTime ReleaseDate { get; set; }
         
         public int PublisherID { get; set; }
-        [ForeignKey("PublisherID")]
+        [ForeignKey(nameof(PublisherID))]
         public Publisher Publisher { get; set; }
     }
 }

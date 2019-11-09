@@ -6,11 +6,11 @@ namespace Ganymede.Api.Data.Monsters
     public class MonsterTag
     {
         public int MonsterID { get; set; }
-        [ForeignKey("MonsterID")]
+        [ForeignKey(nameof(MonsterID))]
         public Monster Monster { get; set; }
 
         public int TagID { get; set; }
-        [ForeignKey("TagID")]
+        [ForeignKey(nameof(TagID))]
         public Tag Tag { get; set; }
     }
 }

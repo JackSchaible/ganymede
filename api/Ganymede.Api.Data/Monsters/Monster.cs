@@ -16,41 +16,41 @@ namespace Ganymede.Api.Data.Monsters
         public virtual ICollection<MonsterTag> Tags { get; set; }
 
         public int MonsterTypeID { get; set; }
-        [ForeignKey("MonsterTypeID")]
+        [ForeignKey(nameof(MonsterTypeID))]
         public MonsterType Type { get; set; }
 
         public int AlignmentID { get; set; }
-        [ForeignKey("AlignmentID")]
+        [ForeignKey(nameof(AlignmentID))]
         public Alignment Alignment { get; set; }
 
         public int BasicStatsID { get; set; }
-        [ForeignKey("BasicStatsID")]
+        [ForeignKey(nameof(BasicStatsID))]
         public BasicStatsSet BasicStats { get; set; }
 
         public int AbilityScoresID { get; set; }
-        [ForeignKey("AbilityScoresID")]
+        [ForeignKey(nameof(AbilityScoresID))]
         public AbilityScores AbilityScores { get; set; }
 
         public int OptionalStatsID { get; set; }
-        [ForeignKey("OptionalStatsID")]
+        [ForeignKey(nameof(OptionalStatsID))]
         public OptionalStatsSet OptionalStats { get; set; }
 
         public int SpecialTraitSetID { get; set; }
-        [ForeignKey("SpecialTraitSetID")]
+        [ForeignKey(nameof(SpecialTraitSetID))]
         public SpecialTraitSet SpecialTraitSet { get; set; }
 
         public int ActionSetID { get; set; }
-        [ForeignKey("ActionSetID")]
+        [ForeignKey(nameof(ActionSetID))]
         public ActionsSet ActionSet { get; set; }
 
         public virtual ICollection<MonsterEquipment> Equipment { get; set; }
 
         public int LegendaryActionsID { get; set; }
-        [ForeignKey("LegendaryActionsID")]
+        [ForeignKey(nameof(LegendaryActionsID))]
         public LegendaryActionsSet LegendaryActions { get; set; }
 
         public int CampaignID { get; set; }
-        [ForeignKey("CampaignID")]
+        [ForeignKey(nameof(CampaignID))]
         public virtual Campaign Campaign { get; set; }
     }
 }

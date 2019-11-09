@@ -9,21 +9,21 @@ namespace Ganymede.Api.Data.Monsters.OptionalStats
         public int ID { get; set; }
 
         public int MonsterSavingThrowSetID { get; set; }
-        [ForeignKey("MonsterSavingThrowSetID")]
+        [ForeignKey(nameof(MonsterSavingThrowSetID))]
         public MonsterSavingThrowSet SavingThrows { get; set; }
 
         public int DamageEffectivenessSetID { get; set; }
-        [ForeignKey("DamageEffectivenessSetID")]
+        [ForeignKey(nameof(DamageEffectivenessSetID))]
         public DamageEffectivenessSet Effectivenesses { get; set; }
 
         public virtual ICollection<MonsterSkillSet> Skills { get; set; }
 
         public int SensesID { get; set; }
-        [ForeignKey("SensesID")]
+        [ForeignKey(nameof(SensesID))]
         public Senses Senses { get; set; }
 
         public int MonsterLanguageSetID { get; set; }
-        [ForeignKey("MonsterLanguageSetID")]
+        [ForeignKey(nameof(MonsterLanguageSetID))]
         public MonsterLanguageSet Languages { get; set; }
     }
 }

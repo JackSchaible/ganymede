@@ -6,11 +6,11 @@ namespace Ganymede.Api.Data.Monsters
     public class MonsterSkillSet
     {
         public int OptionalStatsID { get; set; }
-        [ForeignKey("OptionalStatsID")]
+        [ForeignKey(nameof(OptionalStatsID))]
         public OptionalStatsSet OptionalStats { get; set; }
 
         public int SkillID { get; set; }
-        [ForeignKey("SkillID")]
+        [ForeignKey(nameof(SkillID))]
         public Skill Skill { get; set; }
 
         public bool DoubleProficiency { get; set; }

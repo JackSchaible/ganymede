@@ -5,11 +5,11 @@ namespace Ganymede.Api.Data.Monsters
     public class MonsterEquipment
     {
         public int MonsterID { get; set; }
-        [ForeignKey("MonsterID")]
+        [ForeignKey(nameof(MonsterID))]
         public Monster Monster { get; set; }
 
         public int EquipmentID { get; set; }
-        [ForeignKey("EquipmentID")]
+        [ForeignKey(nameof(EquipmentID))]
         public Equipment.Equipment Equipment { get; set; }   
     }
 }

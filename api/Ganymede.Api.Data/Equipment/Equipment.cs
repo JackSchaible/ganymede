@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Ganymede.Api.Data.Equipment
 {
-    public abstract class Equipment
+    public class Equipment
     {
         public int ID { get; set; }
         public string Name { get; set; }

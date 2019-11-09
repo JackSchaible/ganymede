@@ -9,6 +9,7 @@ using Ganymede.Api.Data.Rulesets;
 using Ganymede.Api.Data.Spells;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Ganymede.Api.Data.Equipment.Weapons;
 
 namespace Ganymede.Api.Data
 {
@@ -27,8 +28,13 @@ namespace Ganymede.Api.Data
         public DbSet<MonsterType> MonsterTypes { get; set; }
         public DbSet<Alignment> Alignments { get; set; }
 
-        public DbSet<ArmorClass> ArmorClasses { get; set; }
         public DbSet<Armor> Armors { get; set; }
+        public DbSet<Equipment.Equipment> Equipments { get; set; }
+        public DbSet<Weapon> Weapons { get; set; }
+        public DbSet<WeaponWeaponProperties> WeaponWeaponProperties { get; set; }
+        public DbSet<WeaponProperty> WeaponProperties { get; set; }
+
+        public DbSet<ArmorClass> ArmorClasses { get; set; }
         public DbSet<ArmorClassArmor> ArmorClassArmors { get; set; }
         public DbSet<MonsterMovement> MonsterMovements { get; set; }
 
@@ -58,7 +64,7 @@ namespace Ganymede.Api.Data
 
         protected override void OnModelCreating(ModelBuilder builder)
 		{
-            builder.Entity<Armor>();
+            builder.Entity<Equipment.Equipment>().ToTable("Equipment");
 
             builder.Entity<Publisher>()
                 .HasIndex(p => p.Name)
@@ -79,6 +85,7 @@ namespace Ganymede.Api.Data
             ConfigureMonsterInnateSpells(builder);
             ConfigureMonsterEquipment(builder);
             ConfigureSpellcasterSpells(builder);
+            ConfigureWeaponProperties(builder);
 
             base.OnModelCreating(builder);
 		}
@@ -267,6 +274,30 @@ namespace Ganymede.Api.Data
             builder.Entity<Equipment.Equipment>()
                 .HasMany(e => e.Monsters)
                 .WithOne(me => me.Equipment)
+                .OnDelete(DeleteBehavior.Restrict);
+        }
+
+        private void ConfigureWeaponProperties(ModelBuilder builder)
+        {
+            builder.Entity<WeaponWeaponProperties>()
+                .HasKey(wwp => new { wwp.WeaponID, wwp.WeaponPropertyID });
+            builder.Entity<WeaponWeaponProperties>()
+                .HasOne(wwp => wwp.Weapon)
+                .WithMany(w => w.WeaponWeaponProperties)
+                .HasForeignKey(wwp => wwp.WeaponID)
+                .OnDelete(DeleteBehavior.Restrict);
+            builder.Entity<WeaponWeaponProperties>()
+                .HasOne(wwp => wwp.WeaponProperty)
+                .WithMany(wp => wp.WeaponWeaponProperties)
+                .HasForeignKey(wwp => wwp.WeaponPropertyID)
+                .OnDelete(DeleteBehavior.Restrict);
+            builder.Entity<Weapon>()
+                .HasMany(w => w.WeaponWeaponProperties)
+                .WithOne(wwp => wwp.Weapon)
+                .OnDelete(DeleteBehavior.Cascade);
+            builder.Entity<WeaponProperty>()
+                .HasMany(wp => wp.WeaponWeaponProperties)
+                .WithOne(wwp => wwp.WeaponProperty)
                 .OnDelete(DeleteBehavior.Restrict);
         }
     }

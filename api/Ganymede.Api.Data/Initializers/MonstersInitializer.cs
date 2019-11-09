@@ -6,7 +6,7 @@ namespace Ganymede.Api.Data.Initializers
 {
     internal class MonstersInitializer
     {
-        public void Initialize(ApplicationDbContext ctx, out IEnumerable<Monster> dAndDMonsters, out IEnumerable<Monster> pfMonsters, out Monster aerisi)
+        public void Initialize(ApplicationDbContext ctx, out IEnumerable<Monster> dAndDMonsters, out IEnumerable<Monster> pfMonsters)
         {
             if (ctx.Monsters.Any())
             {

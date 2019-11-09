@@ -11,11 +11,11 @@ namespace Ganymede.Api.Data.Monsters.OptionalStats.Languages
         public bool Write { get; set; }
 
         public int LanguageID { get; set; }
-        [ForeignKey("LanguageID")]
+        [ForeignKey(nameof(LanguageID))]
         public Language Language { get; set; }
 
         public int MonsterLanguageSetID { get; set; }
-        [ForeignKey("MonsterLanguageSetID")]
+        [ForeignKey(nameof(MonsterLanguageSetID))]
         public MonsterLanguageSet MonsterLanguageSet { get; set; }
     }
 }
