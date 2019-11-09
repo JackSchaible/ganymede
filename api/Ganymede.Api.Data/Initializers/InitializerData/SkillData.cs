@@ -1,6 +1,6 @@
 ﻿namespace Ganymede.Api.Data.Initializers.InitializerData
 {
-    internal class Skills
+    internal class SkillData
     {
         public Skill Acrobatics { get; set; }
         public Skill AnimalHandling { get; set; }

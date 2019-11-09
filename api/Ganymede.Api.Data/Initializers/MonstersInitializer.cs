@@ -1,4 +1,5 @@
 ﻿using Ganymede.Api.Data.Characters;
+using Ganymede.Api.Data.Common;
 using Ganymede.Api.Data.Initializers.InitializerData;
 using Ganymede.Api.Data.Monsters;
 using Ganymede.Api.Data.Monsters.Actions;
@@ -53,8 +54,12 @@ namespace Ganymede.Api.Data.Initializers
             public const int SCTInnate = 0;
             public const int SCTSpellcaster = 1;
 
+            public static Tag TElf;
         }
-        public void Initialize(ApplicationDbContext ctx, Campaign pota, Alignments alignments, DiceRolls diceRolls, Armors armors, Languages languages, Skills skills, out IEnumerable<Monster> dAndDMonsters, out IEnumerable<Monster> pfMonsters)
+        public void Initialize(ApplicationDbContext ctx, Campaign pota, AlignmentData alignments,
+            DiceRollData diceRolls, ArmorData armors, LanguageData languages, SkillData skills,
+            PlayerClassData pcData, SpellData spells,
+            out IEnumerable<Monster> dAndDMonsters, out IEnumerable<Monster> pfMonsters)
         {
             if (ctx.Monsters.Any())
             {
@@ -63,7 +68,10 @@ namespace Ganymede.Api.Data.Initializers
             }
             else
             {
-                dAndDMonsters = CreateDandDMonsters(ctx, pota, alignments, diceRolls, armors, languages, skills);
+                CreateMonsterTypes(ctx);
+                CreateMonsterTags(ctx);
+                dAndDMonsters = CreateDandDMonsters(ctx, pota, alignments, diceRolls, armors,
+                    languages, skills, pcData, spells);
                 pfMonsters = CreatePathfinderMonsters();
 
                 ctx.Monsters.AddRange(dAndDMonsters);
@@ -182,15 +190,28 @@ namespace Ganymede.Api.Data.Initializers
                 );
             }
         }
+        private void CreateMonsterTags(ApplicationDbContext ctx)
+        {
+            Constants.TElf = new Tag { Name = "Elf" };
 
-        private List<Monster> CreateDandDMonsters(ApplicationDbContext ctx, Campaign pota, Alignments alignments, DiceRolls diceRolls, Armors armors, Languages languages, Skills skills)
+            ctx.Tags.AddRange
+            (
+                Constants.TElf
+            );
+        }
+
+        private List<Monster> CreateDandDMonsters(ApplicationDbContext ctx, Campaign pota,
+            AlignmentData alignments, DiceRollData diceRolls, ArmorData armors, LanguageData languages,
+            SkillData skills, PlayerClassData classes, SpellData spells)
         {
             return new List<Monster>
             {
-                CreateAerisi(ctx, alignments, diceRolls, pota, languages, skills)
+                CreateAerisi(ctx, alignments, diceRolls, pota, languages, skills, classes.Wizard, spells)
             };
         }
-        private Monster CreateAerisi(ApplicationDbContext ctx, Alignments a, DiceRolls dr, Campaign pota, Languages languages, Skills skills, PlayerClass wizard)
+        private Monster CreateAerisi(ApplicationDbContext ctx, AlignmentData a, DiceRollData dr,
+            Campaign pota, LanguageData languages, SkillData skills, PlayerClass wizard,
+            SpellData sd)
         {
             var abilityScores = new AbilityScores
             {
@@ -273,10 +294,11 @@ namespace Ganymede.Api.Data.Initializers
             {
                 SpellcasterLevel = 12,
                 SpellcastingClass = wizard,
+                SpellsPerDay = new int[9] { 4, 3, 3, 3, 2, 1, 0, 0, 0 },
                 Spellcasting = new Monsters.SpecialTraits.Spellcasting.MonsterSpellcasting
                 {
                     SpellcastingAbility = "Intelligence",
-                    SpellcastingType = Constants.SCTSpellcaster
+                    SpellcastingType = Constants.SCTSpellcaster,
                 }
             };
             var traits = new SpecialTraitSet
@@ -299,6 +321,7 @@ namespace Ganymede.Api.Data.Initializers
                         Description = "If Aerisi fails a saving throw, she can choose to succeed instead."
                     }
                 },
+                //TODO: Do we need to save the Spellcaster object seperately?
                 SpellcastingModel = spells.Spellcasting
             };
 
@@ -314,7 +337,7 @@ namespace Ganymede.Api.Data.Initializers
                 Type = Constants.MTHumanoid,
                 OptionalStats = optional,
                 Size = Constants.SMedium,
-                SpecialTraitSet = traits
+                SpecialTraitSet = traits,
             };
 
             ctx.Monsters.Add(aerisi);
@@ -354,6 +377,123 @@ namespace Ganymede.Api.Data.Initializers
                 {
                     OptionalStats = optional,
                     Skill = skills.Perception
+                }
+            );
+
+            ctx.SpellcasterSpells.AddRange
+            (
+                new Monsters.SpecialTraits.Spellcasting.SpellcasterSpells
+                {
+                    Spellcaster = spells,
+                    Spell = sd.ChainLightning
+                },
+                new Monsters.SpecialTraits.Spellcasting.SpellcasterSpells
+                {
+                    Spellcaster = spells,
+                    Spell = sd.Seeming
+                },
+                new Monsters.SpecialTraits.Spellcasting.SpellcasterSpells
+                {
+                    Spellcaster = spells,
+                    Spell = sd.Cloudkill
+                },
+                new Monsters.SpecialTraits.Spellcasting.SpellcasterSpells
+                {
+                    Spellcaster = spells,
+                    Spell = sd.IceStorm
+                },
+                new Monsters.SpecialTraits.Spellcasting.SpellcasterSpells
+                {
+                    Spellcaster = spells,
+                    Spell = sd.StormSphere
+                },
+                new Monsters.SpecialTraits.Spellcasting.SpellcasterSpells
+                {
+                    Spellcaster = spells,
+                    Spell = sd.LightningBolt
+                },
+                new Monsters.SpecialTraits.Spellcasting.SpellcasterSpells
+                {
+                    Spellcaster = spells,
+                    Spell = sd.GaseousForm
+                },
+                new Monsters.SpecialTraits.Spellcasting.SpellcasterSpells
+                {
+                    Spellcaster = spells,
+                    Spell = sd.Fly
+                },
+                new Monsters.SpecialTraits.Spellcasting.SpellcasterSpells
+                {
+                    Spellcaster = spells,
+                    Spell = sd.DustDevil
+                },
+                new Monsters.SpecialTraits.Spellcasting.SpellcasterSpells
+                {
+                    Spellcaster = spells,
+                    Spell = sd.GustOfWind
+                },
+                new Monsters.SpecialTraits.Spellcasting.SpellcasterSpells
+                {
+                    Spellcaster = spells,
+                    Spell = sd.Invisibility
+                },
+                new Monsters.SpecialTraits.Spellcasting.SpellcasterSpells
+                {
+                    Spellcaster = spells,
+                    Spell = sd.Thunderwave
+                },
+                new Monsters.SpecialTraits.Spellcasting.SpellcasterSpells
+                {
+                    Spellcaster = spells,
+                    Spell = sd.MageArmor
+                },
+                new Monsters.SpecialTraits.Spellcasting.SpellcasterSpells
+                {
+                    Spellcaster = spells,
+                    Spell = sd.FeatherFall
+                },
+                new Monsters.SpecialTraits.Spellcasting.SpellcasterSpells
+                {
+                    Spellcaster = spells,
+                    Spell = sd.CharmPerson
+                },
+                new Monsters.SpecialTraits.Spellcasting.SpellcasterSpells
+                {
+                    Spellcaster = spells,
+                    Spell = sd.ShockingGrasp
+                },
+                new Monsters.SpecialTraits.Spellcasting.SpellcasterSpells
+                {
+                    Spellcaster = spells,
+                    Spell = sd.RayOfFrost
+                },
+                new Monsters.SpecialTraits.Spellcasting.SpellcasterSpells
+                {
+                    Spellcaster = spells,
+                    Spell = sd.Prestidigitation
+                },
+                new Monsters.SpecialTraits.Spellcasting.SpellcasterSpells
+                {
+                    Spellcaster = spells,
+                    Spell = sd.Message
+                },
+                new Monsters.SpecialTraits.Spellcasting.SpellcasterSpells
+                {
+                    Spellcaster = spells,
+                    Spell = sd.MageHand
+                },
+                new Monsters.SpecialTraits.Spellcasting.SpellcasterSpells
+                {
+                    Spellcaster = spells,
+                    Spell = sd.Gust
+                });
+
+            ctx.MonsterTags.Add
+            (
+                new MonsterTag
+                {
+                    Monster = aerisi,
+                    Tag = Constants.TElf
                 }
             );
 

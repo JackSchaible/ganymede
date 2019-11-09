@@ -2,7 +2,7 @@
 
 namespace Ganymede.Api.Data.Initializers.InitializerData
 {
-    internal class Armors
+    internal class ArmorData
     {
         public Armor Padded { get; set; }
         public Armor Leather { get; set; }

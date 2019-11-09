@@ -2,7 +2,7 @@
 
 namespace Ganymede.Api.Data.Initializers.InitializerData
 {
-    internal class Alignments
+    internal class AlignmentData
     {
         public Alignment LawfulGood { get; set; }
         public Alignment LawfulNeutral { get; set; }

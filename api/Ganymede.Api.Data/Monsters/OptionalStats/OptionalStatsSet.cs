@@ -8,7 +8,7 @@ namespace Ganymede.Api.Data.Monsters.OptionalStats
     {
         public int ID { get; set; }
 
-        public int MonsterSavingThrowSetID { get; set; }
+        public int? MonsterSavingThrowSetID { get; set; }
         [ForeignKey(nameof(MonsterSavingThrowSetID))]
         public MonsterSavingThrowSet SavingThrows { get; set; }
 

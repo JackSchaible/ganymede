@@ -1,4 +1,5 @@
-﻿using Ganymede.Api.Data.Spells;
+﻿using Ganymede.Api.Data.Initializers.InitializerData;
+using Ganymede.Api.Data.Spells;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -70,29 +71,27 @@ namespace Ganymede.Api.Data.Initializers
         private Campaign _campaign;
         #endregion
 
-        public List<Spell> Initialize(ApplicationDbContext ctx, Campaign campaign)
+        public SpellData Initialize(ApplicationDbContext ctx, Campaign campaign)
         {
-            var spells = new List<Spell>();
+            SetSpellMetadata(ctx, campaign);
 
-            SetSpellData(ctx, campaign);
+            var spellData = CreateLevel9Spells(ctx, new SpellData());
+            spellData = CreateLevel8Spells(ctx, spellData);
+            spellData = CreateLevel7Spells(ctx, spellData);
+            spellData = CreateLevel6Spells(ctx, spellData);
+            spellData = CreateLevel5Spells(ctx, spellData);
+            spellData = CreateLevel4Spells(ctx, spellData);
+            spellData = CreateLevel3Spells(ctx, spellData);
+            spellData = CreateLevel2Spells(ctx, spellData);
+            spellData = CreateLevel1Spells(ctx, spellData);
+            spellData = CreateCantrips(ctx, spellData);
 
-            spells.AddRange(CreateLevel9Spells(ctx));
-            spells.AddRange(CreateLevel8Spells(ctx));
-            spells.AddRange(CreateLevel7Spells(ctx));
-            spells.AddRange(CreateLevel6Spells(ctx));
-            spells.AddRange(CreateLevel5Spells(ctx));
-            spells.AddRange(CreateLevel4Spells(ctx));
-            spells.AddRange(CreateLevel3Spells(ctx));
-            spells.AddRange(CreateLevel2Spells(ctx));
-            spells.AddRange(CreateLevel1Spells(ctx));
-            spells.AddRange(CreateCantrips(ctx));
-
-            return spells;
+            return spellData;
         }
 
         #region Spell Data
 
-        public void SetSpellData(ApplicationDbContext ctx, Campaign campaign)
+        public void SetSpellMetadata(ApplicationDbContext ctx, Campaign campaign)
         {
             var schools = CreateDandDSchools(ctx);
             _abjuration = schools.Single(s => s.Name == "Abjuration");
@@ -341,7 +340,7 @@ namespace Ganymede.Api.Data.Initializers
 
         #endregion
 
-        IEnumerable<Spell> CreateLevel9Spells(ApplicationDbContext ctx)
+        SpellData CreateLevel9Spells(ApplicationDbContext ctx, SpellData spellData)
         {
             var spells = new List<Spell>
             {
@@ -365,7 +364,6 @@ namespace Ganymede.Api.Data.Initializers
                     SpellRange = _r10f,
                     SpellSchool = _necromancy
                 },
-                //TODO Next: Add spells with unlimited & special ranges, spells with any other unused special conditions, finish client-side validators
                 new Spell
                 {
                     Campaign = _campaign,
@@ -384,9 +382,9 @@ namespace Ganymede.Api.Data.Initializers
             };
 
             ctx.Spells.AddRange(spells);
-            return spells;
+            return spellData;
         }
-        IEnumerable<Spell> CreateLevel8Spells(ApplicationDbContext ctx)
+        SpellData CreateLevel8Spells(ApplicationDbContext ctx, SpellData spellData)
         {
             var spells = new List<Spell>
             {
@@ -410,9 +408,9 @@ namespace Ganymede.Api.Data.Initializers
             };
 
             ctx.Spells.AddRange(spells);
-            return spells;
+            return spellData;
         }
-        IEnumerable<Spell> CreateLevel7Spells(ApplicationDbContext ctx)
+        SpellData CreateLevel7Spells(ApplicationDbContext ctx, SpellData spellData)
         {
             var spells = new List<Spell>
             {
@@ -441,40 +439,43 @@ namespace Ganymede.Api.Data.Initializers
             };
 
             ctx.AddRange(spells);
-            return spells;
+            return spellData;
         }
-        IEnumerable<Spell> CreateLevel6Spells(ApplicationDbContext ctx)
+        SpellData CreateLevel6Spells(ApplicationDbContext ctx, SpellData spellData)
         {
-            var spells = new List<Spell>
+            var chainLightning = new Spell
             {
-                new Spell
+                Campaign = _campaign,
+                AtHigherLevels = "<p>When you cast this spell using a spell slot of 7th level or higher, one additional bolt leaps from the first target to another target for each slot above 6th.</p>",
+                CastingTime = _t1Action,
+                Description = "<p>You create a bolt of lightning that arcs towards a target of your choice that you can see within range. Three bolts then leap from that target to as many as three other targets, each of which must be within 30 feet of the first target. A target can be a creature or an object and can be targeted by only one of the bolts.</p><p>A target must make a dexterity saving throw. The target takes 10d8 lightning damage on a failed save, or half as much damage on a successful one.</p>",
+                Level = 6,
+                Name = "Chain Lightning",
+                SpellRange = _r150f,
+                SpellComponents = new SpellComponents
                 {
-                    Campaign = _campaign,
-                    AtHigherLevels = "<p>When you cast this spell using a spell slot of 7th level or higher, one additional bolt leaps from the first target to another target for each slot above 6th.</p>",
-                    CastingTime = _t1Action,
-                    Description = "<p>You create a bolt of lightning that arcs towards a target of your choice that you can see within range. Three bolts then leap from that target to as many as three other targets, each of which must be within 30 feet of the first target. A target can be a creature or an object and can be targeted by only one of the bolts.</p><p>A target must make a dexterity saving throw. The target takes 10d8 lightning damage on a failed save, or half as much damage on a successful one.</p>",
-                    Level = 6,
-                    Name = "Chain Lightning",
-                    SpellRange = _r150f,
-                    SpellComponents = new SpellComponents
-                    {
-                        Material = $"A bit of fur{Constants.EncodedComma}A piece of amber or a crystal rod{Constants.EncodedComma}Three silver pins",
-                        Somatic = true,
-                        Verbal = true
-                    },
-                    SpellDuration = _dinst,
-                    SpellSchool = _evocation,
-                }
+                    Material = $"A bit of fur{Constants.EncodedComma}A piece of amber or a crystal rod{Constants.EncodedComma}Three silver pins",
+                    Somatic = true,
+                    Verbal = true
+                },
+                SpellDuration = _dinst,
+                SpellSchool = _evocation,
             };
 
-            ctx.AddRange(spells);
-            return spells;
-        }
-        IEnumerable<Spell> CreateLevel5Spells(ApplicationDbContext ctx)
-        {
             var spells = new List<Spell>
             {
-                new Spell
+                chainLightning
+            };
+
+            spellData.ChainLightning = chainLightning;
+
+            ctx.AddRange(spells);
+            return spellData;
+        }
+        SpellData CreateLevel5Spells(ApplicationDbContext ctx, SpellData spellData)
+        {
+            Spell
+                cloudKill = new Spell
                 {
                     Campaign = _campaign,
                     AtHigherLevels = "<p>When you cast this spell using a spell slot of 6th level or higher, the damage increases by 1d8 for each slot level above 5th.</p>",
@@ -487,7 +488,7 @@ namespace Ganymede.Api.Data.Initializers
                     SpellDuration = _d10cminutes,
                     SpellSchool = _conjuration
                 },
-                new Spell
+                seeming = new Spell
                 {
                     Campaign = _campaign,
                     CastingTime = _t1Action,
@@ -498,17 +499,23 @@ namespace Ganymede.Api.Data.Initializers
                     SpellComponents = _cVS,
                     SpellDuration = _d8hours,
                     SpellSchool = _illusion
-                }
-            };
-
-            ctx.AddRange(spells);
-            return spells;
-        }
-        IEnumerable<Spell> CreateLevel4Spells(ApplicationDbContext ctx)
-        {
+                };
             var spells = new List<Spell>
             {
-                        new Spell
+                cloudKill,
+                seeming
+            };
+
+            spellData.Cloudkill = cloudKill;
+            spellData.Seeming = seeming;
+
+            ctx.AddRange(spells);
+            return spellData;
+        }
+        SpellData CreateLevel4Spells(ApplicationDbContext ctx, SpellData spellData)
+        {
+            Spell
+                iceStorm = new Spell
                 {
                     Campaign = _campaign,
                     AtHigherLevels = "<p>When you cast this spell using a spell slot of 5th level or higher, the bludgeoning damage increases by 1d8 for each slot level above 4th.</p>",
@@ -531,7 +538,7 @@ namespace Ganymede.Api.Data.Initializers
                     SpellDuration = _dinst,
                     SpellSchool = _evocation
                 },
-                new Spell
+                stormSphere = new Spell
                 {
                     Campaign = _campaign,
                     AtHigherLevels = "<p>When you cast this spell using a spell slot of 5th level or higher, the damage increases for each of its effects by ld6 for each slot level above 4th.</p>",
@@ -543,35 +550,24 @@ namespace Ganymede.Api.Data.Initializers
                     SpellComponents = _cVS,
                     SpellDuration = _d1cminute,
                     SpellSchool = _evocation
-                }
-            };
+                };
 
-            ctx.AddRange(spells);
-            return spells;
-        }
-        IEnumerable<Spell> CreateLevel3Spells(ApplicationDbContext ctx)
-        {
             var spells = new List<Spell>
             {
-                new Spell
-                {
-                    AtHigherLevels = "<p>When you cast this spell using a spell slot of 4th level or higher, the damage of an explosive runes glyph increases by 1d8 for each slot level above 3rd. If you create a spell glyph, you can store any spell of up to the same level as the slot you use for the glyph of warding.</p>",
-                    CastingTime = _t1Hour,
-                    Campaign = _campaign,
-                    Description = "<p>When you cast this spell, you inscribe a glyph that harms other creatures, either upon a surface (such as a table or a section of floor or wall) or within an object that can be closed (such as a book, a scroll, or a treasure chest) to conceal the glyph. If you choose a surface, the glyph can cover an area of the surface no larger than 10 feet in diameter. If you choose an object, that object must remain in its place; if the object is moved more than 10 feet from where you cast this spell, the glyph is broken, and the spell ends without being triggered. The glyph is nearly invisible and requires a successful Intelligence (Investigation) check against your spell save DC to be found. You decide what triggers the glyph when you cast the spell. For glyphs inscribed on a surface, the most typical triggers include touching or standing on the glyph, removing another object covering the glyph, approaching within a certain distance of the glyph, or manipulating the object on which the glyph is inscribed. For glyphs inscribed within an object, the most common triggers include opening that object, approaching within a certain distance of the object, or seeing or reading the glyph. Once a glyph is triggered, this spell ends. You can further refine the trigger so the spell activates only under certain circumstances or according to physical characteristics (such as height or weight), creature kind (for example, the ward could be set to affect aberrations or drow), or alignment. You can also set conditions for creatures that don’t trigger the glyph, such as those who say a certain password. When you inscribe the glyph, choose explosive runes or a spell glyph. Explosive Runes. When triggered, the glyph erupts with magical energy in a 20-foot-radius sphere centered on the glyph. The sphere spreads around corners. Each creature in the area must make a Dexterity saving throw. A creature takes 5d8 acid, cold, fire, lightning, or thunder damage on a failed saving throw (your choice when you create the glyph), or half as much damage on a successful one. Spell Glyph. You can store a prepared spell of 3rd level or lower in the glyph by casting it as part of creating the glyph. The spell must target a single creature or an area. The spell being stored has no immediate effect when cast in this way. When the glyph is triggered, the stored spell is cast. If the spell has a target, it targets the creature that triggered the glyph. If the spell affects an area, the area is centered on that creature. If the spell summons hostile creatures or creates harmful objects or traps, they appear as close as possible to the intruder and attack it. If the spell requires concentration, it lasts until the end of its full duration.</p>",
-                    Level = 3,
-                    Name = "Glyph of Warding",
-                    SpellComponents = new SpellComponents
-                    {
-                        Material = "Incense and powdered diamond worth at least 200 gp, which the spell consumes",
-                        Somatic = true,
-                        Verbal = true
-                    },
-                    SpellDuration = _dUTD,
-                    SpellRange = _rtouch,
-                    SpellSchool = _abjuration,
-                },
-                new Spell
+                iceStorm,
+                stormSphere
+            };
+
+            spellData.IceStorm = iceStorm;
+            spellData.StormSphere = stormSphere;
+
+            ctx.AddRange(spells);
+            return spellData;
+        }
+        SpellData CreateLevel3Spells(ApplicationDbContext ctx, SpellData spellData)
+        {
+            Spell
+                fly = new Spell
                 {
                     Campaign = _campaign,
                     AtHigherLevels = "<p>When you cast this spell using a spell slot of 4th level or higher, you can target one additional creature for each slot level above 3rd.</p>",
@@ -589,7 +585,7 @@ namespace Ganymede.Api.Data.Initializers
                     SpellDuration = _d10cminutes,
                     SpellSchool = _transmutation
                 },
-                new Spell
+                gasouesForm = new Spell
                 {
                     Campaign = _campaign,
                     CastingTime = _t1Action,
@@ -606,7 +602,7 @@ namespace Ganymede.Api.Data.Initializers
                     SpellDuration = _d1chour,
                     SpellSchool = _transmutation
                 },
-                new Spell
+                lightningBolt = new Spell
                 {
                     Campaign = _campaign,
                     AtHigherLevels = "<p>When you cast this spell using a spell slot of 4th level or higher, the damage increases by 1d6 for each slot above 3rd.</p>",
@@ -629,6 +625,29 @@ namespace Ganymede.Api.Data.Initializers
                     },
                     SpellDuration = _dinst,
                     SpellSchool = _evocation
+                };
+            var spells = new List<Spell>
+            {
+                fly,
+                gasouesForm,
+                lightningBolt,
+                new Spell
+                {
+                    AtHigherLevels = "<p>When you cast this spell using a spell slot of 4th level or higher, the damage of an explosive runes glyph increases by 1d8 for each slot level above 3rd. If you create a spell glyph, you can store any spell of up to the same level as the slot you use for the glyph of warding.</p>",
+                    CastingTime = _t1Hour,
+                    Campaign = _campaign,
+                    Description = "<p>When you cast this spell, you inscribe a glyph that harms other creatures, either upon a surface (such as a table or a section of floor or wall) or within an object that can be closed (such as a book, a scroll, or a treasure chest) to conceal the glyph. If you choose a surface, the glyph can cover an area of the surface no larger than 10 feet in diameter. If you choose an object, that object must remain in its place; if the object is moved more than 10 feet from where you cast this spell, the glyph is broken, and the spell ends without being triggered. The glyph is nearly invisible and requires a successful Intelligence (Investigation) check against your spell save DC to be found. You decide what triggers the glyph when you cast the spell. For glyphs inscribed on a surface, the most typical triggers include touching or standing on the glyph, removing another object covering the glyph, approaching within a certain distance of the glyph, or manipulating the object on which the glyph is inscribed. For glyphs inscribed within an object, the most common triggers include opening that object, approaching within a certain distance of the object, or seeing or reading the glyph. Once a glyph is triggered, this spell ends. You can further refine the trigger so the spell activates only under certain circumstances or according to physical characteristics (such as height or weight), creature kind (for example, the ward could be set to affect aberrations or drow), or alignment. You can also set conditions for creatures that don’t trigger the glyph, such as those who say a certain password. When you inscribe the glyph, choose explosive runes or a spell glyph. Explosive Runes. When triggered, the glyph erupts with magical energy in a 20-foot-radius sphere centered on the glyph. The sphere spreads around corners. Each creature in the area must make a Dexterity saving throw. A creature takes 5d8 acid, cold, fire, lightning, or thunder damage on a failed saving throw (your choice when you create the glyph), or half as much damage on a successful one. Spell Glyph. You can store a prepared spell of 3rd level or lower in the glyph by casting it as part of creating the glyph. The spell must target a single creature or an area. The spell being stored has no immediate effect when cast in this way. When the glyph is triggered, the stored spell is cast. If the spell has a target, it targets the creature that triggered the glyph. If the spell affects an area, the area is centered on that creature. If the spell summons hostile creatures or creates harmful objects or traps, they appear as close as possible to the intruder and attack it. If the spell requires concentration, it lasts until the end of its full duration.</p>",
+                    Level = 3,
+                    Name = "Glyph of Warding",
+                    SpellComponents = new SpellComponents
+                    {
+                        Material = "Incense and powdered diamond worth at least 200 gp, which the spell consumes",
+                        Somatic = true,
+                        Verbal = true
+                    },
+                    SpellDuration = _dUTD,
+                    SpellRange = _rtouch,
+                    SpellSchool = _abjuration,
                 },
                 new Spell
                 {
@@ -652,15 +671,17 @@ namespace Ganymede.Api.Data.Initializers
                 }
             };
 
-            ctx.AddRange(spells);
-            return spells;
-        }
-        IEnumerable<Spell> CreateLevel2Spells(ApplicationDbContext ctx)
-        {
-            var spells = new List<Spell>
-            {
+            spellData.Fly = fly;
+            spellData.GaseousForm = gasouesForm;
+            spellData.LightningBolt = lightningBolt;
 
-                new Spell
+            ctx.AddRange(spells);
+            return spellData;
+        }
+        SpellData CreateLevel2Spells(ApplicationDbContext ctx, SpellData spellData)
+        {
+            Spell
+                dustDevil = new Spell
                 {
                     Campaign = _campaign,
                     AtHigherLevels = "<p>When you cast this spell using a spell slot of 3rd level or higher, the damage increases by ld8 for each slot level above 2nd.</p>",
@@ -678,7 +699,7 @@ namespace Ganymede.Api.Data.Initializers
                     SpellDuration = _d1cminute,
                     SpellSchool = _conjuration
                 },
-                new Spell
+                gustOfWind = new Spell
                 {
                     Campaign = _campaign,
                     CastingTime = _t1Action,
@@ -701,7 +722,7 @@ namespace Ganymede.Api.Data.Initializers
                     SpellDuration = _d1cminute,
                     SpellSchool = _evocation
                 },
-                new Spell
+                invisibility = new Spell
                 {
                     Campaign = _campaign,
                     AtHigherLevels = "<p>When you cast this spell using a spell slot of 3rd level or higher, you can target one additional creature for each slot level above 2nd.</p>",
@@ -718,17 +739,26 @@ namespace Ganymede.Api.Data.Initializers
                     },
                     SpellDuration = _d1chour,
                     SpellSchool = _illusion
-                }
-            };
+                };
 
-            ctx.AddRange(spells);
-            return spells;
-        }
-        IEnumerable<Spell> CreateLevel1Spells(ApplicationDbContext ctx)
-        {
             var spells = new List<Spell>
             {
-                new Spell
+                dustDevil,
+                gustOfWind,
+                invisibility
+            };
+
+            spellData.DustDevil = dustDevil;
+            spellData.GustOfWind = gustOfWind;
+            spellData.Invisibility = invisibility;
+
+            ctx.AddRange(spells);
+            return spellData;
+        }
+        SpellData CreateLevel1Spells(ApplicationDbContext ctx, SpellData spellData)
+        {
+            Spell
+                charmPerson = new Spell
                 {
                     Campaign = _campaign,
                     AtHigherLevels = "<p>When you cast this spell using a spell slot of 2nd level or higher, you can target one additional creature for each slot level above 1st. The creatures must be within 30 feet of each other when you target them.</p>",
@@ -741,26 +771,7 @@ namespace Ganymede.Api.Data.Initializers
                     SpellDuration = _d1hour,
                     SpellSchool = _enchantment
                 },
-                new Spell
-                {
-                    Campaign = _campaign,
-                    CastingTime = _t1Action,
-                    Description = "<p>For the Duration, you sense the presence of magic within 30 feet of you. If you sense magic in this way, you can use your action to see a faint aura around any visible creature or object in the area that bears magic, and you learn its school of magic, if any.</p><p>The spell can penetrate most barriers, but is blocked by 1 foot of stone, 1 inch of Common metal, a thin sheet of lead, or 3 feet of wood or dirt.</p>",
-                    Level = 1,
-                    Name = "Detect Magic",
-                    Ritual = true,
-                    SpellComponents = _cVS,
-                    SpellDuration = _d10cminutes,
-                    SpellRange = new SpellRange
-                    {
-                        Amount = 30,
-                        Type = Constants.RangeType.Self,
-                        Shape = "sphere",
-                        Unit = "feet"
-                    },
-                    SpellSchool = _divination,
-                },
-                new Spell
+                featherFall = new Spell
                 {
                     Campaign = _campaign,
                     CastingTime = new CastingTime
@@ -780,7 +791,7 @@ namespace Ganymede.Api.Data.Initializers
                     SpellDuration = _d1minute,
                     SpellSchool = _transmutation
                 },
-                new Spell
+                mageArmor = new Spell
                 {
                     Campaign = _campaign,
                     CastingTime = _t1Action,
@@ -797,7 +808,7 @@ namespace Ganymede.Api.Data.Initializers
                     SpellDuration = _d8hours,
                     SpellSchool = _abjuration
                 },
-                new Spell
+                thunderwave = new Spell
                 {
                     Campaign = _campaign,
                     AtHigherLevels = "<p>When you cast this spell using a spell slot of 2nd level or higher, the damage increases by 1d8 for each slot level above 1st.</p>",
@@ -815,17 +826,43 @@ namespace Ganymede.Api.Data.Initializers
                     SpellComponents = _cVS,
                     SpellDuration = _dinst,
                     SpellSchool = _evocation
-                }
-            };
+                };
 
-            ctx.AddRange(spells);
-            return spells;
-        }
-        IEnumerable<Spell> CreateCantrips(ApplicationDbContext ctx)
-        {
             var spells = new List<Spell>
             {
                 new Spell
+                {
+                    Campaign = _campaign,
+                    CastingTime = _t1Action,
+                    Description = "<p>For the Duration, you sense the presence of magic within 30 feet of you. If you sense magic in this way, you can use your action to see a faint aura around any visible creature or object in the area that bears magic, and you learn its school of magic, if any.</p><p>The spell can penetrate most barriers, but is blocked by 1 foot of stone, 1 inch of Common metal, a thin sheet of lead, or 3 feet of wood or dirt.</p>",
+                    Level = 1,
+                    Name = "Detect Magic",
+                    Ritual = true,
+                    SpellComponents = _cVS,
+                    SpellDuration = _d10cminutes,
+                    SpellRange = new SpellRange
+                    {
+                        Amount = 30,
+                        Type = Constants.RangeType.Self,
+                        Shape = "sphere",
+                        Unit = "feet"
+                    },
+                    SpellSchool = _divination,
+                }
+            };
+
+            spellData.CharmPerson = charmPerson;
+            spellData.FeatherFall = featherFall;
+            spellData.MageArmor = mageArmor;
+            spellData.Thunderwave = thunderwave;
+
+            ctx.AddRange(spells);
+            return spellData;
+        }
+        SpellData CreateCantrips(ApplicationDbContext ctx, SpellData spellData)
+        {
+            Spell
+                gust = new Spell
                 {
                     Campaign = _campaign,
                     CastingTime = _t1Action,
@@ -835,9 +872,9 @@ namespace Ganymede.Api.Data.Initializers
                     SpellRange = _r30f,
                     SpellComponents = _cVS,
                     SpellDuration = _dinst,
-                     SpellSchool = _transmutation
+                    SpellSchool = _transmutation
                 },
-                new Spell
+                mageHand = new Spell
                 {
                     Campaign = _campaign,
                     CastingTime = _t1Action,
@@ -847,9 +884,9 @@ namespace Ganymede.Api.Data.Initializers
                     SpellRange = _r30f,
                     SpellComponents = _cVS,
                     SpellDuration = _d1minute,
-                     SpellSchool = _conjuration
+                    SpellSchool = _conjuration
                 },
-                new Spell
+                message = new Spell
                 {
                     Campaign = _campaign,
                     CastingTime = _t1Action,
@@ -861,12 +898,12 @@ namespace Ganymede.Api.Data.Initializers
                     {
                         Verbal = true,
                         Somatic = true,
-                        Material =  "A short piece of copper wire"
+                        Material = "A short piece of copper wire"
                     },
                     SpellDuration = _d1round,
                     SpellSchool = _transmutation
                 },
-                new Spell
+                prest = new Spell
                 {
                     Campaign = _campaign,
                     CastingTime = _t1Action,
@@ -883,7 +920,7 @@ namespace Ganymede.Api.Data.Initializers
                     },
                     SpellSchool = _transmutation
                 },
-                new Spell
+                rayOfFrost = new Spell
                 {
                     Campaign = _campaign,
                     AtHigherLevels = "<p>The spell's damage increases by 1d8 when you reach 5th level, and for every 6 levels beyond</p>",
@@ -896,7 +933,7 @@ namespace Ganymede.Api.Data.Initializers
                     SpellDuration = _dinst,
                     SpellSchool = _evocation
                 },
-                new Spell
+                shockingGrasp = new Spell
                 {
                     Campaign = _campaign,
                     AtHigherLevels = "<p>The spell's damage increases by 1d8 when you reach 5th level, and for every 6 levels beyond</p>",
@@ -908,11 +945,27 @@ namespace Ganymede.Api.Data.Initializers
                     SpellComponents = _cVS,
                     SpellDuration = _dinst,
                     SpellSchool = _evocation
-                }
+                };
+
+            var spells = new List<Spell>
+            {
+                gust,
+                mageHand,
+                message,
+                prest,
+                rayOfFrost,
+                shockingGrasp
             };
 
+            spellData.Gust = gust;
+            spellData.MageHand = mageHand;
+            spellData.Message = message;
+            spellData.Prestidigitation = prest;
+            spellData.RayOfFrost = rayOfFrost;
+            spellData.ShockingGrasp = shockingGrasp;
+
             ctx.AddRange(spells);
-            return spells;
+            return spellData;
         }
     }
 }

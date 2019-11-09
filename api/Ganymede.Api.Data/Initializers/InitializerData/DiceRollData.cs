@@ -2,7 +2,7 @@
 
 namespace Ganymede.Api.Data.Initializers.InitializerData
 {
-    internal class DiceRolls
+    internal class DiceRollData
     {
         public DiceRoll OneDFour { get; set; }
         public DiceRoll OneDSix { get; set; }

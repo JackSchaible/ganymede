@@ -12,14 +12,14 @@ namespace Ganymede.Api.Data.Initializers
             public const int ATShield = 3;
         }
 
-        public void Initialize(ApplicationDbContext ctx, out Armors armors)
+        public void Initialize(ApplicationDbContext ctx, out ArmorData armors)
         {
             armors = InitializeArmors(ctx);
         }
 
-        private Armors InitializeArmors(ApplicationDbContext ctx)
+        private ArmorData InitializeArmors(ApplicationDbContext ctx)
         {
-            var armors = new Armors
+            var armors = new ArmorData
             {
                 Padded = new Equipment.Armor
                 {

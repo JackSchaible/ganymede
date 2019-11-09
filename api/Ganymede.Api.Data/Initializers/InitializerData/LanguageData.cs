@@ -2,7 +2,7 @@
 
 namespace Ganymede.Api.Data.Initializers.InitializerData
 {
-    internal class Languages
+    internal class LanguageData
     {
         public Language Common { get; set; }
         public Language Dwarvish { get; set; }
