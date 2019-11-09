@@ -11,6 +11,6 @@ namespace Ganymede.Api.Data.Monsters.SpecialTraits.Spellcasting
         public MonsterSpellcasting Spellcasting { get; set; }
         public PlayerClass SpellcastingClass { get; set; }
         public int SpellcasterLevel { get; set; }
-        public virtual ICollection<SpellcasterSpells> PreparedSpells { get; set; }
+        public virtual ICollection<SpellcasterSpellsPerDay> PreparedSpells { get; set; }
     }
 }

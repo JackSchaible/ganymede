@@ -54,6 +54,7 @@ namespace Ganymede.Api.Data
         public DbSet<MonsterSpellcasting> MonsterSpellcastings { get; set; }
         public DbSet<Spellcaster> Spellcasters { get; set; }
         public DbSet<SpellcasterSpells> SpellcasterSpells { get; set; }
+        public DbSet<SpellcasterSpellsPerDay> SpellcasterSpellsPerDays { get; set; }
 
         public DbSet<Spell> Spells { get; set; }
         public DbSet<CastingTime> CastingTimes { get; set; }
@@ -83,6 +84,7 @@ namespace Ganymede.Api.Data
             ConfigureMonsterLanguages(builder);
             ConfigureMonsterSkills(builder);
             ConfigureMonsterInnateSpells(builder);
+            ConfigureMonsterSpellcasterSpells(builder);
             ConfigureMonsterEquipment(builder);
             ConfigureSpellcasterSpells(builder);
             ConfigureWeaponProperties(builder);
@@ -221,8 +223,43 @@ namespace Ganymede.Api.Data
                 .WithMany(s => s.InnateSpells)
                 .HasForeignKey(ins => ins.SpellID)
                 .OnDelete(DeleteBehavior.Restrict);
+            builder.Entity<Spell>()
+                .HasMany(s => s.InnateSpells)
+                .WithOne(ins => ins.Spell)
+                .OnDelete(DeleteBehavior.Restrict);
+        }
 
-            
+        private void ConfigureSpellcasterSpells(ModelBuilder builder)
+        {
+            builder.Entity<SpellcasterSpellsPerDay>()
+                .HasIndex(sspd => new { sspd.NumberPerDay, sspd.SpellcastingID })
+                .IsUnique();
+
+            //TODO: Configure spell-spellcaster relationship, add spells to spells initalizer data, add spells to monster Aerisi
+            builder.Entity<SpellcasterSpellsPerDay>()
+                .HasOne(sspd => sspd.Spellcaster)
+                .WithMany(sc => sc.PreparedSpells)
+                .HasForeignKey(sspd => sspd.SpellcastingID)
+                .OnDelete(DeleteBehavior.Restrict);
+            builder.Entity<SpellcasterSpellsPerDay>()
+                .HasMany(sspd => sspd.Spells)
+                .WithOne(s => s.Spellcaster)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            builder.Entity<InnateSpell>()
+                .HasKey(ins => new { ins.SpellID, ins.InnateSpellcastingSpellsPerDayID });
+            builder.Entity<InnateSpell>()
+                .HasOne(ins => ins.SpellcastingSpellsPerDay)
+                .WithMany(sspd => sspd.Spells)
+                .HasForeignKey(ins => ins.InnateSpellcastingSpellsPerDayID)
+                .OnDelete(DeleteBehavior.Restrict);
+            builder.Entity<InnateSpell>()
+                .HasOne(ins => ins.Spell)
+                .WithMany(s => s.InnateSpells)
+                .HasForeignKey(ins => ins.SpellID)
+                .OnDelete(DeleteBehavior.Restrict);
+
+
             builder.Entity<Spell>()
                 .HasMany(s => s.InnateSpells)
                 .WithOne(ins => ins.Spell)

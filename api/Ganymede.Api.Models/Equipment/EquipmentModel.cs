@@ -5,7 +5,7 @@
         public int ID { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
-        public int Price { get; set; }
-        public int Weight { get; set; }
+        public decimal PriceInGold { get; set; }
+        public decimal WeightInPounds { get; set; }
     }
 }

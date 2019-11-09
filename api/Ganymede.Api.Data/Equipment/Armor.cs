@@ -10,6 +10,7 @@ namespace Ganymede.Api.Data.Equipment
         public int ID { get; set; }
         public Equipment Equipment { get; set; }
 
+        public int ArmorType { get; set; }
         public int AC { get; set; }
         public int StrengthRequirement { get; set; }
         public bool StealthDisadvantage { get; set; }
