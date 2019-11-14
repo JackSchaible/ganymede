@@ -15,6 +15,13 @@ namespace Ganymede.Api.Data.Initializers
     {
         private static class Constants
         {
+            public const int AStr = 0;
+            public const int ADex = 1;
+            public const int ACon = 2;
+            public const int AInt = 3;
+            public const int AWis = 4;
+            public const int ACha = 5;
+
             public const int DTAcid = 0;
             public const int DTBludgeoning = 1;
             public const int DTCold = 2;
@@ -54,7 +61,14 @@ namespace Ganymede.Api.Data.Initializers
             public const int SCTInnate = 0;
             public const int SCTSpellcaster = 1;
 
+            public const int TCreature = 0;
+            public const int TTarget = 1;
+
+            public const int AMelee = 0;
+            public const int ARanged = 1;
+
             public static Tag TElf;
+            public static Tag THuman;
         }
         public void Initialize(ApplicationDbContext ctx, Campaign pota, AlignmentData alignments,
             DiceRollData diceRolls, ArmorData armors, LanguageData languages, SkillData skills,
@@ -193,10 +207,12 @@ namespace Ganymede.Api.Data.Initializers
         private void CreateMonsterTags(ApplicationDbContext ctx)
         {
             Constants.TElf = new Tag { Name = "Elf" };
+            Constants.THuman = new Tag { Name = "Human" };
 
             ctx.Tags.AddRange
             (
-                Constants.TElf
+                Constants.TElf,
+                Constants.THuman
             );
         }
 
@@ -206,7 +222,8 @@ namespace Ganymede.Api.Data.Initializers
         {
             return new List<Monster>
             {
-                CreateAerisi(ctx, alignments, diceRolls, pota, languages, skills, classes.Wizard, spells)
+                CreateAerisi(ctx, alignments, diceRolls, pota, languages, skills, classes.Wizard, spells),
+                CreateThurl(ctx, alignments, diceRolls, pota, languages, skills, classes.Sorcerer, spells, armors)
             };
         }
         private Monster CreateAerisi(ApplicationDbContext ctx, AlignmentData a, DiceRollData dr,
@@ -301,7 +318,7 @@ namespace Ganymede.Api.Data.Initializers
                 SpellsPerDay = new int[9] { 4, 3, 3, 3, 2, 1, 0, 0, 0 },
                 Spellcasting = new Monsters.SpecialTraits.Spellcasting.MonsterSpellcasting
                 {
-                    SpellcastingAbility = "Intelligence",
+                    SpellcastingAbility = Constants.AInt,
                     SpellcastingType = Constants.SCTSpellcaster,
                 }
             };
@@ -325,7 +342,6 @@ namespace Ganymede.Api.Data.Initializers
                         Description = "If Aerisi fails a saving throw, she can choose to succeed instead."
                     }
                 },
-                //TODO: Do we need to save the Spellcaster object seperately?
                 SpellcastingModel = spells.Spellcasting
             };
 
@@ -502,6 +518,239 @@ namespace Ganymede.Api.Data.Initializers
             );
 
             return aerisi;
+        }
+        private Monster CreateThurl(ApplicationDbContext ctx, AlignmentData a, DiceRollData dr,
+            Campaign pota, LanguageData languages, SkillData skills, PlayerClass sorcerer,
+            SpellData sd, ArmorData ad)
+        {
+            var abilityScores = new AbilityScores
+            {
+                Strength = 16,
+                Dexterity = 14,
+                Constitution = 14,
+                Intelligence = 11,
+                Wisdom = 10,
+                Charisma = 15
+            };
+
+            var greatswordAttack = new Attack
+            {
+                Action = new Action
+                {
+                    Name = "Greatsword"
+                },
+                Type = Constants.AMelee,
+                Target = Constants.TTarget,
+                HitEffects = new List<HitEffect>
+                {
+                    new HitEffect
+                    {
+                        Damage = dr.TwoDSix,
+                        DamageType = Constants.DTSlashing,
+                    }
+                }
+            };
+
+            var lanceAttack = new Attack
+            {
+                Action = new Action
+                {
+                    Name = "Lance"
+                },
+                Type = Constants.AMelee,
+                HitEffects = new List<HitEffect>
+                {
+                    new HitEffect
+                    {
+                        Damage = dr.OneDTwelve,
+                        DamageType = Constants.DTPiercing
+                    }
+                },
+                Range = 10,
+                Target = Constants.TTarget
+            };
+
+            var actionSet = new ActionsSet
+            {
+                Actions = new List<Action>
+                {
+                    greatswordAttack.Action,
+                    lanceAttack.Action
+                },
+                Multiattack = "Thurl makes two melee attacks.",
+                Reactions = new List<Action>
+                {
+                    new Action
+                    {
+                        Name = "Parry",
+                        Description = "Thurl adds 2 to his AC against one melee attack that would hit him. To do so, Thurl must see the attacker and be wielding a melee weapon."
+                    }
+                }
+            };
+            var ac = new ArmorClass
+            {
+            };
+            var mv = new MonsterMovement
+            {
+                Ground = 30
+            };
+            var basicStats = new BasicStatsSet
+            {
+                AC = ac,
+                HPDice = dr.ElevenDEight,
+                Movement = mv
+            };
+            var optional = new OptionalStatsSet
+            {
+                Languages = new Monsters.OptionalStats.Languages.MonsterLanguageSet { },
+            };
+            var spells = new Monsters.SpecialTraits.Spellcasting.Spellcaster
+            {
+                SpellcasterLevel = 5,
+                SpellcastingClass = sorcerer,
+                SpellsPerDay = new int[9] { 4, 3, 2, 0, 0, 0, 0, 0, 0 },
+                Spellcasting = new Monsters.SpecialTraits.Spellcasting.MonsterSpellcasting
+                {
+                    SpellcastingAbility = Constants.ACha,
+                    SpellcastingType = Constants.SCTSpellcaster,
+                }
+            };
+            var traits = new SpecialTraitSet
+            {
+                SpellcastingModel = spells.Spellcasting
+            };
+
+            var thurl = new Monster
+            {
+                AbilityScores = abilityScores,
+                ActionSet = actionSet,
+                Alignment = a.LawfulEvil,
+                BasicStats = basicStats,
+                Campaign = pota,
+                Name = "Thurl Merosska",
+                Type = Constants.MTHumanoid,
+                OptionalStats = optional,
+                Size = Constants.SMedium,
+                SpecialTraitSet = traits,
+            };
+
+            ctx.Monsters.Add(thurl);
+
+            ctx.MonsterLanguages.AddRange
+            (
+                new Monsters.OptionalStats.Languages.MonsterLanguage
+                {
+                    Language = languages.Auran,
+                    MonsterLanguageSet = optional.Languages
+                },
+                new Monsters.OptionalStats.Languages.MonsterLanguage
+                {
+                    Language = languages.Common,
+                    MonsterLanguageSet = optional.Languages
+                }
+            );
+
+            ctx.MonsterSkillSets.AddRange
+            (
+                new MonsterSkillSet
+                {
+                    OptionalStats = optional,
+                    Skill = skills.AnimalHandling
+                },
+                new MonsterSkillSet
+                {
+                    OptionalStats = optional,
+                    Skill = skills.Athletics
+                },
+                new MonsterSkillSet
+                {
+                    OptionalStats = optional,
+                    Skill = skills.Deception
+                },
+                new MonsterSkillSet
+                {
+                    OptionalStats = optional,
+                    Skill = skills.Persuasion
+                }
+            );
+
+            ctx.SpellcasterSpells.AddRange
+            (
+                new Monsters.SpecialTraits.Spellcasting.SpellcasterSpells
+                {
+                    Spellcaster = spells,
+                    Spell = sd.Haste
+                },
+
+                new Monsters.SpecialTraits.Spellcasting.SpellcasterSpells
+                {
+                    Spellcaster = spells,
+                    Spell = sd.MistyStep
+                },
+                new Monsters.SpecialTraits.Spellcasting.SpellcasterSpells
+                {
+                    Spellcaster = spells,
+                    Spell = sd.Levitate
+                },
+                
+                new Monsters.SpecialTraits.Spellcasting.SpellcasterSpells
+                {
+                    Spellcaster = spells,
+                    Spell = sd.ExpeditiousRetreat
+                },
+                new Monsters.SpecialTraits.Spellcasting.SpellcasterSpells
+                {
+                    Spellcaster = spells,
+                    Spell = sd.FeatherFall
+                },
+                new Monsters.SpecialTraits.Spellcasting.SpellcasterSpells
+                {
+                    Spellcaster = spells,
+                    Spell = sd.Jump
+                },
+
+                new Monsters.SpecialTraits.Spellcasting.SpellcasterSpells
+                {
+                    Spellcaster = spells,
+                    Spell = sd.Friends
+                },
+                new Monsters.SpecialTraits.Spellcasting.SpellcasterSpells
+                {
+                    Spellcaster = spells,
+                    Spell = sd.Gust
+                },
+                new Monsters.SpecialTraits.Spellcasting.SpellcasterSpells
+                {
+                    Spellcaster = spells,
+                    Spell = sd.Light
+                },
+                new Monsters.SpecialTraits.Spellcasting.SpellcasterSpells
+                {
+                    Spellcaster = spells,
+                    Spell = sd.Message
+                },
+                new Monsters.SpecialTraits.Spellcasting.SpellcasterSpells
+                {
+                    Spellcaster = spells,
+                    Spell = sd.RayOfFrost
+                });
+
+            ctx.MonsterTags.Add
+            (
+                new MonsterTag
+                {
+                    Monster = thurl,
+                    Tag = Constants.THuman
+                }
+            );
+
+            ctx.ArmorClassArmors.Add(new ArmorClassArmor
+            {
+                ArmorClass = ac,
+                Armor = ad.Breastplate
+            });
+
+            return thurl;
         }
 
         private List<Monster> CreatePathfinderMonsters()

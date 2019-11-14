@@ -16,6 +16,7 @@ namespace Ganymede.Api.Data.Initializers
                 public const int Action = 0;
                 public const int Reaction = 1;
                 public const int Time = 2;
+                public const int BonusAction = 3;
             }
 
             public static class DurationType
@@ -38,14 +39,15 @@ namespace Ganymede.Api.Data.Initializers
         }
 
         #region DB IDs for reusable times, durations, etc.
-        private CastingTime _t1Action, _t1Hour;
+        private CastingTime _t1Action, _t1Hour, _t1Bonus;
         private SpellRange
             _r10f,
             _r30f,
             _r60f,
             _r120f,
             _r150f,
-            _rtouch;
+            _rtouch,
+            _rself;
         private SpellDuration
             _d1round,
             _d1minute,
@@ -55,10 +57,10 @@ namespace Ganymede.Api.Data.Initializers
             _d1chour,
             _d8hours,
             _dinst,
-            //dUT,
+            _dUT,
             _dUD,
             _dUTD;
-        private SpellComponents _cVS;
+        private SpellComponents _cVS, _cV;
         private SpellSchool
             _abjuration,
             _conjuration,
@@ -106,6 +108,7 @@ namespace Ganymede.Api.Data.Initializers
             var times = CreateDandDCastingTimes(ctx);
             _t1Action = times[0];
             _t1Hour = times[1];
+            _t1Bonus = times[2];
 
             var ranges = CreateDandDRanges(ctx);
             _r10f = ranges[0];
@@ -114,6 +117,7 @@ namespace Ganymede.Api.Data.Initializers
             _r120f = ranges[3];
             _r150f = ranges[4];
             _rtouch = ranges[5];
+            _rself = ranges[6];
 
             var durations = CreateDandDDurations(ctx);
             _d1round = durations[0];
@@ -125,11 +129,12 @@ namespace Ganymede.Api.Data.Initializers
             _d8hours = durations[6];
             _dinst = durations[7];
             _dUD = durations[8];
-            //dUT = durations[9];
+            dUT = durations[9];
             _dUTD = durations[10];
 
             var components = CreateDnDSpellComponents(ctx);
             _cVS = components[0];
+            _cV = components[1];
             _campaign = campaign;
         }
 
@@ -196,6 +201,10 @@ namespace Ganymede.Api.Data.Initializers
                     Amount = 1,
                     Unit = "hour",
                     Type = Constants.CastingTimeType.Time
+                },
+                new CastingTime
+                {
+                    Type = Constants.CastingTimeType.BonusAction
                 }
             };
             ctx.CastingTimes.AddRange(times);
@@ -240,6 +249,10 @@ namespace Ganymede.Api.Data.Initializers
                 new SpellRange
                 {
                     Type = Constants.RangeType.Touch
+                },
+                new SpellRange
+                {
+                    Type = Constants.RangeType.Self
                 }
             };
             ctx.SpellRanges.AddRange(ranges);
@@ -330,7 +343,10 @@ namespace Ganymede.Api.Data.Initializers
                 {
                     Verbal = true,
                     Somatic = true,
-                    Material = null
+                },
+                new SpellComponents
+                {
+                    Verbal = true
                 }
             };
             ctx.SpellComponents.AddRange(spellComponents);
@@ -602,6 +618,23 @@ namespace Ganymede.Api.Data.Initializers
                     SpellDuration = _d1chour,
                     SpellSchool = _transmutation
                 },
+                haste = new Spell
+                { 
+                    Campaign = _campaign,
+                    CastingTime = _t1Action,
+                    Description = "<p>Choose a willing creature that you can see within range. Until the spell ends, the target's speed is doubled, it gains a + 2 bonus to AC, it has advantage on Dexterity saving throws, and it gains an additional action on each of its turns. That action can be used only to take the Attack(one weapon attack only), Dash, Disengage, Hide, or Use an Object action.</p><p>When the spell ends, the target can't move or take actions until after its next turn, as a wave of lethargy sweeps over it.</p>",
+                    Level = 3,
+                    Name = "Haste",
+                    SpellComponents = new SpellComponents
+                    {
+                        Verbal = true,
+                        Somatic = true,
+                        Material = "a shaving of licorice root"
+                    },
+                    SpellDuration = _d1cminute,
+                    SpellRange = _r30f,
+                    SpellSchool = _transmutation
+                },
                 lightningBolt = new Spell
                 {
                     Campaign = _campaign,
@@ -673,6 +706,7 @@ namespace Ganymede.Api.Data.Initializers
 
             spellData.Fly = fly;
             spellData.GaseousForm = gasouesForm;
+            spellData.Haste = haste;
             spellData.LightningBolt = lightningBolt;
 
             ctx.AddRange(spells);
@@ -739,18 +773,51 @@ namespace Ganymede.Api.Data.Initializers
                     },
                     SpellDuration = _d1chour,
                     SpellSchool = _illusion
+                },
+                levitate = new Spell
+                {
+                    Campaign = _campaign,
+                    CastingTime = _t1Action,
+                    Description = "<p>One creature or object of your choice that you can see within range rises vertically, up to 20 feet, and remains suspended there for the duration. The spell can levitate a target that weighs up to 500 pounds. An unwilling creature that succeeds on a Constitution saving throw is unaffected.</p><p>The target can move only by pushing or pulling against a fixed objeet or surface within reach (such as a wall or a ceiling), which allows it to move as if it were climbing. You can change the target's altitude by up to 20 feet in either dircetion on your turn. If you are the target, you can move up or down as part of your move. Otherwise, you can use your action to move the target, which must remain within the spell's range.</p><p>When the spell ends, the target floats gently to the ground if it is still aloft.</p>",
+                    Level = 2,
+                    Name = "Levitate",
+                    SpellComponents = new SpellComponents
+                    {
+                        Verbal = true,
+                        Somatic = true,
+                        Material = "either a small leather loop or a piece of golden wire bent into a cup shape with a long shank on one end"
+                    },
+                    SpellDuration = _d10cminutes,
+                    SpellRange = _r60f,
+                    SpellSchool = _transmutation
+                },
+                mistyStep = new Spell
+                {
+                    Campaign = _campaign,
+                    CastingTime = _t1Bonus,
+                    Description = "<p>Briefly surrounded by silvery mist, you teleport up to 30 feet to an unoccupied space that you can see.</p>",
+                    Level = 2,
+                    Name = "Misty Step",
+                    SpellComponents = _cV,
+                    SpellDuration = _dinst,
+                    SpellRange = _rself,
+                    SpellSchool = _conjuration
                 };
 
             var spells = new List<Spell>
             {
                 dustDevil,
                 gustOfWind,
-                invisibility
+                invisibility,
+                levitate,
+                mistyStep
             };
 
             spellData.DustDevil = dustDevil;
             spellData.GustOfWind = gustOfWind;
             spellData.Invisibility = invisibility;
+            spellData.Levitate = levitate;
+            spellData.MistyStep = mistyStep;
 
             ctx.AddRange(spells);
             return spellData;
@@ -771,6 +838,18 @@ namespace Ganymede.Api.Data.Initializers
                     SpellDuration = _d1hour,
                     SpellSchool = _enchantment
                 },
+                expeditiousRetreat = new Spell
+                {
+                    Campaign = _campaign,
+                    CastingTime = _t1Bonus,
+                    Description = "<p>This spell allows you to move at an incredible pace. When you cast this spell, and then as a bonus action on each of your turns unlil the spell ends, you can take the Dash action.</p>",
+                    Level = 1,
+                    Name = "Expeditious Retreat",
+                    SpellComponents = _cVS,
+                    SpellDuration = _d10cminutes,
+                    SpellRange = _rself,
+                    SpellSchool = _transmutation
+                },
                 featherFall = new Spell
                 {
                     Campaign = _campaign,
@@ -789,6 +868,23 @@ namespace Ganymede.Api.Data.Initializers
                         Material = "A small feather or piece of down"
                     },
                     SpellDuration = _d1minute,
+                    SpellSchool = _transmutation
+                },
+                jump = new Spell
+                {
+                    Campaign = _campaign,
+                    CastingTime = _t1Action,
+                    Description = "You touch a creature. The creature's jump distance is tripled until the spell ends.",
+                    Level = 1,
+                    Name = "Jump",
+                    SpellComponents = new SpellComponents
+                    {
+                        Verbal = true,
+                        Somatic = true,
+                        Material = "A grasshopper's hind leg"
+                    },
+                    SpellDuration = _d1minute,
+                    SpellRange = _rtouch,
                     SpellSchool = _transmutation
                 },
                 mageArmor = new Spell
@@ -852,7 +948,9 @@ namespace Ganymede.Api.Data.Initializers
             };
 
             spellData.CharmPerson = charmPerson;
+            spellData.ExpeditiousRetreat = expeditiousRetreat;
             spellData.FeatherFall = featherFall;
+            spellData.Jump = jump;
             spellData.MageArmor = mageArmor;
             spellData.Thunderwave = thunderwave;
 
@@ -862,6 +960,22 @@ namespace Ganymede.Api.Data.Initializers
         SpellData CreateCantrips(ApplicationDbContext ctx, SpellData spellData)
         {
             Spell
+                friends = new Spell
+                {
+                    Campaign = _campaign,
+                    CastingTime = _t1Action,
+                    Description = "<p>For the duration, you have advantage on all Charisma checks directed at one creature of your choice that isn't hostile toward you. When the spell ends, the creature realizes that you used magic to influence its mood and becomes hostile toward you. A creature prone to violence might attack you. Another creature might seek retribution in other ways (at the DM's discretion), depending on the nature of your interaction with it.</p>",
+                    Level = 0,
+                    Name = "Friends",
+                    SpellRange = _rself,
+                    SpellComponents = new SpellComponents
+                    {
+                        Somatic = true,
+                        Material = "A small amount of makeup appled to the face as this spell is cast"
+                    },
+                    SpellDuration = _d1cminute,
+                    SpellSchool = _enchantment
+                },
                 gust = new Spell
                 {
                     Campaign = _campaign,
@@ -873,6 +987,21 @@ namespace Ganymede.Api.Data.Initializers
                     SpellComponents = _cVS,
                     SpellDuration = _dinst,
                     SpellSchool = _transmutation
+                },
+                light = new Spell
+                {
+                    Campaign = _campaign,
+                    CastingTime = _t1Action,
+                    Description = "<p>You touch one objeet that is no larger than lO feet in any dimension. Until the spell ends, the object sheds bright light in a 20-foot radius and dim light for an additional 20 feet. The light can be colored as you like. Completely covering the object with something opaque blocks the light. The spell ends if you cast it again or dismiss it as an action.</p><p>If you target an object held or worn by a hostile creature, that creature must succeed on a Dexterity saving throw to avoid the spell.</p>",
+                    Level = 0,
+                    SpellComponents = new SpellComponents
+                    {
+                        Verbal = true,
+                        Material = "a firefly or phosphorescent moss"
+                    },
+                    SpellDuration = _d1hour,
+                    SpellRange = _rtouch,
+                    SpellSchool = _evocation
                 },
                 mageHand = new Spell
                 {
@@ -949,7 +1078,9 @@ namespace Ganymede.Api.Data.Initializers
 
             var spells = new List<Spell>
             {
+                friends,
                 gust,
+                light,
                 mageHand,
                 message,
                 prest,
@@ -957,7 +1088,9 @@ namespace Ganymede.Api.Data.Initializers
                 shockingGrasp
             };
 
+            spellData.Friends = friends;
             spellData.Gust = gust;
+            spellData.Light = light;
             spellData.MageHand = mageHand;
             spellData.Message = message;
             spellData.Prestidigitation = prest;

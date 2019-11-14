@@ -1,6 +1,6 @@
 export class CastingTime {
 	public id: number;
-	public type: "Action" | "Reaction" | "Time";
+	public type: "Action" | "Reaction" | "Time" | "Bonus Action";
 	public amount: number;
 	public unit: string;
 	public reactionCondition: string;

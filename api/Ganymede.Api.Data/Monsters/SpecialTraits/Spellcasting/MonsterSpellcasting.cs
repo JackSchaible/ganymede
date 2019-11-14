@@ -4,7 +4,7 @@
     {
         public int ID { get; set; }
         public bool Psionic { get; set; }
-        public string SpellcastingAbility { get; set; }
+        public int SpellcastingAbility { get; set; }
         public int SpellcastingType { get; set; }
     }
 }

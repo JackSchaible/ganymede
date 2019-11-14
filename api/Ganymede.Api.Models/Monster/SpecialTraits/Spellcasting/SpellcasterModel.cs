@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using Ganymede.Api.Data.Monsters.SpecialTraits.Spellcasting;
-using Ganymede.Api.Data.Spells;
 using Ganymede.Api.Models.Characters;
 using Ganymede.Api.Models.Spells;
 using System.Collections.Generic;

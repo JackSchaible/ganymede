@@ -6,7 +6,8 @@
         {
             Action,
             Reaction,
-            Time
+            Time,
+            BonusAction
         }
 
         public enum DurationType

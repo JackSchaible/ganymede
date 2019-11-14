@@ -40,6 +40,7 @@ namespace Ganymede.Api.Data.Initializers
                 OneDTwelve = ctx.DiceRolls.Single(dr => dr.Number == 1 && dr.Sides == 12),
                 OneDTwenty = ctx.DiceRolls.Single(dr => dr.Number == 1 && dr.Sides == 20),
                 TwoDSix = ctx.DiceRolls.Single(dr => dr.Number == 2 && dr.Sides == 6),
+                ElevenDEight = ctx.DiceRolls.Single(dr => dr.Number == 11 && dr.Sides == 8),
                 TwelveDEight = ctx.DiceRolls.Single(dr => dr.Number == 12 && dr.Sides == 8),
             };
 
@@ -173,6 +174,11 @@ namespace Ganymede.Api.Data.Initializers
                 {
                     Number = 2,
                     Sides = 6
+                },
+                ElevenDEight = new DiceRoll
+                {
+                    Number = 11,
+                    Sides = 8
                 },
                 TwelveDEight = new DiceRoll
                 {

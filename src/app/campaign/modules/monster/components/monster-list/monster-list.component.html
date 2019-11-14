@@ -24,19 +24,19 @@
 <mat-accordion #accordion>
 	<mat-expansion-panel *ngFor="let monster of monsters$ | async; let i = index" (opened)="selectedItem=i">
 		<mat-expansion-panel-header>
-			<mat-panel-title>{{ spell?.name }}</mat-panel-title>
+			<mat-panel-title>{{ monster?.name }}</mat-panel-title>
 			<mat-panel-description>
 				<em>
-					<ng-container *ngIf="spell?.level > 0">
+					<!-- <ng-container *ngIf="spell?.level > 0">
 						{{ spell?.level }}{{ words.getSuffix(spell?.level) }}-level
 					</ng-container>
 					{{spell?.spellSchool?.name}}
-					<ng-container *ngIf="spell?.level === 0">cantrip</ng-container>
+					<ng-container *ngIf="spell?.level === 0">cantrip</ng-container> -->
 				</em>
 			</mat-panel-description>
 		</mat-expansion-panel-header>
 
-		<div class="u-flex u-flex__wrap">
+		<!-- <div class="u-flex u-flex__wrap">
 			<div class="col-6 mt-3">
 				<gm-casting-time [castingTime]="spell?.castingTime"></gm-casting-time>
 			</div>
@@ -56,7 +56,7 @@
 
 		<p class="mt-3" *ngIf="spell.description" [innerHTML]="spell?.description"></p>
 
-		<p>Monsters with this Spell: {{ spell?.monsterSpells?.length }}</p>
+		<p>Monsters with this Spell: {{ spell?.monsterSpells?.length }}</p> -->
 
 		<mat-action-row>
 			<div class="u-flex u-flex__column u-flex__align-items--center mr-3">

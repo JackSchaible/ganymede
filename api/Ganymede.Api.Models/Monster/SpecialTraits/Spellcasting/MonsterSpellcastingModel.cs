@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Ganymede.Api.Data.Monsters.SpecialTraits.Spellcasting;
+using static Ganymede.Api.Models.Common.CommonEnums;
 
 namespace Ganymede.Api.Models.Monster.SpecialTraits.Spellcasting
 {
@@ -7,7 +8,7 @@ namespace Ganymede.Api.Models.Monster.SpecialTraits.Spellcasting
     {
         public int ID { get; set; }
         public bool Psionic { get; set; }
-        public string SpellcastingAbility { get; set; }
+        public Abilities SpellcastingAbility { get; set; }
         public SpellcastingEnums.SpellcastingTypes SpellcastingType { get; set; }
     }
 
