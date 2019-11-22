@@ -14,14 +14,11 @@ namespace Ganymede.Api.Data.Monsters
         public int Size { get; set; }
 
         public virtual ICollection<MonsterTag> Tags { get; set; }
+        public virtual ICollection<MonsterAlignment> Alignments { get; set; }
 
         public int MonsterTypeID { get; set; }
         [ForeignKey(nameof(MonsterTypeID))]
         public MonsterType Type { get; set; }
-
-        public int AlignmentID { get; set; }
-        [ForeignKey(nameof(AlignmentID))]
-        public Alignment Alignment { get; set; }
 
         public int BasicStatsID { get; set; }
         [ForeignKey(nameof(BasicStatsID))]

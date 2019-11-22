@@ -7,6 +7,7 @@ namespace Ganymede.Api.Data.Monsters.OptionalStats.Languages
         public int ID { get; set; }
         public int TelepathyRange { get; set; }
         public int AnyFreeLanguages { get; set; }
+        public string Special { get; set; }
 
         public virtual ICollection<MonsterLanguage> Languages { get; set; }
     }

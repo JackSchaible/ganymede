@@ -25,5 +25,7 @@ namespace Ganymede.Api.Data.Monsters.OptionalStats
         public int MonsterLanguageSetID { get; set; }
         [ForeignKey(nameof(MonsterLanguageSetID))]
         public MonsterLanguageSet Languages { get; set; }
+
+        public int CRAdjustment { get; set; }
     }
 }

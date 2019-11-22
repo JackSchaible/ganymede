@@ -11,7 +11,11 @@ namespace Ganymede.Api.Data.Initializers.InitializerData
         public DiceRoll OneDTwelve { get; set; }
         public DiceRoll OneDTwenty { get; set; }
         public DiceRoll TwoDSix { get; set; }
+        public DiceRoll TwoDEight { get; set; }
+        public DiceRoll FourDSix { get; set; }
         public DiceRoll ElevenDEight { get; set; }
         public DiceRoll TwelveDEight { get; set; }
+        public DiceRoll FifteenDTwelve { get; set; }
+        public DiceRoll NinteenDTen { get; set; }
     }
 }

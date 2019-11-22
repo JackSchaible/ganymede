@@ -129,7 +129,7 @@ namespace Ganymede.Api.Data.Initializers
             _d8hours = durations[6];
             _dinst = durations[7];
             _dUD = durations[8];
-            dUT = durations[9];
+            _dUT = durations[9];
             _dUTD = durations[10];
 
             var components = CreateDnDSpellComponents(ctx);

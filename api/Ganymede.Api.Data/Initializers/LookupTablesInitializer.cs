@@ -40,8 +40,12 @@ namespace Ganymede.Api.Data.Initializers
                 OneDTwelve = ctx.DiceRolls.Single(dr => dr.Number == 1 && dr.Sides == 12),
                 OneDTwenty = ctx.DiceRolls.Single(dr => dr.Number == 1 && dr.Sides == 20),
                 TwoDSix = ctx.DiceRolls.Single(dr => dr.Number == 2 && dr.Sides == 6),
+                TwoDEight = ctx.DiceRolls.Single(dr => dr.Number == 2 && dr.Sides == 8),
+                FourDSix = ctx.DiceRolls.Single(dr => dr.Number == 4 && dr.Sides == 6),
                 ElevenDEight = ctx.DiceRolls.Single(dr => dr.Number == 11 && dr.Sides == 8),
                 TwelveDEight = ctx.DiceRolls.Single(dr => dr.Number == 12 && dr.Sides == 8),
+                FifteenDTwelve = ctx.DiceRolls.Single(dr => dr.Number == 15 && dr.Sides == 12),
+                NinteenDTen = ctx.DiceRolls.Single(dr => dr.Number == 19 && dr.Sides == 10),
             };
 
             languages = new LanguageData
@@ -175,6 +179,16 @@ namespace Ganymede.Api.Data.Initializers
                     Number = 2,
                     Sides = 6
                 },
+                TwoDEight = new DiceRoll
+                {
+                    Number = 2,
+                    Sides = 8
+                },
+                FourDSix = new DiceRoll
+                {
+                    Number = 4,
+                    Sides = 6
+                },
                 ElevenDEight = new DiceRoll
                 {
                     Number = 11,
@@ -184,6 +198,16 @@ namespace Ganymede.Api.Data.Initializers
                 {
                     Number = 12,
                     Sides = 8
+                },
+                FifteenDTwelve = new DiceRoll
+                {
+                    Number = 15,
+                    Sides = 12
+                },
+                NinteenDTen = new DiceRoll
+                {
+                    Number = 19,
+                    Sides = 10
                 }
             };
             languages = new LanguageData
@@ -350,79 +374,6 @@ namespace Ganymede.Api.Data.Initializers
                     Name = "Survival"
                 }
             };
-
-            ctx.Alignments.AddRange
-            (
-                alignments.LawfulGood,
-                alignments.LawfulNeutral,
-                alignments.LawfulEvil,
-                alignments.NeutralGood,
-                alignments.Neutral,
-                alignments.NeutralEvil,
-                alignments.ChaoticGood,
-                alignments.ChaoticNeutral,
-                alignments.ChaoticEvil
-            );
-
-            ctx.DiceRolls.AddRange
-            (
-                diceRolls.OneDFour,
-                diceRolls.OneDSix,
-                diceRolls.OneDEight,
-                diceRolls.OneDTen,
-                diceRolls.OneDTwelve,
-                diceRolls.OneDTwenty,
-                diceRolls.TwoDSix,
-                diceRolls.TwelveDEight
-            );
-
-            ctx.Languages.AddRange
-            (
-                languages.Abyssal,
-                languages.Auran,
-                languages.Celestial,
-                languages.Common,
-                languages.DeepSpeech,
-                languages.Draconic,
-                languages.Dwarvish,
-                languages.Elvish,
-                languages.Giant,
-                languages.Gnomish,
-                languages.Goblin,
-                languages.Halfling,
-                languages.Orc,
-                languages.Abyssal,
-                languages.Auran,
-                languages.Celestial,
-                languages.Draconic,
-                languages.DeepSpeech,
-                languages.Infernal,
-                languages.Primordial,
-                languages.Sylvan,
-                languages.Undercommon
-            );
-
-            ctx.Skills.AddRange
-            (
-                skills.Acrobatics,
-                skills.AnimalHandling,
-                skills.Arcana,
-                skills.Athletics,
-                skills.Deception,
-                skills.History,
-                skills.Insight,
-                skills.Intimidation,
-                skills.Investigation,
-                skills.Medicine,
-                skills.Nature,
-                skills.Perception,
-                skills.Performance,
-                skills.Persuasion,
-                skills.Religion,
-                skills.SleightOfHand,
-                skills.Stealth,
-                skills.Survival
-            );
         }
     }
 }

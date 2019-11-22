@@ -40,6 +40,7 @@ namespace Ganymede.Api.Data
 
         public DbSet<Monster> Monsters { get; set; }
         public DbSet<MonsterTag> MonsterTags { get; set; }
+        public DbSet<MonsterAlignment> MonsterAlignments { get; set; }
         public DbSet<MonsterType> MonsterTypes { get; set; }
         public DbSet<Alignment> Alignments { get; set; }
 
@@ -94,6 +95,7 @@ namespace Ganymede.Api.Data
                 .IsUnique();
 
             ConfigureMonsterTags(builder);
+            ConfigureMonsterAlignments(builder);
             ConfigureArmorClassArmors(builder);
             ConfigureMonsterLanguages(builder);
             ConfigureMonsterSkills(builder);
@@ -133,6 +135,30 @@ namespace Ganymede.Api.Data
             builder.Entity<Tag>()
                 .HasMany(t => t.MonsterTags)
                 .WithOne(mt => mt.Tag)
+                .OnDelete(DeleteBehavior.Restrict);
+        }
+
+        private void ConfigureMonsterAlignments(ModelBuilder builder)
+        {
+            builder.Entity<MonsterAlignment>()
+                .HasKey(ma => new { ma.MonsterID, ma.AlignmentID });
+            builder.Entity<MonsterAlignment>()
+                .HasOne(ma => ma.Monster)
+                .WithMany(m => m.Alignments)
+                .HasForeignKey(ma => ma.MonsterID)
+                .OnDelete(DeleteBehavior.Restrict);
+            builder.Entity<MonsterAlignment>()
+                .HasOne(ma => ma.Alignment)
+                .WithMany(a => a.Monsters)
+                .HasForeignKey(ma => ma.AlignmentID)
+                .OnDelete(DeleteBehavior.Restrict);
+            builder.Entity<Monster>()
+                .HasMany(m => m.Alignments)
+                .WithOne(ma => ma.Monster)
+                .OnDelete(DeleteBehavior.Cascade);
+            builder.Entity<Alignment>()
+                .HasMany(a => a.Monsters)
+                .WithOne(ma => ma.Alignment)
                 .OnDelete(DeleteBehavior.Restrict);
         }
 

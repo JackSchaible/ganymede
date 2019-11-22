@@ -34,7 +34,6 @@ namespace Ganymede.Api.Models.Monster
                 .ForMember(d => d.Campaign, o => o.Ignore())
                 .ForMember(d => d.CampaignID, o => o.Ignore())
                 .ForMember(d => d.MonsterTypeID, o => o.Ignore())
-                .ForMember(d => d.AlignmentID, o => o.Ignore())
                 .ForMember(d => d.SpecialTraitSetID, o => o.Ignore())
                 .ForMember(d => d.ActionSetID, o => o.Ignore())
                 .ForMember(d => d.Tags, o => o.Ignore())

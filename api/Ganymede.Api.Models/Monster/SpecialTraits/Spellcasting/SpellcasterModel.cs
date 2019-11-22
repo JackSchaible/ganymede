@@ -26,7 +26,7 @@ namespace Ganymede.Api.Models.Monster.SpecialTraits.Spellcasting
                 {
                     ID = s.ID,
                     Psionic = s.Psionic,
-                    SpellcastingAbility = s.SpellcastingAbility,
+                    SpellcastingAbility = (int)s.SpellcastingAbility,
                     SpellcastingType = (int)s.SpellcastingType
                 }));
             CreateMap<Spellcaster, SpellcasterModel>()

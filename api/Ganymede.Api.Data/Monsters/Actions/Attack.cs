@@ -10,7 +10,8 @@ namespace Ganymede.Api.Data.Monsters.Actions
         public Action Action { get; set; }
 
         public int Type { get; set; }
-        public int Range { get; set; }
+        public int RangeMin { get; set; }
+        public int RangeMax { get; set; }
         public int Target { get; set; }
         public virtual ICollection<HitEffect> HitEffects { get; set; }
         public bool ExtraGrappleRoll { get; set; }
