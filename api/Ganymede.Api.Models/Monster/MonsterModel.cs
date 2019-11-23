@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Ganymede.Api.Models.Common;
 using Ganymede.Api.Models.Equipment;
 using Ganymede.Api.Models.Monster.Actions;
 using Ganymede.Api.Models.Monster.BasicStats;

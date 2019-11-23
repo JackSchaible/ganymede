@@ -1,17 +1,35 @@
-import { BasicStats } from "./basicStats";
 import IFormEditable from "src/app/models/core/app/forms/iFormEditable";
+import { MonsterSize } from "./monsterEnums";
+import { MonsterType } from "./monsterType";
+import { Tag } from "src/app/models/core/tag";
+import { Alignment } from "./alignment";
+import { BasicStats } from "./basicStats/basicStats";
+import { AbilityScores } from "./abilityScores";
+import { OptionalStatsSet } from "./optionalStats/optionalStatsSet";
 
 export class Monster implements IFormEditable {
 	public id: number;
 	public name: string;
-	public description: string;
+	public size: MonsterSize;
+	public type: MonsterType;
+
+	public tags: Tag[];
+	public alignments: Alignment[];
+
 	public basicStats: BasicStats;
+	public abilityScores: AbilityScores;
+	public optionalStats: OptionalStatsSet;
 
 	public static getDefault(): Monster {
 		const monster = new Monster();
 
 		monster.id = -1;
+		monster.type = MonsterType.getDefault();
 		monster.basicStats = BasicStats.getDefault();
+		monster.abilityScores = AbilityScores.getDefault();
+		monster.optionalStats = OptionalStatsSet.getDefault();
+
+		// TODO next: special traits (spellcasting!), actions, equipment, legendary shit
 
 		return monster;
 	}
@@ -24,8 +42,12 @@ export class Monster implements IFormEditable {
 			a === b ||
 			(a.id === b.id &&
 				a.name === b.name &&
-				a.description === b.description &&
-				BasicStats.isEqual(a.basicStats, b.basicStats))
+				MonsterType.isEqual(a.type, b.type) &&
+				Tag.areEqual(a.tags, b.tags) &&
+				Alignment.areEqual(a.alignments, b.alignments) &&
+				BasicStats.isEqual(a.basicStats, b.basicStats) &&
+				AbilityScores.isEqual(a.abilityScores, b.abilityScores) &&
+				OptionalStatsSet.isEqual(a.optionalStats, b.optionalStats))
 		);
 	}
 }

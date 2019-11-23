@@ -1,7 +1,5 @@
-export class BasicStats {
+export class AbilityScores {
 	public id: number;
-	public cr: number;
-	public xp: number;
 	public strength: number;
 	public dexterity: number;
 	public constitution: number;
@@ -9,21 +7,21 @@ export class BasicStats {
 	public wisdom: number;
 	public charisma: number;
 
-	public static getDefault(): BasicStats {
-		const stats = new BasicStats();
-		stats.id = -1;
-		return stats;
+	public static getDefault(): AbilityScores {
+		const scores = new AbilityScores();
+
+		scores.id = -1;
+
+		return scores;
 	}
 
-	public static isEqual(a: BasicStats, b: BasicStats): boolean {
+	public static isEqual(a: AbilityScores, b: AbilityScores): boolean {
 		if ((!a && b) || (a && !b)) return false;
 		if (!a && !b) return true;
 
 		return (
 			a === b ||
 			(a.id === b.id &&
-				a.cr === b.cr &&
-				a.xp === b.xp &&
 				a.strength === b.strength &&
 				a.dexterity === b.dexterity &&
 				a.constitution === b.constitution &&

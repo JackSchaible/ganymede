@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using Ganymede.Api.Data.Common;
 
-namespace Ganymede.Api.Models.Monster
+namespace Ganymede.Api.Models.Common
 {
     public class TagModel
     {
