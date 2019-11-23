@@ -12,6 +12,7 @@ namespace Ganymede.Api.Models.Monster.OptionalStats
         public DamageEffectivenessSetModel Effectivenesses { get; set; }
         public SensesModel Senses { get; set; }
         public MonsterLanguageSetModel Languages { get; set; }
+        public int CRAdjustment { get; set; }
     }
 
     public class OptionalStatsSetModelMapper : Profile

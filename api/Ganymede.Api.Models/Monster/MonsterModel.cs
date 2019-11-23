@@ -16,7 +16,7 @@ namespace Ganymede.Api.Models.Monster
         public MonsterEnums.Size Size { get; set; }
         public MonsterTypeModel Type { get; set; }
         public List<TagModel> Tags { get; set; }
-        public AlignmentModel Alignment { get; set; }
+        public List<AlignmentModel> Alignments { get; set; }
         public BasicStatsSetModel BasicStats { get; set; }
         public AbilityScoresModel AbilityScores { get; set; }
         public OptionalStatsSetModel OptionalStats { get; set; }
@@ -39,13 +39,15 @@ namespace Ganymede.Api.Models.Monster
                 .ForMember(d => d.Tags, o => o.Ignore())
                 .ForMember(d => d.SpecialTraitSet, o => o.MapFrom(s => s.SpecialTraits))
                 .ForMember(d => d.ActionSet, o => o.MapFrom(s => s.Actions))
-                .ForMember(d => d.Equipment, o => o.Ignore());
+                .ForMember(d => d.Equipment, o => o.Ignore())
+                .ForMember(d => d.Alignments, o => o.Ignore());
 
             CreateMap<Data.Monsters.Monster, MonsterModel>()
                 .ForMember(d => d.Tags, o => o.MapFrom(s => s.Tags.Select(t => t.Tag)))
                 .ForMember(d => d.SpecialTraits, o => o.MapFrom(s => s.SpecialTraitSet))
                 .ForMember(d => d.Actions, o => o.MapFrom(s => s.ActionSet))
-                .ForMember(d => d.Equipment, o => o.MapFrom(s => s.Equipment.Select(e => e.Equipment)));
+                .ForMember(d => d.Equipment, o => o.MapFrom(s => s.Equipment.Select(e => e.Equipment)))
+                .ForMember(d => d.Alignments, o => o.MapFrom(s => s.Alignments.Select(a => a.Alignment)));
         }
     }
 }

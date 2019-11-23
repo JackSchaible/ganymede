@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 
@@ -11,8 +10,7 @@ namespace Ganymede.Api.Data.Monsters.Actions
         public int LegendaryActionCount { get; set; }
         public string DescriptionOverride { get; set; }
 
-        public virtual ICollection<LegendaryAction> Actions { get; set; }
-        public virtual ICollection<Action> LairActions { get; set; }
+        public virtual ICollection<Action> Actions { get; set; }
 
         public string DatabaseRegionalEffects { get; set; }
         [NotMapped]

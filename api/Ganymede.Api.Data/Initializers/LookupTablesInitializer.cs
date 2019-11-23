@@ -374,6 +374,79 @@ namespace Ganymede.Api.Data.Initializers
                     Name = "Survival"
                 }
             };
+
+            ctx.Alignments.AddRange
+            (
+                alignments.ChaoticEvil,
+                alignments.ChaoticGood,
+                alignments.ChaoticNeutral,
+                alignments.LawfulEvil,
+                alignments.LawfulGood,
+                alignments.LawfulNeutral,
+                alignments.Neutral,
+                alignments.NeutralEvil,
+                alignments.NeutralGood
+            );
+
+            ctx.DiceRolls.AddRange
+            (
+                diceRolls.OneDFour,
+                diceRolls.OneDSix,
+                diceRolls.OneDEight,
+                diceRolls.OneDTen,
+                diceRolls.OneDTwelve,
+                diceRolls.OneDTwenty,
+                diceRolls.TwoDSix,
+                diceRolls.TwoDEight,
+                diceRolls.FourDSix,
+                diceRolls.ElevenDEight,
+                diceRolls.TwelveDEight,
+                diceRolls.FifteenDTwelve,
+                diceRolls.NinteenDTen
+            );
+
+            ctx.Languages.AddRange
+            (
+                languages.Abyssal,
+                languages.Auran,
+                languages.Celestial,
+                languages.Common,
+                languages.DeepSpeech,
+                languages.Draconic,
+                languages.Dwarvish,
+                languages.Elvish,
+                languages.Giant,
+                languages.Gnomish,
+                languages.Goblin,
+                languages.Halfling,
+                languages.Infernal,
+                languages.Orc,
+                languages.Primordial,
+                languages.Sylvan,
+                languages.Undercommon
+            );
+
+            ctx.Skills.AddRange
+            (
+                skills.Acrobatics,
+                skills.AnimalHandling,
+                skills.Arcana,
+                skills.Athletics,
+                skills.Deception,
+                skills.History,
+                skills.Insight,
+                skills.Intimidation,
+                skills.Investigation,
+                skills.Medicine,
+                skills.Nature,
+                skills.Perception,
+                skills.Performance,
+                skills.Persuasion,
+                skills.Religion,
+                skills.SleightOfHand,
+                skills.Stealth,
+                skills.Survival
+            );
         }
     }
 }

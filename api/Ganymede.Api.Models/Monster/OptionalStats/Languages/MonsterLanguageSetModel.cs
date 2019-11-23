@@ -10,6 +10,7 @@ namespace Ganymede.Api.Models.Monster.OptionalStats.Languages
         public List<MonsterLanguageModel> Languages { get; set; }
         public int TelepathyRange { get; set; }
         public int AnyFreeLanguages { get; set; }
+        public string Special { get; set; }
     }
 
     public class MonsterLanguageSetModelMapper : Profile

@@ -7,6 +7,5 @@ namespace Ganymede.Api.Data.Monsters.Actions
         public int ID { get; set; }
         public virtual ICollection<Action> Actions { get; set; }
         public string Multiattack { get; set; }
-        public virtual ICollection<Action> Reactions { get; set; }
     }
 }

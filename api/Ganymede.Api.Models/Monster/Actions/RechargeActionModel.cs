@@ -22,7 +22,9 @@ namespace Ganymede.Api.Models.Monster.Actions
                 }));
             CreateMap<RechargeAction, RechargeActionModel>()
                 .ForMember(d => d.Name, o => o.MapFrom(s => s.Action.Name))
-                .ForMember(d => d.Description, o => o.MapFrom(s => s.Action.Description));
+                .ForMember(d => d.Description, o => o.MapFrom(s => s.Action.Description))
+                .ForMember(d => d.Lair, o => o.MapFrom(s => false))
+                .ForMember(d => d.Reaction, o => o.MapFrom(s => false));
         }
     }
 }

@@ -313,12 +313,13 @@ namespace Ganymede.Api.Data.Initializers
             };
             var legendaryActions = new LegendaryActionsSet
             {
-                LairActions = new List<Action>
+                Actions = new List<Action>
                 {
                     new Action
                     {
                         Name = "Free Spell",
-                        Description = "<p>If Aerisi is in the air node while Yan-C-Bin isn't, Aerisi can take lair actions. On initiative count 20 (losing initiative ties), Aerisi uses a lair action to cast one of her spells, up to 3rd level, without using components or a spell slot. She can't cast the same spell two rounds in a row, although she can continue to concentrate on a spell she previously cast using a lair action. Aerisi can take no other lair actions while concentrating on a spell cast as a lair action.</p><p>If Aerisi casts invisibility using this lair action, she also draws the power of the air node into herself. By doing so, she regains 15 (3d8 + 2) hit points.</p>"
+                        Description = "<p>If Aerisi is in the air node while Yan-C-Bin isn't, Aerisi can take lair actions. On initiative count 20 (losing initiative ties), Aerisi uses a lair action to cast one of her spells, up to 3rd level, without using components or a spell slot. She can't cast the same spell two rounds in a row, although she can continue to concentrate on a spell she previously cast using a lair action. Aerisi can take no other lair actions while concentrating on a spell cast as a lair action.</p><p>If Aerisi casts invisibility using this lair action, she also draws the power of the air node into herself. By doing so, she regains 15 (3d8 + 2) hit points.</p>",
+                        Lair = true
                     }
                 }
             };
@@ -603,17 +604,15 @@ namespace Ganymede.Api.Data.Initializers
                 Actions = new List<Action>
                 {
                     greatswordAttack.Action,
-                    lanceAttack.Action
-                },
-                Multiattack = "Thurl makes two melee attacks.",
-                Reactions = new List<Action>
-                {
+                    lanceAttack.Action,
                     new Action
                     {
                         Name = "Parry",
-                        Description = "Thurl adds 2 to his AC against one melee attack that would hit him. To do so, Thurl must see the attacker and be wielding a melee weapon."
+                        Description = "Thurl adds 2 to his AC against one melee attack that would hit him. To do so, Thurl must see the attacker and be wielding a melee weapon.",
+                        Reaction = true
                     }
-                }
+                },
+                Multiattack = "Thurl makes two melee attacks.",
             };
             var ac = new ArmorClass
             {
@@ -1151,21 +1150,22 @@ namespace Ganymede.Api.Data.Initializers
                 }
             };
 
+            var eyeRay = new LegendaryAction
+            {
+                ActionCost = 1,
+                Action = new Action
+                {
+                    Name = "Eye Ray",
+                    Description = "The beholder uses one random eye ray.",
+                }
+            };
             var la = new LegendaryActionsSet
             {
                 DescriptionOverride = "<p>The beholder can take 3 legendary actions, using the Eye Ray option. It can take only one legendary action at a time and only at the end of another creature's turn. The beholder regains spent legendary actions at the start of its turn.</p>",
                 LegendaryActionCount = 3,
-                Actions = new List<LegendaryAction>
+                Actions = new List<Action>
                 { 
-                    new LegendaryAction
-                    {
-                        ActionCost = 1,
-                        Action = new Action
-                        {
-                            Name = "Eye Ray",
-                            Description = "The beholder uses one random eye ray."
-                        }
-                    }
+                    eyeRay.Action
                 }                
             };
 
@@ -1179,7 +1179,8 @@ namespace Ganymede.Api.Data.Initializers
                 OptionalStats = os,
                 SpecialTraitSet = sts,
                 ActionSet = anS,
-                LegendaryActions = la
+                LegendaryActions = la,
+                Campaign = pota
             };
 
             ctx.MonsterAlignments.AddRange

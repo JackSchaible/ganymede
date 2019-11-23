@@ -10,6 +10,7 @@ namespace Ganymede.Api.Models.Monster.OptionalStats
         public int Darkvision { get; set; }
         public int Tremorsense { get; set; }
         public int Truesight { get; set; }
+        public int PassivePerceptionOverride { get; set; }
     }
 
     public class SensesModelMapper : Profile

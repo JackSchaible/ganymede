@@ -9,7 +9,6 @@ namespace Ganymede.Api.Models.Monster.Actions
         public int ID { get; set; }
         public List<ActionModel> Actions { get; set; }
         public string Multiattack { get; set; }
-        public List<ActionModel> Reactions { get; set; }
     }
 
     public class ActionsSetModelMapper : Profile

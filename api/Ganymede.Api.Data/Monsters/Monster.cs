@@ -15,6 +15,7 @@ namespace Ganymede.Api.Data.Monsters
 
         public virtual ICollection<MonsterTag> Tags { get; set; }
         public virtual ICollection<MonsterAlignment> Alignments { get; set; }
+        public virtual ICollection<MonsterEquipment> Equipment { get; set; }
 
         public int MonsterTypeID { get; set; }
         [ForeignKey(nameof(MonsterTypeID))]
@@ -28,21 +29,19 @@ namespace Ganymede.Api.Data.Monsters
         [ForeignKey(nameof(AbilityScoresID))]
         public AbilityScores AbilityScores { get; set; }
 
-        public int OptionalStatsID { get; set; }
+        public int? OptionalStatsID { get; set; }
         [ForeignKey(nameof(OptionalStatsID))]
         public OptionalStatsSet OptionalStats { get; set; }
 
-        public int SpecialTraitSetID { get; set; }
+        public int? SpecialTraitSetID { get; set; }
         [ForeignKey(nameof(SpecialTraitSetID))]
         public SpecialTraitSet SpecialTraitSet { get; set; }
 
-        public int ActionSetID { get; set; }
+        public int? ActionSetID { get; set; }
         [ForeignKey(nameof(ActionSetID))]
         public ActionsSet ActionSet { get; set; }
 
-        public virtual ICollection<MonsterEquipment> Equipment { get; set; }
-
-        public int LegendaryActionsID { get; set; }
+        public int? LegendaryActionsID { get; set; }
         [ForeignKey(nameof(LegendaryActionsID))]
         public LegendaryActionsSet LegendaryActions { get; set; }
 

@@ -10,6 +10,7 @@ namespace Ganymede.Api.Models.Monster.BasicStats
         public int Burrow { get; set; }
         public int Climb { get; set; }
         public int Fly { get; set; }
+        public bool CanHover { get; set; }
         public int Swim { get; set; }
     }
 

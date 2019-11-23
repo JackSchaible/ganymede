@@ -14,7 +14,8 @@ namespace Ganymede.Api.Models.Monster
     {
         public AlignmentModelMapper()
         {
-            CreateMap<AlignmentModel, Alignment>();
+            CreateMap<AlignmentModel, Alignment>()
+                .ForMember(d => d.Monsters, o => o.Ignore());
             CreateMap<Alignment, AlignmentModel>();
         }
     }
