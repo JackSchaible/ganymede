@@ -27,7 +27,7 @@ export class Tag {
 						break;
 					}
 
-					if (!Tag.isEqual(a[i], b[i])) {
+					if (!this.isEqual(a[i], b[i])) {
 						areTagsSame = false;
 						break;
 					}

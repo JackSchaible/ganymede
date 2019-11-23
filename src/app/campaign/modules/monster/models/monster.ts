@@ -6,6 +6,7 @@ import { Alignment } from "./alignment";
 import { BasicStats } from "./basicStats/basicStats";
 import { AbilityScores } from "./abilityScores";
 import { OptionalStatsSet } from "./optionalStats/optionalStatsSet";
+import { SpecialTraitSet } from "./specialTraits/specialTraitSet";
 
 export class Monster implements IFormEditable {
 	public id: number;
@@ -19,6 +20,7 @@ export class Monster implements IFormEditable {
 	public basicStats: BasicStats;
 	public abilityScores: AbilityScores;
 	public optionalStats: OptionalStatsSet;
+	public specialTraits: SpecialTraitSet;
 
 	public static getDefault(): Monster {
 		const monster = new Monster();
@@ -28,8 +30,9 @@ export class Monster implements IFormEditable {
 		monster.basicStats = BasicStats.getDefault();
 		monster.abilityScores = AbilityScores.getDefault();
 		monster.optionalStats = OptionalStatsSet.getDefault();
+		monster.specialTraits = SpecialTraitSet.getDefault();
 
-		// TODO next: special traits (spellcasting!), actions, equipment, legendary shit
+		// TODO next: actions, equipment, legendary shit
 
 		return monster;
 	}
@@ -47,7 +50,8 @@ export class Monster implements IFormEditable {
 				Alignment.areEqual(a.alignments, b.alignments) &&
 				BasicStats.isEqual(a.basicStats, b.basicStats) &&
 				AbilityScores.isEqual(a.abilityScores, b.abilityScores) &&
-				OptionalStatsSet.isEqual(a.optionalStats, b.optionalStats))
+				OptionalStatsSet.isEqual(a.optionalStats, b.optionalStats) &&
+				SpecialTraitSet.isEqual(a.specialTraits, b.specialTraits))
 		);
 	}
 }
