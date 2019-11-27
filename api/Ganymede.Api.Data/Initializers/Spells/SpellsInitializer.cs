@@ -1,7 +1,7 @@
 ﻿using Ganymede.Api.Data.Initializers.InitializerData;
 using System.Linq;
 
-namespace Ganymede.Api.Data.Initializers
+namespace Ganymede.Api.Data.Initializers.Spells
 {
     internal class SpellsInitializer
     {

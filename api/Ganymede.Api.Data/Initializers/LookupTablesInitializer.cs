@@ -1,5 +1,6 @@
 ﻿using Ganymede.Api.Data.Common;
 using Ganymede.Api.Data.Initializers.InitializerData;
+using Ganymede.Api.Data.Monsters;
 using System.Linq;
 
 namespace Ganymede.Api.Data.Initializers
@@ -96,47 +97,47 @@ namespace Ganymede.Api.Data.Initializers
         {
             alignments = new AlignmentData
             {
-                LawfulGood = new Monsters.Alignment
+                LawfulGood = new Alignment
                 {
                     Ethics = 0,
                     Morals = 0
                 },
-                LawfulNeutral = new Monsters.Alignment
+                LawfulNeutral = new Alignment
                 {
                     Ethics = 0,
                     Morals = 1
                 },
-                LawfulEvil = new Monsters.Alignment
+                LawfulEvil = new Alignment
                 {
                     Ethics = 0,
                     Morals = 2
                 },
-                NeutralGood = new Monsters.Alignment
+                NeutralGood = new Alignment
                 {
                     Ethics = 1,
                     Morals = 0
                 },
-                Neutral = new Monsters.Alignment
+                Neutral = new Alignment
                 {
                     Ethics = 1,
                     Morals = 1
                 },
-                NeutralEvil = new Monsters.Alignment
+                NeutralEvil = new Alignment
                 {
                     Ethics = 1,
                     Morals = 2
                 },
-                ChaoticGood = new Monsters.Alignment
+                ChaoticGood = new Alignment
                 {
                     Ethics = 2,
                     Morals = 0
                 },
-                ChaoticNeutral = new Monsters.Alignment
+                ChaoticNeutral = new Alignment
                 {
                     Ethics = 2,
                     Morals = 1
                 },
-                ChaoticEvil = new Monsters.Alignment
+                ChaoticEvil = new Alignment
                 {
                     Ethics = 2,
                     Morals = 2

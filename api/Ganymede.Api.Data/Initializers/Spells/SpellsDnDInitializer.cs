@@ -3,7 +3,7 @@ using Ganymede.Api.Data.Spells;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Ganymede.Api.Data.Initializers
+namespace Ganymede.Api.Data.Initializers.Spells
 {
     internal class SpellsDnDInitializer
     {

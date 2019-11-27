@@ -16,9 +16,9 @@ namespace Ganymede.Api.Models.Monster.SpecialTraits
     {
         public SpecialTraitSetModelMapper()
         {
-            CreateMap<SpecialTraitSetModel, SpecialTraitSet>()
+            CreateMap<SpecialTraitSetModel, SpecialTraitsSet>()
                 .ForMember(d => d.MonsterSpellcastingID, o => o.Ignore());
-            CreateMap<SpecialTraitSet, SpecialTraitSetModel>();
+            CreateMap<SpecialTraitsSet, SpecialTraitSetModel>();
         }
     }
 }

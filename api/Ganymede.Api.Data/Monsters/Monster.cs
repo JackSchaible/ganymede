@@ -35,7 +35,7 @@ namespace Ganymede.Api.Data.Monsters
 
         public int? SpecialTraitSetID { get; set; }
         [ForeignKey(nameof(SpecialTraitSetID))]
-        public SpecialTraitSet SpecialTraitSet { get; set; }
+        public SpecialTraitsSet SpecialTraitSet { get; set; }
 
         public int? ActionSetID { get; set; }
         [ForeignKey(nameof(ActionSetID))]

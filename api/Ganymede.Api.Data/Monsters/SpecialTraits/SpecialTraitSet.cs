@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Ganymede.Api.Data.Monsters.SpecialTraits
 {
-    public class SpecialTraitSet
+    public class SpecialTraitsSet
     {
         public int ID { get; set; }
         public virtual ICollection<SpecialTrait> SpecialTraits { get; set; }
