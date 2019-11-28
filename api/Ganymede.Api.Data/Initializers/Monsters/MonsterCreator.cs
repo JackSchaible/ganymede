@@ -69,11 +69,15 @@ namespace Ganymede.Api.Data.Initializers.Monsters
 
             var languages = CreateLangauges();
             if (languages != null)
-                    ctx.MonsterLanguages.AddRange(languages.Select(l => new MonsterLanguage { Language = l, MonsterLanguageSet = monster.OptionalStats.Languages }));
+                ctx.MonsterLanguages.AddRange(languages.Select(l => new MonsterLanguage { Language = l, MonsterLanguageSet = monster.OptionalStats.Languages }));
 
             var skills = CreateSkills();
             if (skills != null)
-                ctx.MonsterSkillSets.AddRange(skills);
+                ctx.MonsterSkillSets.AddRange(skills.Select(s =>
+                {
+                    s.OptionalStats = monster.OptionalStats;
+                    return s;
+                }));
 
             var spellcasting = monster.SpecialTraitSet?.SpellcastingModel;
             if (spellcasting != null)
@@ -129,8 +133,8 @@ namespace Ganymede.Api.Data.Initializers.Monsters
         protected virtual MonsterMovement CreateMovement() => new MonsterMovement { Ground = 30 };
         protected virtual List<Action> CreateActions() => null;
         protected virtual List<Action> CreateLegendaryActions() => null;
-        protected virtual OptionalStatsSet CreateOptionalStats() => new OptionalStatsSet();
-        protected virtual SpecialTraitsSet CreateSpecialTraitsSet() =>  new SpecialTraitsSet();
+        protected virtual OptionalStatsSet CreateOptionalStats() => new OptionalStatsSet { Languages = new MonsterLanguageSet() };
+        protected virtual SpecialTraitsSet CreateSpecialTraitsSet() => new SpecialTraitsSet();
         protected virtual List<Language> CreateLangauges() => null;
         protected virtual List<MonsterSkillSet> CreateSkills() => null;
         protected virtual Spellcaster CreateSpellcaster(MonsterSpellcasting spellcasting) => null;

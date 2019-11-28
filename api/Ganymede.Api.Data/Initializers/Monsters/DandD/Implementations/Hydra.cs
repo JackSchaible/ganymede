@@ -11,9 +11,9 @@ namespace Ganymede.Api.Data.Initializers.Monsters.DandD.Implementations
     internal class Hydra : MonsterCreator
     {
         protected override DiceRoll HitDice => _diceRolls.FifteenDTwelve;
-        protected override string Name => throw new System.NotImplementedException();
-        protected override MonsterType MonsterType => throw new System.NotImplementedException();
-        protected override int Size => throw new System.NotImplementedException();
+        protected override string Name => "Hydra";
+        protected override MonsterType MonsterType => MonstersConstants.MTMonstrosity;
+        protected override int Size => MonstersConstants.SHuge;
         protected override ArmorClass CreateArmor() => new ArmorClass { NaturalArmorModifier = 5 };
         protected override MonsterMovement CreateMovement() => new MonsterMovement { Ground = 30, Swim = 30 };
 

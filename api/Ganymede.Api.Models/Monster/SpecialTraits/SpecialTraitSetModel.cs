@@ -10,6 +10,7 @@ namespace Ganymede.Api.Models.Monster.SpecialTraits
         public int ID { get; set; }
         public List<SpecialTraitModel> SpecialTraits { get; set; }
         public MonsterSpellcastingModel SpellcastingModel { get; set; }
+        public int LegendaryResistancesPerDay { get; set; }
     }
 
     public class SpecialTraitSetModelMapper : Profile

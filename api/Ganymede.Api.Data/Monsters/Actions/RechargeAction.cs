@@ -8,8 +8,8 @@ namespace Ganymede.Api.Data.Monsters.Actions
         public int ID { get; set; }
         public Action Action { get; set; }
 
-
         public int RechargesOn { get; set; }
         public int RechargeMin { get; set; }
+        public int RechargeMax { get; set; }
     }
 }

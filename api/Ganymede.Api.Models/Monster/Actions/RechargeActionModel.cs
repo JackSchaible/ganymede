@@ -7,6 +7,7 @@ namespace Ganymede.Api.Models.Monster.Actions
     {
         public ActionEnums.RechargeConditions RechargesOn { get; set; }
         public int RechargeMin { get; set; }
+        public int RechargeMax { get; set; }
     }
 
     public class RechargeActionModelMapper : Profile

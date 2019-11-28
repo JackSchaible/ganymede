@@ -1,6 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
 
 namespace Ganymede.Api.Data.Monsters.Actions
 {
@@ -12,12 +10,6 @@ namespace Ganymede.Api.Data.Monsters.Actions
 
         public virtual ICollection<Action> Actions { get; set; }
 
-        public string DatabaseRegionalEffects { get; set; }
-        [NotMapped]
-        public string[] RegionalEffects
-        {
-            get => DatabaseRegionalEffects.Split("%2A");
-            set => DatabaseRegionalEffects = string.Join("%2A", value.Select(p => p.ToString()).ToArray());
-        }
+        public string RegionalEffects { get; set; }
     }
 }

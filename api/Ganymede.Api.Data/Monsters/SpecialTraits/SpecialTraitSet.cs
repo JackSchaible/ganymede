@@ -8,6 +8,7 @@ namespace Ganymede.Api.Data.Monsters.SpecialTraits
     {
         public int ID { get; set; }
         public virtual ICollection<SpecialTrait> SpecialTraits { get; set; }
+        public int LegendaryResistancesPerDay { get; set; }
 
         public int? MonsterSpellcastingID { get; set; }
         [ForeignKey(nameof(MonsterSpellcastingID))]

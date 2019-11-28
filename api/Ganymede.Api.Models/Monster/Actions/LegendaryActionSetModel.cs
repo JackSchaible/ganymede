@@ -17,8 +17,7 @@ namespace Ganymede.Api.Models.Monster.Actions
     {
         public LegendaryActionsSetModelMapper()
         {
-            CreateMap<LegendaryActionsSetModel, LegendaryActionsSet>()
-                .ForMember(d => d.DatabaseRegionalEffects, o => o.Ignore());
+            CreateMap<LegendaryActionsSetModel, LegendaryActionsSet>();
             CreateMap<LegendaryActionsSet, LegendaryActionsSetModel>();
         }
     }

@@ -42,11 +42,13 @@ namespace Ganymede.Api.Data.Initializers
                 OneDTwenty = ctx.DiceRolls.Single(dr => dr.Number == 1 && dr.Sides == 20),
                 TwoDSix = ctx.DiceRolls.Single(dr => dr.Number == 2 && dr.Sides == 6),
                 TwoDEight = ctx.DiceRolls.Single(dr => dr.Number == 2 && dr.Sides == 8),
+                TwoDTen = ctx.DiceRolls.Single(dr => dr.Number == 2 && dr.Sides == 10),
                 FourDSix = ctx.DiceRolls.Single(dr => dr.Number == 4 && dr.Sides == 6),
                 ElevenDEight = ctx.DiceRolls.Single(dr => dr.Number == 11 && dr.Sides == 8),
                 TwelveDEight = ctx.DiceRolls.Single(dr => dr.Number == 12 && dr.Sides == 8),
                 FifteenDTwelve = ctx.DiceRolls.Single(dr => dr.Number == 15 && dr.Sides == 12),
                 NinteenDTen = ctx.DiceRolls.Single(dr => dr.Number == 19 && dr.Sides == 10),
+                TwentyEightDTwenty = ctx.DiceRolls.Single(dr => dr.Number == 28 && dr.Sides == 20)
             };
 
             languages = new LanguageData
@@ -185,6 +187,11 @@ namespace Ganymede.Api.Data.Initializers
                     Number = 2,
                     Sides = 8
                 },
+                TwoDTen = new DiceRoll
+                {
+                    Number = 2,
+                    Sides = 10
+                },
                 FourDSix = new DiceRoll
                 {
                     Number = 4,
@@ -209,6 +216,11 @@ namespace Ganymede.Api.Data.Initializers
                 {
                     Number = 19,
                     Sides = 10
+                },
+                TwentyEightDTwenty = new DiceRoll
+                {
+                    Number = 28,
+                    Sides = 20
                 }
             };
             languages = new LanguageData
@@ -403,7 +415,8 @@ namespace Ganymede.Api.Data.Initializers
                 diceRolls.ElevenDEight,
                 diceRolls.TwelveDEight,
                 diceRolls.FifteenDTwelve,
-                diceRolls.NinteenDTen
+                diceRolls.NinteenDTen,
+                diceRolls.TwentyEightDTwenty
             );
 
             ctx.Languages.AddRange
