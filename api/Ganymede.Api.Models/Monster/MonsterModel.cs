@@ -16,8 +16,10 @@ namespace Ganymede.Api.Models.Monster
         public string Name { get; set; }
         public MonsterEnums.Size Size { get; set; }
         public MonsterTypeModel Type { get; set; }
+
         public List<TagModel> Tags { get; set; }
         public List<AlignmentModel> Alignments { get; set; }
+
         public BasicStatsSetModel BasicStats { get; set; }
         public AbilityScoresModel AbilityScores { get; set; }
         public OptionalStatsSetModel OptionalStats { get; set; }

@@ -18,4 +18,25 @@ export abstract class Equipment {
 				a.weightInPouds === b.weightInPouds)
 		);
 	}
+
+	public static areEqual(a: Equipment[], b: Equipment[]): boolean {
+		let areEquipmentSame: boolean = true;
+		if (a && b) {
+			if (a.length === b.length)
+				for (let i = 0; i < a.length; i++) {
+					if (i > b.length) {
+						areEquipmentSame = false;
+						break;
+					}
+
+					if (!this.isEqual(a[i], b[i])) {
+						areEquipmentSame = false;
+						break;
+					}
+				}
+			else areEquipmentSame = false;
+		} else areEquipmentSame = false;
+
+		return areEquipmentSame;
+	}
 }

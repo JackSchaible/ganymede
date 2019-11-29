@@ -90,6 +90,10 @@ namespace Ganymede.Api.Data.Initializers.Monsters
             public const int CRestrained = 12;
             public const int CStunned = 13;
             public const int CUnconscious = 14;
+
+            public const int RCRoll = 0;
+            public const int RCLongRest = 1;
+            public const int RCShortRest = 2;
         }
 
         public void Initialize(ApplicationDbContext ctx, Campaign pota, AlignmentData alignments,

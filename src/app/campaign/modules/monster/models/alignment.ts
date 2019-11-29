@@ -28,7 +28,7 @@ export class Alignment {
 						break;
 					}
 
-					if (!Alignment.isEqual(a[i], b[i])) {
+					if (!this.isEqual(a[i], b[i])) {
 						areAlignmentsSame = false;
 						break;
 					}

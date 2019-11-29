@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { Observable, of } from "rxjs";
-import { Monster } from "./models/monster";
+import { Monster } from "../models/monster";
 import FormService from "src/app/services/form.service";
 import { HttpClient } from "@angular/common/http";
 import { ApiResponse } from "src/app/services/http/apiResponse";

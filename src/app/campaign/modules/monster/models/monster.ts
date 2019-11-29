@@ -7,6 +7,9 @@ import { BasicStats } from "./basicStats/basicStats";
 import { AbilityScores } from "./abilityScores";
 import { OptionalStatsSet } from "./optionalStats/optionalStatsSet";
 import { SpecialTraitSet } from "./specialTraits/specialTraitSet";
+import { LegendaryActionSet } from "./actions/legendaryActionSet";
+import { ActionSet } from "./actions/actionSet";
+import { Equipment } from "src/app/equipment/models/equipment";
 
 export class Monster implements IFormEditable {
 	public id: number;
@@ -21,6 +24,9 @@ export class Monster implements IFormEditable {
 	public abilityScores: AbilityScores;
 	public optionalStats: OptionalStatsSet;
 	public specialTraits: SpecialTraitSet;
+	public actions: ActionSet;
+	public equipment: Equipment[];
+	public legendaryActions: LegendaryActionSet;
 
 	public static getDefault(): Monster {
 		const monster = new Monster();
@@ -31,8 +37,9 @@ export class Monster implements IFormEditable {
 		monster.abilityScores = AbilityScores.getDefault();
 		monster.optionalStats = OptionalStatsSet.getDefault();
 		monster.specialTraits = SpecialTraitSet.getDefault();
-
-		// TODO next: actions, equipment, legendary shit
+		monster.actions = ActionSet.getDefault();
+		monster.equipment = [];
+		monster.legendaryActions = LegendaryActionSet.getDefault();
 
 		return monster;
 	}
@@ -51,7 +58,13 @@ export class Monster implements IFormEditable {
 				BasicStats.isEqual(a.basicStats, b.basicStats) &&
 				AbilityScores.isEqual(a.abilityScores, b.abilityScores) &&
 				OptionalStatsSet.isEqual(a.optionalStats, b.optionalStats) &&
-				SpecialTraitSet.isEqual(a.specialTraits, b.specialTraits))
+				SpecialTraitSet.isEqual(a.specialTraits, b.specialTraits) &&
+				ActionSet.isEqual(a.actions, b.actions) &&
+				Equipment.areEqual(a.equipment, b.equipment) &&
+				LegendaryActionSet.isEqual(
+					a.legendaryActions,
+					b.legendaryActions
+				))
 		);
 	}
 }

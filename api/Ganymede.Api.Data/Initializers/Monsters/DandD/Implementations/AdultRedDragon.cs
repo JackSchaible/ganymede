@@ -160,7 +160,8 @@ namespace Ganymede.Api.Data.Initializers.Monsters.DandD.Implementations
                             Description = "The dragon exhales fire in a 90-foot cone. Each creature in that area must make a DC 24 Dexterity saving throw, taking 91 (26d6) fire damage on a failed save, or half as much damage on a successful one."
                         },
                         RechargeMin = 5,
-                        RechargeMax = 6
+                        RechargeMax = 6,
+                        RechargesOn = MonstersConstants.RCRoll
                     }.Action
                 }
             };
