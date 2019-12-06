@@ -101,6 +101,7 @@ namespace Ganymede.Api.Data
             ConfigureMonsterSkills(builder);
             ConfigureMonsterInnateSpells(builder);
             ConfigureSpellcasterSpells(builder);
+            ConfigureClassSpells(builder);
             ConfigureMonsterEquipment(builder);
             ConfigureWeaponProperties(builder);
 
@@ -334,6 +335,30 @@ namespace Ganymede.Api.Data
             builder.Entity<WeaponProperty>()
                 .HasMany(wp => wp.WeaponWeaponProperties)
                 .WithOne(wwp => wwp.WeaponProperty)
+                .OnDelete(DeleteBehavior.Restrict);
+        }
+
+        private void ConfigureClassSpells(ModelBuilder builder)
+        {
+            builder.Entity<ClassSpell>()
+                .HasKey(cs => new { cs.PlayerClassID, cs.SpellID });
+            builder.Entity<ClassSpell>()
+                .HasOne(cs => cs.Class)
+                .WithMany(c => c.ClassSpells)
+                .HasForeignKey(cs => cs.PlayerClassID)
+                .OnDelete(DeleteBehavior.Restrict);
+            builder.Entity<ClassSpell>()
+                .HasOne(cs => cs.Spell)
+                .WithMany(s => s.ClassSpells)
+                .HasForeignKey(cs => cs.SpellID)
+                .OnDelete(DeleteBehavior.Restrict);
+            builder.Entity<PlayerClass>()
+                .HasMany(pc => pc.ClassSpells)
+                .WithOne(cs => cs.Class)
+                .OnDelete(DeleteBehavior.Cascade);
+            builder.Entity<Spell>()
+                .HasMany(s => s.ClassSpells)
+                .WithOne(cs => cs.Spell)
                 .OnDelete(DeleteBehavior.Restrict);
         }
     }
