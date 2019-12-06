@@ -5,12 +5,12 @@ namespace Ganymede.Api.Data.Initializers.Spells
 {
     internal class SpellsInitializer
     {
-        public void Initialize(ApplicationDbContext ctx, Campaign pota, out SpellData spells)
+        public void Initialize(ApplicationDbContext ctx, Campaign pota, string rootPath, out SpellData spells)
         {
             if (ctx.Spells.Any())
                 spells = LoadData(ctx);
             else
-                spells = CreateDandDSpells(ctx, pota);
+                spells = CreateDandDSpells(ctx, pota, rootPath);
         }
 
         private SpellData LoadData(ApplicationDbContext ctx)
@@ -41,9 +41,12 @@ namespace Ganymede.Api.Data.Initializers.Spells
             };
         }
 
-        private SpellData CreateDandDSpells(ApplicationDbContext ctx, Campaign campaign)
+        private SpellData CreateDandDSpells(ApplicationDbContext ctx, Campaign campaign, string rootPath)
         {
-            return new SpellsDnDInitializer().Initialize(ctx, campaign);
+            var spells = new SpellsDnDInitializer().Initialize(ctx, campaign);
+            spells = new SRDSpellsInitializer().Initialize(ctx, spells, rootPath);
+
+            return spells;
         }
     }
 }

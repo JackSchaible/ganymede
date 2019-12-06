@@ -77,6 +77,10 @@ namespace api
         private void ConfigureDb(IServiceCollection services)
         {
             services.AddDbContext<ApplicationDbContext>();
+            services.AddDbInitializer(o => new InitializerOptions
+            {
+                RootPath = _env.WebRootPath
+            });
             services.AddScoped<IDbInitializer, DbInitializer>();
         }
         private void ConfigureAuth(IServiceCollection services)

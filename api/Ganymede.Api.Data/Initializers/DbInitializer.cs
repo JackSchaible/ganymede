@@ -12,6 +12,7 @@ namespace Ganymede.Api.Data.Initializers
 	{
         private readonly ApplicationDbContext _ctx;
         private readonly UserManager<AppUser> _usrMgr;
+        private readonly string _rootPath;
 
         private readonly UsersInitializer users = new UsersInitializer();
         private readonly PublishersInitializer publishers = new PublishersInitializer();
@@ -23,10 +24,11 @@ namespace Ganymede.Api.Data.Initializers
         private readonly CampaignsInitializer campaigns = new CampaignsInitializer();
         private readonly SpellsInitializer spells = new SpellsInitializer();
 
-        public DbInitializer(ApplicationDbContext ctx, UserManager<AppUser> usrMgr)
+        public DbInitializer(ApplicationDbContext ctx, UserManager<AppUser> usrMgr, string rootPath)
         {
             _ctx = ctx;
             _usrMgr = usrMgr;
+            _rootPath = rootPath;
         }
 
         public void Initialize()
@@ -38,7 +40,7 @@ namespace Ganymede.Api.Data.Initializers
             equipment.Initialize(_ctx, out ArmorData armors);
             campaigns.Initialize(_ctx, userId, fifth, pf, out Campaign pota);
             pcs.Initialize(_ctx, out PlayerClassData pcData);
-            spells.Initialize(_ctx, pota, out SpellData spellData);
+            spells.Initialize(_ctx, pota, _rootPath, out SpellData spellData);
             monsters.Initialize(_ctx, pota, alignments, diceRolls, armors, languages, skills, pcData, spellData, out IEnumerable<Monster> dAndDMonsters, out IEnumerable<Monster> pfMonsters);
 
             _ctx.SaveChanges();
