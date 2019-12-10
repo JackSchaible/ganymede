@@ -4,6 +4,7 @@ using Ganymede.Api.Data.Initializers.Spells;
 using Ganymede.Api.Data.Monsters;
 using Ganymede.Api.Data.Rulesets;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Options;
 using System.Collections.Generic;
 
 namespace Ganymede.Api.Data.Initializers
@@ -24,11 +25,11 @@ namespace Ganymede.Api.Data.Initializers
         private readonly CampaignsInitializer campaigns = new CampaignsInitializer();
         private readonly SpellsInitializer spells = new SpellsInitializer();
 
-        public DbInitializer(ApplicationDbContext ctx, UserManager<AppUser> usrMgr, string rootPath)
+        public DbInitializer(ApplicationDbContext ctx, UserManager<AppUser> usrMgr, IOptionsMonitor<InitializerOptions> options)
         {
             _ctx = ctx;
             _usrMgr = usrMgr;
-            _rootPath = rootPath;
+            _rootPath = options.CurrentValue.RootPath;
         }
 
         public void Initialize()

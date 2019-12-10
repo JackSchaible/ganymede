@@ -44,7 +44,6 @@ namespace Ganymede.Api.Data.Initializers.Spells
         private SpellData CreateDandDSpells(ApplicationDbContext ctx, Campaign campaign, string rootPath)
         {
             var spells = new SpellsDnDInitializer().Initialize(ctx, campaign);
-            spells = new SRDSpellsInitializer().Initialize(ctx, spells, rootPath);
 
             return spells;
         }

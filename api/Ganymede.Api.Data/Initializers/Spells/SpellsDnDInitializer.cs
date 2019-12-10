@@ -7,7 +7,7 @@ namespace Ganymede.Api.Data.Initializers.Spells
 {
     internal class SpellsDnDInitializer
     {
-        private static class Constants
+        internal static class SpellConstants
         {
             public static string EncodedComma = "%2CA";
 
@@ -73,7 +73,7 @@ namespace Ganymede.Api.Data.Initializers.Spells
         private Campaign _campaign;
         #endregion
 
-        public SpellData Initialize(ApplicationDbContext ctx, Campaign campaign)
+        public SpellData Initialize(ApplicationDbContext ctx, Campaign campaign, string rootPath)
         {
             SetSpellMetadata(ctx, campaign);
 
@@ -87,6 +87,8 @@ namespace Ganymede.Api.Data.Initializers.Spells
             spellData = CreateLevel2Spells(ctx, spellData);
             spellData = CreateLevel1Spells(ctx, spellData);
             spellData = CreateCantrips(ctx, spellData);
+
+            spellData = new SRDSpellsInitializer().Initialize(ctx, spellData, rootPath);
 
             return spellData;
         }
@@ -194,17 +196,17 @@ namespace Ganymede.Api.Data.Initializers.Spells
             {
                 new CastingTime
                 {
-                    Type = Constants.CastingTimeType.Action
+                    Type = SpellConstants.CastingTimeType.Action
                 },
                 new CastingTime
                 {
                     Amount = 1,
                     Unit = "hour",
-                    Type = Constants.CastingTimeType.Time
+                    Type = SpellConstants.CastingTimeType.Time
                 },
                 new CastingTime
                 {
-                    Type = Constants.CastingTimeType.BonusAction
+                    Type = SpellConstants.CastingTimeType.BonusAction
                 }
             };
             ctx.CastingTimes.AddRange(times);
@@ -220,39 +222,39 @@ namespace Ganymede.Api.Data.Initializers.Spells
                 {
                     Amount = 10,
                     Unit = "feet",
-                    Type = Constants.RangeType.Ranged
+                    Type = SpellConstants.RangeType.Ranged
                 },
                 new SpellRange
                 {
                     Amount = 30,
                     Unit = "feet",
-                    Type = Constants.RangeType.Ranged
+                    Type = SpellConstants.RangeType.Ranged
                 },
                 new SpellRange
                 {
                     Amount = 60,
                     Unit = "feet",
-                    Type = Constants.RangeType.Ranged
+                    Type = SpellConstants.RangeType.Ranged
                 },
                 new SpellRange
                 {
                     Amount = 120,
                     Unit = "feet",
-                    Type = Constants.RangeType.Ranged
+                    Type = SpellConstants.RangeType.Ranged
                 },
                 new SpellRange
                 {
                     Amount = 150,
                     Unit = "feet",
-                    Type = Constants.RangeType.Ranged
+                    Type = SpellConstants.RangeType.Ranged
                 },
                 new SpellRange
                 {
-                    Type = Constants.RangeType.Touch
+                    Type = SpellConstants.RangeType.Touch
                 },
                 new SpellRange
                 {
-                    Type = Constants.RangeType.Self
+                    Type = SpellConstants.RangeType.Self
                 }
             };
             ctx.SpellRanges.AddRange(ranges);
@@ -266,66 +268,66 @@ namespace Ganymede.Api.Data.Initializers.Spells
             {
                 new SpellDuration
                 {
-                    Type = Constants.DurationType.Duration,
+                    Type = SpellConstants.DurationType.Duration,
                     Amount = 1,
                     Unit = "round"
                 },
                 new SpellDuration
                 {
-                    Type = Constants.DurationType.Duration,
+                    Type = SpellConstants.DurationType.Duration,
                     Amount = 1,
                     Unit = "minute"
                 },
                 new SpellDuration
                 {
-                    Type = Constants.DurationType.Duration,
+                    Type = SpellConstants.DurationType.Duration,
                     Amount = 1,
                     Unit = "minute",
                     Concentration = true
                 },
                 new SpellDuration
                 {
-                    Type = Constants.DurationType.Duration,
+                    Type = SpellConstants.DurationType.Duration,
                     Amount = 10,
                     Unit = "minutes",
                     Concentration = true
                 },
                 new SpellDuration
                 {
-                    Type = Constants.DurationType.Duration,
+                    Type = SpellConstants.DurationType.Duration,
                     Amount = 1,
                     Unit = "hour"
                 },
                 new SpellDuration
                 {
-                    Type = Constants.DurationType.Duration,
+                    Type = SpellConstants.DurationType.Duration,
                     Amount = 1,
                     Unit = "hour",
                     Concentration = true
                 },
                 new SpellDuration
                 {
-                    Type = Constants.DurationType.Duration,
+                    Type = SpellConstants.DurationType.Duration,
                     Amount = 8,
                     Unit = "hours"
                 },
                 new SpellDuration
                 {
-                    Type = Constants.DurationType.Instantaneous
+                    Type = SpellConstants.DurationType.Instantaneous
                 },
                 new SpellDuration
                 {
-                    Type = Constants.DurationType.Until,
+                    Type = SpellConstants.DurationType.Until,
                     UntilDispelled = true
                 },
                 new SpellDuration
                 {
-                    Type = Constants.DurationType.Until,
+                    Type = SpellConstants.DurationType.Until,
                     UntilTriggered = true
                 },
                 new SpellDuration
                 {
-                    Type = Constants.DurationType.Until,
+                    Type = SpellConstants.DurationType.Until,
                     UntilTriggered = true,
                     UntilDispelled = true
                 }
@@ -369,7 +371,7 @@ namespace Ganymede.Api.Data.Initializers.Spells
                     Name = "Astral Projection",
                     SpellDuration = new SpellDuration
                     {
-                        Type = Constants.DurationType.Special
+                        Type = SpellConstants.DurationType.Special
                     },
                     SpellComponents = new SpellComponents
                     {
@@ -391,7 +393,7 @@ namespace Ganymede.Api.Data.Initializers.Spells
                     SpellDuration = _d1cminute,
                     SpellRange = new SpellRange
                     {
-                        Type = Constants.RangeType.Sight
+                        Type = SpellConstants.RangeType.Sight
                     },
                     SpellSchool = _conjuration
                 }
@@ -413,7 +415,7 @@ namespace Ganymede.Api.Data.Initializers.Spells
                     Name = "Sunburst",
                     SpellComponents = new SpellComponents
                     {
-                        Material = $"Fire{Constants.EncodedComma}A piece of sunstone",
+                        Material = $"Fire{SpellConstants.EncodedComma}A piece of sunstone",
                         Somatic = true,
                         Verbal = true
                     },
@@ -437,14 +439,14 @@ namespace Ganymede.Api.Data.Initializers.Spells
                     {
                         Amount = 12,
                         Unit = "hours",
-                        Type = Constants.CastingTimeType.Time
+                        Type = SpellConstants.CastingTimeType.Time
                     },
                     Description = "<p>You shape an illusory duplicate of one beast or humanoid that is within range for the entire casting time of the spell. The duplicate is a creature, partially real and formed from ice or snow, and it can take actions and otherwise be affected as a normal creature. It appears to be the same as the original, but it has half the creature’s hit point maximum and is formed without any equipment. Otherwise, the illusion uses all the statistics of the creature it duplicates.</p><p>The simulacrum is friendly to you and creatures you designate. It obeys your spoken commands, moving and acting in accordance with your wishes and acting on your turn in combat. The simulacrum lacks the ability to learn or become more powerful, so it never increases its level or other abilities, nor can it regain expended spell slots.</p><p>If the simulacrum is damaged, you can repair it in an alchemical laboratory, using rare herbs and minerals worth 100 gp per hit point it regains. The simulacrum lasts until it drops to 0 hit points, at which point it reverts to snow and melts instantly.</p><p>If you cast this spell again, any currently active duplicates you created with this spell are instantly destroyed.</p>",
                     Level = 7,
                     Name = "Simulacrum",
                     SpellComponents = new SpellComponents
                     {
-                        Material = $"Snow or ice in quantities sufficient to made a life-size copy of the duplicated creature{Constants.EncodedComma}Some hair, fingernail clippings, or other piece of that creature’s body placed inside the snow or ice{Constants.EncodedComma}Powdered ruby worth 1,500 gp, sprinkled over the duplicate and consumed by the spell",
+                        Material = $"Snow or ice in quantities sufficient to made a life-size copy of the duplicated creature{SpellConstants.EncodedComma}Some hair, fingernail clippings, or other piece of that creature’s body placed inside the snow or ice{SpellConstants.EncodedComma}Powdered ruby worth 1,500 gp, sprinkled over the duplicate and consumed by the spell",
                         Somatic = true,
                         Verbal = true
                     },
@@ -470,7 +472,7 @@ namespace Ganymede.Api.Data.Initializers.Spells
                 SpellRange = _r150f,
                 SpellComponents = new SpellComponents
                 {
-                    Material = $"A bit of fur{Constants.EncodedComma}A piece of amber or a crystal rod{Constants.EncodedComma}Three silver pins",
+                    Material = $"A bit of fur{SpellConstants.EncodedComma}A piece of amber or a crystal rod{SpellConstants.EncodedComma}Three silver pins",
                     Somatic = true,
                     Verbal = true
                 },
@@ -543,13 +545,13 @@ namespace Ganymede.Api.Data.Initializers.Spells
                     {
                         Amount = 300,
                         Unit = "feet",
-                        Type = Constants.RangeType.Ranged
+                        Type = SpellConstants.RangeType.Ranged
                     },
                     SpellComponents = new SpellComponents
                     {
                         Verbal = true,
                         Somatic = true,
-                        Material = $"A pinch of dust{Constants.EncodedComma}A few drops of water",
+                        Material = $"A pinch of dust{SpellConstants.EncodedComma}A few drops of water",
                     },
                     SpellDuration = _dinst,
                     SpellSchool = _evocation
@@ -613,7 +615,7 @@ namespace Ganymede.Api.Data.Initializers.Spells
                     {
                         Verbal = true,
                         Somatic = true,
-                        Material = $"A bit of gauze{Constants.EncodedComma}A wisp of smoke",
+                        Material = $"A bit of gauze{SpellConstants.EncodedComma}A wisp of smoke",
                     },
                     SpellDuration = _d1chour,
                     SpellSchool = _transmutation
@@ -646,7 +648,7 @@ namespace Ganymede.Api.Data.Initializers.Spells
                     SpellRange = new SpellRange
                     {
                         Amount = 100,
-                        Type = Constants.RangeType.Self,
+                        Type = SpellConstants.RangeType.Self,
                         Shape = "line",
                         Unit = "feet"
                     },
@@ -654,7 +656,7 @@ namespace Ganymede.Api.Data.Initializers.Spells
                     {
                         Verbal = true,
                         Somatic = true,
-                        Material = $"A bit of fur{Constants.EncodedComma}A rod of amber, crystal, or glass",
+                        Material = $"A bit of fur{SpellConstants.EncodedComma}A rod of amber, crystal, or glass",
                     },
                     SpellDuration = _dinst,
                     SpellSchool = _evocation
@@ -698,7 +700,7 @@ namespace Ganymede.Api.Data.Initializers.Spells
                     SpellDuration = _d1round,
                     SpellRange = new SpellRange
                     {
-                        Type = Constants.RangeType.Unlimited,
+                        Type = SpellConstants.RangeType.Unlimited,
                     },
                     SpellSchool = _evocation
                 }
@@ -745,7 +747,7 @@ namespace Ganymede.Api.Data.Initializers.Spells
                         Amount = 60,
                         Unit = "feet",
                         Shape = "line",
-                        Type = Constants.RangeType.Self,
+                        Type = SpellConstants.RangeType.Self,
                     },
                     SpellComponents = new SpellComponents
                     {
@@ -855,7 +857,7 @@ namespace Ganymede.Api.Data.Initializers.Spells
                     Campaign = _campaign,
                     CastingTime = new CastingTime
                     {
-                        Type = Constants.CastingTimeType.Reaction,
+                        Type = SpellConstants.CastingTimeType.Reaction,
                         ReactionCondition = "which you take when you or a creature within 60 feet of you falls"
                     },
                     Description = "<p>Choose up to five Falling creatures within range. A Falling creature's rate of descent slows to 60 feet per round until the spell ends. If the creature lands before the spell ends, it takes no Falling damage and can land on its feet, and the spell ends for that creature.</p>",
@@ -914,7 +916,7 @@ namespace Ganymede.Api.Data.Initializers.Spells
                     Name = "Thunderwave",
                     SpellRange = new SpellRange
                     {
-                        Type = Constants.RangeType.Self,
+                        Type = SpellConstants.RangeType.Self,
                         Amount = 15,
                         Unit = "feet",
                         Shape = "cube"
@@ -939,7 +941,7 @@ namespace Ganymede.Api.Data.Initializers.Spells
                     SpellRange = new SpellRange
                     {
                         Amount = 30,
-                        Type = Constants.RangeType.Self,
+                        Type = SpellConstants.RangeType.Self,
                         Shape = "sphere",
                         Unit = "feet"
                     },
