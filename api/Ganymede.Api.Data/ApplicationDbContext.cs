@@ -28,6 +28,7 @@ namespace Ganymede.Api.Data
         public DbSet<Tag> Tags { get; set; }
 
         public DbSet<PlayerClass> PlayerClasses { get; set; }
+        public DbSet<ClassSpell> ClassSpells { get; set; }
 
         public DbSet<Action> Actions { get; set; }
         public DbSet<ActionsSet> ActionsSets { get; set; }

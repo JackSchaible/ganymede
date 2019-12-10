@@ -73,7 +73,7 @@ namespace Ganymede.Api.Data.Initializers.Spells
         private Campaign _campaign;
         #endregion
 
-        public SpellData Initialize(ApplicationDbContext ctx, Campaign campaign, string rootPath)
+        public SpellData Initialize(ApplicationDbContext ctx, Campaign campaign, PlayerClassData pcData, string rootPath)
         {
             SetSpellMetadata(ctx, campaign);
 

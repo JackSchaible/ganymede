@@ -49,7 +49,7 @@ namespace Ganymede.Api.BLL.Services.Impl
                 {
                     StatusCode = ApiCodes.Ok,
                     InsertedID = newSpell.ID,
-                    ParentID = newSpell.CampaignID
+                    ParentID = newSpell.CampaignID.Value
                 };
             }
             catch (Exception e)

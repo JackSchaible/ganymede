@@ -34,7 +34,7 @@ namespace Ganymede.Api.Data.Spells
         [ForeignKey(nameof(SpellDurationID))]
         public SpellDuration SpellDuration { get; set; }
 
-        public int CampaignID { get; set; }
+        public int? CampaignID { get; set; }
         [ForeignKey(nameof(CampaignID))]
         public Campaign Campaign { get; set; }
 

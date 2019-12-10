@@ -41,10 +41,10 @@ namespace Ganymede.Api.Data.Initializers
             equipment.Initialize(_ctx, out ArmorData armors);
             campaigns.Initialize(_ctx, userId, fifth, pf, out Campaign pota);
             pcs.Initialize(_ctx, out PlayerClassData pcData);
-            spells.Initialize(_ctx, pota, _rootPath, out SpellData spellData);
+            spells.Initialize(_ctx, pota, pcData, _rootPath, out SpellData spellData);
             monsters.Initialize(_ctx, pota, alignments, diceRolls, armors, languages, skills, pcData, spellData, out IEnumerable<Monster> dAndDMonsters, out IEnumerable<Monster> pfMonsters);
 
-            _ctx.SaveChanges();
+            //_ctx.SaveChanges();
         }
     }
 }

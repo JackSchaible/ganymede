@@ -62,7 +62,8 @@ export class MonsterListComponent
 					let result: number;
 
 					// TODO: How to get attack bonus and dps?
-					// const aCr = this.crService.calculateCr(this.monsterStatsService.calculateAverageHp(a.basicStats.hpDice), this.monsterStatsService.calculateArmorClass(a), )
+					// const aCr = this.crService.calculateCr(this.monsterStatsService.calculateAverageHp(a.basicStats.hpDice),
+					// this.monsterStatsService.calculateArmorClass(a), )
 					// if (a. === b.level) {
 					// 	if (a.name < b.name) result = -1;
 					// 	else if (a.name > b.name) result = 1;
