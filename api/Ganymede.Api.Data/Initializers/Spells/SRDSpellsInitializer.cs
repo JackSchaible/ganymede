@@ -14,18 +14,18 @@ namespace Ganymede.Api.Data.Initializers.Spells
 {
     internal class SRDSpellsInitializer
     {
-        public SpellData Initialize(ApplicationDbContext ctx, SpellData data, string rootPath)
+        public SpellData Initialize(ApplicationDbContext ctx, SpellData data, PlayerClassData pcData, string rootPath)
         {
             List<Spell> spells = new List<Spell>();
             foreach (var spellFileName in Directory.EnumerateFiles(Path.Combine(rootPath, "Sources", "Spells")))
-                spells.Add(AddSpell(ctx, spellFileName));
+                spells.Add(AddSpell(ctx, pcData, spellFileName));
 
             // TODO: Add any required spells to the data
 
             return data;
         }
 
-        private Spell AddSpell(ApplicationDbContext ctx, string filename)
+        private Spell AddSpell(ApplicationDbContext ctx, PlayerClassData data, string filename)
         {
             string fileString;
 
@@ -41,7 +41,7 @@ namespace Ganymede.Api.Data.Initializers.Spells
             var topSection = GetTopSection(htmlDoc);
 
             ctx.Spells.Add(spell);
-            ctx.ClassSpells.AddRange(GetClassSpells(topSection["classes"], ctx, spell));
+            ctx.ClassSpells.AddRange(GetClassSpells(topSection["classes"], ctx, data, spell));
 
             return spell;
         }
@@ -68,6 +68,7 @@ namespace Ganymede.Api.Data.Initializers.Spells
         {
             CastingTime ct;
             var castingTimeNode = GetNodeByStrongText(doc, "Casting Time");
+            // This line fails on Branding Smite....the casting time has ** in it for some reason
             var text = castingTimeNode.InnerText.Substring(14);
 
             var indexOfReaction = text.IndexOf("reaction");
@@ -108,16 +109,17 @@ namespace Ganymede.Api.Data.Initializers.Spells
 
             return ct;
         }
-        private List<ClassSpell> GetClassSpells(string classes, ApplicationDbContext ctx, Spell spell)
+        private List<ClassSpell> GetClassSpells(string classes, ApplicationDbContext ctx, PlayerClassData data, Spell spell)
         {
             string[] classList = classes.Split(',');
             List<ClassSpell> spells = new List<ClassSpell>();
-
-            ctx.ClassSpells.AddRange(classList.Select(cl => new ClassSpell
+            var classSpells = classList.Select(cl => new ClassSpell
             {
-                Class = ctx.PlayerClasses.First(x => x.Name.ToLowerInvariant() == cl),
+                Class = GetClassByName(cl, data),
                 Spell = spell
-            }));
+            }).ToList();
+
+            ctx.ClassSpells.AddRange(classSpells);
 
             return spells;
         }
@@ -131,27 +133,31 @@ namespace Ganymede.Api.Data.Initializers.Spells
                     .FirstOrDefault(d => d.Descendants("strong")
                         .First().InnerText.IndexOf(text) > -1);
         }
-
         private Dictionary<string, string> GetTopSection(HtmlDocument doc)
         {
             string text = doc.DocumentNode.Descendants("p").First().InnerText;
-            List<string> values = text.Split("\r\n").ToList();
+            List<string> values = text.Split("\n").ToList();
 
             Dictionary<string, string> topValues = new Dictionary<string, string>();
             string lastKey = null;
-            foreach(var value in values)
+            foreach (var value in values)
             {
                 if (value.IndexOf(':') < 0)
                     topValues[lastKey] += $",{value}";
                 else
                 {
                     var kvp = value.Split(':');
-                    topValues.Add(kvp[0], kvp[1]);
+                    topValues.Add(kvp[0].Trim(), kvp[1].Trim());
                     lastKey = kvp[0];
                 }
             }
 
             return topValues;
+        }
+
+        private PlayerClass GetClassByName(string name, PlayerClassData data)
+        {
+            return data.GetType().GetProperty(name.Capitalize()).GetValue(data, null) as PlayerClass;
         }
     }
 }

@@ -88,7 +88,7 @@ namespace Ganymede.Api.Data.Initializers.Spells
             spellData = CreateLevel1Spells(ctx, spellData);
             spellData = CreateCantrips(ctx, spellData);
 
-            spellData = new SRDSpellsInitializer().Initialize(ctx, spellData, rootPath);
+            spellData = new SRDSpellsInitializer().Initialize(ctx, spellData, pcData, rootPath);
 
             return spellData;
         }
