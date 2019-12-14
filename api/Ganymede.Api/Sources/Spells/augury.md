@@ -7,7 +7,7 @@ classes: cleric
 _2nd-level divination (ritual)_   
 
 **Casting Time:** 1 minute   
-**Range**: Self   
+**Range:** Self   
 **Components:** V, S, M (specially marked sticks, bones, or similar tokens worth at least 25 gp)   
 **Duration:** Instantaneous   
 By casting gem-inlaid sticks, rolling dragon bones, laying out ornate cards, or employing some other divining tool, you receive an omen from an otherworldly entity about the results of a specific course of action that you plan to take within the next 30 minutes. The GM chooses from the following possible omens:

@@ -9,6 +9,7 @@ classes: cleric
 
 # Plane Shift 
 _7th-level conjuration_ 
+
 **Casting Time:** 1 action    
 **Range:** Touch    
 **Components:** V, S, M (a forked, metal rod worth at least 250 gp, attuned to a particular plane of existence)    
