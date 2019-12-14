@@ -44,7 +44,7 @@ namespace Ganymede.Api.Data.Initializers
             spells.Initialize(_ctx, pota, pcData, _rootPath, out SpellData spellData);
             monsters.Initialize(_ctx, pota, alignments, diceRolls, armors, languages, skills, pcData, spellData, out IEnumerable<Monster> dAndDMonsters, out IEnumerable<Monster> pfMonsters);
 
-            //_ctx.SaveChanges();
+            _ctx.SaveChanges();
         }
     }
 }
