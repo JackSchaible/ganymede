@@ -2,41 +2,13 @@
 using Ganymede.Api.Data.Spells;
 using System.Collections.Generic;
 using System.Linq;
+using static Ganymede.Api.Data.Initializers.Spells.SpellConfigurationData;
 
 namespace Ganymede.Api.Data.Initializers.Spells
 {
     internal class SpellsDnDInitializer
     {
-        internal static class SpellConstants
-        {
-            public static string EncodedComma = "%2CA";
-
-            public static class CastingTimeType
-            {
-                public const int Action = 0;
-                public const int Reaction = 1;
-                public const int Time = 2;
-                public const int BonusAction = 3;
-            }
-
-            public static class DurationType
-            {
-                public const int Duration = 0;
-                public const int Instantaneous = 1;
-                public const int Until = 2;
-                public const int Special = 3;
-            }
-
-            public static class RangeType
-            {
-                public const int Ranged = 0;
-                public const int Self = 1;
-                public const int Touch = 2;
-                public const int Sight = 3;
-                public const int Unlimited = 4;
-                public const int Special = 5;
-            }
-        }
+        private SpellConfigurationData _configData;
 
         #region DB IDs for reusable times, durations, etc.
         private CastingTime _t1Action, _t1Hour, _t1Bonus;
@@ -76,7 +48,10 @@ namespace Ganymede.Api.Data.Initializers.Spells
 
         public SpellData Initialize(ApplicationDbContext ctx, Campaign campaign, PlayerClassData pcData, string rootPath)
         {
-            SetSpellMetadata(ctx, campaign);
+            SetSpellMetadata(ctx, campaign, rootPath);
+            _configData.DatabaseContext = ctx;
+            _configData.Rootpath = rootPath;
+            _configData.PCData = pcData;
 
             var spellData = CreateLevel9Spells(ctx, new SpellData());
             spellData = CreateLevel8Spells(ctx, spellData);
@@ -89,14 +64,14 @@ namespace Ganymede.Api.Data.Initializers.Spells
             spellData = CreateLevel1Spells(ctx, spellData);
             spellData = CreateCantrips(ctx, spellData);
 
-            spellData = new SRDSpellsInitializer().Initialize(ctx, spellData, _allSchools, pcData, rootPath);
+            spellData = new SRDSpellsInitializer().Initialize(spellData, _configData);
 
             return spellData;
         }
 
         #region Spell Data
 
-        public void SetSpellMetadata(ApplicationDbContext ctx, Campaign campaign)
+        public void SetSpellMetadata(ApplicationDbContext ctx, Campaign campaign, string rootPath)
         {
             _allSchools = CreateDandDSchools(ctx);
             _abjuration = _allSchools.Single(s => s.Name == "Abjuration");
@@ -139,6 +114,16 @@ namespace Ganymede.Api.Data.Initializers.Spells
             _cVS = components[0];
             _cV = components[1];
             _campaign = campaign;
+
+            _configData = new SpellConfigurationData
+            {
+                CastingTimes = times.ToList(),
+                Ranges = ranges.ToList(),
+                Durations = durations.ToList(),
+                Components = components.ToList(),
+                Schools = _allSchools
+            };
+
         }
 
         private List<SpellSchool> CreateDandDSchools(ApplicationDbContext ctx)
@@ -363,41 +348,6 @@ namespace Ganymede.Api.Data.Initializers.Spells
         {
             var spells = new List<Spell>
             {
-                new Spell
-                {
-                    Campaign = _campaign,
-                    CastingTime = _t1Hour,
-                    Description = "<p>You and up to eight willing creatures within range project your astral bodies into the Astral Plane (the spell fails and the casting is wasted if you are already on that plane). The material body you leave behind is unconscious and in a state of suspended animation; it doesn’t need food or air and doesn’t age.</p><p>Your astral body resembles your mortal form in almost every way, replicating your game statistics and possessions. The principal difference is the addition of a silvery cord that extends from between your shoulder blades and trails behind you, fading to invisibility after 1 foot. This cord is your tether to your material body. As long as the tether remains intact, you can find your way home. If the cord is cut—something that can happen only when an effect specifically states that it does—your soul and body are separated, killing you instantly.</p><p>Your astral form can freely travel through the Astral Plane and can pass through portals there leading to any other plane. If you enter a new plane or return to the plane you were on when casting this spell, your body and possessions are transported along the silver cord, allowing you to re - enter your body as you enter the new plane.Your astral form is a separate incarnation.Any damage or other effects that apply to it have no effect on your physical body, nor do they persist when you return to it.</p><p>The spell ends for you and your companions when you use your action to dismiss it.When the spell ends, the affected creature returns to its physical body, and it awakens.</p><p>The spell might also end early for you or one of your companions.A successful dispel magic spell used against an astral or physical body ends the spell for that creature. If a creature’s original body or its astral form drops to 0 hit points, the spell ends for that creature. If the spell ends and the silver cord is intact, the cord pulls the creature’s astral form back to its body, ending its state of suspended animation.</p><p>If you are returned to your body prematurely, your companions remain in their astral forms and must find their own way back to their bodies, usually by dropping to 0 hit points.</p>",
-                    Level = 9,
-                    Name = "Astral Projection",
-                    SpellDuration = new SpellDuration
-                    {
-                        Type = SpellConstants.DurationType.Special
-                    },
-                    SpellComponents = new SpellComponents
-                    {
-                        Material = "For each creature you affect with this spell, you must provide one jacinth worth at least 1,000 gp and one ornately carved bar of silver worth at least 100 gp, all of which the spell consumes",
-                        Somatic = true,
-                        Verbal = true
-                    },
-                    SpellRange = _r10f,
-                    SpellSchool = _necromancy
-                },
-                new Spell
-                {
-                    Campaign = _campaign,
-                    CastingTime = _t1Action,
-                    Description = "<p>A churning storm cloud forms, centered on a point you can see and spreading to a radius of 360 feet. Lightning flashes in the area, thunder booms, and strong winds roar. Each creature under the cloud (no more than 5,000 feet beneath the cloud) when it appears must make a Constitution saving throw. On a failed save, a creature takes 2d6 thunder damage and becomes deafened for 5 minutes.</p><p>Each round you maintain concentration on this spell, the storm produces additional effects on your turn.</p><p>Round 2. Acidic rain falls from the cloud. Each creature and object under the cloud takes 1d6 acid damage.</p><p>Round 3. You call six bolts of lightning from the cloud to strike six creatures or objects of your choice beneath the cloud. A given creature or object can’t be struck by more than one bolt. A struck creature must make a Dexterity saving throw. The creature takes 10d6 lightning damage on a failed save, or half as much damage on a successful one.</p><p>Round 4. Hailstones rain down from the cloud. Each creature under the cloud takes 2d6 bludgeoning damage.</p><p>Round 5–10. Gusts and freezing rain assail the area under the cloud. The area becomes difficult terrain and is heavily obscured. Each creature there takes 1d6 cold damage. Ranged weapon attacks in the area are impossible. The wind and rain count as a severe distraction for the purposes of maintaining concentration on spells.Finally, gusts of strong wind(ranging from 20 to 50 miles per hour) automatically disperse fog, mists, and similar phenomena in the area, whether mundane or magical.</p>",
-                    Level = 9,
-                    Name = "Storm of Vengeance",
-                    SpellComponents = _cVS,
-                    SpellDuration = _d1cminute,
-                    SpellRange = new SpellRange
-                    {
-                        Type = SpellConstants.RangeType.Sight
-                    },
-                    SpellSchool = _conjuration
-                }
             };
 
             ctx.Spells.AddRange(spells);
@@ -407,23 +357,6 @@ namespace Ganymede.Api.Data.Initializers.Spells
         {
             var spells = new List<Spell>
             {
-                new Spell
-                {
-                    Campaign = _campaign,
-                    CastingTime = _t1Action,
-                    Description = "<p>Brilliant sunlight flashes in a 60-foot radius centered on a point you choose within range. Each creature in that light must make a Constitution saving throw. On a failed save, a creature takes 12d6 radiant damage and is blinded for 1 minute. On a successful save, it takes half as much damage and isn’t blinded by this spell. Undead and oozes have disadvantage on this saving throw.</p><p>A creature blinded by this spell makes another Constitution saving throw at the end of each of its turns. On a successful save, it is no longer blinded.</p><p>This spell dispels any darkness in its area that was created by a spell.</p>",
-                    Level = 8,
-                    Name = "Sunburst",
-                    SpellComponents = new SpellComponents
-                    {
-                        Material = $"Fire{SpellConstants.EncodedComma}A piece of sunstone",
-                        Somatic = true,
-                        Verbal = true
-                    },
-                    SpellDuration = _dinst,
-                    SpellRange = _r150f,
-                    SpellSchool = _evocation
-                }
             };
 
             ctx.Spells.AddRange(spells);
@@ -433,28 +366,6 @@ namespace Ganymede.Api.Data.Initializers.Spells
         {
             var spells = new List<Spell>
             {
-                new Spell
-                {
-                    Campaign = _campaign,
-                    CastingTime = new CastingTime
-                    {
-                        Amount = 12,
-                        Unit = "hours",
-                        Type = SpellConstants.CastingTimeType.Time
-                    },
-                    Description = "<p>You shape an illusory duplicate of one beast or humanoid that is within range for the entire casting time of the spell. The duplicate is a creature, partially real and formed from ice or snow, and it can take actions and otherwise be affected as a normal creature. It appears to be the same as the original, but it has half the creature’s hit point maximum and is formed without any equipment. Otherwise, the illusion uses all the statistics of the creature it duplicates.</p><p>The simulacrum is friendly to you and creatures you designate. It obeys your spoken commands, moving and acting in accordance with your wishes and acting on your turn in combat. The simulacrum lacks the ability to learn or become more powerful, so it never increases its level or other abilities, nor can it regain expended spell slots.</p><p>If the simulacrum is damaged, you can repair it in an alchemical laboratory, using rare herbs and minerals worth 100 gp per hit point it regains. The simulacrum lasts until it drops to 0 hit points, at which point it reverts to snow and melts instantly.</p><p>If you cast this spell again, any currently active duplicates you created with this spell are instantly destroyed.</p>",
-                    Level = 7,
-                    Name = "Simulacrum",
-                    SpellComponents = new SpellComponents
-                    {
-                        Material = $"Snow or ice in quantities sufficient to made a life-size copy of the duplicated creature{SpellConstants.EncodedComma}Some hair, fingernail clippings, or other piece of that creature’s body placed inside the snow or ice{SpellConstants.EncodedComma}Powdered ruby worth 1,500 gp, sprinkled over the duplicate and consumed by the spell",
-                        Somatic = true,
-                        Verbal = true
-                    },
-                    SpellDuration = _dUD,
-                    SpellRange = _rtouch,
-                    SpellSchool = _illusion
-                }
             };
 
             ctx.AddRange(spells);
@@ -462,71 +373,18 @@ namespace Ganymede.Api.Data.Initializers.Spells
         }
         SpellData CreateLevel6Spells(ApplicationDbContext ctx, SpellData spellData)
         {
-            var chainLightning = new Spell
-            {
-                Campaign = _campaign,
-                AtHigherLevels = "<p>When you cast this spell using a spell slot of 7th level or higher, one additional bolt leaps from the first target to another target for each slot above 6th.</p>",
-                CastingTime = _t1Action,
-                Description = "<p>You create a bolt of lightning that arcs towards a target of your choice that you can see within range. Three bolts then leap from that target to as many as three other targets, each of which must be within 30 feet of the first target. A target can be a creature or an object and can be targeted by only one of the bolts.</p><p>A target must make a dexterity saving throw. The target takes 10d8 lightning damage on a failed save, or half as much damage on a successful one.</p>",
-                Level = 6,
-                Name = "Chain Lightning",
-                SpellRange = _r150f,
-                SpellComponents = new SpellComponents
-                {
-                    Material = $"A bit of fur{SpellConstants.EncodedComma}A piece of amber or a crystal rod{SpellConstants.EncodedComma}Three silver pins",
-                    Somatic = true,
-                    Verbal = true
-                },
-                SpellDuration = _dinst,
-                SpellSchool = _evocation,
-            };
-
             var spells = new List<Spell>
             {
-                chainLightning
             };
-
-            spellData.ChainLightning = chainLightning;
 
             ctx.AddRange(spells);
             return spellData;
         }
         SpellData CreateLevel5Spells(ApplicationDbContext ctx, SpellData spellData)
         {
-            Spell
-                cloudKill = new Spell
-                {
-                    Campaign = _campaign,
-                    AtHigherLevels = "<p>When you cast this spell using a spell slot of 6th level or higher, the damage increases by 1d8 for each slot level above 5th.</p>",
-                    CastingTime = _t1Action,
-                    Description = "<p>You create a 20-foot-radius Sphere of poisonous, yellow-green fog centered on a point you choose within range. The fog spreads around corners. It lasts for the Duration or until strong wind disperses the fog, ending the spell. Its area is heavily obscured.</p><p>When a creature enters the spell’s area for the first time on a turn or starts its turn there, that creature must make a Constitution saving throw. The creature takes 5d8 poison damage on a failed save, or half as much damage on a successful one. Creatures are affected even if they hold their breath or don’t need to breathe.</p><p>The fog moves 10 feet away from you at the start of each of your turns, rolling along the surface of the ground. The vapors, being heavier than air, sink to the lowest level of the land, even pouring down openings.</p>",
-                    Level = 5,
-                    Name = "Cloudkill",
-                    SpellRange = _r120f,
-                    SpellComponents = _cVS,
-                    SpellDuration = _d10cminutes,
-                    SpellSchool = _conjuration
-                },
-                seeming = new Spell
-                {
-                    Campaign = _campaign,
-                    CastingTime = _t1Action,
-                    Description = "<p>This spell allows you to change the appearance of any number of creatures that you can see within range. You give each target you choose a new, illusory appearance. An unwilling target can make a Charisma saving throw, and if it succeeds, it is unaffected by this spell.</p><p>The spell disguises physical appearance as well as clothing, armor, weapons, and equipment. You can make each creature seem 1 foot shorter or taller and appear thin, fat, or in between. You can’t change a target’s body type, so you must choose a form that has the same basic arrangement of limbs. Otherwise, the extent of the illusion is up to you. The spell lasts for the duration, unless you use your action to dismiss it sooner.</p><p>The changes wrought by this spell fail to hold up to physical inspection. For example, if you use this spell to add a hat to a creature’s outfit, objects pass through the hat, and anyone who touches it would feel nothing or would feel the creature’s head and hair. If you use this spell to appear thinner than you are, the hand of someone who reaches out to touch you would bump into you while it was seemingly still in midair.</p><p>A creature can use its action to inspect a target and make an Intelligence (Investigation) check against your spell save DC. If it succeeds, it becomes aware that the target is disguised.</p>",
-                    Level = 5,
-                    Name = "Seeming",
-                    SpellRange = _r30f,
-                    SpellComponents = _cVS,
-                    SpellDuration = _d8hours,
-                    SpellSchool = _illusion
-                };
             var spells = new List<Spell>
             {
-                cloudKill,
-                seeming
             };
-
-            spellData.Cloudkill = cloudKill;
-            spellData.Seeming = seeming;
 
             ctx.AddRange(spells);
             return spellData;
@@ -534,29 +392,6 @@ namespace Ganymede.Api.Data.Initializers.Spells
         SpellData CreateLevel4Spells(ApplicationDbContext ctx, SpellData spellData)
         {
             Spell
-                iceStorm = new Spell
-                {
-                    Campaign = _campaign,
-                    AtHigherLevels = "<p>When you cast this spell using a spell slot of 5th level or higher, the bludgeoning damage increases by 1d8 for each slot level above 4th.</p>",
-                    CastingTime = _t1Action,
-                    Description = "<p>A hail of rock-hard ice pounds to the ground in a 20-foot-radius, 40-foot-high cylinder centered on a point within range. Each creature in the cylinder must make a Dexterity saving throw. A creature takes 2d8 bludgeoning damage and 4d6 cold damage on a failed save, or half as much damage on a successful one. Hailstones turn the storm’s area of effect into difficult terrain until the end of your next turn.</p>",
-                    Level = 4,
-                    Name = "Ice Storm",
-                    SpellRange = new SpellRange
-                    {
-                        Amount = 300,
-                        Unit = "feet",
-                        Type = SpellConstants.RangeType.Ranged
-                    },
-                    SpellComponents = new SpellComponents
-                    {
-                        Verbal = true,
-                        Somatic = true,
-                        Material = $"A pinch of dust{SpellConstants.EncodedComma}A few drops of water",
-                    },
-                    SpellDuration = _dinst,
-                    SpellSchool = _evocation
-                },
                 stormSphere = new Spell
                 {
                     Campaign = _campaign,
@@ -573,11 +408,9 @@ namespace Ganymede.Api.Data.Initializers.Spells
 
             var spells = new List<Spell>
             {
-                iceStorm,
                 stormSphere
             };
 
-            spellData.IceStorm = iceStorm;
             spellData.StormSphere = stormSphere;
 
             ctx.AddRange(spells);

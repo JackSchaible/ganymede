@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
+using static Ganymede.Api.Data.Initializers.Spells.SpellConfigurationData;
 using static Ganymede.Api.Data.Initializers.Spells.SpellsDnDInitializer;
 
 namespace Ganymede.Api.Data.Initializers.Spells
@@ -28,22 +29,49 @@ namespace Ganymede.Api.Data.Initializers.Spells
             ConcentrationDurationRegex = new Regex("([0-9]+) (\\w+)");
 
         private readonly string StrongTagRegexPattern = "<strong>{0}:</strong> (.+)(?:<br />|</p>)";
-        private List<SpellSchool> _schools;
+        private SpellConfigurationData _data;
 
-        public SpellData Initialize(ApplicationDbContext ctx, SpellData data, List<SpellSchool> schools, PlayerClassData pcData, string rootPath)
+        public SpellData Initialize(SpellData spellData, SpellConfigurationData data)
         {
-            _schools = schools;
+            _data = data;
 
             List<Spell> spells = new List<Spell>();
-            foreach (var spellFileName in Directory.EnumerateFiles(Path.Combine(rootPath, "Sources", "Spells")))
-                spells.Add(AddSpell(ctx, pcData, spellFileName));
+            foreach (var spellFileName in Directory.EnumerateFiles(Path.Combine(data.Rootpath, "Sources", "Spells")))
+                spells.Add(AddSpell(spellFileName));
 
-            // TODO: Add any required spells to the data
+            spellData.ChainLightning = spells.Find(s => s.Name == "Chain Lightning");
+            spellData.Cloudkill = spells.Find(s => s.Name == "Cloudkill");
+            spellData.Seeming = spells.Find(s => s.Name == "Seeming");
+            spellData.IceStorm = spells.Find(s => s.Name == "Ice Storm");
 
-            return data;
+            /*TODO: These are all duplicates
+            Fly
+            Gaseous Form
+            Glyph of Warding
+            Haste
+            Lightning Bolt
+            Sending
+            Gust of Wind
+            Invisibility
+            Levitate
+            Misty Step
+            Charm Person
+            Detect Magic
+            Expeditious Retreat
+            Feather Fall
+            Jump
+            Mage Armor
+            Thunderwave
+            Mage Hand
+            Message
+            Prestidigitation
+            Ray of Frost
+            Shocking Grasp*/
+
+            return spellData;
         }
 
-        private Spell AddSpell(ApplicationDbContext ctx, PlayerClassData data, string filename)
+        private Spell AddSpell(string filename)
         {
             string fileString;
 
@@ -58,8 +86,8 @@ namespace Ganymede.Api.Data.Initializers.Spells
             var topSection = GetTopSection(htmlDoc);
             var spell = ConvertHtmlToSpell(htmlDoc.Text, topSection);
 
-            ctx.Spells.Add(spell);
-            ctx.ClassSpells.AddRange(GetClassSpells(topSection["classes"], ctx, data, spell));
+            _data.DatabaseContext.Spells.Add(spell);
+            _data.DatabaseContext.ClassSpells.AddRange(GetClassSpells(topSection["classes"], spell));
 
             return spell;
         }
@@ -107,61 +135,17 @@ namespace Ganymede.Api.Data.Initializers.Spells
 
             return topValues;
         }
-        private CastingTime GetCastingTime(string doc)
-        {
-            CastingTime ct;
-            var match = GetMatchByStrongText(doc, "Casting Time");
-            var text = match.Groups[1].Value;
-
-            var indexOfReaction = text.IndexOf("reaction");
-            if (indexOfReaction > -1)
-            {
-                ct = new CastingTime
-                {
-                    Type = SpellConstants.CastingTimeType.Reaction,
-                    ReactionCondition = text.Substring(indexOfReaction + 10)
-                };
-            }
-            else if (text.IndexOf("bonus action") > -1)
-            {
-                ct = new CastingTime
-                {
-                    Type = SpellConstants.CastingTimeType.BonusAction,
-                };
-            }
-            else if (text.IndexOf("action") > -1)
-            {
-                ct = new CastingTime
-                {
-                    Type = SpellConstants.CastingTimeType.Action
-                };
-            }
-            else
-            {
-                int time = int.Parse(Regex.Match(text, "^\\d*").Value);
-                string unit = Regex.Match(text, "\\w*$").Value;
-
-                ct = new CastingTime
-                {
-                    Amount = time,
-                    Type = SpellConstants.CastingTimeType.Time,
-                    Unit = unit
-                };
-            }
-
-            return ct;
-        }
-        private List<ClassSpell> GetClassSpells(string classes, ApplicationDbContext ctx, PlayerClassData data, Spell spell)
+        private List<ClassSpell> GetClassSpells(string classes, Spell spell)
         {
             string[] classList = classes.Split(',');
             List<ClassSpell> spells = new List<ClassSpell>();
             var classSpells = classList.Select(cl => new ClassSpell
             {
-                Class = GetClassByName(cl, data),
+                Class = GetClassByName(cl),
                 Spell = spell
             }).ToList();
 
-            ctx.ClassSpells.AddRange(classSpells);
+            _data.DatabaseContext.ClassSpells.AddRange(classSpells);
 
             return spells;
         }
@@ -182,7 +166,67 @@ namespace Ganymede.Api.Data.Initializers.Spells
             return desc;
         }
         private Match GetMatchByStrongText(string doc, string text) => new Regex(string.Format(StrongTagRegexPattern, text)).Match(doc);
-        private PlayerClass GetClassByName(string name, PlayerClassData data) => data.GetType().GetProperty(name.Capitalize()).GetValue(data, null) as PlayerClass;
+        private PlayerClass GetClassByName(string name) => _data.PCData.GetType().GetProperty(name.Capitalize()).GetValue(_data.PCData, null) as PlayerClass;
+
+        private CastingTime GetCastingTime(string doc)
+        {
+            CastingTime castingTime;
+            var match = GetMatchByStrongText(doc, "Casting Time");
+            var text = match.Groups[1].Value;
+
+            var indexOfReaction = text.IndexOf("reaction");
+            if (indexOfReaction > -1)
+            {
+                castingTime = new CastingTime
+                {
+                    Type = SpellConstants.CastingTimeType.Reaction,
+                    ReactionCondition = text.Substring(indexOfReaction + 10)
+                };
+            }
+            else if (text.IndexOf("bonus action") > -1)
+            {
+                castingTime = new CastingTime
+                {
+                    Type = SpellConstants.CastingTimeType.BonusAction,
+                };
+            }
+            else if (text.IndexOf("action") > -1)
+            {
+                castingTime = new CastingTime
+                {
+                    Type = SpellConstants.CastingTimeType.Action
+                };
+            }
+            else
+            {
+                int time = int.Parse(Regex.Match(text, "^\\d*").Value);
+                string unit = Regex.Match(text, "\\w*$").Value;
+
+                castingTime = new CastingTime
+                {
+                    Amount = time,
+                    Type = SpellConstants.CastingTimeType.Time,
+                    Unit = unit
+                };
+            }
+
+
+            CastingTime existing = _data.CastingTimes.SingleOrDefault(ct =>
+                ct.Amount == castingTime.Amount
+                && ct.ReactionCondition == castingTime.ReactionCondition
+                && ct.Type == castingTime.Type
+                && ct.Unit == castingTime.Unit);
+
+            if (existing == null)
+            {
+                _data.DatabaseContext.CastingTimes.Add(castingTime);
+                _data.CastingTimes.Add(castingTime);
+            }
+            else
+                castingTime = existing;
+
+            return castingTime;
+        }
         private SpellComponents GetComponents(string doc)
         {
             SpellComponents components = new SpellComponents();
@@ -194,6 +238,19 @@ namespace Ganymede.Api.Data.Initializers.Spells
             components.Material = MaterialRegex.IsMatch(text)
                 ? string.Join(SpellConstants.EncodedComma, text[text.IndexOf("(")..text.IndexOf(")")].Split(","))
                 : null;
+
+            SpellComponents existing = _data.Components.SingleOrDefault(sc => 
+                sc.Verbal == components.Verbal
+                && sc.Somatic == components.Somatic
+                && sc.Material == components.Material);
+
+            if (existing == null)
+            {
+                _data.DatabaseContext.SpellComponents.Add(components);
+                _data.Components.Add(components);
+            }
+            else
+                components = existing;
 
             return components;
         }
@@ -231,6 +288,23 @@ namespace Ganymede.Api.Data.Initializers.Spells
             else
                 throw new Exception($"Unable to determine duration type for spell {name}");
 
+            SpellDuration existing = _data.Durations.SingleOrDefault(d =>
+                d.Amount == duration.Amount
+                && d.Concentration == duration.Concentration
+                && d.Type == duration.Type
+                && d.Unit == duration.Unit
+                && d.UntilDispelled == duration.UntilDispelled
+                && d.UntilTriggered == duration.UntilTriggered
+                && d.UpTo == duration.UpTo);
+
+            if (existing == null)
+            {
+                _data.DatabaseContext.SpellDurations.Add(duration);
+                _data.Durations.Add(duration);
+            }
+            else
+                duration = existing;
+
             return duration;
         }
         private SpellRange GetRange(string doc, string name)
@@ -267,8 +341,22 @@ namespace Ganymede.Api.Data.Initializers.Spells
             else
                 throw new Exception($"Cannot parse range type for spell {name}");
 
+            SpellRange existing = _data.Ranges.SingleOrDefault(sr =>
+                sr.Amount == range.Amount
+                && sr.Shape == range.Shape
+                && sr.Type == range.Type
+                && sr.Unit == range.Unit);
+
+            if (existing == null)
+            {
+                _data.DatabaseContext.SpellRanges.Add(range);
+                _data.Ranges.Add(range);
+            }
+            else
+                range = existing;
+
             return range;
         }
-        private SpellSchool GetSchool(Dictionary<string, string> topSection) => _schools.First(s => s.Name.ToLowerInvariant() == topSection["school"]);
+        private SpellSchool GetSchool(Dictionary<string, string> topSection) => _data.Schools.First(s => s.Name.ToLowerInvariant() == topSection["school"]);
     }
 }
