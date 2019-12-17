@@ -14,10 +14,26 @@ namespace Ganymede.Api.Data.Initializers.Spells
 {
     internal class SRDSpellsInitializer
     {
-        private readonly Regex NumberAndUnitRegex = new Regex("([0-9]+) (\\w+)( \\w+)?$");
+        private readonly Regex 
+            NumberAndUnitRegex = new Regex("([0-9]+) (\\w+)$"),
+            RangeShapeRegex = new Regex("\\(([0-9]+)-(\\w+)(?:-\\w+)?( \\w+)?\\)"),
+            LevelRegex = new Regex("<p><em>(.+)</em></p>"),
+            NumberRegex = new Regex("([0-9])"),
+            RitualRegex = new Regex("\\(ritual\\)"),
+            AtHigherLevelsRegex = new Regex("<p><strong>At Higher Levels\\.</strong> (.+)</p>"),
+            ParagraphRegex = new Regex("<p>\\.+</p>"),
+            VerbalRegex = new Regex("( V,)|( V<br />)"),
+            SomaticRegex = new Regex("( S,)|( S<br />)"),
+            MaterialRegex = new Regex("( M,)|( M<br />)"),
+            ConcentrationDurationRegex = new Regex("([0-9]+) (\\w+)");
 
-        public SpellData Initialize(ApplicationDbContext ctx, SpellData data, PlayerClassData pcData, string rootPath)
+        private readonly string StrongTagRegexPattern = "<strong>{0}:</strong> (.+)(?:<br />|</p>)";
+        private List<SpellSchool> _schools;
+
+        public SpellData Initialize(ApplicationDbContext ctx, SpellData data, List<SpellSchool> schools, PlayerClassData pcData, string rootPath)
         {
+            _schools = schools;
+
             List<Spell> spells = new List<Spell>();
             foreach (var spellFileName in Directory.EnumerateFiles(Path.Combine(rootPath, "Sources", "Spells")))
                 spells.Add(AddSpell(ctx, pcData, spellFileName));
@@ -40,7 +56,7 @@ namespace Ganymede.Api.Data.Initializers.Spells
             htmlDoc.LoadHtml(htmlString);
 
             var topSection = GetTopSection(htmlDoc);
-            var spell = ConvertHtmlToSpell(htmlDoc, topSection);
+            var spell = ConvertHtmlToSpell(htmlDoc.Text, topSection);
 
             ctx.Spells.Add(spell);
             ctx.ClassSpells.AddRange(GetClassSpells(topSection["classes"], ctx, data, spell));
@@ -48,34 +64,28 @@ namespace Ganymede.Api.Data.Initializers.Spells
             return spell;
         }
 
-        private Spell ConvertHtmlToSpell(HtmlDocument doc, Dictionary<string, string> topSection)
+        private Spell ConvertHtmlToSpell(string doc, Dictionary<string, string> topSection)
         {
             // For conditional debugging, put inline when parsing is done
             var name = topSection["name"];
 
+            var levelAndSchool = LevelRegex.Match(doc).Groups[1].Value;
+
             return new Spell
             {
-                AtHigherLevels = GetAtHigherLevels(doc),
+                AtHigherLevels = AtHigherLevelsRegex.Match(doc).Groups[1].Value,
                 CastingTime = GetCastingTime(doc),
                 Description = GetDescription(doc),
-                Level = GetLevel(topSection),
+                Level = levelAndSchool.Contains("cantrip") ? 0 : int.Parse(NumberRegex.Match(levelAndSchool).Groups[1].Value),
                 Name = name,
-                Ritual = GetRitual(doc),
+                Ritual = RitualRegex.IsMatch(levelAndSchool),
                 SpellComponents = GetComponents(doc),
                 SpellDuration = GetDuration(doc, name),
-                SpellRange = GetRange(doc, name)
+                SpellRange = GetRange(doc, name),
+                SpellSchool = GetSchool(topSection)
             };
         }
 
-        private string GetAtHigherLevels(HtmlDocument doc)
-        {
-            var atHigherLevelsNode = GetNodeByStrongText(doc, "At Higher Levels");
-            if (atHigherLevelsNode == null) return null;
-
-            var text = atHigherLevelsNode.InnerText;
-
-            return text.Substring(18);
-        }
         private Dictionary<string, string> GetTopSection(HtmlDocument doc)
         {
             string text = doc.DocumentNode.SelectSingleNode("/p").InnerText;
@@ -97,11 +107,11 @@ namespace Ganymede.Api.Data.Initializers.Spells
 
             return topValues;
         }
-        private CastingTime GetCastingTime(HtmlDocument doc)
+        private CastingTime GetCastingTime(string doc)
         {
             CastingTime ct;
-            var castingTimeNode = GetNodeByStrongText(doc, "Casting Time");
-            var text = castingTimeNode.InnerText.Substring(14);
+            var match = GetMatchByStrongText(doc, "Casting Time");
+            var text = match.Groups[1].Value;
 
             var indexOfReaction = text.IndexOf("reaction");
             if (indexOfReaction > -1)
@@ -156,43 +166,57 @@ namespace Ganymede.Api.Data.Initializers.Spells
             return spells;
         }
 
-        private string GetDescription(HtmlDocument doc) => $"<p>{string.Join("</p><p>", doc.DocumentNode.SelectNodes("/p[not(.//strong)]").Last().InnerText.Split("\n"))}</p>";
-        private HtmlNode GetNodeByStrongText(HtmlDocument doc, string text) => doc.DocumentNode.SelectSingleNode($"/p[strong[contains(text(), \"{text}\")]]");
+        private string GetDescription(string doc) 
+        {
+            var matches = ParagraphRegex.Matches(doc);
+
+            string desc = null;
+
+            foreach (Match match in matches)
+            {
+                var value = match.Value;
+                if (!value.Contains("<em>") && !value.Contains("<strong>"))
+                    desc = value;
+            }
+
+            return desc;
+        }
+        private Match GetMatchByStrongText(string doc, string text) => new Regex(string.Format(StrongTagRegexPattern, text)).Match(doc);
         private PlayerClass GetClassByName(string name, PlayerClassData data) => data.GetType().GetProperty(name.Capitalize()).GetValue(data, null) as PlayerClass;
-        private int GetLevel(Dictionary<string, string> topSection) => int.Parse(topSection["level"]);
-        private bool GetRitual(HtmlDocument doc) => doc.DocumentNode.SelectSingleNode("/p[em]").InnerText.Contains("(ritual");
-        private SpellComponents GetComponents(HtmlDocument doc)
+        private SpellComponents GetComponents(string doc)
         {
             SpellComponents components = new SpellComponents();
 
-            var text = GetNodeByStrongText(doc, "Components").InnerText;
+            var text = GetMatchByStrongText(doc, "Components").Groups[1].Value;
 
-            components.Verbal = new Regex("( V,)|( V<br />)").IsMatch(text);
-            components.Somatic = new Regex("( S,)|( S<br />)").IsMatch(text);
-            components.Material = new Regex("( M,)|( M<br />)").IsMatch(text)
-                ? string.Join(SpellConstants.EncodedComma, text.Substring(text.IndexOf("("), text.IndexOf(")") - text.IndexOf("(")).Split(","))
+            components.Verbal = VerbalRegex.IsMatch(text);
+            components.Somatic = SomaticRegex.IsMatch(text);
+            components.Material = MaterialRegex.IsMatch(text)
+                ? string.Join(SpellConstants.EncodedComma, text[text.IndexOf("(")..text.IndexOf(")")].Split(","))
                 : null;
 
             return components;
         }
-        private SpellDuration GetDuration(HtmlDocument doc, string name)
+        private SpellDuration GetDuration(string doc, string name)
         {
             SpellDuration duration = new SpellDuration();
-            var node = GetNodeByStrongText(doc, "Duration");
-            var text = node.InnerText;
+            var text = GetMatchByStrongText(doc, "Duration").Groups[1].Value;
 
             var durationMatch = NumberAndUnitRegex.Match(text);
             if (durationMatch.Success)
             {
                 duration.Type = SpellConstants.DurationType.Duration;
-                duration.Amount = int.Parse(durationMatch.Groups[0].Value);
-                duration.Unit = durationMatch.Groups[1].Value;
+                duration.Amount = int.Parse(durationMatch.Groups[1].Value);
+                duration.Unit = durationMatch.Groups[2].Value;
+            }
+            else if (text.Contains("concentration", StringComparison.OrdinalIgnoreCase))
+            {
+                duration.Concentration = true;
+                duration.UpTo = text.Contains("up to", StringComparison.OrdinalIgnoreCase);
 
-                if (text.Contains("concentration", StringComparison.OrdinalIgnoreCase))
-                {
-                    duration.Concentration = true;
-                    duration.UpTo = text.Contains("up to", StringComparison.OrdinalIgnoreCase);
-                }
+                var cDuration = ConcentrationDurationRegex.Match(text);
+                duration.Amount = int.Parse(cDuration.Groups[1].Value);
+                duration.Unit = cDuration.Groups[2].Value;
             }
             else if (text.Contains("Instantaneous", StringComparison.OrdinalIgnoreCase))
                 duration.Type = SpellConstants.DurationType.Instantaneous;
@@ -209,34 +233,42 @@ namespace Ganymede.Api.Data.Initializers.Spells
 
             return duration;
         }
-        private SpellRange GetRange(HtmlDocument doc, string name)
+        private SpellRange GetRange(string doc, string name)
         {
             SpellRange range = new SpellRange();
-            var text = GetNodeByStrongText(doc, "Range").InnerText;
+            var matchText = GetMatchByStrongText(doc, "Range").Groups[1].Value;
 
-            var rangeMatch = NumberAndUnitRegex.Match(text);
-            var extractAmountAndUnit = Func()
-            {
-                range.Amount = int.Parse(rangeMatch.Groups[0].Value);
-                range.Unit = rangeMatch.Groups[1].Value;
-
-                if (rangeMatch.Groups[2].Success)
-                    range.Shape = rangeMatch.Groups[2].Value;
-            };
-
-            if (rangeMatch.Success)
-            {
-                
-            }
-            else if (text.Contains("self", StringComparison.OrdinalIgnoreCase))
+            var rangeMatch = NumberAndUnitRegex.Match(matchText);
+            if (matchText.Contains("Self", StringComparison.OrdinalIgnoreCase))
             {
                 range.Type = SpellConstants.RangeType.Self;
 
-                int startOfSelfShape = 
-                if (text.)
+                var rangeShapeMatch = RangeShapeRegex.Match(matchText);
+                if (rangeShapeMatch.Success)
+                {
+                    range.Amount = int.Parse(rangeShapeMatch.Groups[1].Value);
+                    range.Unit = rangeShapeMatch.Groups[2].Value;
+                    range.Shape = rangeShapeMatch.Groups[3].Value;
+                }
             }
+            else if (matchText.Contains("Touch", StringComparison.OrdinalIgnoreCase))
+                range.Type = SpellConstants.RangeType.Touch;
+            else if (matchText.Contains("Sight", StringComparison.OrdinalIgnoreCase))
+                range.Type = SpellConstants.RangeType.Sight;
+            else if (rangeMatch.Success)
+            {
+                range.Amount = int.Parse(rangeMatch.Groups[1].Value);
+                range.Unit = rangeMatch.Groups[2].Value;
+            }
+            else if (matchText.Contains("Special", StringComparison.OrdinalIgnoreCase))
+                range.Type = SpellConstants.RangeType.Special;
+            else if (matchText.Contains("Unlimited", StringComparison.OrdinalIgnoreCase))
+                range.Type = SpellConstants.RangeType.Unlimited;
+            else
+                throw new Exception($"Cannot parse range type for spell {name}");
 
             return range;
         }
+        private SpellSchool GetSchool(Dictionary<string, string> topSection) => _schools.First(s => s.Name.ToLowerInvariant() == topSection["school"]);
     }
 }

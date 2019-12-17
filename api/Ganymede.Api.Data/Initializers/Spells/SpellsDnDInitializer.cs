@@ -71,6 +71,7 @@ namespace Ganymede.Api.Data.Initializers.Spells
             _necromancy,
             _transmutation;
         private Campaign _campaign;
+        private List<SpellSchool> _allSchools;
         #endregion
 
         public SpellData Initialize(ApplicationDbContext ctx, Campaign campaign, PlayerClassData pcData, string rootPath)
@@ -88,7 +89,7 @@ namespace Ganymede.Api.Data.Initializers.Spells
             spellData = CreateLevel1Spells(ctx, spellData);
             spellData = CreateCantrips(ctx, spellData);
 
-            spellData = new SRDSpellsInitializer().Initialize(ctx, spellData, pcData, rootPath);
+            spellData = new SRDSpellsInitializer().Initialize(ctx, spellData, _allSchools, pcData, rootPath);
 
             return spellData;
         }
@@ -97,15 +98,15 @@ namespace Ganymede.Api.Data.Initializers.Spells
 
         public void SetSpellMetadata(ApplicationDbContext ctx, Campaign campaign)
         {
-            var schools = CreateDandDSchools(ctx);
-            _abjuration = schools.Single(s => s.Name == "Abjuration");
-            _conjuration = schools.Single(s => s.Name == "Conjuration");
-            _divination = schools.Single(s => s.Name == "Divination");
-            _enchantment = schools.Single(s => s.Name == "Enchantment");
-            _evocation = schools.Single(s => s.Name == "Evocation");
-            _illusion = schools.Single(s => s.Name == "Illusion");
-            _necromancy = schools.Single(s => s.Name == "Necromancy");
-            _transmutation = schools.Single(s => s.Name == "Transmutation");
+            _allSchools = CreateDandDSchools(ctx);
+            _abjuration = _allSchools.Single(s => s.Name == "Abjuration");
+            _conjuration = _allSchools.Single(s => s.Name == "Conjuration");
+            _divination = _allSchools.Single(s => s.Name == "Divination");
+            _enchantment = _allSchools.Single(s => s.Name == "Enchantment");
+            _evocation = _allSchools.Single(s => s.Name == "Evocation");
+            _illusion = _allSchools.Single(s => s.Name == "Illusion");
+            _necromancy = _allSchools.Single(s => s.Name == "Necromancy");
+            _transmutation = _allSchools.Single(s => s.Name == "Transmutation");
 
             var times = CreateDandDCastingTimes(ctx);
             _t1Action = times[0];
