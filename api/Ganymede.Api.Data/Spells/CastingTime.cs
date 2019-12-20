@@ -1,4 +1,6 @@
-﻿namespace Ganymede.Api.Data.Spells
+﻿using System.Collections.Generic;
+
+namespace Ganymede.Api.Data.Spells
 {
     public class CastingTime
     {
@@ -7,5 +9,7 @@
         public int Amount { get; set; }
         public string Unit { get; set; }
         public string ReactionCondition { get; set; }
+
+        public virtual ICollection<SpellCastingTime> Spells { get; set; }
     }
 }

@@ -71,6 +71,7 @@ namespace Ganymede.Api.Data
         public DbSet<MonsterSpellcasting> MonsterSpellcastings { get; set; }
         public DbSet<Spellcaster> Spellcasters { get; set; }
         public DbSet<SpellcasterSpells> SpellcasterSpells { get; set; }
+        public DbSet<SpellCastingTime> SpellCastingTimes { get; set; }
 
         public DbSet<Spell> Spells { get; set; }
         public DbSet<CastingTime> CastingTimes { get; set; }
@@ -105,6 +106,7 @@ namespace Ganymede.Api.Data
             ConfigureClassSpells(builder);
             ConfigureMonsterEquipment(builder);
             ConfigureWeaponProperties(builder);
+            ConfigureSpellCastingTimes(builder);
 
             base.OnModelCreating(builder);
 		}
@@ -360,6 +362,30 @@ namespace Ganymede.Api.Data
             builder.Entity<Spell>()
                 .HasMany(s => s.ClassSpells)
                 .WithOne(cs => cs.Spell)
+                .OnDelete(DeleteBehavior.Restrict);
+        }
+
+        private void ConfigureSpellCastingTimes(ModelBuilder builder)
+        {
+            builder.Entity<SpellCastingTime>()
+                .HasKey(sct => new { sct.SpellID, sct.CastingTimeID });
+            builder.Entity<SpellCastingTime>()
+                .HasOne(sct => sct.Spell)
+                .WithMany(s => s.CastingTimes)
+                .HasForeignKey(sct => sct.SpellID)
+                .OnDelete(DeleteBehavior.Restrict);
+            builder.Entity<SpellCastingTime>()
+                .HasOne(cst => cst.CastingTime)
+                .WithMany(ct => ct.Spells)
+                .HasForeignKey(sct => sct.CastingTimeID)
+                .OnDelete(DeleteBehavior.Restrict);
+            builder.Entity<Spell>()
+                .HasMany(s => s.CastingTimes)
+                .WithOne(sct => sct.Spell)
+                .OnDelete(DeleteBehavior.Cascade);
+            builder.Entity<CastingTime>()
+                .HasMany(ct => ct.Spells)
+                .WithOne(sct => sct.CastingTime)
                 .OnDelete(DeleteBehavior.Restrict);
         }
     }

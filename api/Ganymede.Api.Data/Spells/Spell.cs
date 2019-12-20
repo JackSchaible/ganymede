@@ -18,10 +18,6 @@ namespace Ganymede.Api.Data.Spells
         [ForeignKey(nameof(SpellSchoolID))]
         public SpellSchool SpellSchool { get; set; }
 
-        public int CastingTimeID { get; set; }
-        [ForeignKey(nameof(CastingTimeID))]
-        public CastingTime CastingTime { get; set; }
-
         public int SpellRangeID { get; set; }
         [ForeignKey(nameof(SpellRangeID))]
         public SpellRange SpellRange { get; set; }
@@ -38,6 +34,7 @@ namespace Ganymede.Api.Data.Spells
         [ForeignKey(nameof(CampaignID))]
         public Campaign Campaign { get; set; }
 
+        public virtual ICollection<SpellCastingTime> CastingTimes { get; set; }
         public virtual ICollection<ClassSpell> ClassSpells { get; set; }
         public virtual ICollection<InnateSpell> InnateSpells { get; set; }
         public virtual ICollection<SpellcasterSpells> SpellcasterSpells { get; set; }

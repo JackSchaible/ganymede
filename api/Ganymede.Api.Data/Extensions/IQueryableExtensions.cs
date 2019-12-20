@@ -40,6 +40,7 @@ namespace Ganymede.Api.Data.Extensions
         {
             return campaigns
                 .Include(c => c.Spells)
+                    .ThenInclude(s => s.CastingTimes)
                     .ThenInclude(s => s.CastingTime)
                 .Include(c => c.Spells)
                     .ThenInclude(s => s.SpellRange)

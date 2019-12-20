@@ -122,12 +122,18 @@ namespace Ganymede.Api.BLL.Services.Impl
 
         private Spell MapValues(Spell spell, string userId)
         {
-            CastingTime time = _ctx.CastingTimes.FirstOrDefault(c => c.Amount == spell.CastingTime.Amount && c.Unit == spell.CastingTime.Unit && c.ReactionCondition == spell.CastingTime.ReactionCondition && c.Type == (int)spell.CastingTime.Type);
-            if (time != null)
+            List<SpellCastingTime> times = spell.CastingTimes.ToList();
+            for (int i = 0; i < times.Count; i++)
             {
-                spell.CastingTime = time;
-                spell.CastingTimeID = time.ID;
+                CastingTime castingTime = times[i].CastingTime;
+                CastingTime time = _ctx.CastingTimes.FirstOrDefault(c => c.Amount == castingTime.Amount && c.Unit == castingTime.Unit && c.ReactionCondition == castingTime.ReactionCondition && c.Type == (int)castingTime.Type);
+                if (time != null)
+                {
+                    times[i].CastingTime = time;
+                    times[i].CastingTimeID = time.ID;
+                }
             }
+            spell.CastingTimes = times;
 
             SpellComponents components = _ctx.SpellComponents.FirstOrDefault(c => c.Somatic == spell.SpellComponents.Somatic && c.Verbal == spell.SpellComponents.Verbal && spell.SpellComponents.Material == c.Material);
             if (components != null)
