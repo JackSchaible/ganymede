@@ -411,6 +411,7 @@ namespace Ganymede.Api.Data.Initializers
                 diceRolls.OneDTwenty,
                 diceRolls.TwoDSix,
                 diceRolls.TwoDEight,
+                diceRolls.TwoDTen,
                 diceRolls.FourDSix,
                 diceRolls.ElevenDEight,
                 diceRolls.TwelveDEight,
