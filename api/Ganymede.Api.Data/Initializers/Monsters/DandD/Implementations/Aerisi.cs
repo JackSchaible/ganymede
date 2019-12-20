@@ -8,6 +8,7 @@ using Ganymede.Api.Data.Monsters.SpecialTraits;
 using Ganymede.Api.Data.Monsters.SpecialTraits.Spellcasting;
 using Ganymede.Api.Data.Spells;
 using System.Collections.Generic;
+using static Ganymede.Api.Data.Initializers.Monsters.MonsterConfigurationData;
 using static Ganymede.Api.Data.Initializers.Monsters.MonstersInitializer;
 using Action = Ganymede.Api.Data.Monsters.Actions.Action;
 

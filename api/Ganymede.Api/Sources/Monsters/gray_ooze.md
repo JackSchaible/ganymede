@@ -11,7 +11,7 @@ _Medium ooze, unaligned_
 
 | STR     | DEX     | CON     | INT     | WIS     | CHA     |
 |---------|---------|---------|---------|---------|---------|
-| 12 (+1) | 6 (−2)  | 16 (+3) | 1 (−5)  | 6 (−2) |  2 (−4)  |
+| 12 (+1) | 6 (−2)  | 16 (+3) | 1 (−5)  | 6 (−2)  | 2 (−4)  |
 
 **Skills** Stealth +2    
 **Damage Resistances** acid, cold, fire    

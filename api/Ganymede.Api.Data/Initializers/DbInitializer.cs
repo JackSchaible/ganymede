@@ -35,14 +35,15 @@ namespace Ganymede.Api.Data.Initializers
         public void Initialize()
         {
             string userId = users.Initialize(_ctx, _usrMgr);
+            MarkdownParser parser = new MarkdownParser(_rootPath);
             publishers.Initialize(_ctx, out Publisher wizards, out Publisher paizo);
             rulesets.Initialize(_ctx, wizards, paizo, out Ruleset fifth, out Ruleset pf);
             lookupTables.Initialize(_ctx, out AlignmentData alignments, out DiceRollData diceRolls, out LanguageData languages, out SkillData skills);
             equipment.Initialize(_ctx, out ArmorData armors);
             campaigns.Initialize(_ctx, userId, fifth, pf, out Campaign pota);
             pcs.Initialize(_ctx, out PlayerClassData pcData);
-            spells.Initialize(_ctx, pota, pcData, _rootPath, out SpellData spellData);
-            monsters.Initialize(_ctx, pota, alignments, diceRolls, armors, languages, skills, pcData, spellData, out IEnumerable<Monster> dAndDMonsters, out IEnumerable<Monster> pfMonsters);
+            spells.Initialize(_ctx, pota, pcData, parser, out SpellData spellData);
+            monsters.Initialize(_ctx, parser, pota, alignments, diceRolls, armors, languages, skills, pcData, spellData, out IEnumerable<Monster> dAndDMonsters, out IEnumerable<Monster> pfMonsters);
 
             _ctx.SaveChanges();
         }

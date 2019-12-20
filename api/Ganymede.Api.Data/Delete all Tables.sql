@@ -1,12 +1,3 @@
-USE [master];
-
-DECLARE @kill varchar(8000) = '';  
-SELECT @kill = @kill + 'kill ' + CONVERT(varchar(5), session_id) + ';'  
-FROM sys.dm_exec_sessions
-WHERE database_id  = db_id('Ganymede')
-
-EXEC(@kill);
-
 USE [Ganymede]
 GO
 ALTER TABLE [dbo].[WeaponWeaponProperties] DROP CONSTRAINT [FK_WeaponWeaponProperties_Weapons_WeaponID]
@@ -25,9 +16,11 @@ ALTER TABLE [dbo].[Spells] DROP CONSTRAINT [FK_Spells_SpellDurations_SpellDurati
 GO
 ALTER TABLE [dbo].[Spells] DROP CONSTRAINT [FK_Spells_SpellComponents_SpellComponentsID]
 GO
-ALTER TABLE [dbo].[Spells] DROP CONSTRAINT [FK_Spells_CastingTimes_CastingTimeID]
-GO
 ALTER TABLE [dbo].[Spells] DROP CONSTRAINT [FK_Spells_Campaigns_CampaignID]
+GO
+ALTER TABLE [dbo].[SpellCastingTimes] DROP CONSTRAINT [FK_SpellCastingTimes_Spells_SpellID]
+GO
+ALTER TABLE [dbo].[SpellCastingTimes] DROP CONSTRAINT [FK_SpellCastingTimes_CastingTimes_CastingTimeID]
 GO
 ALTER TABLE [dbo].[SpellcasterSpells] DROP CONSTRAINT [FK_SpellcasterSpells_Spells_SpellID]
 GO
@@ -143,191 +136,189 @@ ALTER TABLE [dbo].[Actions] DROP CONSTRAINT [FK_Actions_LegendaryActionsSets_Leg
 GO
 ALTER TABLE [dbo].[Actions] DROP CONSTRAINT [FK_Actions_ActionsSets_ActionsSetID]
 GO
-/****** Object:  Table [dbo].[WeaponWeaponProperties]    Script Date: 12/11/2019 3:53:15 PM ******/
+/****** Object:  Table [dbo].[WeaponWeaponProperties]    Script Date: 12/20/2019 3:24:05 PM ******/
 DROP TABLE [dbo].[WeaponWeaponProperties]
 GO
-/****** Object:  Table [dbo].[Weapons]    Script Date: 12/11/2019 3:53:15 PM ******/
+/****** Object:  Table [dbo].[Weapons]    Script Date: 12/20/2019 3:24:05 PM ******/
 DROP TABLE [dbo].[Weapons]
 GO
-/****** Object:  Table [dbo].[WeaponProperties]    Script Date: 12/11/2019 3:53:15 PM ******/
+/****** Object:  Table [dbo].[WeaponProperties]    Script Date: 12/20/2019 3:24:05 PM ******/
 DROP TABLE [dbo].[WeaponProperties]
 GO
-/****** Object:  Table [dbo].[Tags]    Script Date: 12/11/2019 3:53:15 PM ******/
+/****** Object:  Table [dbo].[Tags]    Script Date: 12/20/2019 3:24:05 PM ******/
 DROP TABLE [dbo].[Tags]
 GO
-/****** Object:  Table [dbo].[SpellSchools]    Script Date: 12/11/2019 3:53:15 PM ******/
+/****** Object:  Table [dbo].[SpellSchools]    Script Date: 12/20/2019 3:24:05 PM ******/
 DROP TABLE [dbo].[SpellSchools]
 GO
-/****** Object:  Table [dbo].[Spells]    Script Date: 12/11/2019 3:53:15 PM ******/
+/****** Object:  Table [dbo].[Spells]    Script Date: 12/20/2019 3:24:05 PM ******/
 DROP TABLE [dbo].[Spells]
 GO
-/****** Object:  Table [dbo].[SpellRanges]    Script Date: 12/11/2019 3:53:15 PM ******/
+/****** Object:  Table [dbo].[SpellRanges]    Script Date: 12/20/2019 3:24:05 PM ******/
 DROP TABLE [dbo].[SpellRanges]
 GO
-/****** Object:  Table [dbo].[SpellDurations]    Script Date: 12/11/2019 3:53:15 PM ******/
+/****** Object:  Table [dbo].[SpellDurations]    Script Date: 12/20/2019 3:24:06 PM ******/
 DROP TABLE [dbo].[SpellDurations]
 GO
-/****** Object:  Table [dbo].[SpellComponents]    Script Date: 12/11/2019 3:53:15 PM ******/
+/****** Object:  Table [dbo].[SpellComponents]    Script Date: 12/20/2019 3:24:06 PM ******/
 DROP TABLE [dbo].[SpellComponents]
 GO
-/****** Object:  Table [dbo].[SpellcasterSpells]    Script Date: 12/11/2019 3:53:15 PM ******/
+/****** Object:  Table [dbo].[SpellCastingTimes]    Script Date: 12/20/2019 3:24:06 PM ******/
+DROP TABLE [dbo].[SpellCastingTimes]
+GO
+/****** Object:  Table [dbo].[SpellcasterSpells]    Script Date: 12/20/2019 3:24:06 PM ******/
 DROP TABLE [dbo].[SpellcasterSpells]
 GO
-/****** Object:  Table [dbo].[Spellcasters]    Script Date: 12/11/2019 3:53:15 PM ******/
+/****** Object:  Table [dbo].[Spellcasters]    Script Date: 12/20/2019 3:24:06 PM ******/
 DROP TABLE [dbo].[Spellcasters]
 GO
-/****** Object:  Table [dbo].[SpecialTraitsSet]    Script Date: 12/11/2019 3:53:15 PM ******/
+/****** Object:  Table [dbo].[SpecialTraitsSet]    Script Date: 12/20/2019 3:24:06 PM ******/
 DROP TABLE [dbo].[SpecialTraitsSet]
 GO
-/****** Object:  Table [dbo].[SpecialTrait]    Script Date: 12/11/2019 3:53:15 PM ******/
+/****** Object:  Table [dbo].[SpecialTrait]    Script Date: 12/20/2019 3:24:06 PM ******/
 DROP TABLE [dbo].[SpecialTrait]
 GO
-/****** Object:  Table [dbo].[Skills]    Script Date: 12/11/2019 3:53:15 PM ******/
+/****** Object:  Table [dbo].[Skills]    Script Date: 12/20/2019 3:24:06 PM ******/
 DROP TABLE [dbo].[Skills]
 GO
-/****** Object:  Table [dbo].[Senses]    Script Date: 12/11/2019 3:53:15 PM ******/
+/****** Object:  Table [dbo].[Senses]    Script Date: 12/20/2019 3:24:06 PM ******/
 DROP TABLE [dbo].[Senses]
 GO
-/****** Object:  Table [dbo].[Rulesets]    Script Date: 12/11/2019 3:53:15 PM ******/
+/****** Object:  Table [dbo].[Rulesets]    Script Date: 12/20/2019 3:24:06 PM ******/
 DROP TABLE [dbo].[Rulesets]
 GO
-/****** Object:  Table [dbo].[RechargeActions]    Script Date: 12/11/2019 3:53:15 PM ******/
+/****** Object:  Table [dbo].[RechargeActions]    Script Date: 12/20/2019 3:24:06 PM ******/
 DROP TABLE [dbo].[RechargeActions]
 GO
-/****** Object:  Table [dbo].[Publishers]    Script Date: 12/11/2019 3:53:15 PM ******/
+/****** Object:  Table [dbo].[Publishers]    Script Date: 12/20/2019 3:24:06 PM ******/
 DROP TABLE [dbo].[Publishers]
 GO
-/****** Object:  Table [dbo].[PlayerClasses]    Script Date: 12/11/2019 3:53:15 PM ******/
+/****** Object:  Table [dbo].[PlayerClasses]    Script Date: 12/20/2019 3:24:06 PM ******/
 DROP TABLE [dbo].[PlayerClasses]
 GO
-/****** Object:  Table [dbo].[PerDayActions]    Script Date: 12/11/2019 3:53:15 PM ******/
+/****** Object:  Table [dbo].[PerDayActions]    Script Date: 12/20/2019 3:24:06 PM ******/
 DROP TABLE [dbo].[PerDayActions]
 GO
-/****** Object:  Table [dbo].[OptionalStats]    Script Date: 12/11/2019 3:53:15 PM ******/
+/****** Object:  Table [dbo].[OptionalStats]    Script Date: 12/20/2019 3:24:06 PM ******/
 DROP TABLE [dbo].[OptionalStats]
 GO
-/****** Object:  Table [dbo].[MonsterTypes]    Script Date: 12/11/2019 3:53:15 PM ******/
+/****** Object:  Table [dbo].[MonsterTypes]    Script Date: 12/20/2019 3:24:06 PM ******/
 DROP TABLE [dbo].[MonsterTypes]
 GO
-/****** Object:  Table [dbo].[MonsterTags]    Script Date: 12/11/2019 3:53:15 PM ******/
+/****** Object:  Table [dbo].[MonsterTags]    Script Date: 12/20/2019 3:24:06 PM ******/
 DROP TABLE [dbo].[MonsterTags]
 GO
-/****** Object:  Table [dbo].[MonsterSpellcastings]    Script Date: 12/11/2019 3:53:15 PM ******/
+/****** Object:  Table [dbo].[MonsterSpellcastings]    Script Date: 12/20/2019 3:24:06 PM ******/
 DROP TABLE [dbo].[MonsterSpellcastings]
 GO
-/****** Object:  Table [dbo].[MonsterSkillSets]    Script Date: 12/11/2019 3:53:15 PM ******/
+/****** Object:  Table [dbo].[MonsterSkillSets]    Script Date: 12/20/2019 3:24:06 PM ******/
 DROP TABLE [dbo].[MonsterSkillSets]
 GO
-/****** Object:  Table [dbo].[MonsterSavingThrowSets]    Script Date: 12/11/2019 3:53:15 PM ******/
+/****** Object:  Table [dbo].[MonsterSavingThrowSets]    Script Date: 12/20/2019 3:24:06 PM ******/
 DROP TABLE [dbo].[MonsterSavingThrowSets]
 GO
-/****** Object:  Table [dbo].[Monsters]    Script Date: 12/11/2019 3:53:15 PM ******/
+/****** Object:  Table [dbo].[Monsters]    Script Date: 12/20/2019 3:24:06 PM ******/
 DROP TABLE [dbo].[Monsters]
 GO
-/****** Object:  Table [dbo].[MonsterMovements]    Script Date: 12/11/2019 3:53:15 PM ******/
+/****** Object:  Table [dbo].[MonsterMovements]    Script Date: 12/20/2019 3:24:06 PM ******/
 DROP TABLE [dbo].[MonsterMovements]
 GO
-/****** Object:  Table [dbo].[MonsterLanguagesSets]    Script Date: 12/11/2019 3:53:16 PM ******/
+/****** Object:  Table [dbo].[MonsterLanguagesSets]    Script Date: 12/20/2019 3:24:06 PM ******/
 DROP TABLE [dbo].[MonsterLanguagesSets]
 GO
-/****** Object:  Table [dbo].[MonsterLanguages]    Script Date: 12/11/2019 3:53:16 PM ******/
+/****** Object:  Table [dbo].[MonsterLanguages]    Script Date: 12/20/2019 3:24:06 PM ******/
 DROP TABLE [dbo].[MonsterLanguages]
 GO
-/****** Object:  Table [dbo].[MonsterEquipment]    Script Date: 12/11/2019 3:53:16 PM ******/
+/****** Object:  Table [dbo].[MonsterEquipment]    Script Date: 12/20/2019 3:24:06 PM ******/
 DROP TABLE [dbo].[MonsterEquipment]
 GO
-/****** Object:  Table [dbo].[MonsterAlignments]    Script Date: 12/11/2019 3:53:16 PM ******/
+/****** Object:  Table [dbo].[MonsterAlignments]    Script Date: 12/20/2019 3:24:06 PM ******/
 DROP TABLE [dbo].[MonsterAlignments]
 GO
-/****** Object:  Table [dbo].[LegendaryActionsSets]    Script Date: 12/11/2019 3:53:16 PM ******/
+/****** Object:  Table [dbo].[LegendaryActionsSets]    Script Date: 12/20/2019 3:24:06 PM ******/
 DROP TABLE [dbo].[LegendaryActionsSets]
 GO
-/****** Object:  Table [dbo].[LegendaryActions]    Script Date: 12/11/2019 3:53:16 PM ******/
+/****** Object:  Table [dbo].[LegendaryActions]    Script Date: 12/20/2019 3:24:06 PM ******/
 DROP TABLE [dbo].[LegendaryActions]
 GO
-/****** Object:  Table [dbo].[Languages]    Script Date: 12/11/2019 3:53:16 PM ******/
+/****** Object:  Table [dbo].[Languages]    Script Date: 12/20/2019 3:24:06 PM ******/
 DROP TABLE [dbo].[Languages]
 GO
-/****** Object:  Table [dbo].[InnateSpells]    Script Date: 12/11/2019 3:53:16 PM ******/
+/****** Object:  Table [dbo].[InnateSpells]    Script Date: 12/20/2019 3:24:07 PM ******/
 DROP TABLE [dbo].[InnateSpells]
 GO
-/****** Object:  Table [dbo].[InnateSpellcastingSpellsPerDays]    Script Date: 12/11/2019 3:53:16 PM ******/
+/****** Object:  Table [dbo].[InnateSpellcastingSpellsPerDays]    Script Date: 12/20/2019 3:24:07 PM ******/
 DROP TABLE [dbo].[InnateSpellcastingSpellsPerDays]
 GO
-/****** Object:  Table [dbo].[InnateSpellcastings]    Script Date: 12/11/2019 3:53:16 PM ******/
+/****** Object:  Table [dbo].[InnateSpellcastings]    Script Date: 12/20/2019 3:24:07 PM ******/
 DROP TABLE [dbo].[InnateSpellcastings]
 GO
-/****** Object:  Table [dbo].[HitEffects]    Script Date: 12/11/2019 3:53:16 PM ******/
+/****** Object:  Table [dbo].[HitEffects]    Script Date: 12/20/2019 3:24:07 PM ******/
 DROP TABLE [dbo].[HitEffects]
 GO
-/****** Object:  Table [dbo].[Equipment]    Script Date: 12/11/2019 3:53:16 PM ******/
+/****** Object:  Table [dbo].[Equipment]    Script Date: 12/20/2019 3:24:07 PM ******/
 DROP TABLE [dbo].[Equipment]
 GO
-/****** Object:  Table [dbo].[DiceRolls]    Script Date: 12/11/2019 3:53:16 PM ******/
+/****** Object:  Table [dbo].[DiceRolls]    Script Date: 12/20/2019 3:24:07 PM ******/
 DROP TABLE [dbo].[DiceRolls]
 GO
-/****** Object:  Table [dbo].[DamageEffectivenessesSets]    Script Date: 12/11/2019 3:53:16 PM ******/
+/****** Object:  Table [dbo].[DamageEffectivenessesSets]    Script Date: 12/20/2019 3:24:07 PM ******/
 DROP TABLE [dbo].[DamageEffectivenessesSets]
 GO
-/****** Object:  Table [dbo].[ClassSpells]    Script Date: 12/11/2019 3:53:16 PM ******/
+/****** Object:  Table [dbo].[ClassSpells]    Script Date: 12/20/2019 3:24:07 PM ******/
 DROP TABLE [dbo].[ClassSpells]
 GO
-/****** Object:  Table [dbo].[CastingTimes]    Script Date: 12/11/2019 3:53:16 PM ******/
+/****** Object:  Table [dbo].[CastingTimes]    Script Date: 12/20/2019 3:24:07 PM ******/
 DROP TABLE [dbo].[CastingTimes]
 GO
-/****** Object:  Table [dbo].[Campaigns]    Script Date: 12/11/2019 3:53:16 PM ******/
+/****** Object:  Table [dbo].[Campaigns]    Script Date: 12/20/2019 3:24:07 PM ******/
 DROP TABLE [dbo].[Campaigns]
 GO
-/****** Object:  Table [dbo].[BasicStatsSet]    Script Date: 12/11/2019 3:53:16 PM ******/
+/****** Object:  Table [dbo].[BasicStatsSet]    Script Date: 12/20/2019 3:24:07 PM ******/
 DROP TABLE [dbo].[BasicStatsSet]
 GO
-/****** Object:  Table [dbo].[Attacks]    Script Date: 12/11/2019 3:53:16 PM ******/
+/****** Object:  Table [dbo].[Attacks]    Script Date: 12/20/2019 3:24:07 PM ******/
 DROP TABLE [dbo].[Attacks]
 GO
-/****** Object:  Table [dbo].[AspNetUserTokens]    Script Date: 12/11/2019 3:53:16 PM ******/
+/****** Object:  Table [dbo].[AspNetUserTokens]    Script Date: 12/20/2019 3:24:07 PM ******/
 DROP TABLE [dbo].[AspNetUserTokens]
 GO
-/****** Object:  Table [dbo].[AspNetUsers]    Script Date: 12/11/2019 3:53:16 PM ******/
+/****** Object:  Table [dbo].[AspNetUsers]    Script Date: 12/20/2019 3:24:07 PM ******/
 DROP TABLE [dbo].[AspNetUsers]
 GO
-/****** Object:  Table [dbo].[AspNetUserRoles]    Script Date: 12/11/2019 3:53:16 PM ******/
+/****** Object:  Table [dbo].[AspNetUserRoles]    Script Date: 12/20/2019 3:24:07 PM ******/
 DROP TABLE [dbo].[AspNetUserRoles]
 GO
-/****** Object:  Table [dbo].[AspNetUserLogins]    Script Date: 12/11/2019 3:53:16 PM ******/
+/****** Object:  Table [dbo].[AspNetUserLogins]    Script Date: 12/20/2019 3:24:07 PM ******/
 DROP TABLE [dbo].[AspNetUserLogins]
 GO
-/****** Object:  Table [dbo].[AspNetUserClaims]    Script Date: 12/11/2019 3:53:16 PM ******/
+/****** Object:  Table [dbo].[AspNetUserClaims]    Script Date: 12/20/2019 3:24:07 PM ******/
 DROP TABLE [dbo].[AspNetUserClaims]
 GO
-/****** Object:  Table [dbo].[AspNetRoles]    Script Date: 12/11/2019 3:53:16 PM ******/
+/****** Object:  Table [dbo].[AspNetRoles]    Script Date: 12/20/2019 3:24:07 PM ******/
 DROP TABLE [dbo].[AspNetRoles]
 GO
-/****** Object:  Table [dbo].[AspNetRoleClaims]    Script Date: 12/11/2019 3:53:16 PM ******/
+/****** Object:  Table [dbo].[AspNetRoleClaims]    Script Date: 12/20/2019 3:24:07 PM ******/
 DROP TABLE [dbo].[AspNetRoleClaims]
 GO
-/****** Object:  Table [dbo].[Armors]    Script Date: 12/11/2019 3:53:16 PM ******/
+/****** Object:  Table [dbo].[Armors]    Script Date: 12/20/2019 3:24:07 PM ******/
 DROP TABLE [dbo].[Armors]
 GO
-/****** Object:  Table [dbo].[ArmorClasses]    Script Date: 12/11/2019 3:53:16 PM ******/
+/****** Object:  Table [dbo].[ArmorClasses]    Script Date: 12/20/2019 3:24:07 PM ******/
 DROP TABLE [dbo].[ArmorClasses]
 GO
-/****** Object:  Table [dbo].[ArmorClassArmors]    Script Date: 12/11/2019 3:53:16 PM ******/
+/****** Object:  Table [dbo].[ArmorClassArmors]    Script Date: 12/20/2019 3:24:07 PM ******/
 DROP TABLE [dbo].[ArmorClassArmors]
 GO
-/****** Object:  Table [dbo].[Alignments]    Script Date: 12/11/2019 3:53:16 PM ******/
+/****** Object:  Table [dbo].[Alignments]    Script Date: 12/20/2019 3:24:07 PM ******/
 DROP TABLE [dbo].[Alignments]
 GO
-/****** Object:  Table [dbo].[ActionsSets]    Script Date: 12/11/2019 3:53:16 PM ******/
+/****** Object:  Table [dbo].[ActionsSets]    Script Date: 12/20/2019 3:24:07 PM ******/
 DROP TABLE [dbo].[ActionsSets]
 GO
-/****** Object:  Table [dbo].[Actions]    Script Date: 12/11/2019 3:53:16 PM ******/
+/****** Object:  Table [dbo].[Actions]    Script Date: 12/20/2019 3:24:07 PM ******/
 DROP TABLE [dbo].[Actions]
 GO
-/****** Object:  Table [dbo].[AbilityScores]    Script Date: 12/11/2019 3:53:16 PM ******/
+/****** Object:  Table [dbo].[AbilityScores]    Script Date: 12/20/2019 3:24:07 PM ******/
 DROP TABLE [dbo].[AbilityScores]
-GO
-USE [master]
-GO
-/****** Object:  Database [Ganymede]    Script Date: 12/11/2019 3:53:16 PM ******/
-DROP DATABASE [Ganymede]
 GO

@@ -6,6 +6,7 @@ using Ganymede.Api.Data.Monsters.OptionalStats;
 using Ganymede.Api.Data.Monsters.OptionalStats.Languages;
 using Ganymede.Api.Data.Monsters.SpecialTraits;
 using System.Collections.Generic;
+using static Ganymede.Api.Data.Initializers.Monsters.MonsterConfigurationData;
 using static Ganymede.Api.Data.Initializers.Monsters.MonstersInitializer;
 
 namespace Ganymede.Api.Data.Initializers.Monsters.DandD.Implementations

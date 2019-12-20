@@ -2,10 +2,8 @@
 using Ganymede.Api.Data.Initializers.InitializerData;
 using Ganymede.Api.Data.Spells;
 using HtmlAgilityPack;
-using Markdig;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using static Ganymede.Api.Data.Initializers.Spells.SpellConfigurationData;
@@ -29,14 +27,16 @@ namespace Ganymede.Api.Data.Initializers.Spells
 
         private readonly string StrongTagRegexPattern = "<strong>{0}:</strong> (.+)(?:<br />|</p>)";
         private SpellConfigurationData _data;
+        private MarkdownParser _parser;
 
-        public SpellData Initialize(SpellData spellData, SpellConfigurationData data)
+        public SpellData Initialize(MarkdownParser parser, SpellData spellData, SpellConfigurationData data)
         {
             _data = data;
+            _parser = parser;
 
             List<Spell> spells = new List<Spell>();
-            foreach (var spellFileName in Directory.EnumerateFiles(Path.Combine(data.Rootpath, "Sources", "Spells")))
-                spells.Add(AddSpell(spellFileName));
+            foreach (var spellFileName in parser.ListFiles("Spells"))
+                spells.Add(CreateSpell(spellFileName));
 
             spellData.ChainLightning = spells.Find(s => s.Name == "Chain Lightning");
             spellData.Cloudkill = spells.Find(s => s.Name == "Cloudkill");
@@ -66,17 +66,9 @@ namespace Ganymede.Api.Data.Initializers.Spells
             return spellData;
         }
 
-        private Spell AddSpell(string filename)
+        private Spell CreateSpell(string filename)
         {
-            string fileString;
-
-            using (var fs = File.OpenRead(filename))
-            using (var sr = new StreamReader(fs))
-                fileString = sr.ReadToEnd();
-
-            var htmlString = Markdown.ToHtml(fileString);
-            var htmlDoc = new HtmlDocument();
-            htmlDoc.LoadHtml(htmlString);
+            HtmlDocument htmlDoc = _parser.ParseFile(filename);
 
             var topSection = GetTopSection(htmlDoc);
             var spell = ConvertHtmlToSpell(htmlDoc.Text, topSection);

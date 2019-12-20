@@ -7,7 +7,6 @@ namespace Ganymede.Api.Data.Initializers.Spells
     internal class SpellConfigurationData
     {
         public ApplicationDbContext DatabaseContext { get; set; }
-        public string Rootpath { get; set; }
         public PlayerClassData PCData { get; set; }
 
         public List<CastingTime> CastingTimes { get; set; }

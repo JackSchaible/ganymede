@@ -10,12 +10,11 @@ namespace Ganymede.Api.Data.Initializers.Spells
     {
         private SpellConfigurationData _configData;
 
-        public SpellData Initialize(ApplicationDbContext ctx, Campaign campaign, PlayerClassData pcData, string rootPath)
+        public SpellData Initialize(ApplicationDbContext ctx, Campaign campaign, PlayerClassData pcData, MarkdownParser parser)
         {
             _configData = new SpellConfigurationData
             {
                 DatabaseContext = ctx,
-                Rootpath = rootPath,
                 PCData = pcData,
                 CastingTimes = new List<CastingTime>(),
                 Components = new List<SpellComponents>(),
@@ -25,7 +24,7 @@ namespace Ganymede.Api.Data.Initializers.Spells
             };
 
             var spellData = new SpellData();
-            new SRDSpellsImporter().Initialize(spellData, _configData);
+            new SRDSpellsImporter().Initialize(parser, spellData, _configData);
             CreateNonSRDSpells(ctx, campaign, spellData);
 
             return spellData;

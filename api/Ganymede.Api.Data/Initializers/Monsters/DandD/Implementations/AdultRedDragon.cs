@@ -5,6 +5,7 @@ using Ganymede.Api.Data.Monsters.Actions;
 using Ganymede.Api.Data.Monsters.BasicStats;
 using Ganymede.Api.Data.Monsters.OptionalStats;
 using Ganymede.Api.Data.Monsters.SpecialTraits;
+using static Ganymede.Api.Data.Initializers.Monsters.MonsterConfigurationData;
 using static Ganymede.Api.Data.Initializers.Monsters.MonstersInitializer;
 
 namespace Ganymede.Api.Data.Initializers.Monsters.DandD.Implementations
@@ -85,7 +86,7 @@ namespace Ganymede.Api.Data.Initializers.Monsters.DandD.Implementations
         {
             return new ActionsSet
             {
-                Multiattack = "The draong can use its Frightful Presence. It then makes three attacks: one with its bite and two with its claws.",
+                Multiattack = "The dragon can use its Frightful Presence. It then makes three attacks: one with its bite and two with its claws.",
                 Actions = new List<Action>
                 {
                     new Attack
