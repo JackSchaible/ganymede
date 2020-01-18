@@ -7,7 +7,7 @@ _Medium dragon, lawful evil_
 
 **Armor Class** 17 (natural armor)    
 **Hit Points** 60 (8d8 + 24)    
-**Speed** 30 ft., fly 60 ft., swim 30ft.
+**Speed** 30 ft., fly 60 ft., swim 30 ft.
 
 | STR     | DEX     | CON     | INT     | WIS     | CHA     |
 |---------|---------|---------|---------|---------|---------|

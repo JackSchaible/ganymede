@@ -1,6 +1,7 @@
 ﻿using Ganymede.Api.Data.Characters;
 using Ganymede.Api.Data.Initializers.InitializerData;
 using Ganymede.Api.Data.Spells;
+using Ganymede.Api.Extensions;
 using HtmlAgilityPack;
 using System;
 using System.Collections.Generic;

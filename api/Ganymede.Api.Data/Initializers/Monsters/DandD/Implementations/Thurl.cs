@@ -42,7 +42,7 @@ namespace Ganymede.Api.Data.Initializers.Monsters.DandD.Implementations
                 {
                     Name = "Greatsword"
                 },
-                Type = MonstersConstants.WAMelee,
+                RangeType = MonstersConstants.RTMelee,
                 Target = MonstersConstants.TTarget,
                 HitEffects = new List<HitEffect>
                 {
@@ -60,7 +60,7 @@ namespace Ganymede.Api.Data.Initializers.Monsters.DandD.Implementations
                 {
                     Name = "Lance"
                 },
-                Type = MonstersConstants.WAMelee,
+                RangeType = MonstersConstants.RTMelee,
                 HitEffects = new List<HitEffect>
                 {
                     new HitEffect

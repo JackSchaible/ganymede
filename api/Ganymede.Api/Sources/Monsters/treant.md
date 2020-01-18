@@ -7,7 +7,7 @@ _Huge plant, chaotic good_
 
 **Armor Class** 16 (natural armor)   
 **Hit Points** 138 (12d12 + 60)   
-**Speed** 30ft.   
+**Speed** 30 ft.   
 
 | STR     | DEX    | CON     | INT      | WIS     | CHA     |
 |---------|--------|---------|----------|---------|---------|

@@ -50,7 +50,7 @@ namespace Ganymede.Api.Data.Initializers.Monsters.DandD.Implementations
                 },
                 RangeMin = 10,
                 Target = MonstersConstants.TTarget,
-                Type = MonstersConstants.WAMelee
+                RangeType = MonstersConstants.RTMelee
             };
 
             return new ActionsSet

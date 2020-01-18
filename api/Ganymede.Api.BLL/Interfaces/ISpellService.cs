@@ -1,7 +1,7 @@
 ﻿using Ganymede.Api.Models.Api;
 using Ganymede.Api.Models.Spells;
 
-namespace Ganymede.Api.BLL.Services
+namespace Ganymede.Api.Services.Interfaces
 {
     public interface ISpellService
     {

@@ -33,7 +33,7 @@ namespace Ganymede.Api.Data.Initializers.Monsters.DandD.SRD
 
             var text = doc.Text;
             monster.AbilityScores = GetAbilityScores(text, regexs.AbilityScores);
-            monster.ActionSet = parsers.ActionSet.Parse(doc);
+            monster.ActionSet = parsers.ActionSet.Parse(doc, ctx);
 
             return monster;
         }

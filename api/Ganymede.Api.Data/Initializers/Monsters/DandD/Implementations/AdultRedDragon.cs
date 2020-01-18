@@ -95,7 +95,7 @@ namespace Ganymede.Api.Data.Initializers.Monsters.DandD.Implementations
                         {
                             Name = "Bite"
                         },
-                        Type = MonstersConstants.WAMelee,
+                        RangeType = MonstersConstants.RTMelee,
                         RangeMin = 15,
                         Target = MonstersConstants.TTarget,
                         HitEffects = new List<HitEffect>
@@ -118,7 +118,7 @@ namespace Ganymede.Api.Data.Initializers.Monsters.DandD.Implementations
                         {
                             Name = "Claw"
                         },
-                        Type = MonstersConstants.WAMelee,
+                        RangeType = MonstersConstants.RTMelee,
                         RangeMin = 10,
                         Target = MonstersConstants.TTarget,
                         HitEffects = new List<HitEffect>
@@ -136,7 +136,7 @@ namespace Ganymede.Api.Data.Initializers.Monsters.DandD.Implementations
                         {
                             Name = "Tail"
                         },
-                        Type = MonstersConstants.WAMelee,
+                        RangeType = MonstersConstants.RTMelee,
                         RangeMin = 20,
                         Target = MonstersConstants.TTarget,
                         HitEffects = new List<HitEffect>

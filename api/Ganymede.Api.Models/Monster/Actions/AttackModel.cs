@@ -6,7 +6,8 @@ namespace Ganymede.Api.Models.Monster.Actions
 {
     public class AttackModel : ActionModel
     {
-        public ActionEnums.AttackTypes Type { get; set; }
+        public ActionEnums.AttackTypes AttackType { get; set; }
+        public ActionEnums.RangeTypes RangeType { get; set; }
         public int RangeMin { get; set; }
         public int RangeMax { get; set; }
         public ActionEnums.TargetTypes Target { get; set; }

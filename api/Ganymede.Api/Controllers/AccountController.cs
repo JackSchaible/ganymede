@@ -1,9 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
-using Ganymede.Api.BLL.Services;
 using Ganymede.Api.Models.Auth;
 using Microsoft.AspNetCore.Identity;
 using Ganymede.Api.Data;
+using Ganymede.Api.Services.Interfaces;
 
 namespace Ganymede.api.Controllers
 {

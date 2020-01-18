@@ -4,6 +4,12 @@
     {
         public enum AttackTypes
         {
+            Weapon,
+            Spell
+        }
+
+        public enum RangeTypes
+        {
             Melee,
             Ranged
         }

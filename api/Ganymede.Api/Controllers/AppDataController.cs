@@ -1,4 +1,4 @@
-﻿using Ganymede.Api.BLL.Services;
+﻿using Ganymede.Api.Services.Interfaces;
 using Ganymede.Api.Models.App;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;

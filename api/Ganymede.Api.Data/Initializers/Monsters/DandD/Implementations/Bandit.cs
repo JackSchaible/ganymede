@@ -49,7 +49,7 @@ namespace Ganymede.Api.Data.Initializers.Monsters.DandD.Implementations
                     }
                 },
                 Target = MonstersConstants.TTarget,
-                Type = MonstersConstants.WAMelee
+                RangeType = MonstersConstants.RTMelee
             };
             var lCrossbow = new Attack
             {

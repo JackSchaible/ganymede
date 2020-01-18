@@ -3,7 +3,7 @@ using Ganymede.Api.Models.Campaigns;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Ganymede.Api.BLL.Services;
+using Ganymede.Api.Services.Interfaces;
 using Ganymede.Api.Data;
 
 namespace Ganymede.api.Controllers

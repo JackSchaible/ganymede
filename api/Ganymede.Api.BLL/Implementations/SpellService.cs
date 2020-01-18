@@ -3,12 +3,13 @@ using Ganymede.Api.Data;
 using Ganymede.Api.Data.Spells;
 using Ganymede.Api.Models.Api;
 using Ganymede.Api.Models.Spells;
+using Ganymede.Api.Services.Interfaces;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Ganymede.Api.BLL.Services.Impl
+namespace Ganymede.Api.Services.Implementations
 {
     public class SpellService : ISpellService
     {

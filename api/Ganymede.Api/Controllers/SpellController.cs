@@ -1,4 +1,4 @@
-﻿using Ganymede.Api.BLL.Services;
+﻿using Ganymede.Api.Services.Interfaces;
 using Ganymede.Api.Data;
 using Ganymede.Api.Models.Api;
 using Ganymede.Api.Models.Spells;
