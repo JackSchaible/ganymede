@@ -71,7 +71,7 @@ namespace api
 
             context.Database.EnsureCreated();
             initializer.Initialize();
-            autoMapper.ConfigurationProvider.AssertConfigurationIsValid();
+             autoMapper.ConfigurationProvider.AssertConfigurationIsValid();
         }
 
         private void ConfigureDb(IServiceCollection services)

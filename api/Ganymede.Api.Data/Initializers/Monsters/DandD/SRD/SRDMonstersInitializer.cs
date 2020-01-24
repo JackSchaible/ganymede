@@ -17,23 +17,20 @@ namespace Ganymede.Api.Data.Initializers.Monsters.DandD.SRD
             var files = _parser.ListFiles("Monsters");
             var regexs = new Regexs();
 
-            var parsers = new Parsers();
-
             foreach (var file in files)
             {
                 var doc = _parser.ParseFile(file);
-                var monster = CreateMonster(ctx, doc, regexs, parsers);
+                var monster = CreateMonster(ctx, doc, regexs);
             }
         }
 
-        private Monster CreateMonster(ApplicationDbContext ctx, HtmlDocument doc, Regexs regexs,
-            Parsers parsers)
+        private Monster CreateMonster(ApplicationDbContext ctx, HtmlDocument doc, Regexs regexs)
         {
             var monster = new Monster();
 
             var text = doc.Text;
             monster.AbilityScores = GetAbilityScores(text, regexs.AbilityScores);
-            monster.ActionSet = parsers.ActionSet.Parse(doc, ctx);
+            monster.ActionSet = ActionSetParser.Parse(doc, ctx);
 
             return monster;
         }
