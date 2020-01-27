@@ -3,14 +3,14 @@ using System;
 using System.Text.RegularExpressions;
 using Action = Ganymede.Api.Data.Monsters.Actions.Action;
 
-namespace Ganymede.Api.Data.Initializers.Monsters.DandD.SRD.Parsing.ActionParsers
+namespace Ganymede.Api.Data.Initializers.Monsters.DandD.SRD.Parsers.ActionParsers
 {
-    internal static class SubActionTypesParser
+    internal class SubActionTypesParser
     {
-        private static readonly Regex PerDayRegex = new Regex("<strong>(.*) \\(([0-9]+)/Day\\)\\.</strong>(.*)");
-        private static readonly Regex RechargeRegex = new Regex("<strong>(.*) \\(Recharge ([0-9]+)(?:-|–)([0-9]+)\\)\\.</strong>(.*)");
+        private readonly Regex PerDayRegex = new Regex("<strong>(.*) \\(([0-9]+)/Day\\)\\.</strong>(.*)");
+        private readonly Regex RechargeRegex = new Regex("<strong>(.*) \\(Recharge ([0-9]+)(?:-|–)([0-9]+)\\)\\.</strong>(.*)");
 
-        public static bool Parse(string actionString, ApplicationDbContext ctx)
+        public bool Parse(string actionString, ApplicationDbContext ctx)
         {
             bool result = true;
             var perDayMatch = PerDayRegex.Match(actionString);
@@ -31,7 +31,7 @@ namespace Ganymede.Api.Data.Initializers.Monsters.DandD.SRD.Parsing.ActionParser
             return result;
         }
 
-        private static PerDayAction ParsePerDayAction(Match match, ApplicationDbContext ctx)
+        private PerDayAction ParsePerDayAction(Match match, ApplicationDbContext ctx)
         {
             var pdAction = new PerDayAction
             {
@@ -47,7 +47,7 @@ namespace Ganymede.Api.Data.Initializers.Monsters.DandD.SRD.Parsing.ActionParser
             return pdAction;
         }
 
-        private static RechargeAction ParseRechargeAction(Match match, ApplicationDbContext ctx)
+        private RechargeAction ParseRechargeAction(Match match, ApplicationDbContext ctx)
         {
             var rAction = new RechargeAction
             {

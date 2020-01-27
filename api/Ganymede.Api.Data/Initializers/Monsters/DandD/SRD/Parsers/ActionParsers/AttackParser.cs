@@ -7,14 +7,14 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using Action = Ganymede.Api.Data.Monsters.Actions.Action;
 
-namespace Ganymede.Api.Data.Initializers.Monsters.DandD.SRD.Parsing.ActionParsers
+namespace Ganymede.Api.Data.Initializers.Monsters.DandD.SRD.Parsers.ActionParsers
 {
-    internal static class AttackParser
+    internal class AttackParser
     {
-        private static readonly Regex AttackHitRegex = new Regex("<strong>(.*)\\.</strong> (?:<em>)?(Melee or <em>Ranged|Melee|Ranged) (Weapon|Spell) Attack:(?:</em>)?(?:</em>)? .[0-9]* to hit, (?:reach|range) ([0-9]*)(?:/([0-9]*))? ft.(?: or (?:reach|range) ([0-9]*)(?:/([0-9]*))? ft.)?, one (.*)?(target|creature).");
-        private static readonly Regex HitEffectRegex = new Regex("[0-9]* \\(([0-9]*)d([0-9]*)(?: (\\+ [0-9]*))?\\) (\\w*) damage.(?: (.*))?");
+        private readonly Regex AttackHitRegex = new Regex("<strong>(.*)\\.</strong> (?:<em>)?(Melee or <em>Ranged|Melee|Ranged) (Weapon|Spell) Attack:(?:</em>)?(?:</em>)? .[0-9]* to hit, (?:reach|range) ([0-9]*)(?:/([0-9]*))? ft.(?: or (?:reach|range) ([0-9]*)(?:/([0-9]*))? ft.)?, one (.*)?(target|creature).");
+        private readonly Regex HitEffectRegex = new Regex("[0-9]* \\(([0-9]*)d([0-9]*)(?: (\\+ [0-9]*))?\\) (\\w*) damage.(?: (.*))?");
 
-        public static Attack Parse(string attackString, ApplicationDbContext ctx)
+        public Attack Parse(string attackString, ApplicationDbContext ctx)
         {
             Attack attack = null;
 
@@ -40,7 +40,7 @@ namespace Ganymede.Api.Data.Initializers.Monsters.DandD.SRD.Parsing.ActionParser
             return attack;
         }
 
-        private static Attack ParseHit(Attack attack, string hit)
+        private Attack ParseHit(Attack attack, string hit)
         {
             var match = AttackHitRegex.Match(hit);
 
@@ -113,7 +113,7 @@ namespace Ganymede.Api.Data.Initializers.Monsters.DandD.SRD.Parsing.ActionParser
             return attack;
         }
 
-        private static HitEffect ParseHitEffect(string effectString, ApplicationDbContext ctx)
+        private HitEffect ParseHitEffect(string effectString, ApplicationDbContext ctx)
         {
             var match = HitEffectRegex.Match(effectString);
             HitEffect effect = new HitEffect();
@@ -140,6 +140,6 @@ namespace Ganymede.Api.Data.Initializers.Monsters.DandD.SRD.Parsing.ActionParser
             return effect;
         }
 
-        private static string GetConfigPropertyByName(string name) => typeof(MonsterConfigurationData.MonstersConstants).GetField(name).GetValue(null).ToString();
+        private string GetConfigPropertyByName(string name) => typeof(MonsterConfigurationData.MonstersConstants).GetField(name).GetValue(null).ToString();
     }
 }

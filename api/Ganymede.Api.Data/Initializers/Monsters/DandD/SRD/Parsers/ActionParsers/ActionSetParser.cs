@@ -1,4 +1,4 @@
-﻿using Ganymede.Api.Data.Initializers.Monsters.DandD.SRD.Parsing.ActionParsers;
+﻿using Ganymede.Api.Data.Initializers.Monsters.DandD.SRD.Parsers.ActionParsers;
 using Ganymede.Api.Data.Monsters.Actions;
 using HtmlAgilityPack;
 using System;
@@ -7,14 +7,14 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using Action = Ganymede.Api.Data.Monsters.Actions.Action;
 
-namespace Ganymede.Api.Data.Initializers.Monsters.DandD.SRD.Parsing
+namespace Ganymede.Api.Data.Initializers.Monsters.DandD.SRD.Parsers
 {
-    internal static class ActionSetParser
+    internal class ActionSetParser
     {
-        private static readonly Regex MultiAttackRegex = new Regex("<strong>Multiattack\\.</strong> (.*)");
-        private static readonly Regex BasicActionRegex = new Regex("<strong>(.*)\\.</strong>(.*)");
+        private readonly Regex MultiAttackRegex = new Regex("<strong>Multiattack\\.</strong> (.*)");
+        private readonly Regex BasicActionRegex = new Regex("<strong>(.*)\\.</strong>(.*)");
 
-        public static ActionsSet Parse(HtmlDocument doc, ApplicationDbContext ctx)
+        public ActionsSet Parse(HtmlDocument doc, ApplicationDbContext ctx)
         {
             var text = doc.Text;
             var actionsSet = new ActionsSet();
@@ -25,7 +25,7 @@ namespace Ganymede.Api.Data.Initializers.Monsters.DandD.SRD.Parsing
             return actionsSet;
         }
 
-        private static List<Action> GetActions(string doc, ActionsSet set, ApplicationDbContext ctx)
+        private List<Action> GetActions(string doc, ActionsSet set, ApplicationDbContext ctx)
         {
             var actions = new List<Action>();
 
@@ -56,7 +56,7 @@ namespace Ganymede.Api.Data.Initializers.Monsters.DandD.SRD.Parsing
             return actions;
         }
 
-        private static List<string> ParseMultiattack(List<string> actions, ActionsSet set)
+        private List<string> ParseMultiattack(List<string> actions, ActionsSet set)
         {
             var match = MultiAttackRegex.Match(actions[0]);
             if (match.Success)
@@ -66,12 +66,12 @@ namespace Ganymede.Api.Data.Initializers.Monsters.DandD.SRD.Parsing
             return actions;
         }
 
-        private static bool ParseAction(string actionString, ApplicationDbContext ctx)
+        private bool ParseAction(string actionString, ApplicationDbContext ctx)
         {
             bool result = true;
             if (actionString.IndexOf("<em>Hit:</em>") >= 0)
-                ctx.Attacks.Add(AttackParser.Parse(actionString, ctx));
-            else if (!SubActionTypesParser.Parse(actionString, ctx))
+                ctx.Attacks.Add(new AttackParser().Parse(actionString, ctx));
+            else if (!new SubActionTypesParser().Parse(actionString, ctx))
             {
                 // This **MUST** come last
                 var basicMatch = BasicActionRegex.Match(actionString);
