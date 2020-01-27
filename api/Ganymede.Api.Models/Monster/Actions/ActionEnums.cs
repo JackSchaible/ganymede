@@ -11,7 +11,8 @@
         public enum RangeTypes
         {
             Melee,
-            Ranged
+            Ranged,
+            MeleeOrRanged
         }
 
         public enum TargetTypes

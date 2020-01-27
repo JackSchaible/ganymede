@@ -1,4 +1,5 @@
-﻿using Ganymede.Api.Data.Initializers.Monsters.DandD.SRD.Parsers.ActionParsers;
+﻿using Ganymede.Api.Data.Initializers.InitializerData;
+using Ganymede.Api.Data.Initializers.Monsters.DandD.SRD.Parsing.ActionParsers;
 using Ganymede.Api.Data.Monsters.Actions;
 using HtmlAgilityPack;
 using System;
@@ -11,25 +12,31 @@ namespace Ganymede.Api.Data.Initializers.Monsters.DandD.SRD.Parsers
 {
     internal class ActionSetParser
     {
-        private readonly Regex MultiAttackRegex = new Regex("<strong>Multiattack\\.</strong> (.*)");
-        private readonly Regex BasicActionRegex = new Regex("<strong>(.*)\\.</strong>(.*)");
+        private static readonly Regex 
+            MultiAttackRegex = new Regex(@"<strong>Multiattack\.</strong> (.*)"),
+            BasicActionRegex = new Regex(@"<strong>(.*)\.</strong>(.*)");
+        private static readonly int
+            miMultiAttack = 1,
+            miBasicName = 1,
+            miBasicDesc = 2;
 
-        public ActionsSet Parse(HtmlDocument doc, ApplicationDbContext ctx)
+        public static ActionsSet Parse(HtmlDocument doc, ApplicationDbContext ctx, DiceRollData diceRolls)
         {
             var text = doc.Text;
             var actionsSet = new ActionsSet();
 
-            var test = new Regex("Adult Red Dragon").Match(text);
-            var actions = GetActions(text, actionsSet, ctx);
+            //var test = new Regex("Adult Red Dragon").Match(text);
+            var test = new Regex("Druid").Match(text);
+            var actions = GetActions(text, actionsSet, ctx, diceRolls);
 
             return actionsSet;
         }
 
-        private List<Action> GetActions(string doc, ActionsSet set, ApplicationDbContext ctx)
+        private static List<Action> GetActions(string doc, ActionsSet set, ApplicationDbContext ctx, DiceRollData diceRolls)
         {
             var actions = new List<Action>();
 
-            string actionsH3 = "<h3>Actions</h3>";
+            const string actionsH3 = "<h3>Actions</h3>";
             int indexOfActionsHeader = doc.IndexOf(actionsH3);
             if (indexOfActionsHeader >= 0)
             {
@@ -40,15 +47,23 @@ namespace Ganymede.Api.Data.Initializers.Monsters.DandD.SRD.Parsers
                 {
                     actionsList = ParseMultiattack(actionsList, set);
 
+                    int lastIndexWithAction = 0;
                     for (int i = 0; i < actionsList.Count; i++)
                     {
                         string action = actionsList[i];
 
-                        if (!ParseAction(action, ctx))
+                        if (TryParseAction(action, ctx, diceRolls, out Action newAction))
+                        {
+                            lastIndexWithAction = i;
+                            actions.Add(newAction);
+                        }
+                        else
+                        {
                             if (i == 0)
                                 throw new Exception($"Unable to determine action type of '{action}'");
                             else
-                                actions[i - 1].Description += action;
+                                actions[lastIndexWithAction].Description += action;
+                        }
                     }
                 }
             }
@@ -60,30 +75,44 @@ namespace Ganymede.Api.Data.Initializers.Monsters.DandD.SRD.Parsers
         {
             var match = MultiAttackRegex.Match(actions[0]);
             if (match.Success)
-                set.Multiattack = match.Groups[1].Value;
-            actions.RemoveAt(0);
+            {
+                set.Multiattack = match.Groups[miMultiAttack].Value;
+                actions.RemoveAt(0);
+            }
 
             return actions;
         }
 
-        private bool ParseAction(string actionString, ApplicationDbContext ctx)
+        private static bool TryParseAction(string actionString, ApplicationDbContext ctx, DiceRollData diceRolls, out Action action)
         {
-            bool result = true;
+            bool result;
+            // todo: "And the target must make a DC x [type] saving throw"
             if (actionString.IndexOf("<em>Hit:</em>") >= 0)
-                ctx.Attacks.Add(new AttackParser().Parse(actionString, ctx));
-            else if (!new SubActionTypesParser().Parse(actionString, ctx))
+            {
+                ctx.Attacks.Add(AttackParser.TryParse(actionString, ctx, diceRolls, out action));
+                result = true;
+            }
+            else if (SubActionTypesParser.TryParse(actionString, ctx, out action))
+                result = true;
+            else
             {
                 // This **MUST** come last
                 var basicMatch = BasicActionRegex.Match(actionString);
                 if (basicMatch.Success)
-                    ctx.Actions.Add(new Action
+                {
+                    action = new Action
                     {
-                        Name = basicMatch.Groups[1].Value,
-                        Description = basicMatch.Groups[1].Value
-                    });
+                        Name = basicMatch.Groups[miBasicName].Value,
+                        Description = basicMatch.Groups[miBasicDesc].Value
+                    };
+                    result = true;
+                }
+                else
+                {
+                    result = false;
+                    action = null;
+                }
             }
-            else
-                result = false;
 
             return result;
         }

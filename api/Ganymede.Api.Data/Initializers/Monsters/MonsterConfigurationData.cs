@@ -62,6 +62,10 @@ namespace Ganymede.Api.Data.Initializers.Monsters
 
             public const int ATWeapon = 0;
             public const int ATSpell = 1;
+            
+            public const int WAMelee = 0;
+            public const int WARanged = 1;
+            public const int WAMeleeOrRanged = 2;
 
             public static Tag TElf;
             public static Tag THuman;

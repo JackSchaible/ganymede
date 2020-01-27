@@ -156,7 +156,7 @@ namespace Ganymede.Api.Data.Initializers.Spells
             var text = match.Groups[1].Value;
             var indexOfReaction = text.IndexOf("reaction");
 
-            Func<string, CastingTime> extractCastingTimes = delegate (string text)
+            CastingTime extractCastingTimes(string text)
             {
                 CastingTime castingTime;
                 if (indexOfReaction > -1)
@@ -209,7 +209,7 @@ namespace Ganymede.Api.Data.Initializers.Spells
                     castingTime = existing;
 
                 return castingTime;
-            };
+            }
 
             if (text.IndexOf(" or ") > -1 && indexOfReaction == -1)
             {

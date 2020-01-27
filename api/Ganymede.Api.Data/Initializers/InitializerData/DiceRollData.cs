@@ -1,9 +1,11 @@
 ﻿using Ganymede.Api.Data.Common;
+using System.Collections.Generic;
 
 namespace Ganymede.Api.Data.Initializers.InitializerData
 {
     internal class DiceRollData
     {
+        public List<DiceRoll> All { get; set; }
         public DiceRoll OneDFour { get; set; }
         public DiceRoll OneDSix { get; set; }
         public DiceRoll OneDEight { get; set; }

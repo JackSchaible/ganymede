@@ -27,11 +27,12 @@ namespace Ganymede.Api.Data.Initializers.Monsters
                 CreateMonsterTypes(ctx);
                 CreateMonsterTags(ctx);
 
-                new SRDMonstersInitializer().Initialize(ctx, parser);
+                var srdMonsters = new SRDMonstersInitializer().Initialize(ctx, parser, diceRolls);
                 dAndDMonsters = CreateDandDMonsters(ctx, pota, alignments, diceRolls, armors,
                     languages, skills, pcData, spells);
                 pfMonsters = CreatePathfinderMonsters();
 
+                //ctx.Monsters.AddRange(srdMonsters);
                 ctx.Monsters.AddRange(dAndDMonsters);
                 ctx.Monsters.AddRange(pfMonsters);
             }

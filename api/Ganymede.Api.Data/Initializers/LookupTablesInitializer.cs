@@ -1,6 +1,7 @@
 ﻿using Ganymede.Api.Data.Common;
 using Ganymede.Api.Data.Initializers.InitializerData;
 using Ganymede.Api.Data.Monsters;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Ganymede.Api.Data.Initializers
@@ -48,7 +49,8 @@ namespace Ganymede.Api.Data.Initializers
                 TwelveDEight = ctx.DiceRolls.Single(dr => dr.Number == 12 && dr.Sides == 8),
                 FifteenDTwelve = ctx.DiceRolls.Single(dr => dr.Number == 15 && dr.Sides == 12),
                 NinteenDTen = ctx.DiceRolls.Single(dr => dr.Number == 19 && dr.Sides == 10),
-                TwentyEightDTwenty = ctx.DiceRolls.Single(dr => dr.Number == 28 && dr.Sides == 20)
+                TwentyEightDTwenty = ctx.DiceRolls.Single(dr => dr.Number == 28 && dr.Sides == 20),
+                All = ctx.DiceRolls.ToList()
             };
 
             languages = new LanguageData
@@ -222,6 +224,24 @@ namespace Ganymede.Api.Data.Initializers
                     Number = 28,
                     Sides = 20
                 }
+            };
+            diceRolls.All = new List<DiceRoll>
+            {
+                diceRolls.OneDFour,
+                diceRolls.OneDSix,
+                diceRolls.OneDEight,
+                diceRolls.OneDTen,
+                diceRolls.OneDTwelve,
+                diceRolls.OneDTwenty,
+                diceRolls.TwoDSix,
+                diceRolls.TwoDEight,
+                diceRolls.TwoDTen,
+                diceRolls.FourDSix,
+                diceRolls.ElevenDEight,
+                diceRolls.TwelveDEight,
+                diceRolls.FifteenDTwelve,
+                diceRolls.NinteenDTen,
+                diceRolls.TwentyEightDTwenty
             };
             languages = new LanguageData
             {
